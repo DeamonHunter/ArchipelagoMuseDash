@@ -2,6 +2,7 @@
 using System.IO;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
+using Il2CppSystem.Text;
 using MelonLoader;
 using UnhollowerBaseLib;
 using UnityEngine;
@@ -68,7 +69,7 @@ namespace ArchipelagoMuseDash {
                 if (_buttonStyle == null)
                     SetupStyles();
 
-                GUI.ModalWindow(0, new Rect(Screen.width / 2.0f - 250, Screen.height / 2.0f - 175, 500, 360), (GUI.WindowFunction)DrawArchWindow, "Connect to an Archipelago Server", _windowStyle);
+                GUI.ModalWindow(0, new Rect(Screen.width / 2.0f - 250, Screen.height / 2.0f - 190, 500, 380), (GUI.WindowFunction)DrawArchWindow, "Connect to an Archipelago Server", _windowStyle);
             }
             catch (Exception e) {
                 ArchipelagoStatic.ArchLogger.Error("DrawArchLogin", e);
@@ -91,13 +92,11 @@ namespace ArchipelagoMuseDash {
             }));
 
 
-            GUILayout.BeginHorizontal(null);
-            if (GUILayout.Button("Play Muse Dash Normally", _buttonStyle, null))
-                HideLoginOverlay();
-
             if (GUILayout.Button("Log In", _buttonStyle, null))
                 AttemptLogin();
-            GUILayout.EndHorizontal();
+
+            if (GUILayout.Button("Play Without Archipelago", _buttonStyle, null))
+                AttemptPlayNormally();
         }
 
         void SetupStyles() {
@@ -142,6 +141,13 @@ namespace ArchipelagoMuseDash {
                 return;
             }
 
+            HideLoginOverlay();
+        }
+
+        void AttemptPlayNormally() {
+            ArchipelagoStatic.SteamSync.m_FolderPath = ArchipelagoStatic.OriginalFolderName;
+            ArchipelagoStatic.SteamSync.m_FilePath = ArchipelagoStatic.SteamSync.m_FolderPath + "/" + ArchipelagoStatic.SteamSync.m_FileName;
+            ArchipelagoStatic.SteamSync.LoadLocal();
             HideLoginOverlay();
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ArchipelagoMuseDash.Logging;
+using Assets.Scripts.PeroTools.Platforms.Steam;
 using Assets.Scripts.UI.Panels;
 using UnityEngine;
 
@@ -21,6 +22,10 @@ namespace ArchipelagoMuseDash {
         public static GameObject MuseCharacter;
         public static PnlStage SongSelectPanel;
         public static PnlUnlockStage UnlockStagePanel;
+
+        public static SteamSync SteamSync;
+        public static string OriginalFolderName;
+        public static string OriginalFilePath;
 
         public static HashSet<string> ActivatedEnableDisableHookers = new HashSet<string>();
 

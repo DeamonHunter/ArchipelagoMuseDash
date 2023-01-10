@@ -127,7 +127,7 @@
     <Compile Include="Helpers\AssetHelpers.cs" />
     <Compile Include="Logging\ArchLogger.cs" />
     <Compile Include="Patches\ArchipelagoPatches.cs" />
-    <Compile Include="Patches\QoLPatches.cs" />
+    <Compile Include="Patches\SaveAPIPatch.cs" />
     <Compile Include="Patches\StatusPatches.cs" />
     <Compile Include="Patches\WebAPIPatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
