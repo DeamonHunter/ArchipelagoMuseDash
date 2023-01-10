@@ -26,33 +26,50 @@ namespace ArchipelagoMuseDash.Patches {
 
             ArchipelagoStatic.ArchLogger.Log("PnlUnlockStage", "UnlockNewSong");
 
-            //If this is present than it is an arch item
-            if (!newSong.fields.ContainsKey("archName")) {
-                GetTitleText(__instance.gameObject).text = "New Song!!";
-                __instance.unlockText.text = "Go play it!";
+            try {
+                //If this is present than it is an arch item
+                if (!newSong.fields.ContainsKey("archName") && !newSong.fields.ContainsKey("victory")) {
+                    GetTitleText(__instance.gameObject).text = "New Song!!";
+                    __instance.unlockText.text = "Go play it!";
 
-                //Sometimes it looks like the sprite is null? Log And resupply it.
-                if (__instance.unlockCover.sprite == null)
-                    AttemptToFixBrokenAlbumImage(__instance);
-                return;
-            }
+                    //Sometimes it looks like the sprite is null? Log And resupply it.
+                    if (__instance.unlockCover.sprite == null)
+                        AttemptToFixBrokenAlbumImage(__instance);
+                    return;
+                }
 
-            GetTitleText(__instance.gameObject).text = "New Item!!";
-            __instance.unlockText.text = "Hope it's good!";
+                var archipelagoPlayer = newSong["archPlayer"];
 
-            //Recreate the sprite here as for some reason it gets garbage collected
-            var newSprite = Sprite.Create(ArchipelagoStatic.ArchipelagoIcon, new Rect(0, 0, ArchipelagoStatic.ArchipelagoIcon.width, ArchipelagoStatic.ArchipelagoIcon.height), new Vector2(0.5f, 0.5f));
-            newSprite.name = "ArchipelagoItem_cover";
-            __instance.unlockCover.sprite = newSprite;
-
-            var archipelagoName = newSong["archName"];
-            var archipelagoPlayer = newSong["archPlayer"];
-
-            //IL2CPP is weird on string casting. So to avoid that we use an deprecated type, then use .ToString(). This truly is gross but idk how to fix otherwise.
+                if (newSong.fields.ContainsKey("victory")) {
+                    GetTitleText(__instance.gameObject).text = "You've Won!!";
+                    __instance.unlockText.text = "You've Won!";
+                    //IL2CPP is weird on string casting. So to avoid that we use an deprecated type, then use .ToString(). This truly is gross but idk how to fix otherwise.
 #pragma warning disable CS0618
-            __instance.musicTitle.text = VariableUtils.GetResult(archipelagoName, Il2CppSystem.String.Il2CppType).ToString().Replace('_', ' ');
-            __instance.authorTitle.text = VariableUtils.GetResult(archipelagoPlayer, Il2CppSystem.String.Il2CppType).ToString();
+                    __instance.musicTitle.text = "Congratulations on your win.";
+                    __instance.authorTitle.text = VariableUtils.GetResult(archipelagoPlayer, Il2CppSystem.String.Il2CppType).ToString();
 #pragma warning restore CS0618
+                }
+                else {
+                    GetTitleText(__instance.gameObject).text = "New Item!!";
+                    __instance.unlockText.text = "Hope it's good!";
+
+                    var archipelagoName = newSong["archName"];
+
+                    //IL2CPP is weird on string casting. So to avoid that we use an deprecated type, then use .ToString(). This truly is gross but idk how to fix otherwise.
+#pragma warning disable CS0618
+                    __instance.musicTitle.text = VariableUtils.GetResult(archipelagoName, Il2CppSystem.String.Il2CppType).ToString().Replace('_', ' ');
+                    __instance.authorTitle.text = "To " + VariableUtils.GetResult(archipelagoPlayer, Il2CppSystem.String.Il2CppType).ToString();
+#pragma warning restore CS0618
+                }
+
+                //Recreate the sprite here as for some reason it gets garbage collected
+                var newSprite = Sprite.Create(ArchipelagoStatic.ArchipelagoIcon, new Rect(0, 0, ArchipelagoStatic.ArchipelagoIcon.width, ArchipelagoStatic.ArchipelagoIcon.height), new Vector2(0.5f, 0.5f));
+                newSprite.name = "ArchipelagoItem_cover";
+                __instance.unlockCover.sprite = newSprite;
+            }
+            catch (Exception e) {
+                ArchipelagoStatic.ArchLogger.Error("PnlUnlockStage", e);
+            }
         }
 
         static void AttemptToFixBrokenAlbumImage(PnlUnlockStage instance) {
@@ -73,7 +90,7 @@ namespace ArchipelagoMuseDash.Patches {
             ArchipelagoStatic.ArchLogger.Warning("PnlUnlockStage", $"Fix was attempted. Success: {instance.unlockCover.sprite != null}");
         }
 
-        static Text GetTitleText(GameObject pnlUnlockStageObject) {
+        public static Text GetTitleText(GameObject pnlUnlockStageObject) {
             for (int i = 0; i < pnlUnlockStageObject.transform.childCount; i++) {
                 if (pnlUnlockStageObject.transform.GetChild(i).gameObject.name != "AnimationTittleText")
                     continue;
@@ -82,6 +99,20 @@ namespace ArchipelagoMuseDash.Patches {
             }
 
             throw new Exception("Failed to find title text?");
+        }
+
+        public static void SetupLock(PnlUnlockStage pnlUnlockStage, string text, bool showLock) {
+            var lockParent = pnlUnlockStage.unlockText.transform.parent;
+            lockParent.gameObject.SetActive(true);
+
+            if (showLock) {
+                for (int i = 0; i < lockParent.childCount; i++)
+                    lockParent.GetChild(i).gameObject.SetActive(true);
+            }
+
+            pnlUnlockStage.unlockText.transform.parent.GetChild(3).gameObject.SetActive(true);
+            pnlUnlockStage.unlockText.gameObject.SetActive(true);
+            pnlUnlockStage.unlockText.text = text;
         }
     }
 

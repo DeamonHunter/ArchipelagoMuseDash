@@ -5,10 +5,10 @@ using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
+using ArchipelagoMuseDash.Patches;
 using Assets.Scripts.Database;
 using Assets.Scripts.PeroTools.Nice.Datas;
 using Assets.Scripts.PeroTools.Nice.Interface;
-using Assets.Scripts.UI.Controls;
 using UnityEngine;
 using Random = System.Random;
 
@@ -33,7 +33,11 @@ namespace ArchipelagoMuseDash {
 
         const float default_loading_screen_delay = 0.75f;
         const float default_give_delay = 0.1f;
+        const string default_music_name = "Magical Wonderland (More colorful mix)[Default Music]";
         float _itemGiveDelay = default_give_delay;
+
+        bool _showWin;
+        ShowBannerTextOnUnlock _showBannerText;
 
         public void RegisterSession(ArchipelagoSession session, int slot, Dictionary<string, object> slotData) {
             if (_currentSession != null)
@@ -78,8 +82,11 @@ namespace ArchipelagoMuseDash {
 
             if (addItemsImmediately) {
                 lock (_enqueuedItems) {
-                    while (_enqueuedItems.Count > 0)
-                        TryUnlockMusic(_enqueuedItems.Dequeue());
+                    while (_enqueuedItems.Count > 0) {
+                        var music = _enqueuedItems.Dequeue().NewMusic;
+                        if (music != null)
+                            TryUnlockMusic(music);
+                    }
                 }
                 //Forces a refresh of the song select so no songs show up. (Also probably gets rid of the current tag if any?)
                 MusicTagManager.instance.RefreshStageDisplayMusics(-1);
@@ -138,6 +145,18 @@ namespace ArchipelagoMuseDash {
             if (_itemGiveDelay > 0)
                 return;
 
+            if (_showWin) {
+                Data victoryData = new Data();
+                VariableUtils.SetResult(victoryData["uid"], ArchipelagoStatic.AlbumDatabase.GetMusicInfo(default_music_name).uid);
+                _ = victoryData["victory"];
+                ArchipelagoStatic.UnlockStagePanel.UnlockNewSong(victoryData.Cast<IData>());
+                VariableUtils.SetResult(victoryData["archPlayer"], (Il2CppSystem.String)(_currentSession.Players.GetPlayerAlias(_slot)));
+
+                _itemGiveDelay = default_loading_screen_delay;
+                _showWin = false;
+                return;
+            }
+
             QueuedItem newItem;
             lock (_enqueuedItems) {
                 if (_enqueuedItems.Count <= 0)
@@ -147,10 +166,8 @@ namespace ArchipelagoMuseDash {
             }
 
             Data data = new Data();
-            _ = data["new"]; //Creates the new variable to avoid any issues. Todo: Maybe not needed.
-
             if (newItem.NewMusic == null) {
-                VariableUtils.SetResult(data["uid"], ArchipelagoStatic.AlbumDatabase.GetMusicInfo("Magical Wonderland (More colorful mix)[Default Music]").uid);
+                VariableUtils.SetResult(data["uid"], (Il2CppSystem.String)ArchipelagoStatic.AlbumDatabase.GetMusicInfo(default_music_name).uid);
 
                 var name = (Il2CppSystem.String)newItem.ItemName;
                 ArchipelagoStatic.ArchLogger.Log("HandleItem", name);
@@ -158,29 +175,56 @@ namespace ArchipelagoMuseDash {
                 VariableUtils.SetResult(data["archName"], name);
                 VariableUtils.SetResult(data["archPlayer"], (Il2CppSystem.String)newItem.PlayerName);
             }
-            else
-                VariableUtils.SetResult(data["uid"], newItem.NewMusic.uid);
+            else {
+                VariableUtils.SetResult(data["uid"], (Il2CppSystem.String)newItem.NewMusic.uid);
+                if (_unlockedSongs.Contains(newItem.NewMusic.uid))
+                    _showBannerText = ShowBannerTextOnUnlock.DuplicateSong;
+                else if (GoalSong?.uid == newItem.NewMusic.uid)
+                    _showBannerText = ShowBannerTextOnUnlock.GoalSong;
+                ArchipelagoStatic.ArchLogger.Log(_showBannerText.ToString());
+
+                if (TryUnlockMusic(newItem.NewMusic))
+                    _showBannerText = ShowBannerTextOnUnlock.RefreshMusic;
+            }
 
             ArchipelagoStatic.UnlockStagePanel.UnlockNewSong(data.Cast<IData>());
-            if (TryUnlockMusic(newItem)) {
-                MusicTagManager.instance.RefreshStageDisplayMusics(-1);
-                ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
-            }
 
             _itemGiveDelay = default_give_delay;
         }
 
-        bool TryUnlockMusic(QueuedItem queuedItem) {
-            if (queuedItem.NewMusic == null)
-                return false;
+        public void HandleLock() {
+            //Check if we need to override the banner text on an unlocking item
 
-            _unlockedSongs.Add(queuedItem.NewMusic.uid);
-            if (!GlobalDataBase.dbMusicTag.ContainsHide(queuedItem.NewMusic))
+            if (_showBannerText == ShowBannerTextOnUnlock.None)
+                return;
+
+            if (!ArchipelagoStatic.UnlockStagePanel.gameObject.activeInHierarchy) {
+                MusicTagManager.instance.RefreshStageDisplayMusics(-1);
+                ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
+                _showBannerText = ShowBannerTextOnUnlock.None;
+                return;
+            }
+
+            if (!ArchipelagoStatic.UnlockStagePanel.unlockText.gameObject.activeSelf) {
+                switch (_showBannerText) {
+                    case ShowBannerTextOnUnlock.GoalSong:
+                        PnlUnlockStagePatch.SetupLock(ArchipelagoStatic.UnlockStagePanel, "Its the Goal!", false);
+                        break;
+                    case ShowBannerTextOnUnlock.DuplicateSong:
+                        PnlUnlockStagePatch.SetupLock(ArchipelagoStatic.UnlockStagePanel, "Its a duplicate...", false);
+                        break;
+                }
+            }
+        }
+
+        bool TryUnlockMusic(MusicInfo musicInfo) {
+            _unlockedSongs.Add(musicInfo.uid);
+            if (!GlobalDataBase.dbMusicTag.ContainsHide(musicInfo))
                 return false;
 
             //Remove the song from hidden, and also favourite it, so the favourite symbol can act as a "Has a check"
-            GlobalDataBase.dbMusicTag.RemoveHide(queuedItem.NewMusic);
-            GlobalDataBase.dbMusicTag.AddCollection(queuedItem.NewMusic);
+            GlobalDataBase.dbMusicTag.RemoveHide(musicInfo);
+            GlobalDataBase.dbMusicTag.AddCollection(musicInfo);
             return true;
         }
 
@@ -229,8 +273,8 @@ namespace ArchipelagoMuseDash {
 
                 if (GoalSong != null && GoalSong.uid == uid) {
                     //Todo: Better victory stuff
-                    ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Showing Victory Stuff.");
-                    ShowText.ShowInfo("You've Won!");
+                    ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Victory achieved, enqueing visuals for next available time.");
+                    _showWin = true;
 
                     var statusUpdatePacket = new StatusUpdatePacket {
                         Status = ArchipelagoClientState.ClientGoal
@@ -294,6 +338,13 @@ namespace ArchipelagoMuseDash {
                 ItemName = itemName;
                 PlayerName = playerName;
             }
+        }
+
+        enum ShowBannerTextOnUnlock {
+            None,
+            RefreshMusic,
+            DuplicateSong,
+            GoalSong
         }
     }
 }

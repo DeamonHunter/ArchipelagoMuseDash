@@ -65,5 +65,14 @@ namespace ArchipelagoMuseDash {
             if (ArchipelagoStatic.CurrentScene == "UISystem_PC")
                 ArchipelagoStatic.SessionHandler.HandleNewItems();
         }
+
+        public override void OnLateUpdate() {
+            base.OnLateUpdate();
+            if (!ArchipelagoStatic.LoggedInToGame)
+                return;
+
+            if (ArchipelagoStatic.CurrentScene == "UISystem_PC")
+                ArchipelagoStatic.SessionHandler.HandleLock();
+        }
     }
 }
