@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
 using MelonLoader;
@@ -12,6 +13,7 @@ namespace ArchipelagoMuseDash {
         string _password;
 
         string _error;
+        string _lastLoginPath;
 
         float _deltaTime;
 
@@ -29,10 +31,20 @@ namespace ArchipelagoMuseDash {
 #else
             _ipAddress = "archipelago.gg:38281";
 #endif
+            _lastLoginPath = Path.Combine(Application.absoluteURL, "UserData/ArchSaves/LastLogin.txt");
         }
 
-
         public void ShowLoginScreen() {
+            if (File.Exists(_lastLoginPath)) {
+                using (var file = File.OpenRead(_lastLoginPath)) {
+                    using (var sr = new StreamReader(file)) {
+                        _ipAddress = sr.ReadLine();
+                        _username = sr.ReadLine();
+                    }
+                }
+            }
+
+
             ArchipelagoStatic.LoggedInToGame = false;
             MelonEvents.OnGUI.Subscribe(DrawArchLogin);
         }
@@ -118,6 +130,11 @@ namespace ArchipelagoMuseDash {
 
                 var successful = (LoginSuccessful)loginResult;
                 ArchipelagoStatic.SessionHandler.RegisterSession(session, successful.Slot, successful.SlotData);
+
+                var sb = new StringBuilder();
+                sb.AppendLine(_ipAddress);
+                sb.AppendLine(_username);
+                File.WriteAllText(_lastLoginPath, sb.ToString());
             }
             catch (Exception e) {
                 ArchipelagoStatic.ArchLogger.Error("Login", e);
