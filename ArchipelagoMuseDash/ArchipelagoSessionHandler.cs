@@ -28,14 +28,14 @@ namespace ArchipelagoMuseDash {
         readonly Random random = new Random();
 
         ArchipelagoSession _currentSession;
-        long _slot;
+        int _slot;
         Dictionary<string, object> _slotData;
 
         const float default_loading_screen_delay = 0.75f;
         const float default_give_delay = 0.1f;
         float _itemGiveDelay = default_give_delay;
 
-        public void RegisterSession(ArchipelagoSession session, long slot, Dictionary<string, object> slotData) {
+        public void RegisterSession(ArchipelagoSession session, int slot, Dictionary<string, object> slotData) {
             if (_currentSession != null)
                 throw new NotImplementedException("Changing sessions is not implemented atm.");
 
@@ -90,7 +90,8 @@ namespace ArchipelagoMuseDash {
             var name = _currentSession.Items.GetItemName(item.Item);
             ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"Attempting to enqueue network item: {name}");
 
-            if (item.Player == _slot || treatItemAsLocal) {
+            //if Player == 0, then its an item sent by the server
+            if (item.Player == _slot || item.Player == 0 || treatItemAsLocal) {
                 if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(name, out var singularInfo)) {
                     //Individual song
                     ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Network Item was Song.");
@@ -110,6 +111,8 @@ namespace ArchipelagoMuseDash {
             else {
                 ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Network Item is likely an archipelago item.");
                 var playerName = _currentSession.Players.GetPlayerAlias(item.Player);
+                if (string.IsNullOrEmpty(playerName))
+                    playerName = "Unknown Player"; //Catch all for certain cases, like cheated items
 
                 ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"{playerName}, {name}");
                 lock (_enqueuedItems)
