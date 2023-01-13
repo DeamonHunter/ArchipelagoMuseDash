@@ -156,7 +156,6 @@ namespace ArchipelagoMuseDash.Patches {
             var darkenImage = __instance.m_LockObj.transform.GetChild(0).gameObject;
             var lockImage = __instance.m_LockObj.transform.GetChild(1).gameObject;
             if (ArchipelagoStatic.SessionHandler.GoalSong.uid == __instance.musicInfo.uid) {
-                //Todo: Does activating the lock block from accessing it?
                 __instance.m_LockObj.SetActive(true);
                 __instance.m_LockTxt.text = "Goal";
 

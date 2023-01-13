@@ -147,9 +147,9 @@ namespace ArchipelagoMuseDash {
             if (_showWin) {
                 Data victoryData = new Data();
                 VariableUtils.SetResult(victoryData["uid"], ArchipelagoStatic.AlbumDatabase.GetMusicInfo(default_music_name).uid);
+                VariableUtils.SetResult(victoryData["archPlayer"], (Il2CppSystem.String)(_currentSession.Players.GetPlayerAlias(_slot)));
                 _ = victoryData["victory"];
                 ArchipelagoStatic.UnlockStagePanel.UnlockNewSong(victoryData.Cast<IData>());
-                VariableUtils.SetResult(victoryData["archPlayer"], (Il2CppSystem.String)(_currentSession.Players.GetPlayerAlias(_slot)));
 
                 _itemGiveDelay = default_loading_screen_delay;
                 _showWin = false;
@@ -180,10 +180,11 @@ namespace ArchipelagoMuseDash {
                     _showBannerText = ShowBannerTextOnUnlock.DuplicateSong;
                 else if (GoalSong?.uid == newItem.NewMusic.uid)
                     _showBannerText = ShowBannerTextOnUnlock.GoalSong;
-                ArchipelagoStatic.ArchLogger.Log(_showBannerText.ToString());
 
-                if (TryUnlockMusic(newItem.NewMusic))
-                    _showBannerText = ShowBannerTextOnUnlock.RefreshMusic;
+                if (TryUnlockMusic(newItem.NewMusic)) {
+                    if (_showBannerText == ShowBannerTextOnUnlock.None)
+                        _showBannerText = ShowBannerTextOnUnlock.RefreshMusic;
+                }
             }
 
             ArchipelagoStatic.UnlockStagePanel.UnlockNewSong(data.Cast<IData>());
