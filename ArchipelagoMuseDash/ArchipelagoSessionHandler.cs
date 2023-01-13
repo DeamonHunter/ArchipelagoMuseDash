@@ -77,7 +77,9 @@ namespace ArchipelagoMuseDash {
         public void CheckForNewItems(bool addItemsImmediately) {
             while (_currentSession.Items.Any()) {
                 var item = _currentSession.Items.DequeueItem();
-                EnqueueItem(item, addItemsImmediately);
+
+                //These items should always be for the local player.
+                EnqueueItem(item, false);
             }
 
             if (addItemsImmediately) {
@@ -93,20 +95,18 @@ namespace ArchipelagoMuseDash {
             }
         }
 
-        void EnqueueItem(NetworkItem item, bool treatItemAsLocal) {
+        void EnqueueItem(NetworkItem item, bool otherPlayerItem) {
             var name = _currentSession.Items.GetItemName(item.Item);
             ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"Attempting to enqueue network item: {name}");
 
-            //if Player == 0, then its an item sent by the server
-            if (item.Player == _slot || item.Player == 0 || treatItemAsLocal) {
+            //Todo: Should we show who the item was from?
+
+            if (!otherPlayerItem) {
                 if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(name, out var singularInfo)) {
-                    //Individual song
-                    ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Network Item was Song.");
                     lock (_enqueuedItems)
                         _enqueuedItems.Enqueue(new QueuedItem(singularInfo));
                 }
                 else if (ArchipelagoStatic.AlbumDatabase.TryGetAlbum(name, out var album)) {
-                    ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Network Item was Album.");
                     foreach (var musicInfo in album) {
                         lock (_enqueuedItems)
                             _enqueuedItems.Enqueue(new QueuedItem(musicInfo));
@@ -116,7 +116,6 @@ namespace ArchipelagoMuseDash {
                     ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Unknown Item was given: {name}");
             }
             else {
-                ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Network Item is likely an archipelago item.");
                 var playerName = _currentSession.Players.GetPlayerAlias(item.Player);
                 if (string.IsNullOrEmpty(playerName))
                     playerName = "Unknown Player"; //Catch all for certain cases, like cheated items
@@ -257,7 +256,7 @@ namespace ArchipelagoMuseDash {
                 var location2 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-1");
                 _completedSongs.Add(uid);
 
-                //Todo: Is there a better way of doing this?
+                //Complete the location check, but also scout to ensure we get the items we are sending to other players.
                 await _currentSession.Locations.CompleteLocationChecksAsync(location1, location2);
                 var items = await _currentSession.Locations.ScoutLocationsAsync(false, location1, location2);
 
@@ -268,7 +267,7 @@ namespace ArchipelagoMuseDash {
                     if (item.Player == _slot)
                         continue;
 
-                    EnqueueItem(item, false);
+                    EnqueueItem(item, true);
                 }
 
                 if (GoalSong != null && GoalSong.uid == uid) {
