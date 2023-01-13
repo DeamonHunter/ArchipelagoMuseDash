@@ -247,6 +247,11 @@ namespace ArchipelagoMuseDash {
         }
 
         public void CheckLocation(string uid, string locationName) {
+            if (_completedSongs.Contains(uid)) {
+                ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Location already checked for: {locationName}");
+                return;
+            }
+
             ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Checking location for: {locationName}");
             System.Threading.Tasks.Task.Run(async () => await CheckLocationsInner(uid, locationName));
         }
