@@ -1,7 +1,6 @@
 ﻿using System;
 using ArchipelagoMuseDash;
 using ArchipelagoMuseDash.Logging;
-using ArchipelagoMuseDash.Patches;
 using Il2CppSystem.IO;
 using MelonLoader;
 using UnityEngine;
@@ -20,7 +19,6 @@ namespace ArchipelagoMuseDash {
             ArchipelagoStatic.Login = new ArchipelagoLogin();
             ArchipelagoStatic.SessionHandler = new ArchipelagoSessionHandler();
             LoadExternalAssets();
-            WebAPIPatch.DoPatching(HarmonyInstance);
         }
 
         void LoadExternalAssets() {

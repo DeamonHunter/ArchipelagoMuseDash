@@ -6,22 +6,14 @@ using System.Collections.Generic;
 using Account;
 using Assets.Scripts.Database;
 using HarmonyLib;
-using MelonLoader;
 
 namespace ArchipelagoMuseDash.Patches {
     /// <summary>
     /// Patches the API calls to block certain ones while playing archipelago
     /// </summary>
+    [HarmonyPatch(typeof(GameAccountSystem), "SendToUrl")]
     static class WebAPIPatch {
-        public static void DoPatching(HarmonyLib.Harmony harmony) {
-            var targetMethod = AccessTools.Method(typeof(GameAccountSystem), "SendToUrl");
-            var patchMethod = AccessTools.Method(typeof(WebAPIPatch), "SendToURLPatch");
-            harmony.Patch(targetMethod, patchMethod.ToNewHarmonyMethod());
-        }
-
-        public static bool SendToURLPatch(string url, string method, Dictionary<string, object> datas) {
-            ArchipelagoStatic.ArchLogger.Log("WebAPIPatch", $"url:{url} method:{method}");
-
+        private static bool Prefix(string url, string method, Dictionary<string, object> datas) {
             //If we aren't logged in to an archipelago. Work as normal.
             if (!ArchipelagoStatic.LoggedInToGame)
                 return true;
@@ -44,6 +36,8 @@ namespace ArchipelagoMuseDash.Patches {
                 ArchipelagoStatic.ArchLogger.Error("SendToURLPatch", e);
                 return false;
             }
+
+            ArchipelagoStatic.ArchLogger.Log("SendToURLPatch", $"Allowed url:{url} method:{method}");
             return true;
         }
     }
