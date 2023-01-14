@@ -1,7 +1,6 @@
 ﻿using System;
 using ArchipelagoMuseDash;
 using ArchipelagoMuseDash.Logging;
-using Il2CppSystem.IO;
 using MelonLoader;
 using UnityEngine;
 
@@ -22,15 +21,23 @@ namespace ArchipelagoMuseDash {
         }
 
         void LoadExternalAssets() {
-            var path = Path.Combine(Application.absoluteURL, "Mods/ArchIcon.png");
+            using (var stream = MelonAssembly.Assembly.GetManifestResourceStream("ArchipelagoMuseDash.Assets.ArchIcon.png")) {
+                if (stream == null) {
+                    ArchipelagoStatic.ArchLogger.Warning("LoadExternalAssets", "Help");
+                    return;
+                }
 
-            var bytes = File.ReadAllBytes(path);
-            var archIconTexture = new Texture2D(1, 1);
-            archIconTexture.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-            archIconTexture.wrapMode = TextureWrapMode.Clamp;
+                using (var ms = new System.IO.MemoryStream()) {
+                    stream.CopyTo(ms);
 
-            ImageConversion.LoadImage(archIconTexture, bytes);
-            ArchipelagoStatic.ArchipelagoIcon = archIconTexture;
+                    var archIconTexture = new Texture2D(1, 1);
+                    archIconTexture.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+                    archIconTexture.wrapMode = TextureWrapMode.Clamp;
+
+                    ImageConversion.LoadImage(archIconTexture, ms.ToArray());
+                    ArchipelagoStatic.ArchipelagoIcon = archIconTexture;
+                }
+            }
         }
 
         public override void OnSceneWasLoaded(int buildIndex, string sceneName) {
