@@ -2,6 +2,8 @@
 using System.IO;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
+using Assets.Scripts.Database;
+using Assets.Scripts.PeroTools.Nice.Datas;
 using Il2CppSystem.Text;
 using MelonLoader;
 using UnhollowerBaseLib;
@@ -148,7 +150,26 @@ namespace ArchipelagoMuseDash {
             ArchipelagoStatic.SteamSync.m_FolderPath = ArchipelagoStatic.OriginalFolderName;
             ArchipelagoStatic.SteamSync.m_FilePath = ArchipelagoStatic.SteamSync.m_FolderPath + "/" + ArchipelagoStatic.SteamSync.m_FileName;
             ArchipelagoStatic.SteamSync.LoadLocal();
+
+            //FixMyGame();
             HideLoginOverlay();
+
+            //Force collection update
+            MusicTagManager.instance.RefreshStageDisplayMusics(-1);
+            ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
+        }
+
+        /// <summary>
+        /// Unhide all songs. In case something breaks.
+        /// </summary>
+        public void FixMyGame() {
+            var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
+            GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
+
+            foreach (var musicInfo in list)
+                GlobalDataBase.dbMusicTag.RemoveHide(musicInfo);
+
+            DataManager.instance.Save();
         }
 
         void HideLoginOverlay() {

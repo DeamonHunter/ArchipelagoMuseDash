@@ -51,14 +51,19 @@ namespace ArchipelagoMuseDash {
                     _songsByAlbum.Add(albumLocal, albumList);
                 }
                 albumList.Add(musicInfo);
-
-                if (GlobalDataBase.dbMusicTag.AddHide(musicInfo))
-                    GlobalDataBase.dbMusicTag.RemoveCollection(musicInfo);
             }
 
 #if DEBUG
             DumpSongs();
 #endif
+        }
+
+        public void HideAllSongs() {
+            ArchipelagoStatic.ArchLogger.Log("AlbumDatabase", "Hiding all songs");
+            foreach (var musicInfo in _songsByItemName.Values) {
+                if (GlobalDataBase.dbMusicTag.AddHide(musicInfo))
+                    GlobalDataBase.dbMusicTag.RemoveCollection(musicInfo);
+            }
         }
 
         public bool TryGetMusicInfo(string itemName, out MusicInfo info) => _songsByItemName.TryGetValue(itemName, out info);

@@ -58,6 +58,7 @@ namespace ArchipelagoMuseDash {
         void Setup() {
             _unlockedSongs.Clear();
             ArchipelagoStatic.AlbumDatabase.Setup();
+            ArchipelagoStatic.AlbumDatabase.HideAllSongs();
 
             if (_slotData.TryGetValue("victoryLocation", out var value)) {
                 ArchipelagoStatic.ArchLogger.Log("Goal Song", (string)value);
@@ -295,17 +296,6 @@ namespace ArchipelagoMuseDash {
 
         public bool IsSongUnlocked(string musicUid) {
             return _unlockedSongs.Contains(musicUid);
-        }
-
-        /// <summary>
-        /// Unhide all songs. In case something breaks.
-        /// </summary>
-        public void FixMyGame() {
-            var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
-            GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
-
-            foreach (var musicInfo in list)
-                GlobalDataBase.dbMusicTag.RemoveHide(musicInfo);
         }
 
         public MusicInfo GetRandomUnfinishedSong() {
