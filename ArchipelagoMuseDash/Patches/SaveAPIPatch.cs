@@ -8,7 +8,9 @@ using UnityEngine;
 namespace ArchipelagoMuseDash.Patches {
     [HarmonyPatch(typeof(SteamSync), "LoadLocal")]
     internal static class SteamSyncLoadLocal {
-        static void Prefix(SteamSync __instance) {
+        static void Prefix(SteamSync __instance, out bool __state) {
+            __state = ArchipelagoStatic.SteamSync == null;
+
             if (ArchipelagoStatic.SteamSync == null) {
                 ArchipelagoStatic.SteamSync = __instance;
                 ArchipelagoStatic.OriginalFolderName = __instance.m_FolderPath;
@@ -27,9 +29,11 @@ namespace ArchipelagoMuseDash.Patches {
             }
         }
 
-        static void Postfix() {
-            if (DataHelper.isNew)
+        static void Postfix(bool __state) {
+            if (__state && DataHelper.isNew)
                 DataHelper.isNew = false;
+
+            DataHelper.isUnlockAllMaster = __state;
         }
     }
 
