@@ -104,6 +104,9 @@ namespace ArchipelagoMuseDash {
             var albumConfig = configManager.GetConfigObject<DBConfigAlbums>(-1);
             var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>(-1).GetLocal(english_localisation_idx);
 
+            var originalStreamerMode = AnchorModule.instance.isAnchorMode;
+            AnchorModule.instance.isAnchorMode = true;
+
             foreach (var musicInfo in list) {
                 if (musicInfo.uid == random_song_panel_uid)
                     continue;
@@ -111,8 +114,12 @@ namespace ArchipelagoMuseDash {
                 var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
                 var songLocal = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal(english_localisation_idx).GetLocalAlbumInfoByIndex(musicInfo.listIndex);
 
-                sb.AppendLine($"{songLocal.name}[{albumLocal}]|{musicInfo.difficulty1}|{musicInfo.difficulty2}|{musicInfo.difficulty3}|{musicInfo.difficulty4}");
+                var availableInStreamerMode = !AnchorModule.instance.CheckLockByMusicUid(musicInfo.uid);
+
+                sb.AppendLine($"{songLocal.name}|{albumLocal}|{availableInStreamerMode}|{musicInfo.difficulty1}|{musicInfo.difficulty2}|{musicInfo.difficulty3}|{musicInfo.difficulty4}");
             }
+
+            AnchorModule.instance.isAnchorMode = originalStreamerMode;
 
             if (!Directory.Exists(Path.Combine(Application.absoluteURL, "Output/")))
                 Directory.CreateDirectory(Path.Combine(Application.absoluteURL, "Output/"));
