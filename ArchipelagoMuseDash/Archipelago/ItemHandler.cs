@@ -13,6 +13,7 @@ namespace ArchipelagoMuseDash.Archipelago {
         public ItemUnlockHandler Unlocker { get; }
 
         public MusicInfo GoalSong;
+        public HashSet<string> SongsInLogic = new HashSet<string>();
         public HashSet<string> UnlockedSongUids = new HashSet<string>();
         public HashSet<string> CompletedSongUids = new HashSet<string>();
 
@@ -29,6 +30,7 @@ namespace ArchipelagoMuseDash.Archipelago {
         }
 
         public void Setup(Dictionary<string, object> slotData) {
+            SongsInLogic.Clear();
             UnlockedSongUids.Clear();
             CompletedSongUids.Clear();
 
@@ -40,10 +42,21 @@ namespace ArchipelagoMuseDash.Archipelago {
             }
 
             CheckForNewItems();
+            Unlocker.UnlockAllItems();
 
             foreach (var location in _currentSession.Locations.AllLocationsChecked) {
                 var name = _currentSession.Locations.GetLocationNameFromId(location);
                 CheckStartingLocation(name.Substring(0, name.Length - 2));
+            }
+
+            foreach (var location in _currentSession.Locations.AllLocations) {
+                var name = _currentSession.Locations.GetLocationNameFromId(location);
+                name = name.Substring(0, name.Length - 2);
+
+                if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(name, out var info))
+                    SongsInLogic.Add(info.uid);
+                else
+                    ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"Unknown location: {name}");
             }
         }
 

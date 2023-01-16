@@ -91,7 +91,7 @@ namespace ArchipelagoMuseDash {
             _password = GUILayout.TextField(_password, _textFieldStyle, null);
 
             GUILayout.Label(_error ?? "", _labelStyle, new Il2CppReferenceArray<GUILayoutOption>(new[] {
-                GUILayout.Height(120f)
+                GUILayout.Height(110f)
             }));
 
             if (GUILayout.Button("Log In", _buttonStyle, null))

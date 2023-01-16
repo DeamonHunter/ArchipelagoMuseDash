@@ -137,6 +137,7 @@ namespace ArchipelagoMuseDash.Patches {
             //Todo: Possibly fragile. PurchaseLock -> ImgDarken, ImgLock
             var darkenImage = __instance.m_LockObj.transform.GetChild(0).gameObject;
             var lockImage = __instance.m_LockObj.transform.GetChild(1).gameObject;
+            var banner = __instance.m_LockObj.transform.GetChild(2).gameObject;
             if (itemHandler.GoalSong.uid == __instance.musicInfo.uid) {
                 __instance.m_LockObj.SetActive(true);
                 __instance.m_LockTxt.text = "Goal";
@@ -144,14 +145,28 @@ namespace ArchipelagoMuseDash.Patches {
                 var unlocked = itemHandler.UnlockedSongUids.Contains(__instance.musicInfo.uid);
                 darkenImage.SetActive(!unlocked);
                 lockImage.SetActive(!unlocked);
+                banner.SetActive(true);
+                __instance.m_LockTxt.gameObject.SetActive(true);
             }
             else {
                 var locked = !itemHandler.UnlockedSongUids.Contains(__instance.musicInfo.uid);
-
-                __instance.m_LockObj.SetActive(locked);
-                __instance.m_LockTxt.text = locked ? "Not yet unlocked." : "";
                 lockImage.SetActive(locked);
                 darkenImage.SetActive(locked);
+                __instance.m_LockObj.SetActive(locked);
+
+                if (locked) {
+                    var songInLogic = ArchipelagoStatic.SessionHandler.ItemHandler.SongsInLogic.Contains(__instance.musicInfo.uid);
+
+                    if (songInLogic) {
+                        __instance.m_LockTxt.text = "Not yet unlocked.";
+                        banner.SetActive(true);
+                        __instance.m_LockTxt.gameObject.SetActive(true);
+                    }
+                    else {
+                        banner.SetActive(false);
+                        __instance.m_LockTxt.gameObject.SetActive(false);
+                    }
+                }
             }
         }
     }
