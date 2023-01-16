@@ -1,5 +1,6 @@
 ﻿using System;
 using ArchipelagoMuseDash;
+using ArchipelagoMuseDash.Archipelago;
 using ArchipelagoMuseDash.Logging;
 using MelonLoader;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace ArchipelagoMuseDash {
             base.OnInitializeMelon();
             ArchipelagoStatic.ArchLogger = new ArchLogger();
             ArchipelagoStatic.Login = new ArchipelagoLogin();
-            ArchipelagoStatic.SessionHandler = new ArchipelagoSessionHandler();
+            ArchipelagoStatic.SessionHandler = new SessionHandler();
             LoadExternalAssets();
         }
 
@@ -42,15 +43,14 @@ namespace ArchipelagoMuseDash {
 
         public override void OnSceneWasLoaded(int buildIndex, string sceneName) {
             base.OnSceneWasLoaded(buildIndex, sceneName);
-            ArchipelagoStatic.ArchLogger.Log("Scene Load", $"{sceneName} was loaded.");
-
-            ArchipelagoStatic.CurrentScene = sceneName;
 
             try {
-                if (ArchipelagoStatic.HasShownLogin || sceneName != "UISystem_PC")
-                    return;
+                ArchipelagoStatic.ArchLogger.Log("Scene Load", $"{sceneName} was loaded.");
 
-                ArchipelagoStatic.HasShownLogin = true;
+                ArchipelagoStatic.CurrentScene = sceneName;
+
+                if (ArchipelagoStatic.Login.HasBeenShown || sceneName != "UISystem_PC")
+                    return;
 
                 ArchipelagoStatic.Login.ShowLoginScreen();
             }
@@ -62,22 +62,18 @@ namespace ArchipelagoMuseDash {
         public override void OnUpdate() {
             base.OnUpdate();
 
-            if (!ArchipelagoStatic.LoggedInToGame)
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
-            ArchipelagoStatic.SessionHandler.CheckForNewItems(false);
-
-            if (ArchipelagoStatic.CurrentScene == "UISystem_PC")
-                ArchipelagoStatic.SessionHandler.HandleNewItems();
+            ArchipelagoStatic.SessionHandler.OnUpdate();
         }
 
         public override void OnLateUpdate() {
             base.OnLateUpdate();
-            if (!ArchipelagoStatic.LoggedInToGame)
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
-            if (ArchipelagoStatic.CurrentScene == "UISystem_PC")
-                ArchipelagoStatic.SessionHandler.HandleLock();
+            ArchipelagoStatic.SessionHandler.OnLateUpdate();
         }
     }
 }

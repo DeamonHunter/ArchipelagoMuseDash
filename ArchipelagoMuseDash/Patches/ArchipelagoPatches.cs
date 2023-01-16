@@ -1,7 +1,7 @@
 ﻿using System;
+using ArchipelagoMuseDash.Archipelago.Items;
 using Assets.Scripts.Database;
 using Assets.Scripts.PeroTools.Managers;
-using Assets.Scripts.PeroTools.Nice.Interface;
 using Assets.Scripts.UI.Controls;
 using Assets.Scripts.UI.Panels;
 using HarmonyLib;
@@ -20,56 +20,37 @@ namespace ArchipelagoMuseDash.Patches {
     /// </summary>
     [HarmonyPatch(typeof(PnlUnlockStage), "UnlockNewSong")]
     sealed class PnlUnlockStagePatch {
-        static void Postfix(PnlUnlockStage __instance, IData newSong) {
-            if (!ArchipelagoStatic.LoggedInToGame)
+        static void Postfix(PnlUnlockStage __instance) {
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
-            ArchipelagoStatic.ArchLogger.Log("PnlUnlockStage", "UnlockNewSong");
+            ArchipelagoStatic.ArchLogger.Log("PnlUnlockStage", "Handling new Item.");
 
-            try {
-                //If this is present than it is an arch item
-                if (!newSong.fields.ContainsKey("archName") && !newSong.fields.ContainsKey("victory")) {
-                    GetTitleText(__instance.gameObject).text = "New Song!!";
-                    __instance.unlockText.text = "Go play it!";
+            var currentItem = ArchipelagoStatic.SessionHandler.ItemHandler.Unlocker.GetCurrentItem();
 
-                    //Sometimes it looks like the sprite is null? Log And resupply it.
-                    if (__instance.unlockCover.sprite == null)
-                        AttemptToFixBrokenAlbumImage(__instance);
-                    return;
-                }
+            //Something else triggered this unlock. Avoid doing anything
+            if (currentItem == null)
+                return;
 
-                var archipelagoPlayer = newSong["archPlayer"];
+            if (currentItem.TitleText != null)
+                GetTitleText(__instance.gameObject).text = currentItem.TitleText;
 
-                if (newSong.fields.ContainsKey("victory")) {
-                    GetTitleText(__instance.gameObject).text = "You've Won!!";
-                    __instance.unlockText.text = "You've Won!";
-                    //IL2CPP is weird on string casting. So to avoid that we use an deprecated type, then use .ToString(). This truly is gross but idk how to fix otherwise.
-#pragma warning disable CS0618
-                    __instance.musicTitle.text = "Congratulations on your win.";
-                    __instance.authorTitle.text = VariableUtils.GetResult(archipelagoPlayer, Il2CppSystem.String.Il2CppType).ToString();
-#pragma warning restore CS0618
-                }
-                else {
-                    GetTitleText(__instance.gameObject).text = "New Item!!";
-                    __instance.unlockText.text = "Hope it's good!";
+            if (currentItem.SongText != null)
+                __instance.musicTitle.text = currentItem.SongText;
 
-                    var archipelagoName = newSong["archName"];
+            if (currentItem.AuthorText != null)
+                __instance.authorTitle.text = currentItem.AuthorText;
 
-                    //IL2CPP is weird on string casting. So to avoid that we use an deprecated type, then use .ToString(). This truly is gross but idk how to fix otherwise.
-#pragma warning disable CS0618
-                    __instance.musicTitle.text = VariableUtils.GetResult(archipelagoName, Il2CppSystem.String.Il2CppType).ToString().Replace('_', ' ');
-                    __instance.authorTitle.text = "To " + VariableUtils.GetResult(archipelagoPlayer, Il2CppSystem.String.Il2CppType).ToString();
-#pragma warning restore CS0618
-                }
+            __instance.unlockText.text = currentItem.PreUnlockBannerText;
 
+            if (currentItem.UseArchipelagoLogo) {
                 //Recreate the sprite here as for some reason it gets garbage collected
                 var newSprite = Sprite.Create(ArchipelagoStatic.ArchipelagoIcon, new Rect(0, 0, ArchipelagoStatic.ArchipelagoIcon.width, ArchipelagoStatic.ArchipelagoIcon.height), new Vector2(0.5f, 0.5f));
                 newSprite.name = "ArchipelagoItem_cover";
                 __instance.unlockCover.sprite = newSprite;
             }
-            catch (Exception e) {
-                ArchipelagoStatic.ArchLogger.Error("PnlUnlockStage", e);
-            }
+            else if (__instance.unlockCover.sprite == null) //Todo: Is this needed anymore
+                AttemptToFixBrokenAlbumImage(__instance);
         }
 
         static void AttemptToFixBrokenAlbumImage(PnlUnlockStage instance) {
@@ -101,18 +82,17 @@ namespace ArchipelagoMuseDash.Patches {
             throw new Exception("Failed to find title text?");
         }
 
-        public static void SetupLock(PnlUnlockStage pnlUnlockStage, string text, bool showLock) {
+        public static void ShowPostBanner(PnlUnlockStage pnlUnlockStage, IMuseDashItem item) {
+            var postBannerText = item.PostUnlockBannerText;
+            if (postBannerText == null)
+                return;
+
             var lockParent = pnlUnlockStage.unlockText.transform.parent;
             lockParent.gameObject.SetActive(true);
 
-            if (showLock) {
-                for (int i = 0; i < lockParent.childCount; i++)
-                    lockParent.GetChild(i).gameObject.SetActive(true);
-            }
-
             pnlUnlockStage.unlockText.transform.parent.GetChild(3).gameObject.SetActive(true);
             pnlUnlockStage.unlockText.gameObject.SetActive(true);
-            pnlUnlockStage.unlockText.text = text;
+            pnlUnlockStage.unlockText.text = postBannerText;
         }
     }
 
@@ -123,7 +103,7 @@ namespace ArchipelagoMuseDash.Patches {
     sealed class PnlVictoryPatch {
         static void Postfix() {
             //Don't override normal gameplay
-            if (!ArchipelagoStatic.LoggedInToGame)
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
             ArchipelagoStatic.ArchLogger.Log("PnlVictory", $"Selected Role: {GlobalDataBase.dbBattleStage.selectedRole}");
@@ -134,7 +114,7 @@ namespace ArchipelagoMuseDash.Patches {
             //Music info must be grabbed now. The next frame it will be nulled and be unusable.
             var musicInfo = GlobalDataBase.dbBattleStage.selectedMusicInfo;
             var locationName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(musicInfo);
-            ArchipelagoStatic.SessionHandler.CheckLocation(musicInfo.uid, locationName);
+            ArchipelagoStatic.SessionHandler.ItemHandler.CheckLocation(musicInfo.uid, locationName);
         }
     }
 
@@ -146,35 +126,32 @@ namespace ArchipelagoMuseDash.Patches {
     sealed class MusicStageCellOnChangeCellPatch {
         static void Postfix(MusicStageCell __instance) {
             //Don't override normal gameplay
-            if (!ArchipelagoStatic.LoggedInToGame || __instance.musicInfo == null)
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || __instance.musicInfo == null)
                 return;
 
             if (__instance.musicInfo.uid == "?")
                 return; //This is the Random song cell
 
+            var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
+
             //Todo: Possibly fragile. PurchaseLock -> ImgDarken, ImgLock
             var darkenImage = __instance.m_LockObj.transform.GetChild(0).gameObject;
             var lockImage = __instance.m_LockObj.transform.GetChild(1).gameObject;
-            if (ArchipelagoStatic.SessionHandler.GoalSong.uid == __instance.musicInfo.uid) {
+            if (itemHandler.GoalSong.uid == __instance.musicInfo.uid) {
                 __instance.m_LockObj.SetActive(true);
                 __instance.m_LockTxt.text = "Goal";
 
-                var unlocked = ArchipelagoStatic.SessionHandler.IsSongUnlocked(__instance.musicInfo.uid);
+                var unlocked = itemHandler.UnlockedSongUids.Contains(__instance.musicInfo.uid);
                 darkenImage.SetActive(!unlocked);
                 lockImage.SetActive(!unlocked);
             }
-            else if (!ArchipelagoStatic.SessionHandler.IsSongUnlocked(__instance.musicInfo.uid)) {
-                ArchipelagoStatic.ArchLogger.Log("MusicStageCell", $"{__instance.musicInfo?.uid} {__instance.musicInfo?.name}");
-                __instance.m_LockObj.SetActive(true);
-                __instance.m_LockTxt.text = "Not yet unlocked.";
-                lockImage.SetActive(true);
-                darkenImage.SetActive(true);
-            }
             else {
-                __instance.m_LockObj.SetActive(false);
-                __instance.m_LockTxt.text = "";
-                lockImage.SetActive(false);
-                darkenImage.SetActive(false);
+                var locked = !itemHandler.UnlockedSongUids.Contains(__instance.musicInfo.uid);
+
+                __instance.m_LockObj.SetActive(locked);
+                __instance.m_LockTxt.text = locked ? "Not yet unlocked." : "";
+                lockImage.SetActive(locked);
+                darkenImage.SetActive(locked);
             }
         }
     }
@@ -187,12 +164,12 @@ namespace ArchipelagoMuseDash.Patches {
         static bool Prefix(PnlStage __instance, out int __state) {
             __state = DataHelper.Level;
             //Don't override normal gameplay
-            if (!ArchipelagoStatic.LoggedInToGame)
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return true;
 
             ArchipelagoStatic.ArchLogger.Log("PnlStage", "OnBtnPlayClicked");
             MusicInfo musicInfo = GlobalDataBase.s_DbMusicTag.CurMusicInfo();
-            if (musicInfo.uid == "?" || ArchipelagoStatic.SessionHandler.IsSongUnlocked(musicInfo.uid)) {
+            if (musicInfo.uid == "?" || ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(musicInfo.uid)) {
                 //This bypasses level checks in order to allow players to play everything
                 DataHelper.Level = 999;
                 return true;
@@ -214,10 +191,10 @@ namespace ArchipelagoMuseDash.Patches {
         static bool Prefix(DBMusicTag __instance, out MusicInfo __result) {
             __result = null;
             //Don't override normal gameplay
-            if (!ArchipelagoStatic.LoggedInToGame)
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return true;
 
-            __result = ArchipelagoStatic.SessionHandler.GetRandomUnfinishedSong();
+            __result = ArchipelagoStatic.SessionHandler.ItemHandler.GetRandomUnfinishedSong();
 
             if (__result != null)
                 __instance.SetSelectedMusic(__result);
@@ -233,7 +210,7 @@ namespace ArchipelagoMuseDash.Patches {
     sealed class OnClickedOnClickedPatch {
         static bool Prefix() {
             //Don't override normal gameplay
-            return !ArchipelagoStatic.LoggedInToGame;
+            return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
         }
     }
 }

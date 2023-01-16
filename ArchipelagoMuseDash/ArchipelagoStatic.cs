@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ArchipelagoMuseDash.Archipelago;
 using ArchipelagoMuseDash.Logging;
 using Assets.Scripts.PeroTools.Platforms.Steam;
 using Assets.Scripts.UI.Panels;
@@ -10,14 +11,14 @@ namespace ArchipelagoMuseDash {
     /// </summary>
     public static class ArchipelagoStatic {
         public static ArchLogger ArchLogger;
-        public static AlbumDatabase AlbumDatabase = new AlbumDatabase();
 
+        public static AlbumDatabase AlbumDatabase = new AlbumDatabase();
         public static ArchipelagoLogin Login;
-        public static bool LoggedInToGame;
-        public static bool HasShownLogin;
+        public static SessionHandler SessionHandler;
+
+
         public static string CurrentScene;
 
-        public static ArchipelagoSessionHandler SessionHandler;
 
         public static GameObject MuseCharacter;
         public static PnlStage SongSelectPanel;

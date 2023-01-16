@@ -1,24 +1,25 @@
 ﻿using System;
 using System.IO;
-using Archipelago.MultiClient.Net;
-using Archipelago.MultiClient.Net.Enums;
+using System.Text;
 using Assets.Scripts.Database;
 using Assets.Scripts.PeroTools.Nice.Datas;
-using Il2CppSystem.Text;
 using MelonLoader;
 using UnhollowerBaseLib;
 using UnityEngine;
 
 namespace ArchipelagoMuseDash {
     public class ArchipelagoLogin {
+        public bool HasBeenShown;
+
         string _ipAddress;
         string _username;
         string _password;
 
         string _error;
-        string _lastLoginPath;
+        readonly string _lastLoginPath;
 
         float _deltaTime;
+        bool _fixSave;
 
         //Todo: Is there some trigger we can check to see if the loading screen has been removed? 
         const float archipelago_login_display_delay = 1f; //Delays displaying the login for archipelago so it doesn't show over the loading screen
@@ -26,6 +27,7 @@ namespace ArchipelagoMuseDash {
         GUIStyle _buttonStyle;
         GUIStyle _labelStyle;
         GUIStyle _textFieldStyle;
+        GUIStyle _toggleStyle;
         GUIStyle _windowStyle;
 
         public ArchipelagoLogin() {
@@ -47,8 +49,7 @@ namespace ArchipelagoMuseDash {
                 }
             }
 
-
-            ArchipelagoStatic.LoggedInToGame = false;
+            HasBeenShown = true;
             MelonEvents.OnGUI.Subscribe(DrawArchLogin);
         }
 
@@ -89,16 +90,16 @@ namespace ArchipelagoMuseDash {
             GUILayout.Label("Password:", _labelStyle, null);
             _password = GUILayout.TextField(_password, _textFieldStyle, null);
 
-            GUILayout.Label(_error ?? "", new Il2CppReferenceArray<GUILayoutOption>(new GUILayoutOption[] {
+            GUILayout.Label(_error ?? "", _labelStyle, new Il2CppReferenceArray<GUILayoutOption>(new[] {
                 GUILayout.Height(120f)
             }));
-
 
             if (GUILayout.Button("Log In", _buttonStyle, null))
                 AttemptLogin();
 
+            _fixSave = GUILayout.Toggle(_fixSave, "Reset all songs to be visible.", _toggleStyle, null);
             if (GUILayout.Button("Play Without Archipelago", _buttonStyle, null))
-                AttemptPlayNormally();
+                AttemptPlayNormally(_fixSave);
         }
 
         void SetupStyles() {
@@ -114,44 +115,38 @@ namespace ArchipelagoMuseDash {
             _windowStyle = new GUIStyle(GUI.skin.window) {
                 fontSize = 16
             };
+            _toggleStyle = new GUIStyle(GUI.skin.toggle) {
+                fontSize = 16
+            };
         }
 
         void AttemptLogin() {
             try {
-                var session = ArchipelagoSessionFactory.CreateSession(_ipAddress);
-
-                var loginResult = session.TryConnectAndLogin("Muse Dash", _username, ItemsHandlingFlags.AllItems, password: _password);
-
-                if (!loginResult.Successful) {
-                    _error = "Failed to connect to a slot. Ensure you have typed your username correctly";
+                if (!ArchipelagoStatic.SessionHandler.TryFreshLogin(_ipAddress, _username, _password, out var reason)) {
+                    _error = reason;
                     return;
                 }
-
-                ArchipelagoStatic.LoggedInToGame = true;
-
-                var successful = (LoginSuccessful)loginResult;
-                ArchipelagoStatic.SessionHandler.RegisterSession(session, successful.Slot, successful.SlotData);
 
                 var sb = new StringBuilder();
                 sb.AppendLine(_ipAddress);
                 sb.AppendLine(_username);
                 File.WriteAllText(_lastLoginPath, sb.ToString());
+
+                HideLoginOverlay();
             }
             catch (Exception e) {
                 ArchipelagoStatic.ArchLogger.Error("Login", e);
                 _error = e.Message;
-                return;
             }
-
-            HideLoginOverlay();
         }
 
-        void AttemptPlayNormally() {
+        void AttemptPlayNormally(bool fixGame) {
             ArchipelagoStatic.SteamSync.m_FolderPath = ArchipelagoStatic.OriginalFolderName;
             ArchipelagoStatic.SteamSync.m_FilePath = ArchipelagoStatic.SteamSync.m_FolderPath + "/" + ArchipelagoStatic.SteamSync.m_FileName;
             ArchipelagoStatic.SteamSync.LoadLocal();
 
-            //FixMyGame();
+            if (fixGame)
+                FixMyGame();
             HideLoginOverlay();
 
             //Force collection update
@@ -181,11 +176,6 @@ namespace ArchipelagoMuseDash {
             }
 
             MelonEvents.OnGUI.Unsubscribe(DrawArchLogin);
-        }
-
-
-        public void LogOut() {
-            //Todo: Actually use this
         }
     }
 }

@@ -2,7 +2,6 @@
 //Taken from: https://github.com/gamrguy/CustomAlbums/blob/master/Melon/Patch/WebApiPatch.cs
 
 using System;
-using System.Collections.Generic;
 using Account;
 using Assets.Scripts.Database;
 using HarmonyLib;
@@ -13,9 +12,9 @@ namespace ArchipelagoMuseDash.Patches {
     /// </summary>
     [HarmonyPatch(typeof(GameAccountSystem), "SendToUrl")]
     static class WebAPIPatch {
-        private static bool Prefix(string url, string method, Dictionary<string, object> datas) {
+        private static bool Prefix(string url, string method) {
             //If we aren't logged in to an archipelago. Work as normal.
-            if (!ArchipelagoStatic.LoggedInToGame)
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return true;
 
             //Todo: Do we need to block other stuff?

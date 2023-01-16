@@ -120,7 +120,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlbumDatabase.cs" />
-    <Compile Include="ArchipelagoSessionHandler.cs" />
+    <Compile Include="Archipelago\ItemHandler.cs" />
+    <Compile Include="Archipelago\Items\VictoryItem.cs" />
+    <Compile Include="Archipelago\ItemUnlockHandler.cs" />
+    <Compile Include="Archipelago\Items\ExternalItem.cs" />
+    <Compile Include="Archipelago\Items\IMuseDashItem.cs" />
+    <Compile Include="Archipelago\Items\AlbumItem.cs" />
+    <Compile Include="Archipelago\Items\SongItem.cs" />
+    <Compile Include="Archipelago\MuseDashItem.cs" />
+    <Compile Include="Archipelago\SessionHandler.cs" />
     <Compile Include="ArchipelagoLogin.cs" />
     <Compile Include="ArchipelagoMuseDashMod.cs" />
     <Compile Include="ArchipelagoStatic.cs" />
