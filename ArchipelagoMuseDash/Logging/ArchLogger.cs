@@ -1,4 +1,5 @@
 ﻿using System;
+using Archipelago.MultiClient.Net.Helpers;
 using MelonLoader;
 
 namespace ArchipelagoMuseDash.Logging {
@@ -19,11 +20,15 @@ namespace ArchipelagoMuseDash.Logging {
         }
 
         public void Warning(string source, string message) {
-            _logger.Msg(ConsoleColor.DarkYellow, $"[{source}] {message}");
+            _logger.Warning($"[{source}] {message}");
         }
 
         public void Error(string source, Exception e) {
-            _logger.Msg(ConsoleColor.DarkRed, $"[{source}] {e}");
+            _logger.Error($"Exception occured in: {source}.", e);
+        }
+
+        public void LogMessage(LogMessage message) {
+            _logger.Msg(message.ToString());
         }
     }
 }

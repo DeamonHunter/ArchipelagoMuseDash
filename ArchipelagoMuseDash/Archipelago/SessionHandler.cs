@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Helpers;
 
 // Due to how IL2CPP works, some things can't be invoked as an extension.
 // ReSharper disable InvokeAsExtensionMethod
@@ -12,6 +13,7 @@ namespace ArchipelagoMuseDash.Archipelago {
     /// </summary>
     public class SessionHandler {
         public ItemHandler ItemHandler;
+        public HintHandler HintHandler;
 
         public bool IsLoggedIn => _currentSession != null;
 
@@ -45,11 +47,13 @@ namespace ArchipelagoMuseDash.Archipelago {
                 throw new NotImplementedException("Changing sessions is not implemented atm.");
 
             ItemHandler = new ItemHandler(session, slot);
+            HintHandler = new HintHandler(session, slot);
 
             _slot = slot;
             _slotData = slotData;
 
             _currentSession = session;
+            _currentSession.MessageLog.OnMessageReceived += OnMessageReceived;
             try {
                 SetupSession();
             }
@@ -62,6 +66,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             ArchipelagoStatic.AlbumDatabase.Setup();
             ArchipelagoStatic.AlbumDatabase.HideAllSongs();
             ItemHandler.Setup(_slotData);
+            HintHandler.Setup();
         }
 
         public void OnUpdate() {
@@ -71,6 +76,13 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         public void OnLateUpdate() {
             ItemHandler.Unlocker.OnLateUpdate();
+        }
+
+        private void OnMessageReceived(LogMessage message) {
+            if (message is HintItemSendLogMessage hintMessage)
+                HintHandler.HandleHintMessage(hintMessage);
+
+            ArchipelagoStatic.ArchLogger.LogMessage(message);
         }
     }
 }

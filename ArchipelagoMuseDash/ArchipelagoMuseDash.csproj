@@ -110,6 +110,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.UI.dll</HintPath>
@@ -120,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlbumDatabase.cs" />
+    <Compile Include="Archipelago\HintHandler.cs" />
     <Compile Include="Archipelago\ItemHandler.cs" />
     <Compile Include="Archipelago\Items\VictoryItem.cs" />
     <Compile Include="Archipelago\ItemUnlockHandler.cs" />
