@@ -83,15 +83,18 @@ namespace ArchipelagoMuseDash {
             return $"{songLocal.name}[{albumLocal}]";
         }
 
-        public string GetLocalisedNameForMusicInfo(MusicInfo musicInfo) {
+        public string GetLocalisedSongNameForMusicInfo(MusicInfo musicInfo) {
+            var configManager = ConfigManager.instance;
+            var songLocal = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal().GetLocalAlbumInfoByIndex(musicInfo.listIndex);
+            return songLocal.name;
+        }
+
+        public string GetLocalisedAlbumNameForMusicInfo(MusicInfo musicInfo) {
             var configManager = ConfigManager.instance;
             var albumConfig = configManager.GetConfigObject<DBConfigAlbums>(-1);
-            var songLocal = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal().GetLocalAlbumInfoByIndex(musicInfo.listIndex);
-
             var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>(-1).GetLocal();
             var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
-
-            return $"{songLocal.name}[{albumLocal}]";
+            return albumLocal;
         }
 
         void DumpSongs() {

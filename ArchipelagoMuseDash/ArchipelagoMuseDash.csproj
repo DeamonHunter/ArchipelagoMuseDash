@@ -114,6 +114,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.UI.dll</HintPath>
@@ -140,6 +144,7 @@
     <Compile Include="Helpers\AssetHelpers.cs" />
     <Compile Include="Logging\ArchLogger.cs" />
     <Compile Include="Patches\ArchipelagoPatches.cs" />
+    <Compile Include="Patches\HintPatches.cs" />
     <Compile Include="Patches\SaveAPIPatch.cs" />
     <Compile Include="Patches\StatusPatches.cs" />
     <Compile Include="Patches\WebAPIPatch.cs" />

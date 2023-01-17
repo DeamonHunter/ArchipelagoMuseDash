@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
-using Archipelago.MultiClient.Net.Helpers;
 
 // Due to how IL2CPP works, some things can't be invoked as an extension.
 // ReSharper disable InvokeAsExtensionMethod
@@ -53,7 +52,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             _slotData = slotData;
 
             _currentSession = session;
-            _currentSession.MessageLog.OnMessageReceived += OnMessageReceived;
+            _currentSession.MessageLog.OnMessageReceived += ArchipelagoStatic.ArchLogger.LogMessage;
             try {
                 SetupSession();
             }
@@ -70,19 +69,29 @@ namespace ArchipelagoMuseDash.Archipelago {
         }
 
         public void OnUpdate() {
+            if (!IsLoggedIn)
+                return;
+
             ItemHandler.CheckForNewItems();
             ItemHandler.Unlocker.OnUpdate();
+            HintHandler.OnUpdate();
         }
 
         public void OnLateUpdate() {
+            if (!IsLoggedIn)
+                return;
+
             ItemHandler.Unlocker.OnLateUpdate();
         }
 
-        private void OnMessageReceived(LogMessage message) {
-            if (message is HintItemSendLogMessage hintMessage)
-                HintHandler.HandleHintMessage(hintMessage);
+        public void SceneChanged(string sceneName) {
+            if (sceneName != "UISystem_PC")
+                return;
 
-            ArchipelagoStatic.ArchLogger.LogMessage(message);
+            if (!ArchipelagoStatic.Login.HasBeenShown)
+                ArchipelagoStatic.Login.ShowLoginScreen();
+
+            HintHandler?.MainSceneLoaded();
         }
     }
 }

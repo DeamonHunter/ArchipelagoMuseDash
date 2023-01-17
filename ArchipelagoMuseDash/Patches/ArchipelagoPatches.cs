@@ -175,7 +175,7 @@ namespace ArchipelagoMuseDash.Patches {
     /// Overrides the Play Song Button click so that we can enforce our own restrictions, and bypass the level restriction
     /// </summary>
     [HarmonyPatch(typeof(PnlStage), "OnBtnPlayClicked")]
-    sealed class PnlStagePatch {
+    sealed class PnlStageOnBtnPlayClickedPatch {
         static bool Prefix(PnlStage __instance, out int __state) {
             __state = DataHelper.Level;
             //Don't override normal gameplay

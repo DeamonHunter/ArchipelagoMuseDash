@@ -23,6 +23,7 @@ namespace ArchipelagoMuseDash {
         public static GameObject MuseCharacter;
         public static PnlStage SongSelectPanel;
         public static PnlUnlockStage UnlockStagePanel;
+        public static SongHideAskMsg HideSongDialogue;
 
         public static SteamSync SteamSync;
         public static string OriginalFolderName;

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Text;
 using ArchipelagoMuseDash;
 using ArchipelagoMuseDash.Archipelago;
 using ArchipelagoMuseDash.Logging;
-using Assets.Scripts.Database;
 using MelonLoader;
 using UnityEngine;
 
@@ -50,11 +48,7 @@ namespace ArchipelagoMuseDash {
                 ArchipelagoStatic.ArchLogger.Log("Scene Load", $"{sceneName} was loaded.");
 
                 ArchipelagoStatic.CurrentScene = sceneName;
-
-                if (ArchipelagoStatic.Login.HasBeenShown || sceneName != "UISystem_PC")
-                    return;
-
-                ArchipelagoStatic.Login.ShowLoginScreen();
+                ArchipelagoStatic.SessionHandler.SceneChanged(sceneName);
             }
             catch (Exception e) {
                 ArchipelagoStatic.ArchLogger.Error("Scene Load", e);
@@ -67,30 +61,6 @@ namespace ArchipelagoMuseDash {
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
-            if (Input.GetKeyUp(KeyCode.Alpha2)) {
-                ArchipelagoStatic.SessionHandler.HintHandler.HintSong(GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Alpha3)) {
-                if (ArchipelagoStatic.SessionHandler.HintHandler.TryGetSongHints(GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo,
-                        out var location, out var item1, out var item2)) {
-                    var sb = new StringBuilder();
-
-                    if (location != null)
-                        sb.AppendLine(location);
-
-                    if (item1 != null && item2 != null)
-                        sb.AppendLine($"Has items: {item1}, {item2}");
-                    else if (item1 != null)
-                        sb.AppendLine($"Has items: {item1}");
-                    else if (item2 != null)
-                        sb.AppendLine($"Has items: {item2}");
-
-                    ArchipelagoStatic.ArchLogger.Log("Hint Test", sb.ToString());
-                }
-                else
-                    ArchipelagoStatic.ArchLogger.Log("Hint Test", $"No Hints for: {ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo)}");
-            }
 
             ArchipelagoStatic.SessionHandler.OnUpdate();
         }

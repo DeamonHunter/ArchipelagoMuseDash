@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.PeroTools.Managers;
 using Il2CppSystem.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ArchipelagoMuseDash.Helpers {
     /// <summary>
@@ -35,6 +36,14 @@ namespace ArchipelagoMuseDash.Helpers {
 
                 RecursiveGameObjectPrintout(child.gameObject, depth + 1, showName);
             }
+        }
+
+        public static void CopyTextVariables(Text copyFrom, Text copyTo) {
+            copyTo.font = copyFrom.font;
+            copyTo.fontStyle = copyFrom.fontStyle;
+            copyTo.fontSize = copyFrom.fontSize;
+            copyTo.alignment = copyFrom.alignment;
+            copyTo.color = copyFrom.color;
         }
     }
 }
