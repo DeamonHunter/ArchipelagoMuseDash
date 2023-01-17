@@ -167,7 +167,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 //Item is local
                 if (locatedHint.FindingPlayer == _currentPlayerSlot) {
                     var locationName = _currentSession.Locations.GetLocationNameFromId(locatedHint.LocationId);
-                    sb.Append($"To be found at: {locationName.Substring(0, locationName.Length - 2)}");
+                    sb.Append($"To be found at {locationName.Substring(0, locationName.Length - 2)}");
                 }
                 else
                     sb.Append($"To be found by {_currentSession.Players.GetPlayerAlias(locatedHint.FindingPlayer)} at {_currentSession.Locations.GetLocationNameFromId(locatedHint.LocationId)}");
