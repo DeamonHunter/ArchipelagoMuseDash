@@ -86,7 +86,8 @@ namespace ArchipelagoMuseDash.Archipelago {
 
                 //These items should always be for the local player.
                 var item = GetItemFromNetworkItem(networkItem, false);
-                Unlocker.AddItem(item);
+                if (item != null)
+                    Unlocker.AddItem(item);
             }
         }
 
