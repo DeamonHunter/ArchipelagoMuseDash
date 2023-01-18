@@ -21,13 +21,13 @@ namespace ArchipelagoMuseDash.Patches {
             try {
                 switch (url) {
                     case "statistics/pc-play-statistics-feedback":
-                        ArchipelagoStatic.ArchLogger.Log("SendToURLPatch", "Blocked play feedback upload.");
+                        ArchipelagoStatic.ArchLogger.LogDebug("SendToURLPatch", "Blocked play feedback upload.");
                         return false;
                     case "musedash/v2/pcleaderboard/high-score":
-                        ArchipelagoStatic.ArchLogger.Log("SendToURLPatch", "Blocked high score upload:" + GlobalDataBase.dbBattleStage.musicUid);
+                        ArchipelagoStatic.ArchLogger.LogDebug("SendToURLPatch", "Blocked high score upload:" + GlobalDataBase.dbBattleStage.musicUid);
                         return false;
                     case "statistics/favorite_music":
-                        ArchipelagoStatic.ArchLogger.Log("SendToURLPatch", "Blocked favourite upload.");
+                        ArchipelagoStatic.ArchLogger.LogDebug("SendToURLPatch", "Blocked favourite upload.");
                         return false;
                 }
             }

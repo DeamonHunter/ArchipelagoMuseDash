@@ -13,7 +13,11 @@ namespace ArchipelagoMuseDash.Logging {
             _logger = new MelonLogger.Instance("Archipelago");
         }
 
-        public void Log(string message) => Log("", message);
+        public void LogDebug(string source, string message) {
+#if DEBUG
+            _logger.Msg($"[{source}] {message}");
+#endif
+        }
 
         public void Log(string source, string message) {
             _logger.Msg($"[{source}] {message}");
