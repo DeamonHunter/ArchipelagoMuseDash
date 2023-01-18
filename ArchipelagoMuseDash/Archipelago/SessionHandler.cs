@@ -13,6 +13,7 @@ namespace ArchipelagoMuseDash.Archipelago {
     public class SessionHandler {
         public ItemHandler ItemHandler;
         public HintHandler HintHandler;
+        public SongSelectAdditions SongSelectAdditions;
 
         public bool IsLoggedIn => _currentSession != null;
 
@@ -47,6 +48,7 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             ItemHandler = new ItemHandler(session, slot);
             HintHandler = new HintHandler(session, slot);
+            SongSelectAdditions = new SongSelectAdditions();
 
             _slot = slot;
             _slotData = slotData;
@@ -63,7 +65,6 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         public void SetupSession() {
             ArchipelagoStatic.AlbumDatabase.Setup();
-            ArchipelagoStatic.AlbumDatabase.HideAllSongs();
             ItemHandler.Setup(_slotData);
             HintHandler.Setup();
         }
@@ -72,7 +73,9 @@ namespace ArchipelagoMuseDash.Archipelago {
             if (!IsLoggedIn)
                 return;
 
-            ItemHandler.CheckForNewItems();
+            SongSelectAdditions.OnUpdate();
+
+            ItemHandler.OnUpdate();
             ItemHandler.Unlocker.OnUpdate();
             HintHandler.OnUpdate();
         }
@@ -91,7 +94,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             if (!ArchipelagoStatic.Login.HasBeenShown)
                 ArchipelagoStatic.Login.ShowLoginScreen();
 
-            HintHandler?.MainSceneLoaded();
+            SongSelectAdditions?.MainSceneLoaded();
         }
     }
 }

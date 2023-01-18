@@ -58,14 +58,6 @@ namespace ArchipelagoMuseDash {
 #endif
         }
 
-        public void HideAllSongs() {
-            ArchipelagoStatic.ArchLogger.Log("AlbumDatabase", "Hiding all songs");
-            foreach (var musicInfo in _songsByItemName.Values) {
-                if (GlobalDataBase.dbMusicTag.AddHide(musicInfo))
-                    GlobalDataBase.dbMusicTag.RemoveCollection(musicInfo);
-            }
-        }
-
         public bool TryGetMusicInfo(string itemName, out MusicInfo info) => _songsByItemName.TryGetValue(itemName, out info);
         public MusicInfo GetMusicInfo(string itemName) => _songsByItemName[itemName];
 

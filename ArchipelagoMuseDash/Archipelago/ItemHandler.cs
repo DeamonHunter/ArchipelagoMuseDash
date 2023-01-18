@@ -17,8 +17,12 @@ namespace ArchipelagoMuseDash.Archipelago {
         public HashSet<string> UnlockedSongUids = new HashSet<string>();
         public HashSet<string> CompletedSongUids = new HashSet<string>();
 
+        public const string HideSongsText = "Hide Locked Songs";
+        public const string ShowSongsText = "Show Locked Songs";
+
         ArchipelagoSession _currentSession;
         int _currentPlayerSlot;
+        bool _songsAreHidden = true;
 
         readonly Random _random = new Random();
 
@@ -58,9 +62,25 @@ namespace ArchipelagoMuseDash.Archipelago {
                 else
                     ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"Unknown location: {name}");
             }
+
+            SetVisibilityOfAllSongs(_songsAreHidden);
         }
 
-        public void CheckForNewItems() {
+        public void OnUpdate() {
+            CheckForNewItems();
+
+            if (ArchipelagoStatic.SessionHandler.SongSelectAdditions.HideSongsButton == null)
+                return;
+
+            var hideSongText = ArchipelagoStatic.SessionHandler.SongSelectAdditions.HideSongsText;
+
+            if (_songsAreHidden && hideSongText.text != ShowSongsText)
+                hideSongText.text = ShowSongsText;
+            else if (!_songsAreHidden && hideSongText.text != HideSongsText)
+                hideSongText.text = HideSongsText;
+        }
+
+        void CheckForNewItems() {
             while (_currentSession.Items.Any()) {
                 var networkItem = _currentSession.Items.DequeueItem();
 
@@ -191,5 +211,51 @@ namespace ArchipelagoMuseDash.Archipelago {
         }
 
         #endregion
+
+        public void ToggleHiddenSongs() {
+            _songsAreHidden = !_songsAreHidden;
+            SetVisibilityOfAllSongs(_songsAreHidden);
+        }
+
+        void SetVisibilityOfAllSongs(bool visibility) {
+            var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
+            GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
+
+            foreach (var song in list) {
+                if (song == null || song.uid == "?")
+                    continue;
+
+                if (!SongsInLogic.Contains(song.uid)) {
+                    GlobalDataBase.dbMusicTag.AddHide(song);
+                    GlobalDataBase.dbMusicTag.RemoveCollection(song);
+                    continue;
+                }
+
+                bool canBeHidden = !UnlockedSongUids.Contains(song.uid) && GoalSong?.uid != song.uid;
+
+                if (canBeHidden && visibility) {
+                    GlobalDataBase.dbMusicTag.AddHide(song);
+                    GlobalDataBase.dbMusicTag.RemoveCollection(song);
+                }
+                else {
+                    GlobalDataBase.dbMusicTag.RemoveHide(song);
+                    if (!CompletedSongUids.Contains(song.uid))
+                        GlobalDataBase.dbMusicTag.AddCollection(song);
+                }
+            }
+
+            MusicTagManager.instance.RefreshStageDisplayMusics(-1);
+            ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
+        }
+
+        public void UnlockSong(MusicInfo song) {
+            UnlockedSongUids.Add(song.uid);
+            if (!_songsAreHidden)
+                return;
+            GlobalDataBase.dbMusicTag.RemoveHide(song);
+
+            if (!CompletedSongUids.Contains(song.uid) && SongsInLogic.Contains(song.uid))
+                GlobalDataBase.dbMusicTag.AddCollection(song);
+        }
     }
 }

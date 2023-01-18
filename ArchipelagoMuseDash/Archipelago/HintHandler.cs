@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
-using ArchipelagoMuseDash.Helpers;
 using Assets.Scripts.Database;
 using Assets.Scripts.UI.Controls;
-using UnhollowerRuntimeLib;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace ArchipelagoMuseDash.Archipelago {
     public class HintHandler {
@@ -22,10 +16,6 @@ namespace ArchipelagoMuseDash.Archipelago {
         Dictionary<string, Hint> _locationHints = new Dictionary<string, Hint>();
         Dictionary<string, Hint> _itemsHints = new Dictionary<string, Hint>();
 
-        GameObject _hintHandler;
-        Button _hintHandlerButton;
-        GameObject _knownHintText;
-        Text _uglyHintText;
         MusicInfo _lastMusic;
         bool _forceUpdate;
 
@@ -41,18 +31,19 @@ namespace ArchipelagoMuseDash.Archipelago {
         }
 
         public void OnUpdate() {
-            if (!ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlStage"))
-                return;
-
-            if (_hintHandler == null) {
-                AddHintButton();
-                AddHintBox();
+            if (ArchipelagoStatic.SessionHandler.SongSelectAdditions.HintButton == null) {
                 _forceUpdate = true;
+                return;
             }
 
             var currentlySelectedSong = GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo;
             if (currentlySelectedSong?.uid == _lastMusic?.uid && !_forceUpdate)
                 return;
+
+            var hintButton = ArchipelagoStatic.SessionHandler.SongSelectAdditions.HintButtonComp;
+
+            var hintText = ArchipelagoStatic.SessionHandler.SongSelectAdditions.HintText;
+            var hintTextComp = ArchipelagoStatic.SessionHandler.SongSelectAdditions.HintTextComp;
 
             _forceUpdate = false;
             _lastMusic = currentlySelectedSong;
@@ -62,24 +53,20 @@ namespace ArchipelagoMuseDash.Archipelago {
             if (!isSongRandomSelect && _currentSession.RoomState.HintCostPercentage <= 100) {
                 var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
                 if (itemHandler.SongsInLogic.Contains(currentlySelectedSong.uid) && !itemHandler.UnlockedSongUids.Contains(currentlySelectedSong.uid))
-                    _hintHandlerButton.interactable = true; //Todo: Check to see if all hints are exhausted
+                    hintButton.interactable = true; //Todo: Check to see if all hints are exhausted
                 else
-                    _hintHandlerButton.interactable = false;
+                    hintButton.interactable = false;
             }
             else
-                _hintHandlerButton.interactable = false;
+                hintButton.interactable = false;
 
             if (!isSongRandomSelect && ArchipelagoStatic.SessionHandler.HintHandler.TryGetSongHints(currentlySelectedSong, out var hintStr)) {
                 ArchipelagoStatic.ArchLogger.Log("Hinting", hintStr);
-                _knownHintText.SetActive(true);
-                _uglyHintText.text = hintStr;
+                hintText.SetActive(true);
+                hintTextComp.text = hintStr;
             }
             else
-                _knownHintText.SetActive(false);
-        }
-
-        public void MainSceneLoaded() {
-            _hintHandler = null;
+                hintText.SetActive(false);
         }
 
         public void ShowHintPopup() {
@@ -202,102 +189,6 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             hint = sb.ToString();
             return hint.Length > 0;
-        }
-
-        public void AddHintButton() {
-            //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
-
-            var pnlStage = ArchipelagoStatic.SongSelectPanel;
-            var likeButton = pnlStage.gameObject.GetComponentInChildren<StageLikeToggle>();
-
-            //The HideSongDialogue has the button we want, and it should be available at this time.
-            var yesButton = ArchipelagoStatic.HideSongDialogue.m_YesButton;
-            var yesButtonImage = yesButton.GetComponent<Image>();
-            var yesText = yesButton.transform.GetChild(0);
-            var yesTextComp = yesText.GetComponent<Text>();
-
-            _hintHandler = new GameObject("ArchipelagoHintButton");
-            _hintHandler.transform.SetParent(likeButton.transform.parent, false);
-
-            _hintHandlerButton = _hintHandler.AddComponent<Button>();
-            _hintHandlerButton.onClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>(new Action(ShowHintPopup)));
-            _hintHandlerButton.transition = yesButton.transition;
-
-            var colours = yesButton.colors;
-            colours.disabledColor = new UnityEngine.Color(colours.disabledColor.r * 0.8f, colours.disabledColor.g * 0.8f, colours.disabledColor.b * 0.8f, 1);
-            _hintHandlerButton.colors = colours;
-            _hintHandlerButton.interactable = false;
-
-            var image = _hintHandler.AddComponent<Image>();
-            image.sprite = yesButtonImage.sprite;
-            image.type = yesButtonImage.type;
-            _hintHandlerButton.targetGraphic = image;
-
-            var imageTransform = _hintHandler.GetComponent<RectTransform>();
-            var yesButtonTransform = yesButton.gameObject.GetComponent<RectTransform>();
-
-            imageTransform.sizeDelta = yesButtonTransform.sizeDelta;
-            imageTransform.anchorMax = imageTransform.anchorMin = new Vector2(0.5f, 0.5f);
-            imageTransform.anchoredPosition = new Vector2(220, 65);
-            imageTransform.pivot = new Vector2(0, 0.5f);
-
-            var hintButtonText = new GameObject("Text");
-            hintButtonText.transform.SetParent(_hintHandler.transform, false);
-            var hintTextComp = hintButtonText.AddComponent<Text>();
-
-            AssetHelpers.CopyTextVariables(yesTextComp, hintTextComp);
-            hintTextComp.text = "Get Hint";
-
-            var rectTransfrom = hintButtonText.GetComponent<RectTransform>();
-            var yesRectTransform = yesText.GetComponent<RectTransform>();
-
-            rectTransfrom.anchorMin = yesRectTransform.anchorMin;
-            rectTransfrom.anchorMax = yesRectTransform.anchorMax;
-            rectTransfrom.pivot = yesRectTransform.pivot;
-            rectTransfrom.sizeDelta = yesRectTransform.sizeDelta;
-        }
-
-        public void AddHintBox() {
-            //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
-
-            var pnlStage = ArchipelagoStatic.SongSelectPanel;
-            var likeButton = pnlStage.gameObject.GetComponentInChildren<StageLikeToggle>();
-
-            //The HideSongDialogue has the button we want, and it should be available at this time.
-            var noButton = ArchipelagoStatic.HideSongDialogue.m_NoButton;
-            var noButtonImage = noButton.GetComponent<Image>();
-            var noText = noButton.transform.GetChild(0);
-            var noTextComp = noText.GetComponent<Text>();
-
-            _knownHintText = new GameObject("Known Hint Text");
-            _knownHintText.transform.SetParent(likeButton.transform.parent, false);
-
-            var hintBackgroundImage = _knownHintText.AddComponent<Image>();
-            hintBackgroundImage.sprite = noButtonImage.sprite;
-            hintBackgroundImage.type = noButtonImage.type;
-
-            var hintTransform = _knownHintText.GetComponent<RectTransform>();
-
-            hintTransform.anchorMax = hintTransform.anchorMin = new Vector2(0.5f, 0.5f);
-            hintTransform.anchoredPosition = new Vector2(400, 160);
-            hintTransform.pivot = new Vector2(0, 0.5f);
-            hintTransform.sizeDelta = new Vector2(500, 100);
-
-            var hintText = new GameObject();
-            hintText.transform.SetParent(_knownHintText.transform, false);
-
-            _uglyHintText = hintText.AddComponent<Text>();
-            AssetHelpers.CopyTextVariables(noTextComp, _uglyHintText);
-            _uglyHintText.fontSize = 22;
-            _uglyHintText.resizeTextForBestFit = true;
-            _uglyHintText.resizeTextMaxSize = 22;
-            _uglyHintText.resizeTextMinSize = 12;
-            _uglyHintText.verticalOverflow = VerticalWrapMode.Truncate;
-
-            var hintTextRect = hintText.GetComponent<RectTransform>();
-            hintTextRect.anchorMin = new Vector2(0.1f, 0.1f);
-            hintTextRect.anchorMax = new Vector2(0.9f, 0.9f);
-            hintTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
         }
     }
 }

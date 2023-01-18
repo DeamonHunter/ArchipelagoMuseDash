@@ -20,21 +20,17 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
         }
 
         public void UnlockItem(ItemHandler handler, bool immediate) {
+            ArchipelagoStatic.ArchLogger.Log("Song Item", $"Unlocking item: {_song.uid}. Is duplicate: {handler.UnlockedSongUids.Contains(_song.uid)}");
             if (handler.UnlockedSongUids.Contains(_song.uid)) {
                 _isDuplicate = true;
                 return;
             }
 
-            handler.UnlockedSongUids.Add(_song.uid);
-            GlobalDataBase.dbMusicTag.RemoveHide(_song);
-
-            //If the song hasn't been completed, add it to favourites.
-            //Todo: Check against known locations in pool.
-            if (!handler.CompletedSongUids.Contains(_song.uid))
-                GlobalDataBase.dbMusicTag.AddCollection(_song);
-
-            MusicTagManager.instance.RefreshStageDisplayMusics(-1);
-            ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
+            handler.UnlockSong(_song);
+            if (!immediate) {
+                MusicTagManager.instance.RefreshStageDisplayMusics(-1);
+                ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
+            }
         }
 
         private string GetUnlockedBannerText() {
