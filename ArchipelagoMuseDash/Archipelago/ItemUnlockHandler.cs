@@ -45,6 +45,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 throw new Exception("Tried to unlock an item while one was already unlocking.");
 
             _unlockingItem = item;
+            _hasUnlockedItem = false;
 
             Data data = new Data();
             VariableUtils.SetResult(data["uid"], _unlockingItem.UnlockSongUid);
