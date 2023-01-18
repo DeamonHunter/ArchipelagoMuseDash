@@ -20,7 +20,7 @@ namespace ArchipelagoMuseDash.Patches {
                 return true;
 
             ArchipelagoStatic.ArchLogger.Log("AbstractMessageBox", "OnYesClicked");
-            if (__instance.m_Title.text != HintHandler.ArchipelagoDialogueTitle)
+            if (__instance.m_Title?.text != HintHandler.ArchipelagoDialogueTitle)
                 return true;
 
             if (__instance.m_PlayClickAudio)
