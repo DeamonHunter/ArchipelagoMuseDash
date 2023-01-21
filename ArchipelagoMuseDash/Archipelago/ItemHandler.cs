@@ -49,6 +49,8 @@ namespace ArchipelagoMuseDash.Archipelago {
                 GoalSong = ArchipelagoStatic.AlbumDatabase.GetMusicInfo((string)victoryLocation);
                 GlobalDataBase.dbMusicTag.RemoveHide(GoalSong);
                 GlobalDataBase.dbMusicTag.AddCollection(GoalSong);
+
+                SongsInLogic.Add(GoalSong.uid);
             }
 
             if (slotData.TryGetValue("musicSheetWinCount", out var tokenWinCount)) {
