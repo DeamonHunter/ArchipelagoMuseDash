@@ -101,15 +101,32 @@ namespace ArchipelagoMuseDash.Patches {
     /// </summary>
     [HarmonyPatch(typeof(PnlVictory), "OnVictory")]
     sealed class PnlVictoryPatch {
+        const int neko_character_id = 16;
+        const int silencer_elfin_id = 9;
+
         static void Postfix() {
             //Don't override normal gameplay
+            ArchipelagoStatic.ArchLogger.Log("PnlVictory", $"Selected Role: {GlobalDataBase.dbBattleStage.selectedRole}");
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
-            ArchipelagoStatic.ArchLogger.Log("PnlVictory", $"Selected Role: {GlobalDataBase.dbBattleStage.selectedRole}");
-            //Block Sleepwalker Rin (Auto Mode) from getting completions
-            if (GlobalDataBase.dbBattleStage.selectedRole == 2)
+            // Block Sleepwalker Rin (Auto Mode) from getting completions
+            if (BattleHelper.isAutoSleepy) {
+                var reason = "Battle invalid for item unlock due to using Sleepwalker Rin.";
+                ShowText.ShowInfo(reason);
+                ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
                 return;
+            }
+
+            // Cover Neko's death
+            if (GlobalDataBase.dbBattleStage.IsSelectRole(neko_character_id) && !GlobalDataBase.dbBattleStage.IsSelectElfin(silencer_elfin_id)) {
+                if (GlobalDataBase.dbSkill.nekoSkillInvoke) {
+                    var reason = "Battle invalid for item unlock due to dying as NEKO.";
+                    ShowText.ShowInfo(reason);
+                    ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
+                    return;
+                }
+            }
 
             //Music info must be grabbed now. The next frame it will be nulled and be unusable.
             var musicInfo = GlobalDataBase.dbBattleStage.selectedMusicInfo;
@@ -226,6 +243,25 @@ namespace ArchipelagoMuseDash.Patches {
         static bool Prefix() {
             //Don't override normal gameplay
             return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
+        }
+    }
+
+    /// <summary>
+    /// Only allow the favourite/hide button to be clicked during normal gameplay
+    /// </summary>
+    [HarmonyPatch(typeof(PnlRole), "OnApplyClicked")]
+    sealed class PnlRoleApplyPatch {
+        const int sleepwalker_rin_character_id = 2;
+        const int neko_character_id = 16;
+
+        static void Postfix() {
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+                return;
+
+            if (DataHelper.selectedRoleIndex == sleepwalker_rin_character_id)
+                ShowText.ShowInfo("Sleepwalker Rin will not be able to unlock items, without the Silencer Elfin.");
+            else if (DataHelper.selectedRoleIndex == neko_character_id)
+                ShowText.ShowInfo("Neko will not be able to unlock items, if she dies.");
         }
     }
 }
