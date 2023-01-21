@@ -143,7 +143,9 @@ namespace ArchipelagoMuseDash {
         void AttemptPlayNormally(bool fixGame) {
             ArchipelagoStatic.SteamSync.m_FolderPath = ArchipelagoStatic.OriginalFolderName;
             ArchipelagoStatic.SteamSync.m_FilePath = ArchipelagoStatic.SteamSync.m_FolderPath + "/" + ArchipelagoStatic.SteamSync.m_FileName;
-            ArchipelagoStatic.SteamSync.LoadLocal();
+
+            DataManager.instance.Load();
+            GlobalDataBase.InitDatabase();
 
             if (fixGame)
                 FixMyGame();
