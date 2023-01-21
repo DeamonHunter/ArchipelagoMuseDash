@@ -169,6 +169,20 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         async System.Threading.Tasks.Task CheckLocationsInner(string uid, string locationName) {
             try {
+                if (GoalSong != null && GoalSong.uid == uid) {
+                    ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Victory achieved, enqueing visuals for next available time.");
+
+                    //Todo: This maybe should be priority?
+                    Unlocker.AddItem(new VictoryItem(_currentSession.Players.GetPlayerAlias(_currentPlayerSlot)));
+
+                    var statusUpdatePacket = new StatusUpdatePacket {
+                        Status = ArchipelagoClientState.ClientGoal
+                    };
+
+                    await _currentSession.Socket.SendPacketAsync(statusUpdatePacket);
+                    return;
+                }
+
                 var location1 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-0");
                 var location2 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-1");
                 CompletedSongUids.Add(uid);
@@ -185,19 +199,6 @@ namespace ArchipelagoMuseDash.Archipelago {
                         continue;
 
                     Unlocker.AddItem(GetItemFromNetworkItem(item, true));
-                }
-
-                if (GoalSong != null && GoalSong.uid == uid) {
-                    ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Victory achieved, enqueing visuals for next available time.");
-
-                    //Todo: This maybe should be priority?
-                    Unlocker.AddItem(new VictoryItem(_currentSession.Players.GetPlayerAlias(_currentPlayerSlot)));
-
-                    var statusUpdatePacket = new StatusUpdatePacket {
-                        Status = ArchipelagoClientState.ClientGoal
-                    };
-
-                    await _currentSession.Socket.SendPacketAsync(statusUpdatePacket);
                 }
             }
             catch (Exception e) {
