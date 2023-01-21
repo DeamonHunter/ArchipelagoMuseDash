@@ -170,22 +170,22 @@ namespace ArchipelagoMuseDash.Archipelago {
             var sb = new StringBuilder();
 
             if (info.uid == ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong?.uid) {
-                if (_musicSheetHints.Count > 0) {
+                if (_musicSheetHints.Count <= 0) {
                     hint = null;
                     return false;
                 }
 
-                sb.Append("To be found at: ");
+                sb.AppendLine($"{_musicSheetHints.Count} known locations for music sheets: ");
                 foreach (var musicSheetHint in _musicSheetHints.Values) {
                     var locationName = _currentSession.Locations.GetLocationNameFromId(musicSheetHint.LocationId);
                     if (musicSheetHint.FindingPlayer == _currentPlayerSlot) //Local Item
-                        sb.Append($"To be found at {locationName.Substring(0, locationName.Length - 2)}");
+                        sb.AppendLine($"{locationName.Substring(0, locationName.Length - 2)}");
                     else //Remote Item
-                        sb.Append($"To be found by {_currentSession.Players.GetPlayerAlias(musicSheetHint.FindingPlayer)} at {locationName}");
+                        sb.AppendLine($"By {_currentSession.Players.GetPlayerAlias(musicSheetHint.FindingPlayer)} at {locationName}");
                 }
 
                 hint = sb.ToString();
-                return _musicSheetHints.Count > 0;
+                return true;
             }
 
             var itemName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(info);
