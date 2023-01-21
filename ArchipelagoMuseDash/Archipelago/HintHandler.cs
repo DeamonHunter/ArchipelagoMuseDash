@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Models;
@@ -13,6 +14,7 @@ namespace ArchipelagoMuseDash.Archipelago {
         ArchipelagoSession _currentSession;
         int _currentPlayerSlot;
 
+        Dictionary<long, Hint> _musicSheetHints = new Dictionary<long, Hint>();
         Dictionary<string, Hint> _locationHints = new Dictionary<string, Hint>();
         Dictionary<string, Hint> _itemsHints = new Dictionary<string, Hint>();
 
@@ -27,6 +29,7 @@ namespace ArchipelagoMuseDash.Archipelago {
         public void Setup() {
             _locationHints.Clear();
             _itemsHints.Clear();
+            _musicSheetHints.Clear();
             _currentSession.DataStorage.TrackHints(HandleHints);
         }
 
@@ -114,8 +117,14 @@ namespace ArchipelagoMuseDash.Archipelago {
         }
 
         public void HintSong(MusicInfo song) {
-            //There is no specific packet or function to send for costed hints. So send a chat message for the player
-            _currentSession.Socket.SendPacketAsync(new SayPacket { Text = $"!hint {ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(song)}" });
+            if (song == null)
+                throw new ArgumentException("Tried to get hint on null MusicInfo.");
+
+            //There is no specific packet or function to send for costed hints. So we need to send a chat message for the player
+            if (song.uid == ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong.uid)
+                _currentSession.Socket.SendPacketAsync(new SayPacket { Text = $"!hint Music Sheet" });
+            else
+                _currentSession.Socket.SendPacketAsync(new SayPacket { Text = $"!hint {ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(song)}" });
         }
 
         public void HandleHints(Hint[] hints) {
@@ -123,6 +132,16 @@ namespace ArchipelagoMuseDash.Archipelago {
             _forceUpdate = true;
 
             foreach (var hint in hints) {
+                var itemName = _currentSession.Items.GetItemName(hint.ItemId);
+                if (itemName == "Music Sheet" && hint.ReceivingPlayer == _currentPlayerSlot) {
+                    if (hint.Found)
+                        _musicSheetHints.Remove(hint.LocationId);
+                    else
+                        _musicSheetHints[hint.LocationId] = hint;
+
+                    continue;
+                }
+
                 if (hint.FindingPlayer == _currentPlayerSlot) {
                     var locationName = _currentSession.Locations.GetLocationNameFromId(hint.LocationId);
 
@@ -134,8 +153,6 @@ namespace ArchipelagoMuseDash.Archipelago {
                 }
 
                 if (hint.ReceivingPlayer == _currentPlayerSlot) {
-                    var itemName = _currentSession.Items.GetItemName(hint.ItemId);
-
                     ArchipelagoStatic.ArchLogger.Log("Hinting", $"Got Hint for location: {itemName}, Recieving Player, {hint.Found}");
 
                     if (hint.Found)
@@ -147,17 +164,37 @@ namespace ArchipelagoMuseDash.Archipelago {
         }
 
         public bool TryGetSongHints(MusicInfo info, out string hint) {
+            if (info == null)
+                throw new ArgumentException("Tried to get hint on null MusicInfo.");
+
             var sb = new StringBuilder();
+
+            if (info.uid == ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong?.uid) {
+                if (_musicSheetHints.Count > 0) {
+                    hint = null;
+                    return false;
+                }
+
+                sb.Append("To be found at: ");
+                foreach (var musicSheetHint in _musicSheetHints.Values) {
+                    var locationName = _currentSession.Locations.GetLocationNameFromId(musicSheetHint.LocationId);
+                    if (musicSheetHint.FindingPlayer == _currentPlayerSlot) //Local Item
+                        sb.Append($"To be found at {locationName.Substring(0, locationName.Length - 2)}");
+                    else //Remote Item
+                        sb.Append($"To be found by {_currentSession.Players.GetPlayerAlias(musicSheetHint.FindingPlayer)} at {locationName}");
+                }
+
+                hint = sb.ToString();
+                return _musicSheetHints.Count > 0;
+            }
 
             var itemName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(info);
             if (_itemsHints.TryGetValue(itemName, out var locatedHint)) {
-                //Item is local
-                if (locatedHint.FindingPlayer == _currentPlayerSlot) {
-                    var locationName = _currentSession.Locations.GetLocationNameFromId(locatedHint.LocationId);
+                var locationName = _currentSession.Locations.GetLocationNameFromId(locatedHint.LocationId);
+                if (locatedHint.FindingPlayer == _currentPlayerSlot) //Local Item
                     sb.Append($"To be found at {locationName.Substring(0, locationName.Length - 2)}");
-                }
-                else
-                    sb.Append($"To be found by {_currentSession.Players.GetPlayerAlias(locatedHint.FindingPlayer)} at {_currentSession.Locations.GetLocationNameFromId(locatedHint.LocationId)}");
+                else //Remote Item
+                    sb.Append($"To be found by {_currentSession.Players.GetPlayerAlias(locatedHint.FindingPlayer)} at {locationName}");
             }
 
             bool addedItemHint = false;
