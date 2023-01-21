@@ -157,7 +157,10 @@ namespace ArchipelagoMuseDash.Patches {
             var banner = __instance.m_LockObj.transform.GetChild(2).gameObject;
             if (itemHandler.GoalSong.uid == __instance.musicInfo.uid) {
                 __instance.m_LockObj.SetActive(true);
-                __instance.m_LockTxt.text = "Goal";
+                if (itemHandler.NumberOfMusicSheetsToWin - itemHandler.CurrentNumberOfMusicSheets > 0)
+                    __instance.m_LockTxt.text = $"Goal [{itemHandler.NumberOfMusicSheetsToWin - itemHandler.CurrentNumberOfMusicSheets} Left]";
+                else
+                    __instance.m_LockTxt.text = "Goal";
 
                 var unlocked = itemHandler.UnlockedSongUids.Contains(__instance.musicInfo.uid);
                 darkenImage.SetActive(!unlocked);

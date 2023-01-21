@@ -130,6 +130,7 @@
     <Compile Include="AlbumDatabase.cs" />
     <Compile Include="Archipelago\HintHandler.cs" />
     <Compile Include="Archipelago\ItemHandler.cs" />
+    <Compile Include="Archipelago\Items\MusicSheetItem.cs" />
     <Compile Include="Archipelago\Items\VictoryItem.cs" />
     <Compile Include="Archipelago\ItemUnlockHandler.cs" />
     <Compile Include="Archipelago\Items\ExternalItem.cs" />

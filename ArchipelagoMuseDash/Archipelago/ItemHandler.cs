@@ -12,13 +12,18 @@ namespace ArchipelagoMuseDash.Archipelago {
     public class ItemHandler {
         public ItemUnlockHandler Unlocker { get; }
 
-        public MusicInfo GoalSong;
+        public MusicInfo GoalSong { get; private set; }
+        public int NumberOfMusicSheetsToWin { get; private set; }
+        public int CurrentNumberOfMusicSheets { get; private set; }
+
         public HashSet<string> SongsInLogic = new HashSet<string>();
         public HashSet<string> UnlockedSongUids = new HashSet<string>();
         public HashSet<string> CompletedSongUids = new HashSet<string>();
 
         public const string HideSongsText = "Hide Locked Songs";
         public const string ShowSongsText = "Show Locked Songs";
+        public const string MusicSheetItemName = "Music Sheet";
+
 
         ArchipelagoSession _currentSession;
         int _currentPlayerSlot;
@@ -38,12 +43,20 @@ namespace ArchipelagoMuseDash.Archipelago {
             UnlockedSongUids.Clear();
             CompletedSongUids.Clear();
 
-            if (slotData.TryGetValue("victoryLocation", out var value)) {
-                ArchipelagoStatic.ArchLogger.Log("Goal Song", (string)value);
-                GoalSong = ArchipelagoStatic.AlbumDatabase.GetMusicInfo((string)value);
+            //Todo: Handle these being missing
+            if (slotData.TryGetValue("victoryLocation", out var victoryLocation)) {
+                ArchipelagoStatic.ArchLogger.Log("Goal Song", victoryLocation.ToString());
+                GoalSong = ArchipelagoStatic.AlbumDatabase.GetMusicInfo((string)victoryLocation);
                 GlobalDataBase.dbMusicTag.RemoveHide(GoalSong);
                 GlobalDataBase.dbMusicTag.AddCollection(GoalSong);
             }
+
+            if (slotData.TryGetValue("musicSheetWinCount", out var tokenWinCount)) {
+                ArchipelagoStatic.ArchLogger.Log("Music Sheets to Win", tokenWinCount.GetType().ToString());
+                NumberOfMusicSheetsToWin = (int)((long)tokenWinCount);
+            }
+
+            CurrentNumberOfMusicSheets = 0;
 
             CheckForNewItems();
             Unlocker.UnlockAllItems();
@@ -103,9 +116,16 @@ namespace ArchipelagoMuseDash.Archipelago {
                 return new ExternalItem(name, playerName);
             }
 
+            if (name == MusicSheetItemName) {
+                CurrentNumberOfMusicSheets++;
+
+                if (NumberOfMusicSheetsToWin == CurrentNumberOfMusicSheets)
+                    return new SongItem(GoalSong);
+                return new MusicSheetItem(NumberOfMusicSheetsToWin - CurrentNumberOfMusicSheets);
+            }
+
             if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(name, out var singularInfo))
                 return new SongItem(singularInfo);
-
 
             if (ArchipelagoStatic.AlbumDatabase.TryGetAlbum(name, out var album))
                 return new AlbumItem(name, album);
