@@ -10,7 +10,7 @@
         public string AuthorText => _amountOfTokensLeft > 0 ? "To unlock the final song!" : "";
 
         public string PreUnlockBannerText => "A new song?";
-        public string PostUnlockBannerText => "";
+        public string PostUnlockBannerText => $"Music Sheet No. {ArchipelagoStatic.SessionHandler.ItemHandler.NumberOfMusicSheetsToWin - _amountOfTokensLeft}";
 
         readonly int _amountOfTokensLeft;
 
