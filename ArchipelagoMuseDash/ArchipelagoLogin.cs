@@ -145,7 +145,7 @@ namespace ArchipelagoMuseDash {
             ArchipelagoStatic.SteamSync.m_FilePath = ArchipelagoStatic.SteamSync.m_FolderPath + "/" + ArchipelagoStatic.SteamSync.m_FileName;
 
             DataManager.instance.Load();
-            GlobalDataBase.InitDatabase();
+            GlobalDataBase.dbMusicTag.InitDatabase();
 
             if (fixGame)
                 FixMyGame();
