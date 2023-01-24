@@ -1,6 +1,7 @@
 ﻿using System;
 using ArchipelagoMuseDash;
 using ArchipelagoMuseDash.Archipelago;
+using ArchipelagoMuseDash.Helpers;
 using ArchipelagoMuseDash.Logging;
 using MelonLoader;
 using UnityEngine;
@@ -38,6 +39,15 @@ namespace ArchipelagoMuseDash {
                     ImageConversion.LoadImage(archIconTexture, ms.ToArray());
                     ArchipelagoStatic.ArchipelagoIcon = archIconTexture;
                 }
+            }
+
+            using (var stream = MelonAssembly.Assembly.GetManifestResourceStream("ArchipelagoMuseDash.Assets.SongNameReplacements.json")) {
+                if (stream == null) {
+                    ArchipelagoStatic.ArchLogger.Warning("LoadExternalAssets", "Help");
+                    return;
+                }
+
+                ArchipelagoStatic.SongNameChanger = new SongNameChanger(stream);
             }
         }
 

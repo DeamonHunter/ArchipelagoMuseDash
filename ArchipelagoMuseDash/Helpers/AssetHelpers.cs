@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.PeroTools.Managers;
-using Il2CppSystem.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +8,7 @@ namespace ArchipelagoMuseDash.Helpers {
     /// </summary>
     public static class AssetHelpers {
         public static void PrintoutAllGameObjects() {
-            var list = new List<GameObject>();
+            var list = new Il2CppSystem.Collections.Generic.List<GameObject>();
             SceneManager.instance.curScene.GetRootGameObjects(list);
             foreach (var gameobject in list)
                 RecursiveGameObjectPrintout(gameobject, 0, true);
@@ -18,7 +17,7 @@ namespace ArchipelagoMuseDash.Helpers {
         public static void RecursiveGameObjectPrintout(GameObject go, int depth, bool showName) {
             if (showName) {
                 ArchipelagoStatic.ArchLogger.Log("Scene Load", $"{new string('-', depth)} {go.name}");
-                var list = new List<MonoBehaviour>();
+                var list = new Il2CppSystem.Collections.Generic.List<MonoBehaviour>();
                 go.GetComponents(list);
 
                 foreach (var behaviour in list) {

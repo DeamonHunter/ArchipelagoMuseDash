@@ -47,11 +47,15 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             var hintText = ArchipelagoStatic.SessionHandler.SongSelectAdditions.HintText;
             var hintTextComp = ArchipelagoStatic.SessionHandler.SongSelectAdditions.HintTextComp;
+            var songTitleComp = ArchipelagoStatic.SessionHandler.SongSelectAdditions.SongTitleComp;
 
             _forceUpdate = false;
             _lastMusic = currentlySelectedSong;
 
             var isSongRandomSelect = currentlySelectedSong == null || currentlySelectedSong.uid == "?";
+
+            songTitleComp.gameObject.SetActive(!isSongRandomSelect);
+            songTitleComp.text = isSongRandomSelect ? "" : ArchipelagoStatic.SongNameChanger.GetSongName(currentlySelectedSong);
 
             if (!isSongRandomSelect && _currentSession.RoomState.HintCostPercentage <= 100) {
                 var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
@@ -145,7 +149,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 if (hint.FindingPlayer == _currentPlayerSlot) {
                     var locationName = _currentSession.Locations.GetLocationNameFromId(hint.LocationId);
 
-                    ArchipelagoStatic.ArchLogger.Log("Hinting", $"Got Hint for location: {locationName}, Finding Player, {hint.Found}");
+                    ArchipelagoStatic.ArchLogger.LogDebug("Hinting", $"Got Hint for location: {locationName}, Finding Player, {hint.Found}");
                     if (hint.Found)
                         _locationHints.Remove(locationName);
                     else
@@ -153,7 +157,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 }
 
                 if (hint.ReceivingPlayer == _currentPlayerSlot) {
-                    ArchipelagoStatic.ArchLogger.Log("Hinting", $"Got Hint for location: {itemName}, Recieving Player, {hint.Found}");
+                    ArchipelagoStatic.ArchLogger.LogDebug("Hinting", $"Got Hint for location: {itemName}, Recieving Player, {hint.Found}");
 
                     if (hint.Found)
                         _itemsHints.Remove(itemName);

@@ -144,6 +144,7 @@
     <Compile Include="ArchipelagoStatic.cs" />
     <Compile Include="Archipelago\SongSelectAdditions.cs" />
     <Compile Include="Helpers\AssetHelpers.cs" />
+    <Compile Include="Helpers\SongNameChanger.cs" />
     <Compile Include="Logging\ArchLogger.cs" />
     <Compile Include="Patches\ArchipelagoPatches.cs" />
     <Compile Include="Patches\HintPatches.cs" />
@@ -158,6 +159,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Assets\SongNameReplacements.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

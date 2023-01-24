@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
+using Il2CppSystem.IO;
+using UnityEngine;
 
 // Due to how IL2CPP works, some things can't be invoked as an extension.
 // ReSharper disable InvokeAsExtensionMethod
@@ -67,6 +69,10 @@ namespace ArchipelagoMuseDash.Archipelago {
             ArchipelagoStatic.AlbumDatabase.Setup();
             ItemHandler.Setup(_slotData);
             HintHandler.Setup();
+
+#if DEBUG
+            ArchipelagoStatic.SongNameChanger.DumpSongsToTextFile(Path.Combine(Application.absoluteURL, "Output/SongDump.txt"));
+#endif
         }
 
         public void OnUpdate() {

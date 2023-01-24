@@ -17,6 +17,9 @@ namespace ArchipelagoMuseDash.Archipelago {
         public GameObject HintText;
         public Text HintTextComp;
 
+        public GameObject SongText;
+        public Text SongTitleComp;
+
         public void OnUpdate() {
             if (!ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlStage"))
                 return;
@@ -24,13 +27,14 @@ namespace ArchipelagoMuseDash.Archipelago {
             if (HintButton != null)
                 return;
 
-            HintButton = CreateButton("ArchipelagoHintButton", "Get Hint", new Vector2(220, 65), new Vector2(0, 0.5f), ArchipelagoStatic.SessionHandler.HintHandler.ShowHintPopup);
-            HintButtonComp = HintButton.GetComponent<Button>();
-
-            HideSongsButton = CreateButton("ArchipelagoHideButton", "Show Locked Songs", new Vector2(-220, 65), new Vector2(1, 0.5f), ArchipelagoStatic.SessionHandler.ItemHandler.ToggleHiddenSongs);
-            HideSongsButtonComp = HintButton.GetComponent<Button>();
+            HideSongsButton = CreateButton("ArchipelagoHideButton", "Show Locked Songs", new Vector2(660, 40), new Vector2(0, 0.5f), ArchipelagoStatic.SessionHandler.ItemHandler.ToggleHiddenSongs);
+            HideSongsButtonComp = HideSongsButton.GetComponent<Button>();
             HideSongsText = HideSongsButton.GetComponentInChildren<Text>();
 
+            HintButton = CreateButton("ArchipelagoHintButton", "Get Hint", new Vector2(415, 40), new Vector2(0, 0.5f), ArchipelagoStatic.SessionHandler.HintHandler.ShowHintPopup);
+            HintButtonComp = HintButton.GetComponent<Button>();
+
+            AddSongTitleBox();
             AddHintBox();
         }
 
@@ -38,6 +42,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             HintButton = null;
             HideSongsButton = null;
             HideSongsText = null;
+            SongText = null;
         }
 
         public void AddHintBox() {
@@ -60,9 +65,8 @@ namespace ArchipelagoMuseDash.Archipelago {
             hintBackgroundImage.type = noButtonImage.type;
 
             var hintTransform = HintText.GetComponent<RectTransform>();
-
             hintTransform.anchorMax = hintTransform.anchorMin = new Vector2(0.5f, 0.5f);
-            hintTransform.anchoredPosition = new Vector2(400, 160);
+            hintTransform.anchoredPosition = new Vector2(400, 185);
             hintTransform.pivot = new Vector2(0, 0.5f);
             hintTransform.sizeDelta = new Vector2(500, 100);
 
@@ -83,6 +87,48 @@ namespace ArchipelagoMuseDash.Archipelago {
             hintTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
         }
 
+        public void AddSongTitleBox() {
+            //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
+
+            var pnlStage = ArchipelagoStatic.SongSelectPanel;
+            var likeButton = pnlStage.gameObject.GetComponentInChildren<StageLikeToggle>();
+
+            //The HideSongDialogue has the button we want, and it should be available at this time.
+            var noButton = ArchipelagoStatic.HideSongDialogue.m_NoButton;
+            var noButtonImage = noButton.GetComponent<Image>();
+            var noText = noButton.transform.GetChild(0);
+            var noTextComp = noText.GetComponent<Text>();
+
+            SongText = new GameObject("ArchipelagoSongTitle");
+            SongText.transform.SetParent(likeButton.transform.parent, false);
+
+            var songBackgroundImage = SongText.AddComponent<Image>();
+            songBackgroundImage.sprite = noButtonImage.sprite;
+            songBackgroundImage.type = noButtonImage.type;
+
+            var songTransform = SongText.GetComponent<RectTransform>();
+            songTransform.anchorMax = songTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            songTransform.anchoredPosition = new Vector2(400, 100);
+            songTransform.pivot = new Vector2(0, 0.5f);
+            songTransform.sizeDelta = new Vector2(500, 60);
+
+            var songText = new GameObject();
+            songText.transform.SetParent(SongText.transform, false);
+
+            SongTitleComp = songText.AddComponent<Text>();
+            AssetHelpers.CopyTextVariables(noTextComp, SongTitleComp);
+            SongTitleComp.fontSize = 28;
+            SongTitleComp.resizeTextForBestFit = true;
+            SongTitleComp.resizeTextMaxSize = 28;
+            SongTitleComp.resizeTextMinSize = 12;
+            SongTitleComp.verticalOverflow = VerticalWrapMode.Truncate;
+
+            var songTextRect = songText.GetComponent<RectTransform>();
+            songTextRect.anchorMin = new Vector2(0.1f, 0.1f);
+            songTextRect.anchorMax = new Vector2(0.9f, 0.9f);
+            songTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
+        }
+
         private GameObject CreateButton(string buttonName, string buttonText, Vector2 offset, Vector2 pivot, Action onClick) {
             var pnlStage = ArchipelagoStatic.SongSelectPanel;
             var likeButton = pnlStage.gameObject.GetComponentInChildren<StageLikeToggle>();
@@ -101,7 +147,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             button.transition = yesButton.transition;
 
             var colours = yesButton.colors;
-            colours.disabledColor = new UnityEngine.Color(colours.disabledColor.r * 0.8f, colours.disabledColor.g * 0.8f, colours.disabledColor.b * 0.8f, 1);
+            colours.disabledColor = new Color(colours.disabledColor.r * 0.8f, colours.disabledColor.g * 0.8f, colours.disabledColor.b * 0.8f, 1);
             button.colors = colours;
 
             var image = buttonParent.AddComponent<Image>();
@@ -112,7 +158,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             var imageTransform = buttonParent.GetComponent<RectTransform>();
             var yesButtonTransform = yesButton.gameObject.GetComponent<RectTransform>();
 
-            imageTransform.sizeDelta = yesButtonTransform.sizeDelta;
+            imageTransform.sizeDelta = yesButtonTransform.sizeDelta * new Vector2(0.875f, 0.85f);
             imageTransform.anchorMax = imageTransform.anchorMin = new Vector2(0.5f, 0.5f);
             imageTransform.anchoredPosition = offset;
             imageTransform.pivot = pivot;
@@ -122,7 +168,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             var hintTextComp = hintButtonText.AddComponent<Text>();
 
             AssetHelpers.CopyTextVariables(yesTextComp, hintTextComp);
-            hintTextComp.fontSize -= 10;
+            hintTextComp.fontSize -= 15;
             hintTextComp.text = buttonText;
 
             var rectTransfrom = hintButtonText.GetComponent<RectTransform>();
