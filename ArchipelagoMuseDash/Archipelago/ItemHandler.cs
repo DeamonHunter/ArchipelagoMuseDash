@@ -190,8 +190,16 @@ namespace ArchipelagoMuseDash.Archipelago {
                 CompletedSongUids.Add(uid);
 
                 //Complete the location check, but also scout to ensure we get the items we are sending to other players.
-                await _currentSession.Locations.CompleteLocationChecksAsync(location1, location2);
-                var items = await _currentSession.Locations.ScoutLocationsAsync(false, location1, location2);
+
+                LocationInfoPacket items;
+                if (location2 != -1) {
+                    await _currentSession.Locations.CompleteLocationChecksAsync(location1, location2);
+                    items = await _currentSession.Locations.ScoutLocationsAsync(false, location1, location2);
+                }
+                else {
+                    await _currentSession.Locations.CompleteLocationChecksAsync(location1);
+                    items = await _currentSession.Locations.ScoutLocationsAsync(false, location1);
+                }
 
                 ArchipelagoStatic.ArchLogger.Log("CheckLocations", "Received Items Packet.");
                 CheckStartingLocation(locationName);
