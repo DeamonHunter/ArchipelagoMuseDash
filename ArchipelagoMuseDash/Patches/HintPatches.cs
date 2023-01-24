@@ -2,7 +2,7 @@
 using Assets.Scripts.Database;
 using Assets.Scripts.PeroTools.Managers;
 using Assets.Scripts.UI.Tips;
-using Harmony;
+using HarmonyLib;
 
 namespace ArchipelagoMuseDash.Patches {
     [HarmonyPatch(typeof(SongHideAskMsg), "AwakeInit")]
