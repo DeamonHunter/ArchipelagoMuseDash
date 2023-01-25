@@ -1,6 +1,6 @@
 ﻿namespace ArchipelagoMuseDash.Archipelago.Items {
     public class VictoryItem : IMuseDashItem {
-        public string UnlockSongUid => ArchipelagoStatic.AlbumDatabase.GetMusicInfo("Magical Wonderland (More colorful mix)[Default Music]").uid;
+        public string UnlockSongUid => _lastPlayedSongUID;
         public bool UseArchipelagoLogo => true;
 
         public string TitleText => "You've Won!!";
@@ -11,9 +11,11 @@
         public string PostUnlockBannerText => null;
 
         string _playerName;
+        string _lastPlayedSongUID;
 
-        public VictoryItem(string localPlayerName) {
+        public VictoryItem(string localPlayerName, string lastPlayedSongUID) {
             _playerName = localPlayerName;
+            _lastPlayedSongUID = lastPlayedSongUID;
         }
 
         public void UnlockItem(ItemHandler handler, bool immediate) { }

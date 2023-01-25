@@ -171,11 +171,13 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         async System.Threading.Tasks.Task CheckLocationsInner(string uid, string locationName) {
             try {
+                CompletedSongUids.Add(uid);
+
                 if (GoalSong != null && GoalSong.uid == uid) {
                     ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Victory achieved, enqueing visuals for next available time.");
 
                     //Todo: This maybe should be priority?
-                    Unlocker.AddItem(new VictoryItem(_currentSession.Players.GetPlayerAlias(_currentPlayerSlot)));
+                    Unlocker.AddItem(new VictoryItem(_currentSession.Players.GetPlayerAlias(_currentPlayerSlot), uid));
 
                     var statusUpdatePacket = new StatusUpdatePacket {
                         Status = ArchipelagoClientState.ClientGoal
@@ -187,8 +189,6 @@ namespace ArchipelagoMuseDash.Archipelago {
 
                 var location1 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-0");
                 var location2 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-1");
-
-                CompletedSongUids.Add(uid);
 
                 //Complete the location check, but also scout to ensure we get the items we are sending to other players.
 
