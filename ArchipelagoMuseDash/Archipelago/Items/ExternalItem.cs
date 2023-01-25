@@ -1,6 +1,6 @@
 ﻿namespace ArchipelagoMuseDash.Archipelago.Items {
     public class ExternalItem : IMuseDashItem {
-        public string UnlockSongUid => ArchipelagoStatic.AlbumDatabase.GetMusicInfo("Magical Wonderland (More colorful mix)[Default Music]").uid;
+        public string UnlockSongUid => ArchipelagoStatic.AlbumDatabase.GetMusicInfo("Magical Wonderland[Default Music]").uid;
         public bool UseArchipelagoLogo => true;
 
         public string TitleText => "New Item!!";
