@@ -187,12 +187,13 @@ namespace ArchipelagoMuseDash.Archipelago {
 
                 var location1 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-0");
                 var location2 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-1");
+
                 CompletedSongUids.Add(uid);
 
                 //Complete the location check, but also scout to ensure we get the items we are sending to other players.
 
                 LocationInfoPacket items;
-                if (location2 != -1) {
+                if (location2 != -1 && _currentSession.Locations.AllLocations.Contains(location2)) {
                     await _currentSession.Locations.CompleteLocationChecksAsync(location1, location2);
                     items = await _currentSession.Locations.ScoutLocationsAsync(false, location1, location2);
                 }
