@@ -138,7 +138,6 @@
     <Compile Include="Archipelago\Items\IMuseDashItem.cs" />
     <Compile Include="Archipelago\Items\AlbumItem.cs" />
     <Compile Include="Archipelago\Items\SongItem.cs" />
-    <Compile Include="Archipelago\MuseDashItem.cs" />
     <Compile Include="Archipelago\SessionHandler.cs" />
     <Compile Include="ArchipelagoLogin.cs" />
     <Compile Include="ArchipelagoMuseDashMod.cs" />

@@ -141,6 +141,11 @@ namespace ArchipelagoMuseDash {
         }
 
         void AttemptPlayNormally(bool fixGame) {
+#if DEBUG
+            //Attach this to playing normally so that it can be easily triggered, once everything *should* be loaded
+            ArchipelagoStatic.SongNameChanger.DumpSongsToTextFile(Path.Combine(Application.absoluteURL, "Output/SongDump.txt"));
+#endif
+
             ArchipelagoStatic.SteamSync.m_FolderPath = ArchipelagoStatic.OriginalFolderName;
             ArchipelagoStatic.SteamSync.m_FilePath = ArchipelagoStatic.SteamSync.m_FolderPath + "/" + ArchipelagoStatic.SteamSync.m_FileName;
 
