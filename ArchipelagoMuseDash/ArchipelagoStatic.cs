@@ -4,6 +4,7 @@ using ArchipelagoMuseDash.Helpers;
 using ArchipelagoMuseDash.Logging;
 using Assets.Scripts.PeroTools.Platforms.Steam;
 using Assets.Scripts.UI.Panels;
+using FormulaBase;
 using UnityEngine;
 
 namespace ArchipelagoMuseDash {
@@ -24,6 +25,7 @@ namespace ArchipelagoMuseDash {
 
         //Needed MuseDash components
         public static string CurrentScene;
+        public static StageBattleComponent BattleComponent;
         public static HashSet<string> ActivatedEnableDisableHookers = new HashSet<string>();
         public static GameObject MuseCharacter;
         public static PnlStage SongSelectPanel;

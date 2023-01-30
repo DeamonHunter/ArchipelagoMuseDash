@@ -15,6 +15,7 @@ namespace ArchipelagoMuseDash.Archipelago {
     public class SessionHandler {
         public ItemHandler ItemHandler;
         public HintHandler HintHandler;
+        public DeathLinkHandler DeathLinkHandler;
         public SongSelectAdditions SongSelectAdditions;
 
         public bool IsLoggedIn => _currentSession != null;
@@ -38,41 +39,35 @@ namespace ArchipelagoMuseDash.Archipelago {
 
 
             var successful = (LoginSuccessful)loginResult;
-            RegisterSession(session, successful.Slot, successful.SlotData);
+            StartSession(session, successful.Slot, successful.SlotData);
             reason = null;
             return true;
         }
 
 
-        void RegisterSession(ArchipelagoSession session, int slot, Dictionary<string, object> slotData) {
+        void StartSession(ArchipelagoSession session, int slot, Dictionary<string, object> slotData) {
             if (_currentSession != null)
                 throw new NotImplementedException("Changing sessions is not implemented atm.");
 
-            ItemHandler = new ItemHandler(session, slot);
-            HintHandler = new HintHandler(session, slot);
-            SongSelectAdditions = new SongSelectAdditions();
-
             _slot = slot;
             _slotData = slotData;
-
             _currentSession = session;
-            _currentSession.MessageLog.OnMessageReceived += ArchipelagoStatic.ArchLogger.LogMessage;
+
             try {
-                SetupSession();
+                ItemHandler = new ItemHandler(_currentSession, _slot);
+                HintHandler = new HintHandler(_currentSession, _slot);
+                DeathLinkHandler = new DeathLinkHandler(_currentSession, _slot, _slotData);
+                SongSelectAdditions = new SongSelectAdditions();
+
+                _currentSession.MessageLog.OnMessageReceived += ArchipelagoStatic.ArchLogger.LogMessage;
+
+                ArchipelagoStatic.AlbumDatabase.Setup();
+                ItemHandler.Setup(_slotData);
+                HintHandler.Setup();
             }
             catch (Exception e) {
                 ArchipelagoStatic.ArchLogger.Error("ItemHandler", e);
             }
-        }
-
-        public void SetupSession() {
-            ArchipelagoStatic.AlbumDatabase.Setup();
-            ItemHandler.Setup(_slotData);
-            HintHandler.Setup();
-
-#if DEBUG
-            ArchipelagoStatic.SongNameChanger.DumpSongsToTextFile(Path.Combine(Application.absoluteURL, "Output/SongDump.txt"));
-#endif
         }
 
         public void OnUpdate() {
