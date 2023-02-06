@@ -43,6 +43,7 @@ namespace ArchipelagoMuseDash.Helpers {
             { '↑', ' ' },
             { '↓', ' ' },
             { '†', ' ' },
+            { 'Ⅰ', '1' },
             { 'Ⅱ', '2' },
             { 'ä', 'a' },
             { 'ë', 'e' },
@@ -117,14 +118,20 @@ namespace ArchipelagoMuseDash.Helpers {
                 if (englishName.Any(c => !_allowedCharacters.Contains(c))) {
                     var chineseLOC = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal(AlbumDatabase.CHINESE_LOC_INDEX).GetLocalAlbumInfoByIndex(musicInfo.listIndex);
                     var englishLOC = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal(AlbumDatabase.ENGLISH_LOC_INDEX).GetLocalAlbumInfoByIndex(musicInfo.listIndex);
-                    var japaneseLOC = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal(2).GetLocalAlbumInfoByIndex(musicInfo.listIndex);
-                    var koreanLOC = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal(3).GetLocalAlbumInfoByIndex(musicInfo.listIndex);
-                    ArchipelagoStatic.ArchLogger.Log("Dump Songs", $"English contains unknown char: {musicInfo.uid}. Name: {englishLOC.name}");
-                    failedSongsSB.AppendLine($"{musicInfo.uid}|{chineseLOC.name}|{englishLOC.name}|{japaneseLOC.name}|{koreanLOC.name}");
+                    ArchipelagoStatic.ArchLogger.Log("Dump Songs", $"English Song contains unknown char: {musicInfo.uid}. Name: {englishLOC.name}");
+                    failedSongsSB.AppendLine($"{musicInfo.uid}|{chineseLOC.name}|{englishLOC.name}");
                 }
 
                 var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>(-1).GetLocal(AlbumDatabase.ENGLISH_LOC_INDEX);
                 var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
+                if (albumLocal.Any(c => !_allowedCharacters.Contains(c))) {
+                    albumLocal = ReplaceKnownCharacters(albumLocal);
+                    if (albumLocal.Any(c => !_allowedCharacters.Contains(c))) {
+                        ArchipelagoStatic.ArchLogger.Log("Dump Songs", $"English Album contains unknown char: Song: {musicInfo.uid}. Name: {albumLocal}");
+                        failedSongsSB.AppendLine($"Album: {albumLocal}");
+                    }
+                }
+
                 var availableInStreamerMode = !AnchorModule.instance.CheckLockByMusicUid(musicInfo.uid);
                 sb.AppendLine($"{englishName}|{albumLocal}|{availableInStreamerMode}|{musicInfo.difficulty1}|{musicInfo.difficulty2}|{musicInfo.difficulty3}|{musicInfo.difficulty4}");
             }
