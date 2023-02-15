@@ -113,6 +113,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 if (string.IsNullOrEmpty(playerName))
                     playerName = "Unknown Player"; //Catch all for certain cases, like cheated items
 
+                name = name ?? $"Unknown Item: {item.Item}";
                 ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"{playerName}, {name}");
 
                 return new ExternalItem(name, playerName);
