@@ -39,7 +39,10 @@ namespace ArchipelagoMuseDash {
                 }
 
                 var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
-                _songsByItemName.Add(GetItemNameFromMusicInfo(musicInfo), musicInfo);
+
+                var songName = GetItemNameFromMusicInfo(musicInfo);
+                ArchipelagoStatic.ArchLogger.LogDebug("Album Database", "Known Item: " + songName);
+                _songsByItemName.Add(songName, musicInfo);
 
                 if (!_songsByAlbum.TryGetValue(albumLocal, out var albumList)) {
                     albumList = new Il2CppSystem.Collections.Generic.List<MusicInfo>();

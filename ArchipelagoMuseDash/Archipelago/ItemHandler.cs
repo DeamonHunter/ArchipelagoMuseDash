@@ -165,6 +165,11 @@ namespace ArchipelagoMuseDash.Archipelago {
                 return;
             }
 
+            if (!SongsInLogic.Contains(uid) && GoalSong.uid != uid) {
+                ArchipelagoStatic.ArchLogger.Warning("CheckLocations", $"Tried to check location that wasn't in logic: {locationName}");
+                return;
+            }
+
             ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Checking location for: {locationName}");
             System.Threading.Tasks.Task.Run(async () => await CheckLocationsInner(uid, locationName));
         }

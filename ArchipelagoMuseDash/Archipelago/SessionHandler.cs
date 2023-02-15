@@ -31,6 +31,9 @@ namespace ArchipelagoMuseDash.Archipelago {
         /// <param name="reason">The first error code that was generated if the attempt was unsuccessful.</param>
         /// <returns>Whether the session was successfully created.</returns>
         public bool TryFreshLogin(string ipAddress, string username, string password, out string reason) {
+            if (_currentSession != null)
+                throw new NotImplementedException("Changing sessions is not implemented atm.");
+
             var session = ArchipelagoSessionFactory.CreateSession(ipAddress);
 
             var loginResult = session.TryConnectAndLogin("Muse Dash", username, ItemsHandlingFlags.AllItems, password: password);
@@ -44,26 +47,19 @@ namespace ArchipelagoMuseDash.Archipelago {
             }
 
             var successful = (LoginSuccessful)loginResult;
-            StartSession(session, successful.Slot, successful.SlotData);
+
+            _slot = successful.Slot;
+            _slotData = successful.SlotData;
+            _currentSession = session;
+
             reason = null;
             return true;
         }
 
         /// <summary>
-        /// Register the newly created <see cref="ArchipelagoSession"/> and then starts all child handlers
+        /// Starts up all Archipelago related services. Should be started after loading save file to ensure nothing is broken.
         /// </summary>
-        /// <param name="session"></param>
-        /// <param name="slot"></param>
-        /// <param name="slotData"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        void StartSession(ArchipelagoSession session, int slot, Dictionary<string, object> slotData) {
-            if (_currentSession != null)
-                throw new NotImplementedException("Changing sessions is not implemented atm.");
-
-            _slot = slot;
-            _slotData = slotData;
-            _currentSession = session;
-
+        public void StartSession() {
             try {
                 ItemHandler = new ItemHandler(_currentSession, _slot);
                 HintHandler = new HintHandler(_currentSession, _slot);
@@ -112,9 +108,6 @@ namespace ArchipelagoMuseDash.Archipelago {
         public void SceneChanged(string sceneName) {
             if (sceneName != "UISystem_PC")
                 return;
-
-            if (!ArchipelagoStatic.Login.HasBeenShown)
-                ArchipelagoStatic.Login.ShowLoginScreen();
 
             SongSelectAdditions?.MainSceneLoaded();
         }

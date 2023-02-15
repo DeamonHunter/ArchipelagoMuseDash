@@ -139,63 +139,49 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             //The HideSongDialogue has the button we want, and it should be available at this time.
             var yesButton = ArchipelagoStatic.HideSongDialogue.m_YesButton;
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "1");
             var yesButtonImage = yesButton.GetComponent<Image>();
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "2");
             var yesText = yesButton.transform.GetChild(0);
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "3");
             var yesTextComp = yesText.GetComponent<Text>();
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "4");
 
             var buttonParent = new GameObject(buttonName);
             buttonParent.transform.SetParent(likeButton.transform.parent, false);
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "5");
 
             var button = buttonParent.AddComponent<Button>();
             button.onClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>(onClick));
             button.transition = yesButton.transition;
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "6");
 
             var colours = yesButton.colors;
             colours.disabledColor = new Color(colours.disabledColor.r * 0.8f, colours.disabledColor.g * 0.8f, colours.disabledColor.b * 0.8f, 1);
             button.colors = colours;
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "7");
 
             var image = buttonParent.AddComponent<Image>();
             image.sprite = yesButtonImage.sprite;
             image.type = yesButtonImage.type;
             button.targetGraphic = image;
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "8");
 
             var imageTransform = buttonParent.GetComponent<RectTransform>();
             var yesButtonTransform = yesButton.gameObject.GetComponent<RectTransform>();
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "9");
 
             imageTransform.sizeDelta = yesButtonTransform.sizeDelta * new Vector2(0.875f, 0.85f);
             imageTransform.anchorMax = imageTransform.anchorMin = new Vector2(0.5f, 0.5f);
             imageTransform.anchoredPosition = offset;
             imageTransform.pivot = pivot;
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "10");
 
             var hintButtonText = new GameObject("Text");
             hintButtonText.transform.SetParent(buttonParent.transform, false);
             var hintTextComp = hintButtonText.AddComponent<Text>();
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "11");
 
             AssetHelpers.CopyTextVariables(yesTextComp, hintTextComp);
             hintTextComp.fontSize -= 15;
             hintTextComp.text = buttonText;
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "12");
 
             var rectTransfrom = hintButtonText.GetComponent<RectTransform>();
             var yesRectTransform = yesText.GetComponent<RectTransform>();
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "13");
 
             rectTransfrom.anchorMin = yesRectTransform.anchorMin;
             rectTransfrom.anchorMax = yesRectTransform.anchorMax;
             rectTransfrom.pivot = yesRectTransform.pivot;
             rectTransfrom.sizeDelta = yesRectTransform.sizeDelta;
-            ArchipelagoStatic.ArchLogger.Log("CreateButton", "14");
 
             return buttonParent;
         }

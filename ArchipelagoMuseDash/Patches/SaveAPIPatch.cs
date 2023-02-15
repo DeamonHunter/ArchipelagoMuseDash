@@ -1,39 +1,18 @@
-﻿using Assets.Scripts.Database;
-using Assets.Scripts.PeroTools.Nice.Datas;
+﻿using Assets.Scripts.PeroTools.Nice.Datas;
 using Assets.Scripts.PeroTools.Platforms.Steam;
 using HarmonyLib;
 using Il2CppSystem.IO;
-using UnityEngine;
 
 namespace ArchipelagoMuseDash.Patches {
     [HarmonyPatch(typeof(SteamSync), "LoadLocal")]
     internal static class SteamSyncLoadLocal {
-        static void Prefix(SteamSync __instance, out bool __state) {
-            __state = ArchipelagoStatic.SteamSync == null;
+        static void Prefix(SteamSync __instance) {
+            if (ArchipelagoStatic.SteamSync != null)
+                return;
 
-            if (ArchipelagoStatic.SteamSync == null) {
-                ArchipelagoStatic.SteamSync = __instance;
-                ArchipelagoStatic.OriginalFolderName = __instance.m_FolderPath;
-                ArchipelagoStatic.OriginalFilePath = __instance.m_FilePath;
-
-                var path = Path.Combine(Application.absoluteURL, "UserData/ArchSaves");
-                __instance.m_FolderPath = path;
-                __instance.m_FilePath = __instance.m_FolderPath + "/" + __instance.m_FileName;
-
-                if (!Directory.Exists(path))
-                    Directory.CreateDirectory(path);
-
-                //Copy over current data
-                if (!File.Exists(__instance.m_FilePath) && File.Exists(ArchipelagoStatic.OriginalFilePath))
-                    File.Copy(ArchipelagoStatic.OriginalFilePath, __instance.m_FilePath);
-            }
-        }
-
-        static void Postfix(bool __state) {
-            if (__state && DataHelper.isNew)
-                DataHelper.isNew = false;
-
-            DataHelper.isUnlockAllMaster = __state;
+            ArchipelagoStatic.SteamSync = __instance;
+            ArchipelagoStatic.OriginalFolderName = __instance.m_FolderPath;
+            ArchipelagoStatic.OriginalFilePath = __instance.m_FilePath;
         }
     }
 
