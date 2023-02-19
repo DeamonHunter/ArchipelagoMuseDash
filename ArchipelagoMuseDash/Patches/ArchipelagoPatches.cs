@@ -1,6 +1,7 @@
 ﻿using System;
 using ArchipelagoMuseDash.Archipelago.Items;
 using Assets.Scripts.Database;
+using Assets.Scripts.GameCore.HostComponent;
 using Assets.Scripts.PeroTools.Managers;
 using Assets.Scripts.UI.Controls;
 using Assets.Scripts.UI.Panels;
@@ -113,7 +114,7 @@ namespace ArchipelagoMuseDash.Patches {
             // Block Sleepwalker Rin (Auto Mode) from getting completions
             if (BattleHelper.isAutoSleepy) {
                 var reason = "Battle invalid for item unlock due to using Sleepwalker Rin.";
-                ShowText.ShowInfo(reason);
+                ShowText.ShowInfo(reason); //Todo: Fix Show message
                 ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
                 return;
             }
@@ -122,10 +123,19 @@ namespace ArchipelagoMuseDash.Patches {
             if (GlobalDataBase.dbBattleStage.IsSelectRole(neko_character_id) && !GlobalDataBase.dbBattleStage.IsSelectElfin(silencer_elfin_id)) {
                 if (GlobalDataBase.dbSkill.nekoSkillInvoke) {
                     var reason = "Battle invalid for item unlock due to dying as NEKO.";
-                    ShowText.ShowInfo(reason);
+                    ShowText.ShowInfo(reason); //Todo: Fix Show message
                     ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
                     return;
                 }
+            }
+
+            var kvp = TaskStageTarget.instance.GetStageEvaluate();
+            ArchipelagoStatic.ArchLogger.Log("PnlVictory", $"KVP: {kvp.Key}, {kvp.Value}");
+            if (kvp.Value < (int)ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded) {
+                var reason = $"Grade result was worse than {ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded}";
+                ShowText.ShowInfo(reason); //Todo: Fix Show message
+                ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
+                return;
             }
 
             //Music info must be grabbed now. The next frame it will be nulled and be unusable.

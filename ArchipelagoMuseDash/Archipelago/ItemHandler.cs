@@ -12,6 +12,7 @@ namespace ArchipelagoMuseDash.Archipelago {
     public class ItemHandler {
         public ItemUnlockHandler Unlocker { get; }
 
+        public GradeOption GradeNeeded { get; private set; }
         public MusicInfo GoalSong { get; private set; }
         public int NumberOfMusicSheetsToWin { get; private set; }
         public int CurrentNumberOfMusicSheets { get; private set; }
@@ -54,9 +55,16 @@ namespace ArchipelagoMuseDash.Archipelago {
             }
 
             if (slotData.TryGetValue("musicSheetWinCount", out var tokenWinCount)) {
-                ArchipelagoStatic.ArchLogger.Log("Music Sheets to Win", tokenWinCount.GetType().ToString());
+                ArchipelagoStatic.ArchLogger.Log("Music Sheets to Win", ((long)tokenWinCount).ToString());
                 NumberOfMusicSheetsToWin = (int)((long)tokenWinCount);
             }
+
+            if (slotData.TryGetValue("gradeNeeded", out var gradeNeeded)) {
+                ArchipelagoStatic.ArchLogger.Log("Grade Needed to win", $"{gradeNeeded.GetType()} : {gradeNeeded}");
+                GradeNeeded = (GradeOption)((long)gradeNeeded);
+            }
+            else
+                GradeNeeded = GradeOption.Any;
 
             CurrentNumberOfMusicSheets = 0;
 
