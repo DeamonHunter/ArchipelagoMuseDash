@@ -7,6 +7,9 @@ using Assets.Scripts.PeroTools.Nice.Interface;
 using UnityEngine;
 
 namespace ArchipelagoMuseDash.Archipelago {
+    /// <summary>
+    /// Handles Item Unlocks
+    /// </summary>
     public class ItemUnlockHandler {
         ItemHandler _handler;
 

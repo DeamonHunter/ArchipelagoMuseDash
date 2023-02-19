@@ -128,6 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlbumDatabase.cs" />
+    <Compile Include="Archipelago\DeathLinkHandler.cs" />
     <Compile Include="Archipelago\HintHandler.cs" />
     <Compile Include="Archipelago\ItemHandler.cs" />
     <Compile Include="Archipelago\Items\MusicSheetItem.cs" />
@@ -137,7 +138,6 @@
     <Compile Include="Archipelago\Items\IMuseDashItem.cs" />
     <Compile Include="Archipelago\Items\AlbumItem.cs" />
     <Compile Include="Archipelago\Items\SongItem.cs" />
-    <Compile Include="Archipelago\MuseDashItem.cs" />
     <Compile Include="Archipelago\SessionHandler.cs" />
     <Compile Include="ArchipelagoLogin.cs" />
     <Compile Include="ArchipelagoMuseDashMod.cs" />
@@ -171,6 +171,16 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\ArchIcon.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\LoginBackground.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\ButtonNo.png" />
+    <EmbeddedResource Include="Assets\ButtonYes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\ButtonNoHighlighted.png" />
+    <EmbeddedResource Include="Assets\ButtonYesHighlighted.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

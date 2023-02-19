@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using ArchipelagoMuseDash.Helpers;
 using Assets.Scripts.Database;
 using Assets.Scripts.PeroTools.Nice.Datas;
 using MelonLoader;
@@ -9,7 +10,8 @@ using UnityEngine;
 
 namespace ArchipelagoMuseDash {
     public class ArchipelagoLogin {
-        public bool HasBeenShown;
+        bool _showLoginButton;
+        bool _showLoginScreen;
 
         string _ipAddress;
         string _username;
@@ -19,16 +21,21 @@ namespace ArchipelagoMuseDash {
         readonly string _lastLoginPath;
 
         float _deltaTime;
-        bool _fixSave;
 
         //Todo: Is there some trigger we can check to see if the loading screen has been removed? 
         const float archipelago_login_display_delay = 1f; //Delays displaying the login for archipelago so it doesn't show over the loading screen
 
-        GUIStyle _buttonStyle;
+        Texture2D _yesTexture;
+        Texture2D _yesTextureHighlighted;
+        Texture2D _noTexture;
+        Texture2D _noTextureHighlighted;
+        Texture2D _backgroundTexture;
+
+        GUIStyle _windowStyle;
+        GUIStyle _buttonYesStyle;
+        GUIStyle _buttonNoStyle;
         GUIStyle _labelStyle;
         GUIStyle _textFieldStyle;
-        GUIStyle _toggleStyle;
-        GUIStyle _windowStyle;
 
         public ArchipelagoLogin() {
 #if DEBUG
@@ -37,25 +44,52 @@ namespace ArchipelagoMuseDash {
             _ipAddress = "archipelago.gg:38281";
 #endif
             _lastLoginPath = Path.Combine(Application.absoluteURL, "UserData/ArchSaves/LastLogin.txt");
+
+            _backgroundTexture = AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.LoginBackground.png");
+            _yesTexture = AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.ButtonYes.png");
+            _yesTextureHighlighted = AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.ButtonYesHighlighted.png");
+            _noTexture = AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.ButtonNo.png");
+            _noTextureHighlighted = AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.ButtonNoHighlighted.png");
+
+            MelonEvents.OnGUI.Subscribe(DrawArchLogin);
         }
 
-        public void ShowLoginScreen() {
-            if (File.Exists(_lastLoginPath)) {
-                using (var file = File.OpenRead(_lastLoginPath)) {
-                    using (var sr = new StreamReader(file)) {
-                        _ipAddress = sr.ReadLine();
-                        _username = sr.ReadLine();
-                    }
-                }
-            }
-
-            HasBeenShown = true;
-            MelonEvents.OnGUI.Subscribe(DrawArchLogin);
+        public void OnUpdate() {
+            _showLoginButton = !ArchipelagoStatic.SessionHandler.IsLoggedIn && ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlHome");
         }
 
         void DrawArchLogin() {
             try {
-                _deltaTime += Time.deltaTime;
+                //Can only call this in GUI
+                if (_windowStyle == null)
+                    SetupStyles(); //Todo: Add textures
+
+                if (!_showLoginScreen) {
+                    if (!_showLoginButton)
+                        return;
+
+                    _deltaTime += Time.deltaTime;
+                    if (_deltaTime < archipelago_login_display_delay)
+                        return;
+
+                    if (!GUI.Button(new Rect(Screen.width - 320, Screen.height - 120, 300, 100), "Show Archipelago Login", _buttonNoStyle))
+                        return;
+
+                    _showLoginScreen = true;
+#if DEBUG
+                    //Attach this to playing normally so that it can be easily triggered, once everything *should* be loaded
+                    //ArchipelagoStatic.SongNameChanger.DumpSongsToTextFile(Path.Combine(Application.absoluteURL, "Output/SongDump.txt"));
+#endif
+
+                    if (File.Exists(_lastLoginPath)) {
+                        using (var file = File.OpenRead(_lastLoginPath)) {
+                            using (var sr = new StreamReader(file)) {
+                                _ipAddress = sr.ReadLine();
+                                _username = sr.ReadLine();
+                            }
+                        }
+                    }
+                }
 
                 var museCharacter = ArchipelagoStatic.MuseCharacter;
                 if (museCharacter == null)
@@ -65,14 +99,7 @@ namespace ArchipelagoMuseDash {
                 var uiParent = museCharacter.transform.parent.parent.parent;
                 uiParent.gameObject.SetActive(false);
 
-                //Give some time for the actual background to show up
-                if (_deltaTime < archipelago_login_display_delay)
-                    return;
-
-                if (_buttonStyle == null)
-                    SetupStyles();
-
-                GUI.ModalWindow(0, new Rect(Screen.width / 2.0f - 250, Screen.height / 2.0f - 190, 500, 380), (GUI.WindowFunction)DrawArchWindow, "Connect to an Archipelago Server", _windowStyle);
+                GUI.ModalWindow(0, new Rect(Screen.width / 2.0f - 250, Screen.height / 2.0f - 170, 500, 340), (GUI.WindowFunction)DrawArchWindow, "Connect to an Archipelago Server", _windowStyle);
             }
             catch (Exception e) {
                 ArchipelagoStatic.ArchLogger.Error("DrawArchLogin", e);
@@ -81,6 +108,10 @@ namespace ArchipelagoMuseDash {
         }
 
         void DrawArchWindow(int windowID) {
+            GUILayout.Label("", _labelStyle, new Il2CppReferenceArray<GUILayoutOption>(new[] {
+                GUILayout.Height(40f)
+            }));
+
             GUILayout.Label("IP Address And Port:", _labelStyle, null);
             _ipAddress = GUILayout.TextField(_ipAddress, _textFieldStyle, null);
 
@@ -91,31 +122,72 @@ namespace ArchipelagoMuseDash {
             _password = GUILayout.TextField(_password, _textFieldStyle, null);
 
             GUILayout.Label(_error ?? "", _labelStyle, new Il2CppReferenceArray<GUILayoutOption>(new[] {
-                GUILayout.Height(110f)
+                GUILayout.Height(50f)
             }));
 
-            if (GUILayout.Button("Log In", _buttonStyle, null))
+            GUILayout.BeginHorizontal(null);
+            if (GUILayout.Button("Back Out", _buttonNoStyle, new Il2CppReferenceArray<GUILayoutOption>(new[] {
+                    GUILayout.Height(40f)
+                })))
+                HideLoginOverlay();
+
+            if (GUILayout.Button("Log In", _buttonYesStyle, new Il2CppReferenceArray<GUILayoutOption>(new[] {
+                    GUILayout.Height(40f)
+                })))
                 AttemptLogin();
 
-            _fixSave = GUILayout.Toggle(_fixSave, "Reset all songs to be visible.", _toggleStyle, null);
-            if (GUILayout.Button("Play Without Archipelago", _buttonStyle, null))
-                AttemptPlayNormally(_fixSave);
+            GUILayout.EndHorizontal();
         }
 
         void SetupStyles() {
+            var mainState = new GUIStyleState() {
+                background = _backgroundTexture,
+                textColor = new Color(1, 1, 1, 1)
+            };
+
+            _windowStyle = new GUIStyle(GUI.skin.window) {
+                fontSize = 24,
+                normal = mainState,
+                hover = mainState,
+                active = mainState
+            };
+
+            var yesState = new GUIStyleState() {
+                background = _yesTexture,
+                textColor = Color.white
+            };
+            var yesStateHighlighted = new GUIStyleState() {
+                background = _yesTextureHighlighted,
+                textColor = Color.white
+            };
+
+            _buttonYesStyle = new GUIStyle(GUI.skin.button) {
+                fontSize = 20,
+                normal = yesState,
+                hover = yesStateHighlighted,
+                active = yesStateHighlighted
+            };
+
+            var noState = new GUIStyleState() {
+                background = _noTexture,
+                textColor = Color.white
+            };
+            var noStateHighlighted = new GUIStyleState() {
+                background = _noTextureHighlighted,
+                textColor = Color.white
+            };
+
+            _buttonNoStyle = new GUIStyle(GUI.skin.button) {
+                fontSize = 20,
+                normal = noState,
+                hover = noStateHighlighted,
+                active = noStateHighlighted
+            };
+
             _labelStyle = new GUIStyle(GUI.skin.label) {
                 fontSize = 16
             };
             _textFieldStyle = new GUIStyle(GUI.skin.textField) {
-                fontSize = 16
-            };
-            _buttonStyle = new GUIStyle(GUI.skin.button) {
-                fontSize = 16
-            };
-            _windowStyle = new GUIStyle(GUI.skin.window) {
-                fontSize = 16
-            };
-            _toggleStyle = new GUIStyle(GUI.skin.toggle) {
                 fontSize = 16
             };
         }
@@ -132,7 +204,8 @@ namespace ArchipelagoMuseDash {
                 sb.AppendLine(_username);
                 File.WriteAllText(_lastLoginPath, sb.ToString());
 
-                HideLoginOverlay();
+                SwapToArchipelagoSave();
+                ArchipelagoStatic.SessionHandler.StartSession();
             }
             catch (Exception e) {
                 ArchipelagoStatic.ArchLogger.Error("Login", e);
@@ -140,33 +213,28 @@ namespace ArchipelagoMuseDash {
             }
         }
 
-        void AttemptPlayNormally(bool fixGame) {
-            ArchipelagoStatic.SteamSync.m_FolderPath = ArchipelagoStatic.OriginalFolderName;
+        void SwapToArchipelagoSave() {
+            var path = Path.Combine(Application.absoluteURL, "UserData/ArchSaves");
+            ArchipelagoStatic.SteamSync.m_FolderPath = path;
             ArchipelagoStatic.SteamSync.m_FilePath = ArchipelagoStatic.SteamSync.m_FolderPath + "/" + ArchipelagoStatic.SteamSync.m_FileName;
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            //Copy over current data
+            if (!File.Exists(ArchipelagoStatic.SteamSync.m_FilePath) && File.Exists(ArchipelagoStatic.OriginalFilePath))
+                File.Copy(ArchipelagoStatic.OriginalFilePath, ArchipelagoStatic.SteamSync.m_FilePath);
+
+            DataHelper.isUnlockAllMaster = true;
 
             DataManager.instance.Load();
             GlobalDataBase.dbMusicTag.InitDatabase();
 
-            if (fixGame)
-                FixMyGame();
             HideLoginOverlay();
 
             //Force collection update
             MusicTagManager.instance.RefreshStageDisplayMusics(-1);
             ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
-        }
-
-        /// <summary>
-        /// Unhide all songs. In case something breaks.
-        /// </summary>
-        public void FixMyGame() {
-            var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
-            GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
-
-            foreach (var musicInfo in list)
-                GlobalDataBase.dbMusicTag.RemoveHide(musicInfo);
-
-            DataManager.instance.Save();
         }
 
         void HideLoginOverlay() {
@@ -176,8 +244,7 @@ namespace ArchipelagoMuseDash {
                 var uiParent = museCharacter.transform.parent.parent.parent;
                 uiParent.gameObject.SetActive(true);
             }
-
-            MelonEvents.OnGUI.Unsubscribe(DrawArchLogin);
+            _showLoginScreen = false;
         }
     }
 }

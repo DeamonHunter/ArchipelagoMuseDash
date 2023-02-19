@@ -56,6 +56,7 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             songTitleComp.gameObject.SetActive(!isSongRandomSelect);
             songTitleComp.text = isSongRandomSelect ? "" : ArchipelagoStatic.SongNameChanger.GetSongName(currentlySelectedSong);
+            ArchipelagoStatic.ArchLogger.Log("Hint Handler", songTitleComp.text);
 
             if (!isSongRandomSelect && _currentSession.RoomState.HintCostPercentage <= 100) {
                 var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;

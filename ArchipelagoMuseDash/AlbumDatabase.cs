@@ -39,8 +39,10 @@ namespace ArchipelagoMuseDash {
                 }
 
                 var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
-                var localisedSongName = ArchipelagoStatic.SongNameChanger.GetSongName(musicInfo);
-                _songsByItemName.Add($"{localisedSongName}[{albumLocal}]", musicInfo);
+
+                var songName = GetItemNameFromMusicInfo(musicInfo);
+                ArchipelagoStatic.ArchLogger.LogDebug("Album Database", "Known Item: " + songName);
+                _songsByItemName.Add(songName, musicInfo);
 
                 if (!_songsByAlbum.TryGetValue(albumLocal, out var albumList)) {
                     albumList = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
@@ -54,16 +56,17 @@ namespace ArchipelagoMuseDash {
         public MusicInfo GetMusicInfo(string itemName) => _songsByItemName[itemName];
 
         public bool TryGetAlbum(string itemName, out Il2CppSystem.Collections.Generic.List<MusicInfo> infos) => _songsByAlbum.TryGetValue(itemName, out infos);
+
         public Il2CppSystem.Collections.Generic.List<MusicInfo> GetAlbum(string itemName) => _songsByAlbum[itemName];
 
         public string GetItemNameFromMusicInfo(MusicInfo musicInfo) {
-            var configManager = ConfigManager.instance;
-            var albumConfig = configManager.GetConfigObject<DBConfigAlbums>(-1);
-            var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>(-1).GetLocal(ENGLISH_LOC_INDEX);
-            var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
+            //var configManager = ConfigManager.instance;
+            //var albumConfig = configManager.GetConfigObject<DBConfigAlbums>(-1);
+            //var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>(-1).GetLocal(ENGLISH_LOC_INDEX);
+            //var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
 
             var localisedSongName = ArchipelagoStatic.SongNameChanger.GetSongName(musicInfo);
-            return $"{localisedSongName}[{albumLocal}]";
+            return $"{localisedSongName}";
         }
 
         public string GetLocalisedSongNameForMusicInfo(MusicInfo musicInfo) {

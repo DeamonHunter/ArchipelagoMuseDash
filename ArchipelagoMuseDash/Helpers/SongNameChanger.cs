@@ -8,8 +8,13 @@ using Assets.Scripts.PeroTools.Managers;
 using MelonLoader.TinyJSON;
 
 namespace ArchipelagoMuseDash.Helpers {
+    /// <summary>
+    /// Handles changing the names of <see cref="MusicInfo"/> to a form that is compatible with Archipelago.
+    /// </summary>
     public class SongNameChanger {
-        HashSet<char> _allowedCharacters = new HashSet<char>() {
+        Dictionary<string, string> _songUIDToReplacementNames = new Dictionary<string, string>();
+
+        readonly HashSet<char> _allowedCharacters = new HashSet<char>() {
             //Standard Extra Chars
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
             'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -19,7 +24,7 @@ namespace ArchipelagoMuseDash.Helpers {
             '\'', '!', '~', ':', '&', '*', '#', '/', ',', '?', ';'
         };
 
-        Dictionary<char, char> _characterReplacements = new Dictionary<char, char>() {
+        readonly Dictionary<char, char> _characterReplacements = new Dictionary<char, char>() {
             //Replaced to make names a bit clearer.
             //Though anything with these is likely just to be manually cleaned up
             { '[', ' ' },
@@ -38,6 +43,7 @@ namespace ArchipelagoMuseDash.Helpers {
             { '↑', ' ' },
             { '↓', ' ' },
             { '†', ' ' },
+            { 'Ⅰ', '1' },
             { 'Ⅱ', '2' },
             { 'ä', 'a' },
             { 'ë', 'e' },
@@ -45,12 +51,16 @@ namespace ArchipelagoMuseDash.Helpers {
             { 'í', 'i' },
         };
 
-        Dictionary<string, string> _songUIDToReplacementNames = new Dictionary<string, string>();
-
+        /// <summary>
+        /// Creates a <see cref="SongNameChanger"/> from a <see cref="Stream"/> containing JSON.
+        /// </summary>
+        /// <param name="stream"></param>
         public SongNameChanger(Stream stream) {
             using (var sr = new StreamReader(stream)) {
                 var text = sr.ReadToEnd();
-                text = Regex.Replace(text, @"//.*\n", ""); //TinyJSON does not handle comments
+
+                //TinyJSON does not handle comments, so strip out all the comments in the file
+                text = Regex.Replace(text, @"//.*\n", "");
 
                 var variant = (ProxyObject)JSON.Load(text);
                 foreach (var pair in variant) {
@@ -63,31 +73,29 @@ namespace ArchipelagoMuseDash.Helpers {
             }
         }
 
+        /// <summary>
+        /// Gets the modified Archipelago song name. This name is in ASCII characters and can be used for hinting.
+        /// </summary>
+        /// <param name="musicInfo">The <see cref="MusicInfo"/> that you want the name of.</param>
+        /// <returns>The Archipelago Song Name</returns>
         public string GetSongName(MusicInfo musicInfo) {
             var configManager = ConfigManager.instance;
             if (!_songUIDToReplacementNames.TryGetValue(musicInfo.uid, out var englishName)) {
                 var englishSongLOC = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal(AlbumDatabase.ENGLISH_LOC_INDEX).GetLocalAlbumInfoByIndex(musicInfo.listIndex);
                 englishName = englishSongLOC.name;
             }
-#if DEBUG
-            else {
-                //This is to make sure that its correct for now
-                var englishSongLOC = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal(AlbumDatabase.ENGLISH_LOC_INDEX).GetLocalAlbumInfoByIndex(musicInfo.listIndex);
-                ArchipelagoStatic.ArchLogger.Log("Dump Songs", $"Loaded name '{englishName} for '{musicInfo.uid}|{englishSongLOC.name}'");
-            }
-#endif
 
-            if (englishName.Any(c => !_allowedCharacters.Contains(c))) {
+            if (englishName.Any(c => !_allowedCharacters.Contains(c)))
                 englishName = ReplaceKnownCharacters(englishName);
-#if DEBUG
-                var englishSongLOC = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal(AlbumDatabase.ENGLISH_LOC_INDEX).GetLocalAlbumInfoByIndex(musicInfo.listIndex);
-                ArchipelagoStatic.ArchLogger.Log("Dump Songs", $"Changed name from: '{englishSongLOC.name}' to '{englishName}'");
-#endif
-            }
 
             return englishName;
         }
 
+        /// <summary>
+        /// Outputs a file which is can be used by the Archipelago Randomiser to create items/locations.
+        /// Also outputs another file for any songs containing non-ASCII characters that may need to be translated to become items/locations.
+        /// </summary>
+        /// <param name="filePath">The file to create.</param>
         public void DumpSongsToTextFile(string filePath) {
             var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
             GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
@@ -107,20 +115,23 @@ namespace ArchipelagoMuseDash.Helpers {
 
                 var englishName = GetSongName(musicInfo);
 
-                if (englishName.Contains("Shit"))
-                    ArchipelagoStatic.ArchLogger.Log("Dump Songs", $"Holy Shit Grass Snake: {musicInfo.uid}");
-
                 if (englishName.Any(c => !_allowedCharacters.Contains(c))) {
                     var chineseLOC = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal(AlbumDatabase.CHINESE_LOC_INDEX).GetLocalAlbumInfoByIndex(musicInfo.listIndex);
                     var englishLOC = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal(AlbumDatabase.ENGLISH_LOC_INDEX).GetLocalAlbumInfoByIndex(musicInfo.listIndex);
-                    var japaneseLOC = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal(2).GetLocalAlbumInfoByIndex(musicInfo.listIndex);
-                    var koreanLOC = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal(3).GetLocalAlbumInfoByIndex(musicInfo.listIndex);
-                    ArchipelagoStatic.ArchLogger.Log("Dump Songs", $"English contains unknown char: {musicInfo.uid}. Name: {englishLOC.name}");
-                    failedSongsSB.AppendLine($"{musicInfo.uid}|{chineseLOC.name}|{englishLOC.name}|{japaneseLOC.name}|{koreanLOC.name}");
+                    ArchipelagoStatic.ArchLogger.Log("Dump Songs", $"English Song contains unknown char: {musicInfo.uid}. Name: {englishLOC.name}");
+                    failedSongsSB.AppendLine($"{musicInfo.uid}|{chineseLOC.name}|{englishLOC.name}");
                 }
 
                 var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>(-1).GetLocal(AlbumDatabase.ENGLISH_LOC_INDEX);
                 var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
+                if (albumLocal.Any(c => !_allowedCharacters.Contains(c))) {
+                    albumLocal = ReplaceKnownCharacters(albumLocal);
+                    if (albumLocal.Any(c => !_allowedCharacters.Contains(c))) {
+                        ArchipelagoStatic.ArchLogger.Log("Dump Songs", $"English Album contains unknown char: Song: {musicInfo.uid}. Name: {albumLocal}");
+                        failedSongsSB.AppendLine($"Album: {albumLocal}");
+                    }
+                }
+
                 var availableInStreamerMode = !AnchorModule.instance.CheckLockByMusicUid(musicInfo.uid);
                 sb.AppendLine($"{englishName}|{albumLocal}|{availableInStreamerMode}|{musicInfo.difficulty1}|{musicInfo.difficulty2}|{musicInfo.difficulty3}|{musicInfo.difficulty4}");
             }
@@ -133,6 +144,11 @@ namespace ArchipelagoMuseDash.Helpers {
             File.WriteAllText(Path.Combine(Path.GetDirectoryName(filePath), "FailedOutput.txt"), failedSongsSB.ToString());
         }
 
+        /// <summary>
+        /// Goes through a string and replaces all characters that we have defined to be replaced.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         string ReplaceKnownCharacters(string str) {
             var sb = new StringBuilder(str);
 
@@ -154,12 +170,10 @@ namespace ArchipelagoMuseDash.Helpers {
                     idx++;
                 }
                 else
-                    sb.Remove(idx, 1); //Don't increase idx as we are moving everything down 1.
+                    sb.Remove(idx, 1); //Doesn't increase idx as we are moving everything down 1.
             }
 
             var output = sb.ToString();
-
-            //Fix up cases where there may be more than 1 space.
             output = output.Replace("  ", " ").Trim();
             return output;
         }
