@@ -51,7 +51,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 return;
 
             try {
-                BattleRoleAttributeComponent.instance.Hurt(-BattleRoleAttributeComponent.instance.GetHp(), false);
+                BattleRoleAttributeComponent.instance.Hurt(-9999, false);
             }
             catch (Exception e) {
                 ArchipelagoStatic.ArchLogger.Error("DeathLink", e);
