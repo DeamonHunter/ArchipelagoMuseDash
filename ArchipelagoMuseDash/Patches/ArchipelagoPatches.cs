@@ -113,7 +113,7 @@ namespace ArchipelagoMuseDash.Patches {
 
             // Block Sleepwalker Rin (Auto Mode) from getting completions
             if (BattleHelper.isAutoSleepy) {
-                var reason = "Battle invalid for item unlock due to using Sleepwalker Rin.";
+                var reason = "No Items Given:\nSleepwalker Rin was used without Silencer.";
                 ShowText.ShowInfo(reason); //Todo: Fix Show message
                 ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
                 return;
@@ -122,7 +122,7 @@ namespace ArchipelagoMuseDash.Patches {
             // Cover Neko's death
             if (GlobalDataBase.dbBattleStage.IsSelectRole(neko_character_id) && !GlobalDataBase.dbBattleStage.IsSelectElfin(silencer_elfin_id)) {
                 if (GlobalDataBase.dbSkill.nekoSkillInvoke) {
-                    var reason = "Battle invalid for item unlock due to dying as NEKO.";
+                    var reason = "No Items Given:\nDied as NEKO.";
                     ShowText.ShowInfo(reason); //Todo: Fix Show message
                     ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
                     return;
@@ -132,8 +132,8 @@ namespace ArchipelagoMuseDash.Patches {
             var kvp = TaskStageTarget.instance.GetStageEvaluate();
             ArchipelagoStatic.ArchLogger.Log("PnlVictory", $"KVP: {kvp.Key}, {kvp.Value}");
             if (kvp.Value < (int)ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded) {
-                var reason = $"Grade result was worse than {ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded}";
-                ShowText.ShowInfo(reason); //Todo: Fix Show message
+                var reason = $"No Items Given:\nGrade result was worse than {ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded}";
+                ShowText.ShowInfo(reason);
                 ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
                 return;
             }
