@@ -277,4 +277,19 @@ namespace ArchipelagoMuseDash.Patches {
                 ShowText.ShowInfo("Neko will not be able to unlock items, if she dies.");
         }
     }
+
+    /// <summary>
+    /// Show the reason briefly for deathlink
+    /// </summary>
+    [HarmonyPatch(typeof(PnlFail), "OnEnable")]
+    sealed class PnlFailOnEnablePatch {
+        static void Postfix() {
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || ArchipelagoStatic.SessionHandler?.DeathLinkHandler == null)
+                return;
+
+            var reason = ArchipelagoStatic.SessionHandler.DeathLinkHandler.GetDeathLinkReason();
+            if (reason != null)
+                ShowText.ShowInfo(reason);
+        }
+    }
 }

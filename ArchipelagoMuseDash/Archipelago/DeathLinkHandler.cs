@@ -14,6 +14,7 @@ namespace ArchipelagoMuseDash.Archipelago {
         DeathLinkService _deathLinkService;
 
         bool _killingPlayer;
+        string _deathLinkReason;
 
         public DeathLinkHandler(ArchipelagoSession session, int slotID, Dictionary<string, object> slotData) {
             _session = session;
@@ -39,7 +40,14 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         void OnDeathLinkReceived(DeathLink deathLink) {
             ArchipelagoStatic.ArchLogger.Log("DeathLink", $"Received DeathLink: {deathLink.Source}: {deathLink.Cause}");
+            _deathLinkReason = $"Killed By {deathLink.Source}\n\"{deathLink.Cause}\"";
             _killingPlayer = true;
+        }
+
+        public string GetDeathLinkReason() {
+            var reason = _deathLinkReason;
+            _deathLinkReason = null;
+            return reason;
         }
 
         public void Update() {
