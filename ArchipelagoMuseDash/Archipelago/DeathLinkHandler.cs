@@ -47,7 +47,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 return;
 
             var battleStage = ArchipelagoStatic.BattleComponent;
-            if (battleStage == null || battleStage.isDead || battleStage.isSucceed)
+            if (battleStage == null || battleStage.isDead || battleStage.isPause || battleStage.isSucceed)
                 return;
 
             try {
