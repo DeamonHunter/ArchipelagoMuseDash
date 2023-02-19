@@ -35,8 +35,8 @@
     <Reference Include="0Harmony">
       <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Archipelago.MultiClient.Net, Version=4.2.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Archipelago.MultiClient.Net.4.2.2\lib\net40\Archipelago.MultiClient.Net.dll</HintPath>
+    <Reference Include="Archipelago.MultiClient.Net, Version=4.2.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Archipelago.MultiClient.Net.4.2.4\lib\net40\Archipelago.MultiClient.Net.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\Assembly-CSharp.dll</HintPath>
@@ -53,7 +53,7 @@
       <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\MelonLoader.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Archipelago.MultiClient.Net.4.2.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Archipelago.MultiClient.Net.4.2.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PeroTools2, Version=3.5.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -123,12 +123,13 @@
       <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="websocket-sharp, Version=1.0.2.34775, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Archipelago.MultiClient.Net.4.2.2\lib\net40\websocket-sharp.dll</HintPath>
+      <HintPath>..\packages\Archipelago.MultiClient.Net.4.2.4\lib\net40\websocket-sharp.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AlbumDatabase.cs" />
     <Compile Include="Archipelago\DeathLinkHandler.cs" />
+    <Compile Include="Archipelago\GradeOption.cs" />
     <Compile Include="Archipelago\HintHandler.cs" />
     <Compile Include="Archipelago\ItemHandler.cs" />
     <Compile Include="Archipelago\Items\MusicSheetItem.cs" />
