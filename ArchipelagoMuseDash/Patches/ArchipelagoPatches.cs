@@ -25,7 +25,7 @@ namespace ArchipelagoMuseDash.Patches {
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
-            ArchipelagoStatic.ArchLogger.Log("PnlUnlockStage", "Handling new Item.");
+            ArchipelagoStatic.ArchLogger.LogDebug("PnlUnlockStage", "Handling new Item.");
 
             var currentItem = ArchipelagoStatic.SessionHandler.ItemHandler.Unlocker.GetCurrentItem();
 
@@ -107,7 +107,7 @@ namespace ArchipelagoMuseDash.Patches {
 
         static void Postfix() {
             //Don't override normal gameplay
-            ArchipelagoStatic.ArchLogger.Log("PnlVictory", $"Selected Role: {GlobalDataBase.dbBattleStage.selectedRole}");
+            ArchipelagoStatic.ArchLogger.LogDebug("PnlVictory", $"Selected Role: {GlobalDataBase.dbBattleStage.selectedRole}");
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
@@ -130,7 +130,6 @@ namespace ArchipelagoMuseDash.Patches {
             }
 
             var kvp = TaskStageTarget.instance.GetStageEvaluate();
-            ArchipelagoStatic.ArchLogger.Log("PnlVictory", $"KVP: {kvp.Key}, {kvp.Value}");
             if (kvp.Value < (int)ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded) {
                 var reason = $"No Items Given:\nGrade result was worse than {ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded}";
                 ShowText.ShowInfo(reason);

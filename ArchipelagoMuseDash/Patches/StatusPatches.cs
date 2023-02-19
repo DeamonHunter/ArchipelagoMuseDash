@@ -11,7 +11,7 @@ namespace ArchipelagoMuseDash.Patches {
     [HarmonyPatch(typeof(EnableDisableHooker), "OnEnable")]
     sealed class EnableDisableHookerOnEnablePatch {
         static void Postfix(EnableDisableHooker __instance) {
-            ArchipelagoStatic.ArchLogger.Log("EnableDisableHooker", $"OnEnable {__instance.gameObject.name}");
+            ArchipelagoStatic.ArchLogger.LogDebug("EnableDisableHooker", $"OnEnable {__instance.gameObject.name}");
             ArchipelagoStatic.ActivatedEnableDisableHookers.Add(__instance.name);
         }
     }
@@ -22,7 +22,7 @@ namespace ArchipelagoMuseDash.Patches {
     [HarmonyPatch(typeof(EnableDisableHooker), "OnDisable")]
     sealed class EnableDisableHookerOnDisablePatch {
         static void Postfix(EnableDisableHooker __instance) {
-            ArchipelagoStatic.ArchLogger.Log("EnableDisableHooker", $"OnDisable {__instance.gameObject.name}");
+            ArchipelagoStatic.ArchLogger.LogDebug("EnableDisableHooker", $"OnDisable {__instance.gameObject.name}");
             ArchipelagoStatic.ActivatedEnableDisableHookers.Remove(__instance.name);
         }
     }
@@ -33,7 +33,7 @@ namespace ArchipelagoMuseDash.Patches {
     [HarmonyPatch(typeof(CharacterExpression), "Awake")]
     sealed class CharacterExpressionAwakePatch {
         static void Prefix(CharacterExpression __instance) {
-            ArchipelagoStatic.ArchLogger.Log("CharacterExpression", "Awake");
+            ArchipelagoStatic.ArchLogger.LogDebug("CharacterExpression", "Awake");
             ArchipelagoStatic.MuseCharacter = __instance.gameObject;
         }
     }
@@ -44,7 +44,7 @@ namespace ArchipelagoMuseDash.Patches {
     [HarmonyPatch(typeof(PnlStage), "Awake")]
     sealed class PnlStageAwakePatch {
         static void Postfix(PnlStage __instance) {
-            ArchipelagoStatic.ArchLogger.Log("PnlStage", "Awake");
+            ArchipelagoStatic.ArchLogger.LogDebug("PnlStage", "Awake");
             ArchipelagoStatic.SongSelectPanel = __instance;
         }
     }
@@ -55,7 +55,7 @@ namespace ArchipelagoMuseDash.Patches {
     [HarmonyPatch(typeof(PnlUnlock), "Awake")]
     sealed class PnlUnlockPatch {
         static void Postfix(PnlUnlock __instance) {
-            ArchipelagoStatic.ArchLogger.Log("PnlUnlockStage", "Awake");
+            ArchipelagoStatic.ArchLogger.LogDebug("PnlUnlockStage", "Awake");
             ArchipelagoStatic.UnlockStagePanel = __instance.pnlUnlockStage;
         }
     }
@@ -66,7 +66,7 @@ namespace ArchipelagoMuseDash.Patches {
     [HarmonyPatch(typeof(StageBattleComponent), "GameStart")]
     sealed class StageBattleComponentGameStartPatch {
         static void Postfix(StageBattleComponent __instance) {
-            ArchipelagoStatic.ArchLogger.Log("StageBattleComponent", "GameStart");
+            ArchipelagoStatic.ArchLogger.LogDebug("StageBattleComponent", "GameStart");
             ArchipelagoStatic.BattleComponent = __instance;
         }
     }
@@ -80,7 +80,7 @@ namespace ArchipelagoMuseDash.Patches {
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
-            ArchipelagoStatic.ArchLogger.Log("StageBattleComponent", "Dead");
+            ArchipelagoStatic.ArchLogger.LogDebug("StageBattleComponent", "Dead");
             ArchipelagoStatic.SessionHandler.DeathLinkHandler.PlayerDied();
         }
     }

@@ -31,7 +31,7 @@ namespace ArchipelagoMuseDash {
             base.OnSceneWasLoaded(buildIndex, sceneName);
 
             try {
-                ArchipelagoStatic.ArchLogger.Log("Scene Load", $"{sceneName} was loaded.");
+                ArchipelagoStatic.ArchLogger.LogDebug("Scene Load", $"{sceneName} was loaded.");
 
                 ArchipelagoStatic.CurrentScene = sceneName;
                 ArchipelagoStatic.SessionHandler.SceneChanged(sceneName);

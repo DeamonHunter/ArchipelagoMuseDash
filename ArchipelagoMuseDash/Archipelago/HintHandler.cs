@@ -56,7 +56,7 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             songTitleComp.gameObject.SetActive(!isSongRandomSelect);
             songTitleComp.text = isSongRandomSelect ? "" : ArchipelagoStatic.SongNameChanger.GetSongName(currentlySelectedSong);
-            ArchipelagoStatic.ArchLogger.Log("Hint Handler", songTitleComp.text);
+            ArchipelagoStatic.ArchLogger.LogDebug("Hint Handler", songTitleComp.text);
 
             if (!isSongRandomSelect && _currentSession.RoomState.HintCostPercentage <= 100) {
                 var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
@@ -69,7 +69,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 hintButton.interactable = false;
 
             if (!isSongRandomSelect && ArchipelagoStatic.SessionHandler.HintHandler.TryGetSongHints(currentlySelectedSong, out var hintStr)) {
-                ArchipelagoStatic.ArchLogger.Log("Hinting", hintStr);
+                ArchipelagoStatic.ArchLogger.LogDebug("Hinting", hintStr);
                 hintText.SetActive(true);
                 hintTextComp.text = hintStr;
             }

@@ -60,7 +60,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             }
 
             if (slotData.TryGetValue("gradeNeeded", out var gradeNeeded)) {
-                ArchipelagoStatic.ArchLogger.Log("Grade Needed to win", $"{gradeNeeded.GetType()} : {gradeNeeded}");
+                ArchipelagoStatic.ArchLogger.Log("Grade Needed to win", ((GradeOption)((long)gradeNeeded)).ToString());
                 GradeNeeded = (GradeOption)((long)gradeNeeded);
             }
             else
@@ -83,7 +83,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(name, out var info))
                     SongsInLogic.Add(info.uid);
                 else
-                    ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"Unknown location: {name}");
+                    ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Unknown location: {name}");
             }
 
             SetVisibilityOfAllSongs(_songsAreHidden);
@@ -122,8 +122,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                     playerName = "Unknown Player"; //Catch all for certain cases, like cheated items
 
                 name = name ?? $"Unknown Item: {item.Item}";
-                ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"{playerName}, {name}");
-
+                ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", $"External Item: {playerName}, {name}");
                 return new ExternalItem(name, playerName);
             }
 

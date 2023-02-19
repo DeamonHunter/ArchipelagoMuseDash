@@ -20,7 +20,7 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
         }
 
         public void UnlockItem(ItemHandler handler, bool immediate) {
-            ArchipelagoStatic.ArchLogger.Log("Song Item", $"Unlocking item: {_song.uid}. Is duplicate: {handler.UnlockedSongUids.Contains(_song.uid)}");
+            ArchipelagoStatic.ArchLogger.LogDebug("Song Item", $"Unlocking item: {_song.uid}. Is duplicate: {handler.UnlockedSongUids.Contains(_song.uid)}");
             if (handler.UnlockedSongUids.Contains(_song.uid)) {
                 _isDuplicate = true;
                 return;

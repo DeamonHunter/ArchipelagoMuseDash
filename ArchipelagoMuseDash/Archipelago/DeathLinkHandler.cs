@@ -16,6 +16,32 @@ namespace ArchipelagoMuseDash.Archipelago {
         bool _killingPlayer;
         string _deathLinkReason;
 
+        Random _random = new Random();
+
+        List<string> _deathReasons = new List<string>() {
+            //Generic
+            "{0} has ran out of rhythm.",
+            "{0} took one too many to the face.",
+            "{0} forgot they shouldn't use Little Devil Marija on an easy song.",
+
+            //Stage references
+            "{0} ate too much candy.",
+            "{0} got shot.",
+            "{0} got charmed.",
+            "{0} got run over by a limousine.",
+            "{0} should've been playing Groove Coaster",
+            "{0} should've been playing Touhou",
+
+            //Song references
+            "{0} spilled their MilK.",
+            "{0} went bankrupt.",
+            "{0} lost all their BrainPower.",
+            "{0} ran into a grass snake.",
+            "{0} dove straight into the ground.",
+            "{0} stopped their tape tonight.",
+            "{0} ran out of energy for their synergy matrix."
+        };
+
         public DeathLinkHandler(ArchipelagoSession session, int slotID, Dictionary<string, object> slotData) {
             _session = session;
             _slotID = slotID;
@@ -29,13 +55,17 @@ namespace ArchipelagoMuseDash.Archipelago {
         }
 
         public void PlayerDied() {
-            ArchipelagoStatic.ArchLogger.Log("DeathLink", $"Player Died. Current Status: {(_deathLinkService != null ? "Active" : "Deactive")}, {_killingPlayer}");
+            ArchipelagoStatic.ArchLogger.LogDebug("DeathLink", $"Player Died. Current Status: {(_deathLinkService != null ? "Active" : "Deactive")}, {_killingPlayer}");
             if (_deathLinkService == null || _killingPlayer)
                 return;
 
             var alias = _session.Players.GetPlayerAlias(_slotID);
-            _deathLinkService.SendDeathLink(new DeathLink(alias, $"{alias} ran out of Rhythm."));
-            ArchipelagoStatic.ArchLogger.Log("DeathLink", "Sent Link");
+
+            var reasonIndex = _random.Next(_deathReasons.Count);
+            var chosenReason = string.Format(_deathReasons[reasonIndex], alias);
+
+            ArchipelagoStatic.ArchLogger.Log("DeathLink", $"Sending deathlink: {chosenReason}");
+            _deathLinkService.SendDeathLink(new DeathLink(alias, chosenReason));
         }
 
         void OnDeathLinkReceived(DeathLink deathLink) {

@@ -8,7 +8,7 @@ namespace ArchipelagoMuseDash.Patches {
     [HarmonyPatch(typeof(SongHideAskMsg), "AwakeInit")]
     sealed class SongHideAskMsgAwakeInitPatch {
         static void Postfix(SongHideAskMsg __instance) {
-            ArchipelagoStatic.ArchLogger.Log("SongHideAskMsg", "AwakeInit");
+            ArchipelagoStatic.ArchLogger.LogDebug("SongHideAskMsg", "AwakeInit");
             ArchipelagoStatic.HideSongDialogue = __instance;
         }
     }
@@ -19,7 +19,7 @@ namespace ArchipelagoMuseDash.Patches {
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return true;
 
-            ArchipelagoStatic.ArchLogger.Log("AbstractMessageBox", "OnYesClicked");
+            ArchipelagoStatic.ArchLogger.LogDebug("AbstractMessageBox", "OnYesClicked");
             if (__instance.m_Title?.text != HintHandler.ArchipelagoDialogueTitle)
                 return true;
 

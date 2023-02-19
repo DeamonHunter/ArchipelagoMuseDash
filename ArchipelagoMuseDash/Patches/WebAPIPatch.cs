@@ -36,7 +36,7 @@ namespace ArchipelagoMuseDash.Patches {
                 return false;
             }
 
-            ArchipelagoStatic.ArchLogger.Log("SendToURLPatch", $"Allowed url:{url} method:{method}");
+            ArchipelagoStatic.ArchLogger.LogDebug("SendToURLPatch", $"Allowed url:{url} method:{method}");
             return true;
         }
     }
