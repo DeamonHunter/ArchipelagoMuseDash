@@ -84,10 +84,6 @@ namespace ArchipelagoMuseDash {
                         return;
 
                     _showLoginScreen = true;
-#if DEBUG
-                    //Attach this to playing normally so that it can be easily triggered, once everything *should* be loaded
-                    //ArchipelagoStatic.SongNameChanger.DumpSongsToTextFile(Path.Combine(Application.absoluteURL, "Output/SongDump.txt"));
-#endif
 
                     if (File.Exists(_lastLoginPath)) {
                         using (var file = File.OpenRead(_lastLoginPath)) {
@@ -220,6 +216,10 @@ namespace ArchipelagoMuseDash {
 
                 SwapToArchipelagoSave();
                 ArchipelagoStatic.SessionHandler.StartSession();
+#if DEBUG
+                //Attach this to playing normally so that it can be easily triggered, once everything *should* be loaded
+                ArchipelagoStatic.SongNameChanger.DumpSongsToTextFile(Path.Combine(Application.absoluteURL, "Output/SongDump.txt"));
+#endif
             }
             catch (Exception e) {
                 ArchipelagoStatic.ArchLogger.Error("Login", e);
@@ -239,16 +239,16 @@ namespace ArchipelagoMuseDash {
             if (!File.Exists(ArchipelagoStatic.SteamSync.m_FilePath) && File.Exists(ArchipelagoStatic.OriginalFilePath))
                 File.Copy(ArchipelagoStatic.OriginalFilePath, ArchipelagoStatic.SteamSync.m_FilePath);
 
-            DataHelper.isUnlockAllMaster = true;
-
             DataManager.instance.Load();
             GlobalDataBase.dbMusicTag.InitDatabase();
 
-            HideLoginOverlay();
+            DataHelper.isUnlockAllMaster = true;
 
             //Force collection update
             MusicTagManager.instance.RefreshStageDisplayMusics(-1);
             ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
+
+            HideLoginOverlay();
         }
 
         void HideLoginOverlay() {
