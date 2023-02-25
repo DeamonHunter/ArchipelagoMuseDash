@@ -7,11 +7,13 @@ using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using ArchipelagoMuseDash.Archipelago.Items;
 using Assets.Scripts.Database;
+using UnityEngine.EventSystems;
 
 namespace ArchipelagoMuseDash.Archipelago {
     public class ItemHandler {
         public ItemUnlockHandler Unlocker { get; }
 
+        public ShownSongMode HiddenSongMode { get; private set; } = ShownSongMode.Unlocks;
         public GradeOption GradeNeeded { get; private set; }
         public MusicInfo GoalSong { get; private set; }
         public int NumberOfMusicSheetsToWin { get; private set; }
@@ -21,14 +23,13 @@ namespace ArchipelagoMuseDash.Archipelago {
         public HashSet<string> UnlockedSongUids = new HashSet<string>();
         public HashSet<string> CompletedSongUids = new HashSet<string>();
 
-        public const string HideSongsText = "Hide Locked Songs";
-        public const string ShowSongsText = "Show Locked Songs";
+        public const string ShowingAllSongsText = "Showing: All";
+        public const string ShowingUnlockedSongsText = "Showing: Unlocked";
+        public const string ShowingUnplayedSongsText = "Showing: Unplayed";
         public const string MusicSheetItemName = "Music Sheet";
-
 
         ArchipelagoSession _currentSession;
         int _currentPlayerSlot;
-        bool _songsAreHidden = true;
 
         readonly Random _random = new Random();
 
@@ -40,6 +41,8 @@ namespace ArchipelagoMuseDash.Archipelago {
         }
 
         public void Setup(Dictionary<string, object> slotData) {
+            ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Setup Called.");
+
             SongsInLogic.Clear();
             UnlockedSongUids.Clear();
             CompletedSongUids.Clear();
@@ -86,21 +89,28 @@ namespace ArchipelagoMuseDash.Archipelago {
                     ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Unknown location: {name}");
             }
 
-            SetVisibilityOfAllSongs(_songsAreHidden);
+            SetVisibilityOfAllSongs(ShownSongMode.Unlocks);
         }
 
         public void OnUpdate() {
             CheckForNewItems();
 
-            if (ArchipelagoStatic.SessionHandler.SongSelectAdditions.HideSongsButton == null)
+            if (ArchipelagoStatic.SessionHandler.SongSelectAdditions.ToggleSongsButton == null)
                 return;
 
-            var hideSongText = ArchipelagoStatic.SessionHandler.SongSelectAdditions.HideSongsText;
+            var hideSongText = ArchipelagoStatic.SessionHandler.SongSelectAdditions.ToggleSongsText;
 
-            if (_songsAreHidden && hideSongText.text != ShowSongsText)
-                hideSongText.text = ShowSongsText;
-            else if (!_songsAreHidden && hideSongText.text != HideSongsText)
-                hideSongText.text = HideSongsText;
+            switch (HiddenSongMode) {
+                case ShownSongMode.AllInLogic:
+                    hideSongText.text = ShowingAllSongsText;
+                    break;
+                case ShownSongMode.Unplayed:
+                    hideSongText.text = ShowingUnplayedSongsText;
+                    break;
+                case ShownSongMode.Unlocks:
+                    hideSongText.text = ShowingUnlockedSongsText;
+                    break;
+            }
         }
 
         void CheckForNewItems() {
@@ -186,6 +196,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             try {
                 CompletedSongUids.Add(uid);
 
+
                 if (GoalSong != null && GoalSong.uid == uid) {
                     ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Victory achieved, enqueing visuals for next available time.");
 
@@ -237,6 +248,10 @@ namespace ArchipelagoMuseDash.Archipelago {
                 //Check to see if the song is favourited, and remove if it is
                 if (GlobalDataBase.dbMusicTag.ContainsCollection(singularInfo))
                     GlobalDataBase.dbMusicTag.RemoveCollection(singularInfo);
+
+                if (HiddenSongMode == ShownSongMode.Unplayed)
+                    AddHide(singularInfo);
+
                 CompletedSongUids.Add(singularInfo.uid);
                 return;
             }
@@ -246,6 +261,10 @@ namespace ArchipelagoMuseDash.Archipelago {
                     //Check to see if the song is favourited, and remove if it is
                     if (GlobalDataBase.dbMusicTag.ContainsCollection(musicInfo))
                         GlobalDataBase.dbMusicTag.RemoveCollection(musicInfo);
+
+                    if (HiddenSongMode == ShownSongMode.Unplayed)
+                        AddHide(musicInfo);
+
                     CompletedSongUids.Add(musicInfo.uid);
                 }
 
@@ -258,49 +277,108 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         #endregion
 
-        public void ToggleHiddenSongs() {
-            _songsAreHidden = !_songsAreHidden;
-            SetVisibilityOfAllSongs(_songsAreHidden);
+        public void PickNextSongShownMode() {
+            //Try to fix jank button selection logic
+            EventSystem.current.SetSelectedGameObject(null);
+
+            ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Choosing next song shown mode.");
+            var nextMode = (ShownSongMode)(((int)HiddenSongMode + 1) % ((int)ShownSongMode.AllInLogic + 1));
+            SetVisibilityOfAllSongs(nextMode);
         }
 
-        void SetVisibilityOfAllSongs(bool visibility) {
+        void SetVisibilityOfAllSongs(ShownSongMode mode) {
             var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
             GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
+
+            ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"Visibility being set to {mode}");
+            HiddenSongMode = mode;
+
+            GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo = null;
 
             foreach (var song in list) {
                 if (song == null || song.uid == "?")
                     continue;
 
                 if (!SongsInLogic.Contains(song.uid)) {
-                    GlobalDataBase.dbMusicTag.AddHide(song);
+                    AddHide(song);
                     GlobalDataBase.dbMusicTag.RemoveCollection(song);
                     continue;
                 }
 
-                bool canBeHidden = !UnlockedSongUids.Contains(song.uid) && GoalSong?.uid != song.uid;
-
-                if (canBeHidden && visibility) {
-                    GlobalDataBase.dbMusicTag.AddHide(song);
-                    GlobalDataBase.dbMusicTag.RemoveCollection(song);
-                }
-                else {
+                //Goal should always be visible
+                if (GoalSong?.uid == song.uid) {
                     GlobalDataBase.dbMusicTag.RemoveHide(song);
-                    if (!CompletedSongUids.Contains(song.uid))
-                        GlobalDataBase.dbMusicTag.AddCollection(song);
+                    GlobalDataBase.dbMusicTag.AddCollection(song);
+                    continue;
+                }
+
+                switch (mode) {
+                    case ShownSongMode.AllInLogic:
+                        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                            GlobalDataBase.dbMusicTag.RemoveHide(song);
+
+                        if (UnlockedSongUids.Contains(song.uid) && !CompletedSongUids.Contains(song.uid) && !GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                            GlobalDataBase.dbMusicTag.AddCollection(song);
+                        break;
+
+                    case ShownSongMode.Unlocks:
+                        if (!UnlockedSongUids.Contains(song.uid)) {
+                            AddHide(song);
+
+                            if (GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                                GlobalDataBase.dbMusicTag.RemoveCollection(song);
+                        }
+                        else {
+                            if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                                GlobalDataBase.dbMusicTag.RemoveHide(song);
+
+                            if (!CompletedSongUids.Contains(song.uid) && !GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                                GlobalDataBase.dbMusicTag.AddCollection(song);
+                        }
+                        break;
+
+                    case ShownSongMode.Unplayed:
+                        if (!UnlockedSongUids.Contains(song.uid) || CompletedSongUids.Contains(song.uid)) {
+                            AddHide(song);
+
+                            if (GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                                GlobalDataBase.dbMusicTag.RemoveCollection(song);
+                        }
+                        else {
+                            if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                                GlobalDataBase.dbMusicTag.RemoveHide(song);
+
+                            if (!GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                                GlobalDataBase.dbMusicTag.AddCollection(song);
+                        }
+                        break;
                 }
             }
 
-            MusicTagManager.instance.RefreshStageDisplayMusics(-1);
+            MusicTagManager.instance.RefreshDBDisplayMusics();
             ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
+        }
+
+        private void AddHide(MusicInfo song) {
+            if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                return;
+
+            GlobalDataBase.dbMusicTag.AddHide(song);
+            GlobalDataBase.dbMusicTag.RemoveShowMusicUid(song);
+
+            if (GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo?.uid == song?.uid)
+                GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo = GlobalDataBase.dbMusicTag.SelectRandomMusic();
         }
 
         public void UnlockSong(MusicInfo song) {
             UnlockedSongUids.Add(song.uid);
-            if (!_songsAreHidden)
+            if (HiddenSongMode == ShownSongMode.AllInLogic || !SongsInLogic.Contains(song.uid))
                 return;
-            GlobalDataBase.dbMusicTag.RemoveHide(song);
 
-            if (!CompletedSongUids.Contains(song.uid) && SongsInLogic.Contains(song.uid))
+            if (HiddenSongMode == ShownSongMode.Unlocks || !CompletedSongUids.Contains(song.uid))
+                GlobalDataBase.dbMusicTag.RemoveHide(song);
+
+            if (!CompletedSongUids.Contains(song.uid))
                 GlobalDataBase.dbMusicTag.AddCollection(song);
         }
     }

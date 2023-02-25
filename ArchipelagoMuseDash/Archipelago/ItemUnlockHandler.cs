@@ -39,7 +39,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             }
 
             //Force a refresh of the song select and relevant classes, so new songs should show.
-            MusicTagManager.instance.RefreshStageDisplayMusics(-1);
+            MusicTagManager.instance.RefreshDBDisplayMusics();
             ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
         }
 

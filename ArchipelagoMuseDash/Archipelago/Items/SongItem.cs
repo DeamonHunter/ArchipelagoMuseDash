@@ -28,7 +28,7 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
 
             handler.UnlockSong(_song);
             if (!immediate) {
-                MusicTagManager.instance.RefreshStageDisplayMusics(-1);
+                MusicTagManager.instance.RefreshDBDisplayMusics();
                 ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
             }
         }

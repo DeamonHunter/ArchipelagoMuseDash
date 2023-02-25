@@ -3,6 +3,7 @@ using ArchipelagoMuseDash.Helpers;
 using UnhollowerRuntimeLib;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ArchipelagoMuseDash.Archipelago {
@@ -10,9 +11,9 @@ namespace ArchipelagoMuseDash.Archipelago {
         public GameObject HintButton;
         public Button HintButtonComp;
 
-        public GameObject HideSongsButton;
-        public Button HideSongsButtonComp;
-        public Text HideSongsText;
+        public GameObject ToggleSongsButton;
+        public Button ToggleSongsButtonComp;
+        public Text ToggleSongsText;
 
         public GameObject HintText;
         public Text HintTextComp;
@@ -24,8 +25,20 @@ namespace ArchipelagoMuseDash.Archipelago {
             if (!ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlStage"))
                 return;
 
-            if (HintButton != null)
+            if (HintButton != null) {
+                if (EventSystem.current == null)
+                    return;
+
+                if (EventSystem.current.currentSelectedGameObject == HintButton) {
+                    ArchipelagoStatic.ArchLogger.Log("SongSelectAdditions", "Force deselecting Hint Button");
+                    EventSystem.current.SetSelectedGameObject(null);
+                }
+                if (EventSystem.current.currentSelectedGameObject == ToggleSongsButton) {
+                    ArchipelagoStatic.ArchLogger.Log("SongSelectAdditions", "Force deselecting Toggle Songs Button");
+                    EventSystem.current.SetSelectedGameObject(null);
+                }
                 return;
+            }
 
             if (ArchipelagoStatic.HideSongDialogue?.m_YesButton == null || ArchipelagoStatic.HideSongDialogue?.m_NoButton == null || ArchipelagoStatic.SongSelectPanel == null)
                 return;
@@ -34,9 +47,9 @@ namespace ArchipelagoMuseDash.Archipelago {
             if (likeButton == null)
                 return;
 
-            HideSongsButton = CreateButton(likeButton, "ArchipelagoHideButton", "Show Locked Songs", new Vector2(660, 40), new Vector2(0, 0.5f), ArchipelagoStatic.SessionHandler.ItemHandler.ToggleHiddenSongs);
-            HideSongsButtonComp = HideSongsButton.GetComponent<Button>();
-            HideSongsText = HideSongsButton.GetComponentInChildren<Text>();
+            ToggleSongsButton = CreateButton(likeButton, "ArchipelagoHideButton", "Show Locked Songs", new Vector2(660, 40), new Vector2(0, 0.5f), ArchipelagoStatic.SessionHandler.ItemHandler.PickNextSongShownMode);
+            ToggleSongsButtonComp = ToggleSongsButton.GetComponent<Button>();
+            ToggleSongsText = ToggleSongsButton.GetComponentInChildren<Text>();
 
             HintButton = CreateButton(likeButton, "ArchipelagoHintButton", "Get Hint", new Vector2(415, 40), new Vector2(0, 0.5f), ArchipelagoStatic.SessionHandler.HintHandler.ShowHintPopup);
             HintButtonComp = HintButton.GetComponent<Button>();
@@ -47,8 +60,8 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         public void MainSceneLoaded() {
             HintButton = null;
-            HideSongsButton = null;
-            HideSongsText = null;
+            ToggleSongsButton = null;
+            ToggleSongsText = null;
             SongText = null;
         }
 
@@ -146,9 +159,11 @@ namespace ArchipelagoMuseDash.Archipelago {
             var buttonParent = new GameObject(buttonName);
             buttonParent.transform.SetParent(likeButton.transform.parent, false);
 
+
             var button = buttonParent.AddComponent<Button>();
             button.onClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>(onClick));
             button.transition = yesButton.transition;
+            button.navigation.mode = Navigation.Mode.None;
 
             var colours = yesButton.colors;
             colours.disabledColor = new Color(colours.disabledColor.r * 0.8f, colours.disabledColor.g * 0.8f, colours.disabledColor.b * 0.8f, 1);

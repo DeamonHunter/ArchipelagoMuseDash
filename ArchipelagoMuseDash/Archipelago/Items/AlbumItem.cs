@@ -46,7 +46,7 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
                     GlobalDataBase.dbMusicTag.AddCollection(song);
             }
 
-            MusicTagManager.instance.RefreshStageDisplayMusics(-1);
+            MusicTagManager.instance.RefreshDBDisplayMusics();
             ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
         }
     }

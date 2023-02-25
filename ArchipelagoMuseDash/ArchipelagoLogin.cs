@@ -245,7 +245,7 @@ namespace ArchipelagoMuseDash {
             DataHelper.isUnlockAllMaster = true;
 
             //Force collection update
-            MusicTagManager.instance.RefreshStageDisplayMusics(-1);
+            MusicTagManager.instance.RefreshDBDisplayMusics();
             ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
 
             HideLoginOverlay();
