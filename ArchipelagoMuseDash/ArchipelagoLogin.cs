@@ -199,10 +199,16 @@ namespace ArchipelagoMuseDash {
                     return;
                 }
 
-                var sb = new StringBuilder();
-                sb.AppendLine(_ipAddress);
-                sb.AppendLine(_username);
-                File.WriteAllText(_lastLoginPath, sb.ToString());
+                var baseDirectory = Path.GetDirectoryName(_lastLoginPath);
+                if (baseDirectory != null) {
+                    if (!Directory.Exists(baseDirectory))
+                        Directory.CreateDirectory(baseDirectory);
+
+                    var sb = new StringBuilder();
+                    sb.AppendLine(_ipAddress);
+                    sb.AppendLine(_username);
+                    File.WriteAllText(_lastLoginPath, sb.ToString());
+                }
 
                 SwapToArchipelagoSave();
                 ArchipelagoStatic.SessionHandler.StartSession();
