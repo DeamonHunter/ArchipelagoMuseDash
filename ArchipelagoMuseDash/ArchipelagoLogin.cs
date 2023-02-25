@@ -22,8 +22,7 @@ namespace ArchipelagoMuseDash {
 
         float _deltaTime;
 
-        //Todo: Is there some trigger we can check to see if the loading screen has been removed? 
-        const float archipelago_login_display_delay = 1f; //Delays displaying the login for archipelago so it doesn't show over the loading screen
+        const float archipelago_login_display_delay = 0.25f;
 
         Texture2D _yesTexture;
         Texture2D _yesTextureHighlighted;
@@ -58,6 +57,10 @@ namespace ArchipelagoMuseDash {
             _showLoginButton = !ArchipelagoStatic.SessionHandler.IsLoggedIn && ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlHome");
         }
 
+        public void SceneSwitch() {
+            _deltaTime = 0;
+        }
+
         void DrawArchLogin() {
             try {
                 //Can only call this in GUI
@@ -68,9 +71,14 @@ namespace ArchipelagoMuseDash {
                     if (!_showLoginButton)
                         return;
 
-                    _deltaTime += Time.deltaTime;
-                    if (_deltaTime < archipelago_login_display_delay)
+                    if (ArchipelagoStatic.LoadingSceneActive)
                         return;
+
+                    //Due to the way muse dash works, the home screen is enable for a frame or two after the load screen finishes.
+                    if (_deltaTime < archipelago_login_display_delay) {
+                        _deltaTime += Time.deltaTime;
+                        return;
+                    }
 
                     if (!GUI.Button(new Rect(Screen.width - 320, Screen.height - 120, 300, 100), "Show Archipelago Login", _buttonNoStyle))
                         return;

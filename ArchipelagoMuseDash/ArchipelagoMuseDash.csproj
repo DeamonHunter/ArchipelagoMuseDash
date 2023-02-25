@@ -149,6 +149,7 @@
     <Compile Include="Logging\ArchLogger.cs" />
     <Compile Include="Patches\ArchipelagoPatches.cs" />
     <Compile Include="Patches\HintPatches.cs" />
+    <Compile Include="Patches\LoadingScenePatches.cs" />
     <Compile Include="Patches\SaveAPIPatch.cs" />
     <Compile Include="Patches\StatusPatches.cs" />
     <Compile Include="Patches\WebAPIPatch.cs" />

@@ -24,6 +24,7 @@ namespace ArchipelagoMuseDash {
         public static SessionHandler SessionHandler;
 
         //Needed MuseDash components
+        public static bool LoadingSceneActive;
         public static string CurrentScene;
         public static StageBattleComponent BattleComponent;
         public static HashSet<string> ActivatedEnableDisableHookers = new HashSet<string>();
