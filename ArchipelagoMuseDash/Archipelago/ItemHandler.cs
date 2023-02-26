@@ -37,6 +37,8 @@ namespace ArchipelagoMuseDash.Archipelago {
             _currentSession = session;
             _currentPlayerSlot = playerSlot;
 
+            _currentSession.Locations.CheckedLocationsUpdated += NewLocationChecked;
+
             Unlocker = new ItemUnlockHandler(this);
         }
 
@@ -76,7 +78,7 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             foreach (var location in _currentSession.Locations.AllLocationsChecked) {
                 var name = _currentSession.Locations.GetLocationNameFromId(location);
-                CheckStartingLocation(name.Substring(0, name.Length - 2));
+                CheckRemoteLocation(name.Substring(0, name.Length - 2));
             }
 
             foreach (var location in _currentSession.Locations.AllLocations) {
@@ -121,6 +123,14 @@ namespace ArchipelagoMuseDash.Archipelago {
                 var item = GetItemFromNetworkItem(networkItem, false);
                 if (item != null)
                     Unlocker.AddItem(item);
+            }
+        }
+
+        void NewLocationChecked(IReadOnlyCollection<long> locations) {
+            foreach (var location in locations) {
+                ArchipelagoStatic.ArchLogger.LogDebug("NewLocationCheck", $"New Location: {location}");
+                var name = _currentSession.Locations.GetLocationNameFromId(location);
+                CheckRemoteLocation(name.Substring(0, name.Length - 2));
             }
         }
 
@@ -227,7 +237,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 }
 
                 ArchipelagoStatic.ArchLogger.Log("CheckLocations", "Received Items Packet.");
-                CheckStartingLocation(locationName);
+                CheckRemoteLocation(locationName);
                 foreach (var item in items.Locations) {
                     //The item should already be handled
                     if (item.Player == _currentPlayerSlot)
@@ -241,10 +251,17 @@ namespace ArchipelagoMuseDash.Archipelago {
             }
         }
 
-        void CheckStartingLocation(string locationName) {
+        void CheckRemoteLocation(string locationName) {
             var subSection = locationName.Substring(0, locationName.Length);
 
             if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(subSection, out var singularInfo)) {
+                if (CompletedSongUids.Contains(singularInfo.uid))
+                    return;
+
+                //If a person collects 1 of 2 locations, we don't want to check it.
+                if (!IsSongFullyCompleted(subSection))
+                    return;
+
                 //Check to see if the song is favourited, and remove if it is
                 if (GlobalDataBase.dbMusicTag.ContainsCollection(singularInfo))
                     GlobalDataBase.dbMusicTag.RemoveCollection(singularInfo);
@@ -256,23 +273,24 @@ namespace ArchipelagoMuseDash.Archipelago {
                 return;
             }
 
-            if (ArchipelagoStatic.AlbumDatabase.TryGetAlbum(subSection, out var album)) {
-                foreach (var musicInfo in album) {
-                    //Check to see if the song is favourited, and remove if it is
-                    if (GlobalDataBase.dbMusicTag.ContainsCollection(musicInfo))
-                        GlobalDataBase.dbMusicTag.RemoveCollection(musicInfo);
+            ArchipelagoStatic.ArchLogger.Warning("HandleLocationChecked", $"Unknown Location: {locationName}");
+        }
 
-                    if (HiddenSongMode == ShownSongMode.Unplayed)
-                        AddHide(musicInfo);
-
-                    CompletedSongUids.Add(musicInfo.uid);
-                }
-
-                return;
+        private bool IsSongFullyCompleted(string songKey) {
+            var location1 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", songKey + "-0");
+            if (location1 != -1 && _currentSession.Locations.AllLocations.Contains(location1)) {
+                if (!_currentSession.Locations.AllLocationsChecked.Contains(location1))
+                    return false;
             }
 
 
-            ArchipelagoStatic.ArchLogger.Warning("HandleLocationChecked", $"Unknown Location: {locationName}");
+            var location2 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", songKey + "-1");
+            if (location2 != -1 && _currentSession.Locations.AllLocations.Contains(location2)) {
+                if (!_currentSession.Locations.AllLocationsChecked.Contains(location2))
+                    return false;
+            }
+
+            return true;
         }
 
         #endregion
