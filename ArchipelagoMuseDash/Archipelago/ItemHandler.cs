@@ -206,7 +206,6 @@ namespace ArchipelagoMuseDash.Archipelago {
             try {
                 CompletedSongUids.Add(uid);
 
-
                 if (GoalSong != null && GoalSong.uid == uid) {
                     ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Victory achieved, enqueing visuals for next available time.");
 
@@ -221,20 +220,28 @@ namespace ArchipelagoMuseDash.Archipelago {
                     return;
                 }
 
+                var locationsToCheck = new List<long>();
+
                 var location1 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-0");
+                if (location1 != -1 && _currentSession.Locations.AllLocations.Contains(location1)) {
+                    if (!_currentSession.Locations.AllLocationsChecked.Contains(location1))
+                        locationsToCheck.Add(location1);
+                }
+
                 var location2 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-1");
+                if (location2 != -1 && _currentSession.Locations.AllLocations.Contains(location2)) {
+                    if (!_currentSession.Locations.AllLocationsChecked.Contains(location2))
+                        locationsToCheck.Add(location2);
+                }
+
+                if (locationsToCheck.Count <= 0)
+                    return;
+
+                var locationsArray = locationsToCheck.ToArray();
 
                 //Complete the location check, but also scout to ensure we get the items we are sending to other players.
-
-                LocationInfoPacket items;
-                if (location2 != -1 && _currentSession.Locations.AllLocations.Contains(location2)) {
-                    await _currentSession.Locations.CompleteLocationChecksAsync(location1, location2);
-                    items = await _currentSession.Locations.ScoutLocationsAsync(false, location1, location2);
-                }
-                else {
-                    await _currentSession.Locations.CompleteLocationChecksAsync(location1);
-                    items = await _currentSession.Locations.ScoutLocationsAsync(false, location1);
-                }
+                await _currentSession.Locations.CompleteLocationChecksAsync(locationsArray);
+                var items = await _currentSession.Locations.ScoutLocationsAsync(false, locationsArray);
 
                 ArchipelagoStatic.ArchLogger.Log("CheckLocations", "Received Items Packet.");
                 CheckRemoteLocation(locationName);
