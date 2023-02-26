@@ -366,8 +366,8 @@ namespace ArchipelagoMuseDash.Archipelago {
             GlobalDataBase.dbMusicTag.AddHide(song);
             GlobalDataBase.dbMusicTag.RemoveShowMusicUid(song);
 
-            if (GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo?.uid == song?.uid)
-                GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo = GlobalDataBase.dbMusicTag.SelectRandomMusic();
+            //if (GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo?.uid == song?.uid)
+            //    GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo = GlobalDataBase.dbMusicTag.SelectRandomMusic();
         }
 
         public void UnlockSong(MusicInfo song) {
