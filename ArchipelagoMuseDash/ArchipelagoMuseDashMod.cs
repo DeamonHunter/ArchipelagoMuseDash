@@ -5,7 +5,7 @@ using ArchipelagoMuseDash.Helpers;
 using ArchipelagoMuseDash.Logging;
 using MelonLoader;
 
-[assembly: MelonInfo(typeof(ArchipelagoMuseDashMod), "Archipelago Muse Dash", "0.5.3", "DeamonHunter")]
+[assembly: MelonInfo(typeof(ArchipelagoMuseDashMod), "Archipelago Muse Dash", "0.6.4", "DeamonHunter")]
 [assembly: MelonGame("PeroPeroGames", "MuseDash")]
 
 namespace ArchipelagoMuseDash {
