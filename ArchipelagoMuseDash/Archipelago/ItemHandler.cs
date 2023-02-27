@@ -78,7 +78,7 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             foreach (var location in _currentSession.Locations.AllLocationsChecked) {
                 var name = _currentSession.Locations.GetLocationNameFromId(location);
-                CheckRemoteLocation(name.Substring(0, name.Length - 2));
+                CheckRemoteLocation(name.Substring(0, name.Length - 2), false);
             }
 
             foreach (var location in _currentSession.Locations.AllLocations) {
@@ -130,7 +130,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             foreach (var location in locations) {
                 ArchipelagoStatic.ArchLogger.LogDebug("NewLocationCheck", $"New Location: {location}");
                 var name = _currentSession.Locations.GetLocationNameFromId(location);
-                CheckRemoteLocation(name.Substring(0, name.Length - 2));
+                CheckRemoteLocation(name.Substring(0, name.Length - 2), false);
             }
         }
 
@@ -244,7 +244,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 var items = await _currentSession.Locations.ScoutLocationsAsync(false, locationsArray);
 
                 ArchipelagoStatic.ArchLogger.Log("CheckLocations", "Received Items Packet.");
-                CheckRemoteLocation(locationName);
+                CheckRemoteLocation(locationName, true);
                 foreach (var item in items.Locations) {
                     //The item should already be handled
                     if (item.Player == _currentPlayerSlot)
@@ -258,15 +258,12 @@ namespace ArchipelagoMuseDash.Archipelago {
             }
         }
 
-        void CheckRemoteLocation(string locationName) {
+        void CheckRemoteLocation(string locationName, bool force) {
             var subSection = locationName.Substring(0, locationName.Length);
 
             if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(subSection, out var singularInfo)) {
-                if (CompletedSongUids.Contains(singularInfo.uid))
-                    return;
-
                 //If a person collects 1 of 2 locations, we don't want to check it.
-                if (!IsSongFullyCompleted(subSection))
+                if (!force && !IsSongFullyCompleted(subSection))
                     return;
 
                 //Check to see if the song is favourited, and remove if it is
@@ -276,7 +273,8 @@ namespace ArchipelagoMuseDash.Archipelago {
                 if (HiddenSongMode == ShownSongMode.Unplayed)
                     AddHide(singularInfo);
 
-                CompletedSongUids.Add(singularInfo.uid);
+                if (!CompletedSongUids.Contains(singularInfo.uid))
+                    CompletedSongUids.Add(singularInfo.uid);
                 return;
             }
 
