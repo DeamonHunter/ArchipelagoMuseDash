@@ -153,6 +153,7 @@ namespace ArchipelagoMuseDash.Patches {
                 var reason = $"No Items Given:\nGrade result was worse than {ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded}";
                 ShowText.ShowInfo(reason);
                 ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
+                ArchipelagoStatic.SessionHandler.DeathLinkHandler.PlayerDied();
                 return;
             }
 
