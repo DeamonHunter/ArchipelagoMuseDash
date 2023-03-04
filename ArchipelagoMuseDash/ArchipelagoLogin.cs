@@ -3,7 +3,6 @@ using System.IO;
 using System.Text;
 using ArchipelagoMuseDash.Helpers;
 using Assets.Scripts.Database;
-using Assets.Scripts.PeroTools.Nice.Datas;
 using MelonLoader;
 using UnhollowerBaseLib;
 using UnityEngine;

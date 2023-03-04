@@ -33,15 +33,12 @@ namespace ArchipelagoMuseDash {
             var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>(-1).GetLocal(ENGLISH_LOC_INDEX);
 
             foreach (var musicInfo in list) {
-                if (musicInfo.uid == RANDOM_PANEL_UID) {
-                    ArchipelagoStatic.ArchLogger.Log("Album Database", "Skipping random.");
+                if (musicInfo.uid == RANDOM_PANEL_UID)
                     continue;
-                }
 
                 var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
 
                 var songName = GetItemNameFromMusicInfo(musicInfo);
-                ArchipelagoStatic.ArchLogger.LogDebug("Album Database", "Known Item: " + songName);
                 _songsByItemName.Add(songName, musicInfo);
 
                 if (!_songsByAlbum.TryGetValue(albumLocal, out var albumList)) {
@@ -60,11 +57,6 @@ namespace ArchipelagoMuseDash {
         public Il2CppSystem.Collections.Generic.List<MusicInfo> GetAlbum(string itemName) => _songsByAlbum[itemName];
 
         public string GetItemNameFromMusicInfo(MusicInfo musicInfo) {
-            //var configManager = ConfigManager.instance;
-            //var albumConfig = configManager.GetConfigObject<DBConfigAlbums>(-1);
-            //var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>(-1).GetLocal(ENGLISH_LOC_INDEX);
-            //var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
-
             var localisedSongName = ArchipelagoStatic.SongNameChanger.GetSongName(musicInfo);
             return $"{localisedSongName}";
         }

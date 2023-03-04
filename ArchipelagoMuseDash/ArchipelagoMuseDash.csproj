@@ -145,6 +145,7 @@
     <Compile Include="ArchipelagoStatic.cs" />
     <Compile Include="Archipelago\ShownSongMode.cs" />
     <Compile Include="Archipelago\SongSelectAdditions.cs" />
+    <Compile Include="Helpers\ArchipelagoHelpers.cs" />
     <Compile Include="Helpers\AssetHelpers.cs" />
     <Compile Include="Helpers\SongNameChanger.cs" />
     <Compile Include="Logging\ArchLogger.cs" />

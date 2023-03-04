@@ -6,6 +6,7 @@ using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using ArchipelagoMuseDash.Archipelago.Items;
+using ArchipelagoMuseDash.Helpers;
 using Assets.Scripts.Database;
 using UnityEngine.EventSystems;
 
@@ -71,16 +72,6 @@ namespace ArchipelagoMuseDash.Archipelago {
             else
                 GradeNeeded = GradeOption.Any;
 
-            CurrentNumberOfMusicSheets = 0;
-
-            CheckForNewItems();
-            Unlocker.UnlockAllItems();
-
-            foreach (var location in _currentSession.Locations.AllLocationsChecked) {
-                var name = _currentSession.Locations.GetLocationNameFromId(location);
-                CheckRemoteLocation(name.Substring(0, name.Length - 2), false);
-            }
-
             foreach (var location in _currentSession.Locations.AllLocations) {
                 var name = _currentSession.Locations.GetLocationNameFromId(location);
                 name = name.Substring(0, name.Length - 2);
@@ -89,6 +80,16 @@ namespace ArchipelagoMuseDash.Archipelago {
                     SongsInLogic.Add(info.uid);
                 else
                     ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Unknown location: {name}");
+            }
+
+            CurrentNumberOfMusicSheets = 0;
+
+            CheckForNewItems();
+            Unlocker.UnlockAllItems();
+
+            foreach (var location in _currentSession.Locations.AllLocationsChecked) {
+                var name = _currentSession.Locations.GetLocationNameFromId(location);
+                CheckRemoteLocation(name.Substring(0, name.Length - 2), false);
             }
 
             SetVisibilityOfAllSongs(ShownSongMode.Unlocks);
@@ -118,7 +119,6 @@ namespace ArchipelagoMuseDash.Archipelago {
         void CheckForNewItems() {
             while (_currentSession.Items.Any()) {
                 var networkItem = _currentSession.Items.DequeueItem();
-
                 //These items should always be for the local player.
                 var item = GetItemFromNetworkItem(networkItem, false);
                 if (item != null)
@@ -315,8 +315,7 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"Visibility being set to {mode}");
             HiddenSongMode = mode;
-
-            GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo = null;
+            ArchipelagoHelpers.SelectNextAvailableSong();
 
             foreach (var song in list) {
                 if (song == null || song.uid == "?")
@@ -388,9 +387,6 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             GlobalDataBase.dbMusicTag.AddHide(song);
             GlobalDataBase.dbMusicTag.RemoveShowMusicUid(song);
-
-            //if (GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo?.uid == song?.uid)
-            //    GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo = GlobalDataBase.dbMusicTag.SelectRandomMusic();
         }
 
         public void UnlockSong(MusicInfo song) {

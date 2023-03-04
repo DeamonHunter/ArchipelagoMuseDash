@@ -1,5 +1,7 @@
 ﻿using System;
+using ArchipelagoMuseDash.Archipelago;
 using ArchipelagoMuseDash.Archipelago.Items;
+using ArchipelagoMuseDash.Helpers;
 using Assets.Scripts.Database;
 using Assets.Scripts.GameCore.HostComponent;
 using Assets.Scripts.PeroTools.Managers;
@@ -289,6 +291,22 @@ namespace ArchipelagoMuseDash.Patches {
             var reason = ArchipelagoStatic.SessionHandler.DeathLinkHandler.GetDeathLinkReason();
             if (reason != null)
                 ShowText.ShowInfo(reason);
+        }
+    }
+
+    /// <summary>
+    /// Gets called when the player completes the song. Uses this to activate location checks.
+    /// </summary>
+    [HarmonyPatch(typeof(PnlVictory), "OnContinueClicked")]
+    sealed class PnlVictoryOnContinueClickedPatch {
+        static void Postfix() {
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+                return;
+
+            if (ArchipelagoStatic.SessionHandler.ItemHandler.HiddenSongMode != ShownSongMode.Unplayed)
+                return;
+
+            ArchipelagoHelpers.SelectNextAvailableSong();
         }
     }
 }
