@@ -243,9 +243,6 @@ namespace ArchipelagoMuseDash {
             if (!File.Exists(ArchipelagoStatic.SteamSync.m_FilePath) && File.Exists(ArchipelagoStatic.OriginalFilePath))
                 File.Copy(ArchipelagoStatic.OriginalFilePath, ArchipelagoStatic.SteamSync.m_FilePath);
 
-            //Note this only really loads settings
-            ArchipelagoStatic.SteamSync.LoadLocal();
-
             DataHelper.isUnlockAllMaster = true;
 
             //Force collection update
