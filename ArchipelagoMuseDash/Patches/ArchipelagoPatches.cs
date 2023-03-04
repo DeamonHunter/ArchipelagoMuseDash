@@ -53,7 +53,7 @@ namespace ArchipelagoMuseDash.Patches {
             if (currentItem.UseArchipelagoLogo) {
                 int iconIndex = 0;
                 if (currentItem is ExternalItem) {
-                    if ((currentItem.Item.Flags & ItemFlags.NeverExclude) != 0)
+                    if ((currentItem.Item.Flags & ItemFlags.Advancement) != 0)
                         iconIndex = 0;
                     else if ((currentItem.Item.Flags & ItemFlags.NeverExclude) != 0)
                         iconIndex = 1;
@@ -341,6 +341,16 @@ namespace ArchipelagoMuseDash.Patches {
             TweenSettingsExtensions.SetAutoKill(tween, false);
             tween.onKill = __instance.m_Tween.onKill;
             __instance.m_Tween = tween;
+        }
+    }
+
+    /// <summary>
+    /// Disable the level up panel during archipelago
+    /// </summary>
+    [HarmonyPatch(typeof(PnlLevelUpAward), "OnLevelUp")]
+    sealed class PnlLevelUpAwardOnLevelUpPatch {
+        static bool Prefix() {
+            return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
         }
     }
 }
