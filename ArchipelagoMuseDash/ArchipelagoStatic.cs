@@ -16,7 +16,7 @@ namespace ArchipelagoMuseDash {
 
         //Loaded Assets
         public static SongNameChanger SongNameChanger;
-        public static Texture2D ArchipelagoIcon;
+        public static Texture2D[] ArchipelagoIcons;
 
         //Archipelago Controllers
         public static AlbumDatabase AlbumDatabase = new AlbumDatabase();

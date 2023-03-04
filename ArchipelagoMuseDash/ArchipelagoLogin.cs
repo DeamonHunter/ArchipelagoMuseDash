@@ -105,7 +105,7 @@ namespace ArchipelagoMuseDash {
                 var uiParent = museCharacter.transform.parent.parent.parent;
                 uiParent.gameObject.SetActive(false);
 
-                GUI.ModalWindow(0, new Rect(Screen.width / 2.0f - 250, Screen.height / 2.0f - 180, 500, 360), (GUI.WindowFunction)DrawArchWindow, "Connect to an Archipelago Server", _windowStyle);
+                GUI.ModalWindow(0, new Rect(Screen.width / 2.0f - 250, Screen.height / 2.0f - 185, 500, 370), (GUI.WindowFunction)DrawArchWindow, "Connect to an Archipelago Server", _windowStyle);
             }
             catch (Exception e) {
                 ArchipelagoStatic.ArchLogger.Error("DrawArchLogin", e);

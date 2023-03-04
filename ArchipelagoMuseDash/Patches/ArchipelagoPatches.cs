@@ -1,4 +1,5 @@
 ﻿using System;
+using Archipelago.MultiClient.Net.Enums;
 using ArchipelagoMuseDash.Archipelago;
 using ArchipelagoMuseDash.Archipelago.Items;
 using ArchipelagoMuseDash.Helpers;
@@ -35,6 +36,8 @@ namespace ArchipelagoMuseDash.Patches {
             if (currentItem == null)
                 return;
 
+            ArchipelagoStatic.ArchLogger.Log("PnlUnlockStage", $"Demo: {GlobalDataBase.dbMusicTag.m_AllMusicInfo[currentItem.UnlockSongUid].demo}");
+
             if (currentItem.TitleText != null)
                 GetTitleText(__instance.gameObject).text = currentItem.TitleText;
 
@@ -47,8 +50,22 @@ namespace ArchipelagoMuseDash.Patches {
             __instance.unlockText.text = currentItem.PreUnlockBannerText;
 
             if (currentItem.UseArchipelagoLogo) {
+                int iconIndex = 0;
+                if (currentItem is ExternalItem) {
+                    if ((currentItem.Item.Flags & ItemFlags.NeverExclude) != 0)
+                        iconIndex = 0;
+                    else if ((currentItem.Item.Flags & ItemFlags.NeverExclude) != 0)
+                        iconIndex = 1;
+                    else if ((currentItem.Item.Flags & ItemFlags.Trap) != 0)
+                        iconIndex = 3;
+                    else
+                        iconIndex = 2;
+                }
+
+                var icon = ArchipelagoStatic.ArchipelagoIcons[iconIndex];
+
                 //Recreate the sprite here as for some reason it gets garbage collected
-                var newSprite = Sprite.Create(ArchipelagoStatic.ArchipelagoIcon, new Rect(0, 0, ArchipelagoStatic.ArchipelagoIcon.width, ArchipelagoStatic.ArchipelagoIcon.height), new Vector2(0.5f, 0.5f));
+                var newSprite = Sprite.Create(icon, new Rect(0, 0, icon.width, icon.height), new Vector2(0.5f, 0.5f));
                 newSprite.name = "ArchipelagoItem_cover";
                 __instance.unlockCover.sprite = newSprite;
             }

@@ -173,7 +173,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Assets\ArchIcon.png" />
+    <EmbeddedResource Include="Assets\APIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\LoginBackground.png" />
@@ -185,6 +185,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Assets\ButtonNoHighlighted.png" />
     <EmbeddedResource Include="Assets\ButtonYesHighlighted.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\APTrap.png" />
+    <EmbeddedResource Include="Assets\APTrash.png" />
+    <EmbeddedResource Include="Assets\APUseful.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

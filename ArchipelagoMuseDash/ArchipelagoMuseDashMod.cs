@@ -4,6 +4,7 @@ using ArchipelagoMuseDash.Archipelago;
 using ArchipelagoMuseDash.Helpers;
 using ArchipelagoMuseDash.Logging;
 using MelonLoader;
+using UnityEngine;
 
 [assembly: MelonInfo(typeof(ArchipelagoMuseDashMod), "Archipelago Muse Dash", "0.6.6", "DeamonHunter")]
 [assembly: MelonGame("PeroPeroGames", "MuseDash")]
@@ -20,7 +21,13 @@ namespace ArchipelagoMuseDash {
             ArchipelagoStatic.ArchLogger = new ArchLogger();
             ArchipelagoStatic.Login = new ArchipelagoLogin(Info.Version);
             ArchipelagoStatic.SessionHandler = new SessionHandler();
-            ArchipelagoStatic.ArchipelagoIcon = AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.ArchIcon.png");
+
+            ArchipelagoStatic.ArchipelagoIcons = new Texture2D[] {
+                AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APIcon.png"),
+                AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APIconUseful.png"),
+                AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APIconTrash.png"),
+                AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APIconTrap.png"),
+            };
 
             using (var stream = MelonAssembly.Assembly.GetManifestResourceStream("ArchipelagoMuseDash.Assets.SongNameReplacements.json"))
                 ArchipelagoStatic.SongNameChanger = new SongNameChanger(stream);

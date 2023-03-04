@@ -8,16 +8,15 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
         public string UnlockSongUid => _songUID ?? ArchipelagoStatic.AlbumDatabase.GetMusicInfo("Magical Wonderland").uid;
         public bool UseArchipelagoLogo => _songUID == null;
 
-        public string TitleText => "New Item!!";
+        public string TitleText => "Sending a New Item!!";
         public string SongText => _itemName;
         public string AuthorText => $"Sent to {_receivingPlayerName}.";
 
         public string PreUnlockBannerText => "A new item?";
-        public string PostUnlockBannerText => _songUID != null ? "It ain't yours." : "Hope it's good!"; //Todo: See if we can get type info.
+        public string PostUnlockBannerText => GetPostUnlockBannerText();
 
         readonly string _receivingPlayerName;
         readonly string _itemName;
-
         readonly string _songUID;
 
         public ExternalItem(string itemName, string receivingPlayer) {
@@ -29,5 +28,21 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
         }
 
         public void UnlockItem(ItemHandler handler, bool immediate) { }
+
+        private string GetPostUnlockBannerText() {
+            if (_songUID != null)
+                return "It ain't yours.";
+
+            if ((Item.Flags & ItemFlags.Advancement) != 0)
+                return "Looks good!";
+
+            if ((Item.Flags & ItemFlags.NeverExclude) != 0)
+                return "Hope it's useful!";
+
+            if ((Item.Flags & ItemFlags.Trap) != 0)
+                return "...";
+
+            return "Looks useless.";
+        }
     }
 }
