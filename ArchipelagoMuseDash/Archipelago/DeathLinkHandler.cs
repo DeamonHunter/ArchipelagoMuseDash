@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.BounceFeatures.DeathLink;
+using ArchipelagoMuseDash.Patches;
+using Assets.Scripts.Database;
 using Assets.Scripts.GameCore.HostComponent;
+using Assets.Scripts.UI.Controls;
 
 namespace ArchipelagoMuseDash.Archipelago {
     /// <summary>
@@ -52,12 +55,19 @@ namespace ArchipelagoMuseDash.Archipelago {
             _deathLinkService = session.CreateDeathLinkService();
             _deathLinkService.EnableDeathLink();
             _deathLinkService.OnDeathLinkReceived += OnDeathLinkReceived;
+
+            ShowText.ShowInfo("Death Link is enabled.\nYou can disable Death Link by swapping to the Silencer Elfin.");
         }
 
         public void PlayerDied() {
             ArchipelagoStatic.ArchLogger.LogDebug("DeathLink", $"Player Died. Current Status: {(_deathLinkService != null ? "Active" : "Deactive")}, {_killingPlayer}");
             if (_deathLinkService == null || _killingPlayer)
                 return;
+
+            if (GlobalDataBase.dbBattleStage.IsSelectElfin(PnlVictoryPatch.silencer_elfin_id)) {
+                ArchipelagoStatic.ArchLogger.LogDebug("DeathLink", "Ignoring Player Death due to silencer elfin.");
+                return;
+            }
 
             var alias = _session.Players.GetPlayerAlias(_slotID);
 

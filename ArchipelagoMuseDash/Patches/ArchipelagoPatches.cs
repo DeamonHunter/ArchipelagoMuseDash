@@ -8,6 +8,7 @@ using Assets.Scripts.GameCore.HostComponent;
 using Assets.Scripts.PeroTools.Managers;
 using Assets.Scripts.UI.Controls;
 using Assets.Scripts.UI.Panels;
+using DG.Tweening;
 using HarmonyLib;
 using Il2CppSystem.Collections.Generic;
 using PeroTools2.Resources;
@@ -121,8 +122,8 @@ namespace ArchipelagoMuseDash.Patches {
     /// </summary>
     [HarmonyPatch(typeof(PnlVictory), "OnVictory")]
     sealed class PnlVictoryPatch {
-        const int neko_character_id = 16;
-        const int silencer_elfin_id = 9;
+        public const int neko_character_id = 16;
+        public const int silencer_elfin_id = 9;
 
         static void Postfix() {
             //Don't override normal gameplay
@@ -325,6 +326,21 @@ namespace ArchipelagoMuseDash.Patches {
                 return;
 
             ArchipelagoHelpers.SelectNextAvailableSong();
+        }
+    }
+
+    /// <summary>
+    /// Slightly extend Show Text messages so they are readible
+    /// </summary>
+    [HarmonyPatch(typeof(ShowText), "DoTweenInit")]
+    sealed class ShowTextDoTweenInitPatch {
+        static void Postfix(ShowText __instance) {
+            var tween = DOTweenModuleUI.DOFade(__instance.m_CanvasGroup, 1f, 3f);
+            TweenSettingsExtensions.SetEase(tween, __instance.m_Curve);
+            tween.onComplete = __instance.m_Tween.onComplete;
+            TweenSettingsExtensions.SetAutoKill(tween, false);
+            tween.onKill = __instance.m_Tween.onKill;
+            __instance.m_Tween = tween;
         }
     }
 }
