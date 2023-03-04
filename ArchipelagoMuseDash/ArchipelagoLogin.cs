@@ -35,8 +35,9 @@ namespace ArchipelagoMuseDash {
         GUIStyle _buttonNoStyle;
         GUIStyle _labelStyle;
         GUIStyle _textFieldStyle;
+        string _versionNumber;
 
-        public ArchipelagoLogin() {
+        public ArchipelagoLogin(string versionNumber) {
 #if DEBUG
             _ipAddress = "localhost:38281";
 #else
@@ -49,6 +50,8 @@ namespace ArchipelagoMuseDash {
             _yesTextureHighlighted = AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.ButtonYesHighlighted.png");
             _noTexture = AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.ButtonNo.png");
             _noTextureHighlighted = AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.ButtonNoHighlighted.png");
+
+            _versionNumber = versionNumber;
 
             MelonEvents.OnGUI.Subscribe(DrawArchLogin);
         }
@@ -103,7 +106,7 @@ namespace ArchipelagoMuseDash {
                 var uiParent = museCharacter.transform.parent.parent.parent;
                 uiParent.gameObject.SetActive(false);
 
-                GUI.ModalWindow(0, new Rect(Screen.width / 2.0f - 250, Screen.height / 2.0f - 170, 500, 340), (GUI.WindowFunction)DrawArchWindow, "Connect to an Archipelago Server", _windowStyle);
+                GUI.ModalWindow(0, new Rect(Screen.width / 2.0f - 250, Screen.height / 2.0f - 180, 500, 360), (GUI.WindowFunction)DrawArchWindow, "Connect to an Archipelago Server", _windowStyle);
             }
             catch (Exception e) {
                 ArchipelagoStatic.ArchLogger.Error("DrawArchLogin", e);
@@ -125,8 +128,10 @@ namespace ArchipelagoMuseDash {
             GUILayout.Label("Password:", _labelStyle, null);
             _password = GUILayout.TextField(_password, _textFieldStyle, null);
 
+            GUILayout.Label("Version: " + _versionNumber, _labelStyle, null);
+
             GUILayout.Label(_error ?? "", _labelStyle, new Il2CppReferenceArray<GUILayoutOption>(new[] {
-                GUILayout.Height(50f)
+                GUILayout.Height(60f)
             }));
 
             GUILayout.BeginHorizontal(null);
@@ -239,8 +244,8 @@ namespace ArchipelagoMuseDash {
             if (!File.Exists(ArchipelagoStatic.SteamSync.m_FilePath) && File.Exists(ArchipelagoStatic.OriginalFilePath))
                 File.Copy(ArchipelagoStatic.OriginalFilePath, ArchipelagoStatic.SteamSync.m_FilePath);
 
-            DataManager.instance.Load();
-            GlobalDataBase.dbMusicTag.InitDatabase();
+            //Note this only really loads settings
+            ArchipelagoStatic.SteamSync.LoadLocal();
 
             DataHelper.isUnlockAllMaster = true;
 
