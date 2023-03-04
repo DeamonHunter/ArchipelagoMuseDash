@@ -65,7 +65,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 return;
 
             if (GlobalDataBase.dbBattleStage.IsSelectElfin(PnlVictoryPatch.silencer_elfin_id)) {
-                ArchipelagoStatic.ArchLogger.LogDebug("DeathLink", "Ignoring Player Death due to silencer elfin.");
+                ArchipelagoStatic.ArchLogger.LogDebug("DeathLink", "Ignoring Death Link due to silencer elfin.");
                 return;
             }
 
@@ -80,6 +80,11 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         void OnDeathLinkReceived(DeathLink deathLink) {
             ArchipelagoStatic.ArchLogger.Log("DeathLink", $"Received DeathLink: {deathLink.Source}: {deathLink.Cause}");
+            if (GlobalDataBase.dbBattleStage.IsSelectElfin(PnlVictoryPatch.silencer_elfin_id)) {
+                ArchipelagoStatic.ArchLogger.LogDebug("DeathLink", "Ignoring Death Link due to silencer elfin.");
+                return;
+            }
+
             _deathLinkReason = $"Killed By {deathLink.Source}\n\"{deathLink.Cause}\"";
             _killingPlayer = true;
         }
@@ -93,6 +98,12 @@ namespace ArchipelagoMuseDash.Archipelago {
         public void Update() {
             if (!_killingPlayer)
                 return;
+
+            if (GlobalDataBase.dbBattleStage.IsSelectElfin(PnlVictoryPatch.silencer_elfin_id)) {
+                ArchipelagoStatic.ArchLogger.LogDebug("DeathLink", "Ignoring Death Link due to silencer elfin.");
+                _killingPlayer = false;
+                return;
+            }
 
             var battleStage = ArchipelagoStatic.BattleComponent;
             if (battleStage == null || battleStage.isDead || battleStage.isPause || battleStage.isSucceed)
