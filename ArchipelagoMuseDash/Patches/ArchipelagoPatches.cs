@@ -134,7 +134,7 @@ namespace ArchipelagoMuseDash.Patches {
             // Block Sleepwalker Rin (Auto Mode) from getting completions
             if (BattleHelper.isAutoSleepy) {
                 var reason = "No Items Given:\nSleepwalker Rin was used without Silencer.";
-                ShowText.ShowInfo(reason); //Todo: Fix Show message
+                ShowText.ShowInfo(reason);
                 ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
                 return;
             }
@@ -143,7 +143,7 @@ namespace ArchipelagoMuseDash.Patches {
             if (GlobalDataBase.dbBattleStage.IsSelectRole(neko_character_id) && !GlobalDataBase.dbBattleStage.IsSelectElfin(silencer_elfin_id)) {
                 if (GlobalDataBase.dbSkill.nekoSkillInvoke) {
                     var reason = "No Items Given:\nDied as NEKO.";
-                    ShowText.ShowInfo(reason); //Todo: Fix Show message
+                    ShowText.ShowInfo(reason);
                     ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
                     return;
                 }
@@ -335,7 +335,7 @@ namespace ArchipelagoMuseDash.Patches {
     [HarmonyPatch(typeof(ShowText), "DoTweenInit")]
     sealed class ShowTextDoTweenInitPatch {
         static void Postfix(ShowText __instance) {
-            var tween = DOTweenModuleUI.DOFade(__instance.m_CanvasGroup, 1f, 3.5f);
+            var tween = DOTweenModuleUI.DOFade(__instance.m_CanvasGroup, 1f, 5f);
             TweenSettingsExtensions.SetEase(tween, __instance.m_Curve);
             tween.onComplete = __instance.m_Tween.onComplete;
             TweenSettingsExtensions.SetAutoKill(tween, false);
