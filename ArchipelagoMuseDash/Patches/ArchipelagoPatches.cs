@@ -292,9 +292,9 @@ namespace ArchipelagoMuseDash.Patches {
                 return;
 
             if (DataHelper.selectedRoleIndex == sleepwalker_rin_character_id)
-                ShowText.ShowInfo("Sleepwalker Rin will not be able to unlock items, without the Silencer Elfin.");
+                ShowText.ShowInfo("Sleepwalker Rin will not unlock items without the Silencer Elfin.");
             else if (DataHelper.selectedRoleIndex == neko_character_id)
-                ShowText.ShowInfo("Neko will not be able to unlock items, if she dies.");
+                ShowText.ShowInfo("NEKO will not unlock items if she dies before completing the stage.");
         }
     }
 
@@ -330,12 +330,12 @@ namespace ArchipelagoMuseDash.Patches {
     }
 
     /// <summary>
-    /// Slightly extend Show Text messages so they are readible
+    /// Slightly extend Show Text messages so they are readable
     /// </summary>
     [HarmonyPatch(typeof(ShowText), "DoTweenInit")]
     sealed class ShowTextDoTweenInitPatch {
         static void Postfix(ShowText __instance) {
-            var tween = DOTweenModuleUI.DOFade(__instance.m_CanvasGroup, 1f, 3f);
+            var tween = DOTweenModuleUI.DOFade(__instance.m_CanvasGroup, 1f, 3.5f);
             TweenSettingsExtensions.SetEase(tween, __instance.m_Curve);
             tween.onComplete = __instance.m_Tween.onComplete;
             TweenSettingsExtensions.SetAutoKill(tween, false);
