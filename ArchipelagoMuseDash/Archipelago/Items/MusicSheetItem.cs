@@ -1,5 +1,10 @@
-﻿namespace ArchipelagoMuseDash.Archipelago.Items {
+﻿using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Models;
+
+namespace ArchipelagoMuseDash.Archipelago.Items {
     public class MusicSheetItem : IMuseDashItem {
+        public NetworkItem Item { get; set; }
+
         public string UnlockSongUid => ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong.uid;
         public bool UseArchipelagoLogo => false;
 

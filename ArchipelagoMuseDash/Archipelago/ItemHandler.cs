@@ -143,7 +143,7 @@ namespace ArchipelagoMuseDash.Archipelago {
 
                 name = name ?? $"Unknown Item: {item.Item}";
                 ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", $"External Item: {playerName}, {name}");
-                return new ExternalItem(name, playerName);
+                return new ExternalItem(name, playerName) { Item = item };
             }
 
             if (name == MusicSheetItemName) {
@@ -151,14 +151,14 @@ namespace ArchipelagoMuseDash.Archipelago {
 
                 if (NumberOfMusicSheetsToWin == CurrentNumberOfMusicSheets)
                     return new SongItem(GoalSong);
-                return new MusicSheetItem(NumberOfMusicSheetsToWin - CurrentNumberOfMusicSheets);
+                return new MusicSheetItem(NumberOfMusicSheetsToWin - CurrentNumberOfMusicSheets) { Item = item };
             }
 
             if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(name, out var singularInfo))
-                return new SongItem(singularInfo);
+                return new SongItem(singularInfo) { Item = item };
 
             if (ArchipelagoStatic.AlbumDatabase.TryGetAlbum(name, out var album))
-                return new AlbumItem(name, album);
+                return new AlbumItem(name, album) { Item = item };
 
             if (name != "Nothing" && name != "Victory")
                 ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Unknown Item was given: {name}");
@@ -211,6 +211,7 @@ namespace ArchipelagoMuseDash.Archipelago {
 
                     //Todo: This maybe should be priority?
                     Unlocker.AddItem(new VictoryItem(_currentSession.Players.GetPlayerAlias(_currentPlayerSlot), uid));
+                    Unlocker.PrioritiseItems(new[] { new NetworkItem() });
 
                     var statusUpdatePacket = new StatusUpdatePacket {
                         Status = ArchipelagoClientState.ClientGoal
@@ -245,13 +246,10 @@ namespace ArchipelagoMuseDash.Archipelago {
 
                 ArchipelagoStatic.ArchLogger.Log("CheckLocations", "Received Items Packet.");
                 CheckRemoteLocation(locationName, true);
-                foreach (var item in items.Locations) {
-                    //The item should already be handled
-                    if (item.Player == _currentPlayerSlot)
-                        continue;
+                foreach (var item in items.Locations)
+                    Unlocker.AddItem(GetItemFromNetworkItem(item, item.Player != _currentPlayerSlot));
 
-                    Unlocker.AddItem(GetItemFromNetworkItem(item, true));
-                }
+                Unlocker.PrioritiseItems(items.Locations);
             }
             catch (Exception e) {
                 ArchipelagoStatic.ArchLogger.Error("Check Location", e);

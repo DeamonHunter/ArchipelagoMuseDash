@@ -1,9 +1,12 @@
 ﻿using System;
+using Archipelago.MultiClient.Net.Models;
 using Assets.Scripts.Database;
 using Il2CppSystem.Collections.Generic;
 
 namespace ArchipelagoMuseDash.Archipelago.Items {
     public class AlbumItem : IMuseDashItem {
+        public NetworkItem Item { get; set; }
+
         public string UnlockSongUid => _firstSong.uid;
         public bool UseArchipelagoLogo => false;
 

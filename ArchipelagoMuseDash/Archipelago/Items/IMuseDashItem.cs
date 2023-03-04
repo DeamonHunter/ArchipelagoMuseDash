@@ -1,5 +1,9 @@
-﻿namespace ArchipelagoMuseDash.Archipelago.Items {
+﻿using Archipelago.MultiClient.Net.Models;
+
+namespace ArchipelagoMuseDash.Archipelago.Items {
     public interface IMuseDashItem {
+        NetworkItem Item { get; set; }
+
         string UnlockSongUid { get; }
         bool UseArchipelagoLogo { get; }
 

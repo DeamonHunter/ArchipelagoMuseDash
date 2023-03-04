@@ -1,7 +1,11 @@
-﻿using Assets.Scripts.Database;
+﻿using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Models;
+using Assets.Scripts.Database;
 
 namespace ArchipelagoMuseDash.Archipelago.Items {
     public class SongItem : IMuseDashItem {
+        public NetworkItem Item { get; set; }
+
         public string UnlockSongUid => _song.uid;
         public bool UseArchipelagoLogo => false;
 

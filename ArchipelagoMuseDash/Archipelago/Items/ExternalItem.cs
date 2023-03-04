@@ -1,7 +1,11 @@
-﻿namespace ArchipelagoMuseDash.Archipelago.Items {
-    public class ExternalItem : IMuseDashItem {
-        public string UnlockSongUid => _songUID ?? ArchipelagoStatic.AlbumDatabase.GetMusicInfo("Magical Wonderland").uid;
+﻿using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Models;
 
+namespace ArchipelagoMuseDash.Archipelago.Items {
+    public class ExternalItem : IMuseDashItem {
+        public NetworkItem Item { get; set; }
+
+        public string UnlockSongUid => _songUID ?? ArchipelagoStatic.AlbumDatabase.GetMusicInfo("Magical Wonderland").uid;
         public bool UseArchipelagoLogo => _songUID == null;
 
         public string TitleText => "New Item!!";

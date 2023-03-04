@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Archipelago.MultiClient.Net.Models;
 using ArchipelagoMuseDash.Archipelago.Items;
 using ArchipelagoMuseDash.Patches;
 using Assets.Scripts.PeroTools.Nice.Datas;
@@ -26,8 +28,47 @@ namespace ArchipelagoMuseDash.Archipelago {
         }
 
         public void AddItem(IMuseDashItem item) {
-            lock (_enqueuedItems)
+            lock (_enqueuedItems) {
+                if (_enqueuedItems.Any(x => IsNetworkItemSame(x.Item, item.Item)))
+                    return;
+
                 _enqueuedItems.Enqueue(item);
+            }
+        }
+
+        public void PrioritiseItems(NetworkItem[] items) {
+            lock (_enqueuedItems) {
+                var dequeuedItems = new List<IMuseDashItem>();
+                var matchingItems = new List<IMuseDashItem>();
+
+                while (_enqueuedItems.Count > 0) {
+                    var enqueuedItem = _enqueuedItems.Dequeue();
+
+                    bool includedItem = false;
+                    foreach (var item in items) {
+                        if (!IsNetworkItemSame(enqueuedItem.Item, item))
+                            continue;
+
+                        includedItem = true;
+                        break;
+                    }
+
+                    if (includedItem)
+                        matchingItems.Add(enqueuedItem);
+                    else
+                        dequeuedItems.Add(enqueuedItem);
+                }
+
+                foreach (var item in matchingItems)
+                    _enqueuedItems.Enqueue(item);
+
+                foreach (var item in dequeuedItems)
+                    _enqueuedItems.Enqueue(item);
+            }
+        }
+
+        private bool IsNetworkItemSame(NetworkItem item1, NetworkItem item2) {
+            return item1.Item == item2.Item && item1.Location == item2.Location;
         }
 
         public void UnlockAllItems() {
