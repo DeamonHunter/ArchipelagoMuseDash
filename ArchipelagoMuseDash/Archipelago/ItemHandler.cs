@@ -302,7 +302,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             //Try to fix jank button selection logic
             EventSystem.current.SetSelectedGameObject(null);
 
-            ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Choosing next song shown mode.");
+            ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", "Choosing next song shown mode.");
             var nextMode = (ShownSongMode)(((int)HiddenSongMode + 1) % ((int)ShownSongMode.AllInLogic + 1));
             SetVisibilityOfAllSongs(nextMode);
         }

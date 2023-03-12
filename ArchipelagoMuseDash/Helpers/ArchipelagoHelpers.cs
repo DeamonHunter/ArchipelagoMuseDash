@@ -12,13 +12,13 @@ namespace ArchipelagoMuseDash.Helpers {
             if (selectedInfo == null)
                 return;
 
-            ArchipelagoStatic.ArchLogger.Log("SelectNextAvailableSong", $"Attempting on {GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo?.name}");
+            ArchipelagoStatic.ArchLogger.LogDebug("SelectNextAvailableSong", $"Attempting on {GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo?.name}");
             if (IsSongStillShown(selectedInfo.uid))
                 return;
 
             var index = GlobalDataBase.dbMusicTag.m_StageShowMusicUids.IndexOf(selectedInfo.uid);
             if (index < 0) {
-                ArchipelagoStatic.ArchLogger.Log("SelectNextAvailableSong", "Song wasn't available. So giving up.");
+                ArchipelagoStatic.ArchLogger.LogDebug("SelectNextAvailableSong", "Song wasn't available. So giving up.");
                 return;
             }
 

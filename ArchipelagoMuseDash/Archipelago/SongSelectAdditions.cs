@@ -30,11 +30,11 @@ namespace ArchipelagoMuseDash.Archipelago {
                     return;
 
                 if (EventSystem.current.currentSelectedGameObject == HintButton) {
-                    ArchipelagoStatic.ArchLogger.Log("SongSelectAdditions", "Force deselecting Hint Button");
+                    ArchipelagoStatic.ArchLogger.LogDebug("SongSelectAdditions", "Force deselecting Hint Button");
                     EventSystem.current.SetSelectedGameObject(null);
                 }
                 if (EventSystem.current.currentSelectedGameObject == ToggleSongsButton) {
-                    ArchipelagoStatic.ArchLogger.Log("SongSelectAdditions", "Force deselecting Toggle Songs Button");
+                    ArchipelagoStatic.ArchLogger.LogDebug("SongSelectAdditions", "Force deselecting Toggle Songs Button");
                     EventSystem.current.SetSelectedGameObject(null);
                 }
                 return;

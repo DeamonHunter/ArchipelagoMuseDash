@@ -37,7 +37,7 @@ namespace ArchipelagoMuseDash.Patches {
             if (currentItem == null)
                 return;
 
-            ArchipelagoStatic.ArchLogger.Log("PnlUnlockStage", $"Demo: {GlobalDataBase.dbMusicTag.m_AllMusicInfo[currentItem.UnlockSongUid].demo}");
+            ArchipelagoStatic.ArchLogger.LogDebug("PnlUnlockStage", $"Demo: {GlobalDataBase.dbMusicTag.m_AllMusicInfo[currentItem.UnlockSongUid].demo}");
 
             if (currentItem.TitleText != null)
                 GetTitleText(__instance.gameObject).text = currentItem.TitleText;
@@ -232,7 +232,7 @@ namespace ArchipelagoMuseDash.Patches {
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return true;
 
-            ArchipelagoStatic.ArchLogger.Log("PnlStage", "OnBtnPlayClicked");
+            ArchipelagoStatic.ArchLogger.LogDebug("PnlStage", "OnBtnPlayClicked");
             MusicInfo musicInfo = GlobalDataBase.s_DbMusicTag.CurMusicInfo();
             if (musicInfo.uid == "?" || ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(musicInfo.uid)) {
                 //This bypasses level checks in order to allow players to play everything

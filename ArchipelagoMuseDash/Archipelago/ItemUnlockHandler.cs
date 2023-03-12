@@ -17,6 +17,8 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         readonly Queue<IMuseDashItem> _enqueuedItems = new Queue<IMuseDashItem>();
 
+        readonly HashSet<NetworkItem> _knownItems = new HashSet<NetworkItem>();
+
         IMuseDashItem _unlockingItem;
         bool _hasUnlockedItem;
 
@@ -29,9 +31,12 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         public void AddItem(IMuseDashItem item) {
             lock (_enqueuedItems) {
-                if (_enqueuedItems.Any(x => IsNetworkItemSame(x.Item, item.Item)))
+                ArchipelagoStatic.ArchLogger.LogDebug("ItemUnlockHandler", $"Attempting to add item: {item.Item}");
+                if (_knownItems.Contains(item.Item))
                     return;
+                ArchipelagoStatic.ArchLogger.LogDebug("ItemUnlockHandler", "No duplicate found.");
 
+                _knownItems.Add(item.Item);
                 _enqueuedItems.Enqueue(item);
             }
         }
@@ -67,7 +72,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             }
         }
 
-        private bool IsNetworkItemSame(NetworkItem item1, NetworkItem item2) {
+        bool IsNetworkItemSame(NetworkItem item1, NetworkItem item2) {
             return item1.Item == item2.Item && item1.Location == item2.Location;
         }
 
