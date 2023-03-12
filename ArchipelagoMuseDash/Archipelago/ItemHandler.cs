@@ -19,6 +19,7 @@ namespace ArchipelagoMuseDash.Archipelago {
         public MusicInfo GoalSong { get; private set; }
         public int NumberOfMusicSheetsToWin { get; private set; }
         public int CurrentNumberOfMusicSheets { get; private set; }
+        private int _prospectiveSheetCount;
 
         public HashSet<string> SongsInLogic = new HashSet<string>();
         public HashSet<string> UnlockedSongUids = new HashSet<string>();
@@ -147,11 +148,9 @@ namespace ArchipelagoMuseDash.Archipelago {
             }
 
             if (name == MusicSheetItemName) {
-                CurrentNumberOfMusicSheets++;
-
-                if (NumberOfMusicSheetsToWin == CurrentNumberOfMusicSheets)
+                if (CurrentNumberOfMusicSheets + 1 >= NumberOfMusicSheetsToWin)
                     return new SongItem(GoalSong);
-                return new MusicSheetItem(NumberOfMusicSheetsToWin - CurrentNumberOfMusicSheets) { Item = item };
+                return new MusicSheetItem() { Item = item };
             }
 
             if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(name, out var singularInfo))
@@ -164,6 +163,10 @@ namespace ArchipelagoMuseDash.Archipelago {
                 ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Unknown Item was given: {name}");
 
             return null;
+        }
+
+        public void AddMusicSheet() {
+            CurrentNumberOfMusicSheets++;
         }
 
         public MusicInfo GetRandomUnfinishedSong() {
