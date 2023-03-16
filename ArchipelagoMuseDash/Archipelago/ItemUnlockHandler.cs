@@ -93,6 +93,14 @@ namespace ArchipelagoMuseDash.Archipelago {
             if (_unlockingItem != null)
                 throw new Exception("Tried to unlock an item while one was already unlocking.");
 
+            if (item is MusicSheetItem) {
+                var handler = ArchipelagoStatic.SessionHandler.ItemHandler;
+
+                if (handler.CurrentNumberOfMusicSheets + 1 == handler.NumberOfMusicSheetsToWin)
+                    item = new SongItem(handler.GoalSong);
+            }
+            
+            
             _unlockingItem = item;
             _hasUnlockedItem = false;
 
