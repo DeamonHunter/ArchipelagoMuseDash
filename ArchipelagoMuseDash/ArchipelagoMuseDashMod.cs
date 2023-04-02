@@ -6,7 +6,7 @@ using ArchipelagoMuseDash.Logging;
 using MelonLoader;
 using UnityEngine;
 
-[assembly: MelonInfo(typeof(ArchipelagoMuseDashMod), "Archipelago Muse Dash", "0.7.2", "DeamonHunter")]
+[assembly: MelonInfo(typeof(ArchipelagoMuseDashMod), "Archipelago Muse Dash", "0.7.3", "DeamonHunter")]
 [assembly: MelonGame("PeroPeroGames", "MuseDash")]
 
 namespace ArchipelagoMuseDash {
@@ -23,7 +23,7 @@ namespace ArchipelagoMuseDash {
             ArchipelagoStatic.SessionHandler = new SessionHandler();
 
             ArchipelagoStatic.ArchipelagoIcons = new Texture2D[] {
-                AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APIcon.png"),
+                AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APProgression.png"),
                 AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APUseful.png"),
                 AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APTrash.png"),
                 AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APTrap.png"),

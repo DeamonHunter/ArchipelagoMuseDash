@@ -203,5 +203,8 @@
     <EmbeddedResource Include="Assets\APTrash.png" />
     <EmbeddedResource Include="Assets\APUseful.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\APProgression.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
