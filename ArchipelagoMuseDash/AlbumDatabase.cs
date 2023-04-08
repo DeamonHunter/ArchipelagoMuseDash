@@ -1,78 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
-using Assets.Scripts.Database;
-using Assets.Scripts.PeroTools.Managers;
+﻿using Il2CppAssets.Scripts.Database;
+using Il2CppAssets.Scripts.PeroTools.Managers;
 
-namespace ArchipelagoMuseDash {
-    /// <summary>
-    /// Contains information about the game's songs, in a way that is easier to access for us.
-    /// </summary>
-    public class AlbumDatabase {
-        Dictionary<string, MusicInfo> _songsByItemName = new Dictionary<string, MusicInfo>();
-        Dictionary<string, Il2CppSystem.Collections.Generic.List<MusicInfo>> _songsByAlbum = new Dictionary<string, Il2CppSystem.Collections.Generic.List<MusicInfo>>();
+namespace ArchipelagoMuseDash;
 
-        public const int CHINESE_LOC_INDEX = 0;
-        public const int ENGLISH_LOC_INDEX = 1;
-        public const string RANDOM_PANEL_UID = "?";
+/// <summary>
+/// Contains information about the game's songs, in a way that is easier to access for us.
+/// </summary>
+public class AlbumDatabase {
+    private Dictionary<string, MusicInfo> _songsByItemName = new();
+    private Dictionary<string, List<MusicInfo>> _songsByAlbum = new();
 
-        public void Setup() {
-            _songsByAlbum.Clear();
-            _songsByItemName.Clear();
+    public const int CHINESE_LOC_INDEX = 0;
+    public const int ENGLISH_LOC_INDEX = 1;
+    public const string RANDOM_PANEL_UID = "?";
 
-            var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
-            GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
+    public void Setup() {
+        _songsByAlbum.Clear();
+        _songsByItemName.Clear();
 
-            _songsByAlbum = new Dictionary<string, Il2CppSystem.Collections.Generic.List<MusicInfo>>();
-            _songsByItemName = new Dictionary<string, MusicInfo>();
+        var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
+        GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
 
-            var configManager = ConfigManager.instance;
-            if (configManager == null)
-                throw new Exception("Config Manage was null when trying to load songs.");
+        _songsByAlbum = new Dictionary<string, List<MusicInfo>>();
+        _songsByItemName = new Dictionary<string, MusicInfo>();
 
-            var albumConfig = configManager.GetConfigObject<DBConfigAlbums>(-1);
-            var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>(-1).GetLocal(ENGLISH_LOC_INDEX);
+        var configManager = ConfigManager.instance;
+        if (configManager == null)
+            throw new Exception("Config Manage was null when trying to load songs.");
 
-            foreach (var musicInfo in list) {
-                if (musicInfo.uid == RANDOM_PANEL_UID)
-                    continue;
+        var albumConfig = configManager.GetConfigObject<DBConfigAlbums>();
+        var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>().GetLocal(ENGLISH_LOC_INDEX);
 
-                var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
+        foreach (var musicInfo in list) {
+            if (musicInfo.uid == RANDOM_PANEL_UID)
+                continue;
 
-                var songName = GetItemNameFromMusicInfo(musicInfo);
-                _songsByItemName.Add(songName, musicInfo);
-
-                if (!_songsByAlbum.TryGetValue(albumLocal, out var albumList)) {
-                    albumList = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
-                    _songsByAlbum.Add(albumLocal, albumList);
-                }
-                albumList.Add(musicInfo);
-            }
-        }
-
-        public bool TryGetMusicInfo(string itemName, out MusicInfo info) => _songsByItemName.TryGetValue(itemName, out info);
-        public MusicInfo GetMusicInfo(string itemName) => _songsByItemName[itemName];
-
-        public bool TryGetAlbum(string itemName, out Il2CppSystem.Collections.Generic.List<MusicInfo> infos) => _songsByAlbum.TryGetValue(itemName, out infos);
-
-        public Il2CppSystem.Collections.Generic.List<MusicInfo> GetAlbum(string itemName) => _songsByAlbum[itemName];
-
-        public string GetItemNameFromMusicInfo(MusicInfo musicInfo) {
-            var localisedSongName = ArchipelagoStatic.SongNameChanger.GetSongName(musicInfo);
-            return $"{localisedSongName}";
-        }
-
-        public string GetLocalisedSongNameForMusicInfo(MusicInfo musicInfo) {
-            var configManager = ConfigManager.instance;
-            var songLocal = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal().GetLocalAlbumInfoByIndex(musicInfo.listIndex);
-            return songLocal.name;
-        }
-
-        public string GetLocalisedAlbumNameForMusicInfo(MusicInfo musicInfo) {
-            var configManager = ConfigManager.instance;
-            var albumConfig = configManager.GetConfigObject<DBConfigAlbums>(-1);
-            var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>(-1).GetLocal();
             var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
-            return albumLocal;
+
+            var songName = GetItemNameFromMusicInfo(musicInfo);
+            _songsByItemName.Add(songName, musicInfo);
+
+            if (!_songsByAlbum.TryGetValue(albumLocal, out var albumList)) {
+                albumList = new List<MusicInfo>();
+                _songsByAlbum.Add(albumLocal, albumList);
+            }
+            albumList.Add(musicInfo);
         }
+    }
+
+    public bool TryGetMusicInfo(string itemName, out MusicInfo info) => _songsByItemName.TryGetValue(itemName, out info);
+    public MusicInfo GetMusicInfo(string itemName) => _songsByItemName[itemName];
+
+    public bool TryGetAlbum(string itemName, out List<MusicInfo> infos) => _songsByAlbum.TryGetValue(itemName, out infos);
+
+    public List<MusicInfo> GetAlbum(string itemName) => _songsByAlbum[itemName];
+
+    public string GetItemNameFromMusicInfo(MusicInfo musicInfo) {
+        var localisedSongName = ArchipelagoStatic.SongNameChanger.GetSongName(musicInfo);
+        return $"{localisedSongName}";
+    }
+
+    public string GetLocalisedSongNameForMusicInfo(MusicInfo musicInfo) {
+        var configManager = ConfigManager.instance;
+        var songLocal = configManager.GetConfigObject<DBConfigALBUM>(musicInfo.albumJsonIndex).GetLocal().GetLocalAlbumInfoByIndex(musicInfo.listIndex);
+        return songLocal.name;
+    }
+
+    public string GetLocalisedAlbumNameForMusicInfo(MusicInfo musicInfo) {
+        var configManager = ConfigManager.instance;
+        var albumConfig = configManager.GetConfigObject<DBConfigAlbums>();
+        var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>().GetLocal();
+        var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
+        return albumLocal;
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Archipelago.MultiClient.Net;
+﻿using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
 
 namespace ArchipelagoMuseDash.Archipelago {
@@ -11,14 +9,15 @@ namespace ArchipelagoMuseDash.Archipelago {
         public ItemHandler ItemHandler;
         public HintHandler HintHandler;
         public DeathLinkHandler DeathLinkHandler;
+        public TrapHandler TrapHandler;
 
         public SongSelectAdditions SongSelectAdditions;
 
         public bool IsLoggedIn => _currentSession != null;
 
-        ArchipelagoSession _currentSession;
-        int _slot;
-        Dictionary<string, object> _slotData;
+        private ArchipelagoSession _currentSession;
+        private int _slot;
+        private Dictionary<string, object> _slotData;
 
         /// <summary>
         /// Attempts to create a new <see cref="ArchipelagoSession"/> using the data provided.<br/>
@@ -64,6 +63,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 ItemHandler = new ItemHandler(_currentSession, _slot);
                 HintHandler = new HintHandler(_currentSession, _slot);
                 DeathLinkHandler = new DeathLinkHandler(_currentSession, _slot, _slotData);
+                TrapHandler = new TrapHandler(_currentSession.DataStorage);
                 SongSelectAdditions = new SongSelectAdditions();
 
                 _currentSession.MessageLog.OnMessageReceived += ArchipelagoStatic.ArchLogger.LogMessage;

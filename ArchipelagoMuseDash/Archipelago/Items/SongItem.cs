@@ -1,6 +1,6 @@
-﻿using Archipelago.MultiClient.Net.Enums;
-using Archipelago.MultiClient.Net.Models;
-using Assets.Scripts.Database;
+﻿using Archipelago.MultiClient.Net.Models;
+using Il2Cpp;
+using Il2CppAssets.Scripts.Database;
 
 namespace ArchipelagoMuseDash.Archipelago.Items {
     public class SongItem : IMuseDashItem {
@@ -16,8 +16,8 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
         public string PreUnlockBannerText => "A new song?";
         public string PostUnlockBannerText => GetUnlockedBannerText();
 
-        readonly MusicInfo _song;
-        bool _isDuplicate;
+        private readonly MusicInfo _song;
+        private bool _isDuplicate;
 
         public SongItem(MusicInfo song) {
             _song = song;
@@ -31,10 +31,12 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
             }
 
             handler.UnlockSong(_song);
-            if (!immediate) {
-                MusicTagManager.instance.RefreshDBDisplayMusics();
-                ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
-            }
+            if (immediate)
+                return;
+
+            MusicTagManager.instance.RefreshDBDisplayMusics();
+            if (ArchipelagoStatic.SongSelectPanel)
+                ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
         }
 
         private string GetUnlockedBannerText() {

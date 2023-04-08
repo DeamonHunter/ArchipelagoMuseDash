@@ -1,210 +1,106 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6AA329FC-0CBE-4A61-B134-3BF77DDC61DC}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ArchipelagoMuseDash</RootNamespace>
-    <AssemblyName>ArchipelagoMuseDash</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\0Harmony.dll</HintPath>
-    </Reference>
-    <Reference Include="Archipelago.MultiClient.Net, Version=4.2.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Archipelago.MultiClient.Net.4.2.4\lib\net40\Archipelago.MultiClient.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass, Version=2.0.0.668, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
-    <Reference Include="DOTween, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\DOTween.dll</HintPath>
-    </Reference>
-    <Reference Include="DOTweenPro, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\DOTweenPro.dll</HintPath>
-    </Reference>
-    <Reference Include="Il2Cppmscorlib, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
-    </Reference>
-    <Reference Include="MelonLoader">
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\MelonLoader.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Archipelago.MultiClient.Net.4.2.4\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PeroTools2, Version=3.5.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\PeroTools2.dll</HintPath>
-    </Reference>
-    <Reference Include="Sirenix.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\Sirenix.Serialization.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Core" />
-    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Text.Encoding.CodePages, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Encoding.CodePages.5.0.0\lib\net461\System.Text.Encoding.CodePages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnhollowerBaseLib, Version=0.4.18.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Dependencies\Il2CppAssemblyGenerator\Il2CppAssemblyUnhollower\UnhollowerBaseLib.dll</HintPath>
-    </Reference>
-    <Reference Include="UnhollowerRuntimeLib">
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Dependencies\Il2CppAssemblyGenerator\Il2CppAssemblyUnhollower\UnhollowerRuntimeLib.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.AudioModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.AudioModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.IMGUIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\UnityEngine.UIModule.dll</HintPath>
-    </Reference>
-    <Reference Include="websocket-sharp, Version=1.0.2.34775, Culture=neutral, PublicKeyToken=5660b08a1845a91e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Archipelago.MultiClient.Net.4.2.4\lib\net40\websocket-sharp.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AlbumDatabase.cs" />
-    <Compile Include="Archipelago\DeathLinkHandler.cs" />
-    <Compile Include="Archipelago\GradeOption.cs" />
-    <Compile Include="Archipelago\HintHandler.cs" />
-    <Compile Include="Archipelago\ItemHandler.cs" />
-    <Compile Include="Archipelago\Items\MusicSheetItem.cs" />
-    <Compile Include="Archipelago\Items\VictoryItem.cs" />
-    <Compile Include="Archipelago\ItemUnlockHandler.cs" />
-    <Compile Include="Archipelago\Items\ExternalItem.cs" />
-    <Compile Include="Archipelago\Items\IMuseDashItem.cs" />
-    <Compile Include="Archipelago\Items\AlbumItem.cs" />
-    <Compile Include="Archipelago\Items\SongItem.cs" />
-    <Compile Include="Archipelago\SessionHandler.cs" />
-    <Compile Include="ArchipelagoLogin.cs" />
-    <Compile Include="ArchipelagoMuseDashMod.cs" />
-    <Compile Include="ArchipelagoStatic.cs" />
-    <Compile Include="Archipelago\ShownSongMode.cs" />
-    <Compile Include="Archipelago\SongSelectAdditions.cs" />
-    <Compile Include="Helpers\ArchipelagoHelpers.cs" />
-    <Compile Include="Helpers\AssetHelpers.cs" />
-    <Compile Include="Helpers\SongNameChanger.cs" />
-    <Compile Include="Logging\ArchLogger.cs" />
-    <Compile Include="Patches\ArchipelagoPatches.cs" />
-    <Compile Include="Patches\HintPatches.cs" />
-    <Compile Include="Patches\LoadingScenePatches.cs" />
-    <Compile Include="Patches\SaveAPIPatch.cs" />
-    <Compile Include="Patches\StatusPatches.cs" />
-    <Compile Include="Patches\WebAPIPatch.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\SongNameReplacements.json" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\APIcon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\LoginBackground.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\ButtonNo.png" />
-    <EmbeddedResource Include="Assets\ButtonYes.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\ButtonNoHighlighted.png" />
-    <EmbeddedResource Include="Assets\ButtonYesHighlighted.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\APTrap.png" />
-    <EmbeddedResource Include="Assets\APTrash.png" />
-    <EmbeddedResource Include="Assets\APUseful.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\APProgression.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <LangVersion>10</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="0Harmony">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\net6\0Harmony.dll</HintPath>
+      </Reference>
+      <Reference Include="Assembly-CSharp">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\Assembly-CSharp.dll</HintPath>
+      </Reference>
+      <Reference Include="Assembly-CSharp-firstpass">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\Assembly-CSharp-firstpass.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppDOTween">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\Il2CppDOTween.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppDOTweenPro">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\Il2CppDOTweenPro.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppInterop.Common">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\net6\Il2CppInterop.Common.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppInterop.Generator">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\net6\Il2CppInterop.Generator.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppInterop.Runtime">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\net6\Il2CppInterop.Runtime.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2Cppmscorlib">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\Il2Cppmscorlib.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppPeroTools2">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\Il2CppPeroTools2.dll</HintPath>
+      </Reference>
+      <Reference Include="Il2CppSirenix.Serialization">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\Il2CppSirenix.Serialization.dll</HintPath>
+      </Reference>
+      <Reference Include="MelonLoader">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\net6\MelonLoader.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.AudioModule">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\UnityEngine.AudioModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.CoreModule">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\UnityEngine.CoreModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.ImageConversionModule">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\UnityEngine.ImageConversionModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.IMGUIModule">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\UnityEngine.IMGUIModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.InputLegacyModule">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\UnityEngine.InputLegacyModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.TextRenderingModule">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\UnityEngine.TextRenderingModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UI">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\UnityEngine.UI.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.UIModule">
+        <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\UnityEngine.UIModule.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Assets\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Assets\APIcon.png" />
+      <EmbeddedResource Include="Assets\APIcon.png" />
+      <None Remove="Assets\APProgression.png" />
+      <EmbeddedResource Include="Assets\APProgression.png" />
+      <None Remove="Assets\APTrap.png" />
+      <EmbeddedResource Include="Assets\APTrap.png" />
+      <None Remove="Assets\APTrash.png" />
+      <EmbeddedResource Include="Assets\APTrash.png" />
+      <None Remove="Assets\APUseful.png" />
+      <EmbeddedResource Include="Assets\APUseful.png" />
+      <None Remove="Assets\ButtonNo.png" />
+      <EmbeddedResource Include="Assets\ButtonNo.png" />
+      <None Remove="Assets\ButtonNoHighlighted.png" />
+      <EmbeddedResource Include="Assets\ButtonNoHighlighted.png" />
+      <None Remove="Assets\ButtonYes.png" />
+      <EmbeddedResource Include="Assets\ButtonYes.png" />
+      <None Remove="Assets\ButtonYesHighlighted.png" />
+      <EmbeddedResource Include="Assets\ButtonYesHighlighted.png" />
+      <None Remove="Assets\LoginBackground.png" />
+      <EmbeddedResource Include="Assets\LoginBackground.png" />
+      <None Remove="Assets\SongNameReplacements.json" />
+      <EmbeddedResource Include="Assets\SongNameReplacements.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Archipelago.MultiClient.Net" Version="4.2.5-betav2" />
+    </ItemGroup>
+
 </Project>

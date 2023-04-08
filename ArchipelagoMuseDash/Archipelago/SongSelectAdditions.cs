@@ -1,6 +1,6 @@
-﻿using System;
-using ArchipelagoMuseDash.Helpers;
-using UnhollowerRuntimeLib;
+﻿using ArchipelagoMuseDash.Helpers;
+using Il2Cpp;
+using Il2CppInterop.Runtime;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -40,7 +40,8 @@ namespace ArchipelagoMuseDash.Archipelago {
                 return;
             }
 
-            if (ArchipelagoStatic.HideSongDialogue?.m_YesButton == null || ArchipelagoStatic.HideSongDialogue?.m_NoButton == null || ArchipelagoStatic.SongSelectPanel == null)
+            if (!ArchipelagoStatic.HideSongDialogue || !ArchipelagoStatic.HideSongDialogue.m_YesButton
+                || !ArchipelagoStatic.HideSongDialogue.m_NoButton || !ArchipelagoStatic.SongSelectPanel)
                 return;
 
             var likeButton = ArchipelagoStatic.SongSelectPanel.gameObject.GetComponentInChildren<StageLikeToggle>(true);
@@ -67,8 +68,6 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         public void AddHintBox(StageLikeToggle likeButton) {
             //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
-
-            var pnlStage = ArchipelagoStatic.SongSelectPanel;
 
             //The HideSongDialogue has the button we want, and it should be available at this time.
             var noButton = ArchipelagoStatic.HideSongDialogue.m_NoButton;
@@ -109,8 +108,6 @@ namespace ArchipelagoMuseDash.Archipelago {
         public void AddSongTitleBox(StageLikeToggle likeButton) {
             //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
 
-            var pnlStage = ArchipelagoStatic.SongSelectPanel;
-
             //The HideSongDialogue has the button we want, and it should be available at this time.
             var noButton = ArchipelagoStatic.HideSongDialogue.m_NoButton;
             var noButtonImage = noButton.GetComponent<Image>();
@@ -148,8 +145,6 @@ namespace ArchipelagoMuseDash.Archipelago {
         }
 
         private GameObject CreateButton(StageLikeToggle likeButton, string buttonName, string buttonText, Vector2 offset, Vector2 pivot, Action onClick) {
-            var pnlStage = ArchipelagoStatic.SongSelectPanel;
-
             //The HideSongDialogue has the button we want, and it should be available at this time.
             var yesButton = ArchipelagoStatic.HideSongDialogue.m_YesButton;
             var yesButtonImage = yesButton.GetComponent<Image>();

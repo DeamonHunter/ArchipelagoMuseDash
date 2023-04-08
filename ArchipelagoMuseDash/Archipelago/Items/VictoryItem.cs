@@ -1,11 +1,10 @@
-﻿using Archipelago.MultiClient.Net.Enums;
-using Archipelago.MultiClient.Net.Models;
+﻿using Archipelago.MultiClient.Net.Models;
 
 namespace ArchipelagoMuseDash.Archipelago.Items {
     public class VictoryItem : IMuseDashItem {
         public NetworkItem Item { get; set; }
 
-        public string UnlockSongUid => _lastPlayedSongUID;
+        public string UnlockSongUid { get; }
         public bool UseArchipelagoLogo => true;
 
         public string TitleText => "You've Won!!";
@@ -15,12 +14,11 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
         public string PreUnlockBannerText => "It looks like...";
         public string PostUnlockBannerText => null;
 
-        string _playerName;
-        string _lastPlayedSongUID;
+        private readonly string _playerName;
 
-        public VictoryItem(string localPlayerName, string lastPlayedSongUID) {
+        public VictoryItem(string localPlayerName, string lastPlayedSongUid) {
             _playerName = localPlayerName;
-            _lastPlayedSongUID = lastPlayedSongUID;
+            UnlockSongUid = lastPlayedSongUid;
         }
 
         public void UnlockItem(ItemHandler handler, bool immediate) { }

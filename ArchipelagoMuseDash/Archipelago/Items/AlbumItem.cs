@@ -1,7 +1,6 @@
-﻿using System;
-using Archipelago.MultiClient.Net.Models;
-using Assets.Scripts.Database;
-using Il2CppSystem.Collections.Generic;
+﻿using Archipelago.MultiClient.Net.Models;
+using Il2Cpp;
+using Il2CppAssets.Scripts.Database;
 
 namespace ArchipelagoMuseDash.Archipelago.Items {
     public class AlbumItem : IMuseDashItem {
@@ -17,9 +16,9 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
         public string PreUnlockBannerText => "A new song?";
         public string PostUnlockBannerText => null;
 
-        readonly string _albumName;
-        readonly List<MusicInfo> _songList;
-        readonly MusicInfo _firstSong;
+        private readonly string _albumName;
+        private readonly List<MusicInfo> _songList;
+        private readonly MusicInfo _firstSong;
         //bool _isDuplicate; //Todo: Support finding duplicates
 
         public AlbumItem(string albumName, List<MusicInfo> songList) {
@@ -50,7 +49,8 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
             }
 
             MusicTagManager.instance.RefreshDBDisplayMusics();
-            ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
+            if (ArchipelagoStatic.SongSelectPanel)
+                ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
         }
     }
 }

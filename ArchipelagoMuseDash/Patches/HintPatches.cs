@@ -1,35 +1,35 @@
 ﻿using ArchipelagoMuseDash.Archipelago;
-using Assets.Scripts.Database;
-using Assets.Scripts.PeroTools.Managers;
-using Assets.Scripts.UI.Tips;
 using HarmonyLib;
+using Il2Cpp;
+using Il2CppAssets.Scripts.Database;
+using Il2CppAssets.Scripts.PeroTools.Managers;
+using Il2CppAssets.Scripts.UI.Tips;
 
-namespace ArchipelagoMuseDash.Patches {
-    [HarmonyPatch(typeof(SongHideAskMsg), "AwakeInit")]
-    sealed class SongHideAskMsgAwakeInitPatch {
-        static void Postfix(SongHideAskMsg __instance) {
-            ArchipelagoStatic.ArchLogger.LogDebug("SongHideAskMsg", "AwakeInit");
-            ArchipelagoStatic.HideSongDialogue = __instance;
-        }
+namespace ArchipelagoMuseDash.Patches;
+
+[HarmonyPatch(typeof(SongHideAskMsg), "AwakeInit")]
+sealed class SongHideAskMsgAwakeInitPatch {
+    private static void Postfix(SongHideAskMsg __instance) {
+        ArchipelagoStatic.ArchLogger.LogDebug("SongHideAskMsg", "AwakeInit");
+        ArchipelagoStatic.HideSongDialogue = __instance;
     }
+}
+[HarmonyPatch(typeof(AbstractMessageBox), "OnYesClicked")]
+sealed class AbstractMessageBoxOnYesClickedPatch {
+    private static bool Prefix(AbstractMessageBox __instance) {
+        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+            return true;
 
-    [HarmonyPatch(typeof(AbstractMessageBox), "OnYesClicked")]
-    sealed class AbstractMessageBoxOnYesClickedPatch {
-        static bool Prefix(AbstractMessageBox __instance) {
-            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
-                return true;
+        ArchipelagoStatic.ArchLogger.LogDebug("AbstractMessageBox", "OnYesClicked");
+        if (!__instance.m_Title || __instance.m_Title.text != HintHandler.ARCHIPELAGO_DIALOGUE_TITLE)
+            return true;
 
-            ArchipelagoStatic.ArchLogger.LogDebug("AbstractMessageBox", "OnYesClicked");
-            if (__instance.m_Title?.text != HintHandler.ArchipelagoDialogueTitle)
-                return true;
+        if (__instance.m_PlayClickAudio)
+            AudioManager.instance.PlayOneShot(PnlTipsManager.s_YesClip, DataHelper.sfxVolume);
 
-            if (__instance.m_PlayClickAudio)
-                AudioManager.instance.PlayOneShot(PnlTipsManager.s_YesClip, DataHelper.sfxVolume);
+        ArchipelagoStatic.SessionHandler.HintHandler.HintSong(GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo);
 
-            ArchipelagoStatic.SessionHandler.HintHandler.HintSong(GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo);
-
-            __instance.Close();
-            return false;
-        }
+        __instance.Close();
+        return false;
     }
 }
