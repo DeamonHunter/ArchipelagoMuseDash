@@ -78,5 +78,6 @@ sealed class StageBattleComponentDeadPatch {
 
         ArchipelagoStatic.ArchLogger.LogDebug("StageBattleComponent", "Dead");
         ArchipelagoStatic.SessionHandler.DeathLinkHandler.PlayerDied();
+        ArchipelagoStatic.SessionHandler.TrapHandler.SetTrapFinished();
     }
 }

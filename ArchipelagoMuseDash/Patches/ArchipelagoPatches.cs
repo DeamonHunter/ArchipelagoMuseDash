@@ -140,6 +140,8 @@ sealed class PnlVictoryPatch {
             return;
         }
 
+        ArchipelagoStatic.SessionHandler.TrapHandler.SetTrapFinished();
+
         // Cover Neko's death
         if (GlobalDataBase.dbBattleStage.IsSelectRole(NEKO_CHARACTER_ID) && !GlobalDataBase.dbBattleStage.IsSelectElfin(SILENCER_ELFIN_ID)) {
             if (GlobalDataBase.dbSkill.nekoSkillInvoke) {

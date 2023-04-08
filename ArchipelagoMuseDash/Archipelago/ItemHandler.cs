@@ -146,6 +146,9 @@ public class ItemHandler {
             return new ExternalItem(name, playerName) { Item = item };
         }
 
+        if (ArchipelagoStatic.SessionHandler.TrapHandler.EnqueueIfTrap(item))
+            return null;
+
         if (name == music_sheet_item_name)
             return new MusicSheetItem() { Item = item };
 
