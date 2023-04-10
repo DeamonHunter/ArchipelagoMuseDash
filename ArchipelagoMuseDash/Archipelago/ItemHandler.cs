@@ -263,8 +263,11 @@ public class ItemHandler {
 
             ArchipelagoStatic.ArchLogger.Log("CheckLocations", "Received Items Packet.");
             CheckRemoteLocation(locationName, true);
-            foreach (var item in items.Locations)
-                Unlocker.AddItem(GetItemFromNetworkItem(item, item.Player != _currentPlayerSlot));
+            foreach (var networkItem in items.Locations) {
+                var item = GetItemFromNetworkItem(networkItem, networkItem.Player != _currentPlayerSlot);
+                if (item != null)
+                    Unlocker.AddItem(item);
+            }
 
             Unlocker.PrioritiseItems(items.Locations);
         }
