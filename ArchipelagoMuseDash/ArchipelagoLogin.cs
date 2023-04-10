@@ -40,7 +40,7 @@ public class ArchipelagoLogin {
 #if DEBUG
         _ipAddress = "localhost:38281";
 #else
-            _ipAddress = "archipelago.gg:38281";
+        _ipAddress = "archipelago.gg:38281";
 #endif
         _lastLoginPath = Path.Combine(Application.absoluteURL, "UserData/ArchSaves/LastLogin.txt");
 

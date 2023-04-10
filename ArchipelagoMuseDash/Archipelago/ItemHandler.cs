@@ -167,14 +167,18 @@ public class ItemHandler {
     public void AddMusicSheet() {
         CurrentNumberOfMusicSheets++;
 
-        if (CurrentNumberOfMusicSheets < NumberOfMusicSheetsToWin || UnlockedSongUids.Contains(GoalSong.uid))
+        if (CurrentNumberOfMusicSheets < NumberOfMusicSheetsToWin || UnlockedSongUids.Contains(GoalSong.uid)) {
+            MusicTagManager.instance.RefreshDBDisplayMusics();
+            if (ArchipelagoStatic.SongSelectPanel)
+                ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
             return;
+        }
 
         ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", "Force unlocking the goal song as we reached the goal.");
 
         UnlockSong(GoalSong);
-        MusicTagManager.instance.RefreshDBDisplayMusics();
 
+        MusicTagManager.instance.RefreshDBDisplayMusics();
         if (ArchipelagoStatic.SongSelectPanel)
             ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
     }
