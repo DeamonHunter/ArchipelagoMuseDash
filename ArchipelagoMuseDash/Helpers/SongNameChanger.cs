@@ -20,7 +20,7 @@ public class SongNameChanger {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
         ' ', '-', '+', '.', '_',
         //More Questionable ASCII Todo: Check to see what should be allowed
-        '\'', '!', '~', ':', '&', '*', '#', '/', ',', '?', ';'
+        '\'', '!', ':', '&', '*', '#', '/', ',', '?', ';'
     };
 
     private readonly Dictionary<char, char> _characterReplacements = new() {
@@ -30,6 +30,7 @@ public class SongNameChanger {
         { ']', ' ' },
         { '(', ' ' },
         { ')', ' ' },
+        { '~', char.MinValue },
 
         //Full Width Chars
         { '：', ':' },
