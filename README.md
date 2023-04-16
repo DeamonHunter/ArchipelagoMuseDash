@@ -18,7 +18,7 @@ However, the **Just as Planned DLC** is recommended as the number of possible so
 
 # Installing this Mod
 
-Check the [latest release](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/tag/v0.9.2) for instructions on installing this mod.
+Check the [latest release](https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest) for instructions on installing this mod.
 
 # Building this Mod
 
