@@ -61,9 +61,9 @@ public static class ArchipelagoHelpers {
 
     public static bool IsItemDuplicate(NetworkItem itemA, NetworkItem itemB) {
         //If either item is given by the server (cheat or starting item) then never say its a duplicate
-        if (itemA is { Player: 0, Location: -1 })
+        if (itemA is { Player: 0, Location: < 0 })
             return false;
-        if (itemB is { Player: 0, Location: -1 })
+        if (itemB is { Player: 0, Location: < 0 })
             return false;
 
         return itemA.Item == itemB.Item && itemA.Location == itemB.Location;

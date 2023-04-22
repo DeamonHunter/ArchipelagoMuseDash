@@ -51,7 +51,7 @@ public class TrapHandler {
         }
 
         _activatedTrap = _knownTraps[_lastHandledTrap];
-        if (_activatedTrap.NetworkItem is { Player: 0, Location: -1 })
+        if (_activatedTrap.NetworkItem is { Player: 0, Location: < 0 })
             _knownTraps.RemoveAt(_lastHandledTrap);
         else
             _lastHandledTrap++;
