@@ -1,5 +1,6 @@
 ﻿using Archipelago.MultiClient.Net.Models;
 using ArchipelagoMuseDash.Archipelago.Items;
+using ArchipelagoMuseDash.Helpers;
 using ArchipelagoMuseDash.Patches;
 using Il2Cpp;
 using Il2CppAssets.Scripts.PeroTools.Nice.Datas;
@@ -39,37 +40,27 @@ public class ItemUnlockHandler {
 
     public void PrioritiseItems(NetworkItem[] items) {
         lock (_enqueuedItems) {
-            var dequeuedItems = new List<IMuseDashItem>();
-            var matchingItems = new List<IMuseDashItem>();
+            var itemsWithoutDuplicates = new List<IMuseDashItem>();
+            var itemsWithDuplicates = new List<IMuseDashItem>();
 
             while (_enqueuedItems.Count > 0) {
                 var enqueuedItem = _enqueuedItems.Dequeue();
-
-                bool includedItem = false;
-                foreach (var item in items) {
-                    if (!IsNetworkItemSame(enqueuedItem.Item, item))
-                        continue;
-
-                    includedItem = true;
-                    break;
-                }
-
-                if (includedItem)
-                    matchingItems.Add(enqueuedItem);
+                var hasDuplicate = items.Any(item => ArchipelagoHelpers.IsItemDuplicate(item, enqueuedItem.Item));
+                if (hasDuplicate)
+                    itemsWithDuplicates.Add(enqueuedItem);
                 else
-                    dequeuedItems.Add(enqueuedItem);
+                    itemsWithoutDuplicates.Add(enqueuedItem);
             }
 
-            foreach (var item in matchingItems)
+
+            //This reorders duplicate items such that they show first.
+            //Duplicate items happens in one (normal) case, which is items a player has gotten
+            foreach (var item in itemsWithDuplicates)
                 _enqueuedItems.Enqueue(item);
 
-            foreach (var item in dequeuedItems)
+            foreach (var item in itemsWithoutDuplicates)
                 _enqueuedItems.Enqueue(item);
         }
-    }
-
-    private bool IsNetworkItemSame(NetworkItem item1, NetworkItem item2) {
-        return item1.Item == item2.Item && item1.Location == item2.Location;
     }
 
     public void UnlockAllItems() {

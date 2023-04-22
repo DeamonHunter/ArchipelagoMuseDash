@@ -1,6 +1,7 @@
 ﻿using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Models;
 using ArchipelagoMuseDash.Archipelago.Traps;
+using ArchipelagoMuseDash.Helpers;
 using Il2CppAssets.Scripts.UI.Controls;
 using Il2CppGameLogic;
 
@@ -21,43 +22,26 @@ public class TrapHandler {
     }
 
     public bool EnqueueIfTrap(NetworkItem item) {
-        foreach (var trap in _knownTraps) {
-            if (trap.NetworkItem.Item == item.Item && trap.NetworkItem.Location == item.Location)
-                return true; //Already known
-        }
+        if (_knownTraps.Any(trap => ArchipelagoHelpers.IsItemDuplicate(trap.NetworkItem, item)))
+            return true;
 
-        switch (item.Item) {
-            case 2900001: {
-                _knownTraps.Add(new BadAppleTrap() { NetworkItem = item });
-                return true;
-            }
-            case 2900002: {
-                _knownTraps.Add(new PixelateTrap() { NetworkItem = item });
-                return true;
-            }
-            case 2900003: {
-                _knownTraps.Add(new RandomWaveTrap() { NetworkItem = item });
-                return true;
-            }
-            case 2900004: {
-                _knownTraps.Add(new ShadowEdgeTrap() { NetworkItem = item });
-                return true;
-            }
-            case 2900005: {
-                _knownTraps.Add(new ChromaticAberrationTrap() { NetworkItem = item });
-                return true;
-            }
-            case 2900006: {
-                _knownTraps.Add(new BGFreezeTrap() { NetworkItem = item });
-                return true;
-            }
-            case 2900007: {
-                _knownTraps.Add(new GrayScaleTrap() { NetworkItem = item });
-                return true;
-            }
-            default:
-                return false;
-        }
+        ITrap trap = item.Item switch {
+            2900001 => new BadAppleTrap(),
+            2900002 => new PixelateTrap(),
+            2900003 => new RandomWaveTrap(),
+            2900004 => new ShadowEdgeTrap(),
+            2900005 => new ChromaticAberrationTrap(),
+            2900006 => new BGFreezeTrap(),
+            2900007 => new GrayScaleTrap(),
+            _ => null
+        };
+
+        if (trap == null)
+            return false;
+
+        trap.NetworkItem = item;
+        _knownTraps.Add(trap);
+        return true;
     }
 
     public void ActivateNextTrap() {

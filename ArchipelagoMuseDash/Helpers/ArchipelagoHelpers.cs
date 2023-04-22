@@ -1,4 +1,5 @@
-﻿using ArchipelagoMuseDash.Archipelago;
+﻿using Archipelago.MultiClient.Net.Models;
+using ArchipelagoMuseDash.Archipelago;
 using Il2CppAssets.Scripts.Database;
 
 namespace ArchipelagoMuseDash.Helpers;
@@ -56,5 +57,15 @@ public static class ArchipelagoHelpers {
             ShownSongMode.Unplayed => itemHandler.SongsInLogic.Contains(uid) && itemHandler.UnlockedSongUids.Contains(uid) && !itemHandler.CompletedSongUids.Contains(uid),
             _ => true
         };
+    }
+
+    public static bool IsItemDuplicate(NetworkItem itemA, NetworkItem itemB) {
+        //If either item is given by the server (cheat or starting item) then never say its a duplicate
+        if (itemA is { Player: 0, Location: -1 })
+            return false;
+        if (itemB is { Player: 0, Location: -1 })
+            return false;
+
+        return itemA.Item == itemB.Item && itemA.Location == itemB.Location;
     }
 }
