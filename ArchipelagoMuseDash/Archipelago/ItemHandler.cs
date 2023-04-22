@@ -74,7 +74,7 @@ public class ItemHandler {
 
         foreach (var location in _currentSession.Locations.AllLocations) {
             var name = _currentSession.Locations.GetLocationNameFromId(location);
-            name = name.Substring(0, name.Length - 2);
+            name = name[..^2];
 
             if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(name, out var info))
                 SongsInLogic.Add(info.uid);
@@ -89,7 +89,7 @@ public class ItemHandler {
 
         foreach (var location in _currentSession.Locations.AllLocationsChecked) {
             var name = _currentSession.Locations.GetLocationNameFromId(location);
-            CheckRemoteLocation(name.Substring(0, name.Length - 2), false);
+            CheckRemoteLocation(name[..^2], false);
         }
 
         SetVisibilityOfAllSongs(ShownSongMode.Unlocks);
@@ -103,17 +103,12 @@ public class ItemHandler {
 
         var hideSongText = ArchipelagoStatic.SessionHandler.SongSelectAdditions.ToggleSongsText;
 
-        switch (HiddenSongMode) {
-            case ShownSongMode.AllInLogic:
-                hideSongText.text = showing_all_songs_text;
-                break;
-            case ShownSongMode.Unplayed:
-                hideSongText.text = showing_unplayed_songs_text;
-                break;
-            case ShownSongMode.Unlocks:
-                hideSongText.text = showing_unlocked_songs_text;
-                break;
-        }
+        hideSongText.text = HiddenSongMode switch {
+            ShownSongMode.AllInLogic => showing_all_songs_text,
+            ShownSongMode.Unplayed => showing_unplayed_songs_text,
+            ShownSongMode.Unlocks => showing_unlocked_songs_text,
+            _ => hideSongText.text
+        };
     }
 
     private void CheckForNewItems() {
@@ -130,12 +125,15 @@ public class ItemHandler {
         foreach (var location in locations) {
             ArchipelagoStatic.ArchLogger.LogDebug("NewLocationCheck", $"New Location: {location}");
             var name = _currentSession.Locations.GetLocationNameFromId(location);
-            CheckRemoteLocation(name.Substring(0, name.Length - 2), false);
+            CheckRemoteLocation(name[..^2], false);
         }
     }
 
     private IMuseDashItem GetItemFromNetworkItem(NetworkItem item, bool otherPlayersItem) {
         var name = _currentSession.Items.GetItemName(item.Item);
+
+        ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", $"Got Item: {name}({item.Item}). Player {item.Player}, Location {item.Location}, Flags {item.Flags}.");
+
         if (otherPlayersItem) {
             var playerName = _currentSession.Players.GetPlayerAlias(item.Player);
             if (string.IsNullOrEmpty(playerName))
@@ -261,7 +259,7 @@ public class ItemHandler {
             await _currentSession.Locations.CompleteLocationChecksAsync(locationsArray);
             var items = await _currentSession.Locations.ScoutLocationsAsync(false, locationsArray);
 
-            ArchipelagoStatic.ArchLogger.Log("CheckLocations", "Received Items Packet.");
+            ArchipelagoStatic.ArchLogger.LogDebug("CheckLocations", "Received Items Packet.");
             CheckRemoteLocation(locationName, true);
             foreach (var networkItem in items.Locations) {
                 var item = GetItemFromNetworkItem(networkItem, networkItem.Player != _currentPlayerSlot);

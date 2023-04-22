@@ -28,10 +28,8 @@ public class ItemUnlockHandler {
 
     public void AddItem(IMuseDashItem item) {
         lock (_enqueuedItems) {
-            ArchipelagoStatic.ArchLogger.LogDebug("ItemUnlockHandler", $"Attempting to add item: {item.Item}");
             if (_knownItems.Contains(item.Item))
                 return;
-            ArchipelagoStatic.ArchLogger.LogDebug("ItemUnlockHandler", "No duplicate found.");
 
             _knownItems.Add(item.Item);
             _enqueuedItems.Enqueue(item);

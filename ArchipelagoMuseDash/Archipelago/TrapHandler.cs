@@ -51,7 +51,11 @@ public class TrapHandler {
         }
 
         _activatedTrap = _knownTraps[_lastHandledTrap];
-        _lastHandledTrap++;
+        if (_activatedTrap.NetworkItem is { Player: 0, Location: -1 })
+            _knownTraps.RemoveAt(_lastHandledTrap);
+        else
+            _lastHandledTrap++;
+
         ShowText.ShowInfo(_activatedTrap.TrapMessage);
         ArchipelagoStatic.ArchLogger.Log("TrapHandler", $"Activated trap {_activatedTrap}");
     }
