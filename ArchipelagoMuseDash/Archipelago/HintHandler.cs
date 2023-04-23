@@ -156,20 +156,26 @@ public class HintHandler {
                     _locationHints[locationName] = hint;
             }
 
-            if (hint.ReceivingPlayer == _currentPlayerSlot) {
-                ArchipelagoStatic.ArchLogger.LogDebug("Hinting", $"Got Hint for location: {itemName}, Recieving Player, {hint.Found}");
+            if (hint.ReceivingPlayer != _currentPlayerSlot)
+                continue;
 
-                if (hint.Found)
-                    _itemsHints.Remove(itemName);
-                else
-                    _itemsHints[itemName] = hint;
-            }
+            ArchipelagoStatic.ArchLogger.LogDebug("Hinting", $"Got Hint for location: {itemName}, Receiving Player, {hint.Found}");
+
+            if (hint.Found)
+                _itemsHints.Remove(itemName);
+            else
+                _itemsHints[itemName] = hint;
         }
     }
 
     private bool TryGetSongHints(MusicInfo info, out string hint) {
         if (info == null)
             throw new ArgumentException("Tried to get hint on null MusicInfo.");
+
+        if (ArchipelagoStatic.SessionHandler.ItemHandler.CompletedSongUids.Contains(info.uid)) {
+            hint = null;
+            return false;
+        }
 
         var sb = new StringBuilder();
 
