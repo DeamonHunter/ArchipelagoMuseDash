@@ -82,8 +82,11 @@ public class ItemUnlockHandler {
         if (item is MusicSheetItem) {
             var handler = ArchipelagoStatic.SessionHandler.ItemHandler;
 
-            if (handler.CurrentNumberOfMusicSheets + 1 == handler.NumberOfMusicSheetsToWin)
+            if (handler.CurrentNumberOfMusicSheets + 1 >= handler.NumberOfMusicSheetsToWin
+                && !handler.UnlockedSongUids.Contains(handler.GoalSong.uid)) {
+                handler.AddMusicSheet();
                 item = new SongItem(handler.GoalSong);
+            }
         }
 
 
