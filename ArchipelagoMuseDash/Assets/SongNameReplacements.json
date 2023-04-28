@@ -163,6 +163,15 @@
     //Google Translated
     "61-2": "Buttoba Supernova", //ぶっとばスーパーノヴァ
     
+    //Deep L Translated. Chinese V-Tuber song with no english translation. Wanted to avoid "Dong Ai Li Lovely"...
+    "62-0": "East Ai Li Lovely", //【东爱璃Lovely】Lovely
+
+    //Romaji. Translates to Forest Sea Ship?
+    "62-1": "Mori Umi no Fune", //森海の船
+
+    //Romaji. Translates to I'm Swamped!!
+    "62-3": "Numatta!!", //沼った！！
+    
     ///
     /// Song Cleanup Section
     ///
