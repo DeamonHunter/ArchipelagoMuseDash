@@ -1,5 +1,4 @@
-﻿using ArchipelagoMuseDash.Archipelago.Traps;
-using HarmonyLib;
+﻿using HarmonyLib;
 using Il2CppAssets.Scripts.Database;
 using Il2CppGameLogic;
 
@@ -33,20 +32,20 @@ sealed class StageBattleComponentGetMusicDataFromStageInfo {
 [HarmonyPatch(typeof(DBStageInfo), "SetRuntimeMusicData")]
 sealed class DBStageInfoSetRuntimeMusicData {
     static void Postfix(Il2CppSystem.Collections.Generic.List<MusicData> data) {
-        for (int i = 0; i < data.Count; i++) {
-            var md = data._items[i];
-            TrapHelper.OutputNote(md);
-        }
+        //for (int i = 0; i < data.Count; i++) {
+        //    var md = data._items[i];
+        //    TrapHelper.OutputNote(md);
+        //}
 
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return;
 
         ArchipelagoStatic.ArchLogger.Log("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
         ArchipelagoStatic.SessionHandler.TrapHandler.SetRuntimeMusicDataHook(data);
-        for (int i = 0; i < data.Count; i++) {
-            var md = data._items[i];
-            TrapHelper.OutputNote(md);
-        }
+        //for (int i = 0; i < data.Count; i++) {
+        //    var md = data._items[i];
+        //    TrapHelper.OutputNote(md);
+        //}
     }
 }
 [HarmonyPatch(typeof(DBTouhou), "AwakeInit")]
