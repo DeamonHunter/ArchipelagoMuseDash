@@ -93,7 +93,7 @@ public class DeathLinkHandler {
 
         var battleStage = ArchipelagoStatic.BattleComponent;
         if (battleStage == null || battleStage.isDead || battleStage.isPause || battleStage.isSucceed)
-            _deathDelay = 5f;
+            _deathDelay = 3f;
     }
 
     public string GetDeathLinkReason() {
