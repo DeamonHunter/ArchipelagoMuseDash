@@ -24,7 +24,7 @@ public class BadAppleTrap : ITrap {
     }
 
     public void SetRuntimeMusicDataHook(List<MusicData> data) {
-        ArchipelagoStatic.ArchLogger.Log("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
+        ArchipelagoStatic.ArchLogger.LogDebug("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
         ChangeToBadApple(data);
         TrapHelper.FixIndexes(data);
     }
@@ -53,7 +53,6 @@ public class BadAppleTrap : ITrap {
 
             //BmsNodeUid.Hp and BmsNodeUid.Music do not have stage specific versions, except for touhou. So these require special logic.
             if (noteData.m_BmsUid is BmsNodeUid.Hp or BmsNodeUid.Music) {
-                ArchipelagoStatic.ArchLogger.Log("BadAppleTrap", "Note is HP or Music");
                 if (noteData.scene == "scene_08")
                     continue;
 

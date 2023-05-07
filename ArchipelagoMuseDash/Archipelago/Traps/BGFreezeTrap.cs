@@ -13,7 +13,7 @@ public class BGFreezeTrap : ITrap {
     public void LoadMusicDataByFilenameHook() { }
 
     public void SetRuntimeMusicDataHook(List<MusicData> data) {
-        ArchipelagoStatic.ArchLogger.Log("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
+        ArchipelagoStatic.ArchLogger.LogDebug("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
 
         var backgroundFreezeNoteData = CreateBackgroundFreezeNoteData();
         TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(backgroundFreezeNoteData.uid, backgroundFreezeNoteData));

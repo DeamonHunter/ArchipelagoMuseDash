@@ -16,7 +16,7 @@ public class CanvasScrollTrap : ITrap {
     public void LoadMusicDataByFilenameHook() { }
 
     public void SetRuntimeMusicDataHook(List<MusicData> data) {
-        ArchipelagoStatic.ArchLogger.Log("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
+        ArchipelagoStatic.ArchLogger.LogDebug("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
 
         var scrollNoteData = UnityEngine.Random.Range(0, 2) == 0 ? CreateUpScrollNoteData() : CreateDownScrollNoteData();
         TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(scrollNoteData.uid, scrollNoteData));
