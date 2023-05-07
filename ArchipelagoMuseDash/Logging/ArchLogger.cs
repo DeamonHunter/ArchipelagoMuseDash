@@ -1,4 +1,4 @@
-﻿using Archipelago.MultiClient.Net.Helpers;
+﻿using Archipelago.MultiClient.Net.MessageLog.Messages;
 using MelonLoader;
 
 namespace ArchipelagoMuseDash.Logging;
