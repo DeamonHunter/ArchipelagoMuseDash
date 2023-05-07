@@ -4,6 +4,8 @@ using ArchipelagoMuseDash.Patches;
 using Il2CppAssets.Scripts.Database;
 using Il2CppAssets.Scripts.GameCore.HostComponent;
 using Il2CppAssets.Scripts.UI.Controls;
+using UnityEngine;
+using Random = System.Random;
 
 namespace ArchipelagoMuseDash.Archipelago;
 
@@ -19,6 +21,7 @@ public class DeathLinkHandler {
     private string _deathLinkReason;
 
     private readonly Random _random = new();
+    private float _deathDelay = 0;
 
     private readonly List<string> _deathReasons = new() {
         //Generic
@@ -86,6 +89,11 @@ public class DeathLinkHandler {
 
         _deathLinkReason = $"Killed By {deathLink.Source}\n\"{deathLink.Cause}\"";
         _killingPlayer = true;
+
+
+        var battleStage = ArchipelagoStatic.BattleComponent;
+        if (battleStage == null || battleStage.isDead || battleStage.isPause || battleStage.isSucceed)
+            _deathDelay = 5f;
     }
 
     public string GetDeathLinkReason() {
@@ -93,6 +101,8 @@ public class DeathLinkHandler {
         _deathLinkReason = null;
         return reason;
     }
+
+    public bool HasDeathLinkReason() => _deathLinkReason != null;
 
     public void Update() {
         if (!_killingPlayer)
@@ -107,6 +117,11 @@ public class DeathLinkHandler {
         var battleStage = ArchipelagoStatic.BattleComponent;
         if (battleStage == null || battleStage.isDead || battleStage.isPause || battleStage.isSucceed)
             return;
+
+        if (_deathDelay > 0) {
+            _deathDelay -= Time.deltaTime;
+            return;
+        }
 
         try {
             BattleRoleAttributeComponent.instance.Hurt(-9999, false);
