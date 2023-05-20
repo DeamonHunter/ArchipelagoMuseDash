@@ -2,6 +2,7 @@
 using ArchipelagoMuseDash.Helpers;
 using Il2Cpp;
 using Il2CppAssets.Scripts.Database;
+using Il2CppAssets.Scripts.UI.Controls;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MelonLoader;
 using UnityEngine;
@@ -72,12 +73,11 @@ public class ArchipelagoLogin {
             if (_windowStyle == null)
                 SetupStyles(); //Todo: Add textures
 
+            DrawForfeitRelease();
+
             if (!_showLoginScreen) {
-                if (!_showLoginButton) {
-                    if (ArchipelagoStatic.SessionHandler.IsLoggedIn)
-                        DrawForfeitRelease();
+                if (!_showLoginButton)
                     return;
-                }
 
                 if (ArchipelagoStatic.LoadingSceneActive)
                     return;
@@ -157,21 +157,26 @@ public class ArchipelagoLogin {
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return;
 
+        if (!ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlHome"))
+            return;
+
         if (!ArchipelagoStatic.SessionHandler.ItemHandler.VictoryAchieved)
             return;
 
         //Todo: Work out if this can be done.
         if (!_hasCollected && ArchipelagoStatic.SessionHandler.CanCollectOnVictory) {
-            if (!GUI.Button(new Rect(Screen.width - 220, Screen.height - 160, 200, 60), "Run !collect", _buttonNoStyle)) {
+            if (GUI.Button(new Rect(Screen.width - 220, Screen.height - 160, 200, 60), "Run !collect", _buttonNoStyle)) {
                 _hasCollected = true;
                 ArchipelagoStatic.SessionHandler.CollectItems();
+                ShowText.ShowInfo("Collected items.");
             }
         }
 
         if (!_hasReleased && ArchipelagoStatic.SessionHandler.CanReleaseOnVictory) {
-            if (!GUI.Button(new Rect(Screen.width - 220, Screen.height - 80, 200, 60), "Run !release", _buttonNoStyle)) {
+            if (GUI.Button(new Rect(Screen.width - 220, Screen.height - 80, 200, 60), "Run !release", _buttonNoStyle)) {
                 _hasReleased = true;
                 ArchipelagoStatic.SessionHandler.ReleaseItems();
+                ShowText.ShowInfo("Released items.");
             }
         }
     }
