@@ -21,6 +21,8 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
             UnlockSongUid = lastPlayedSongUid;
         }
 
-        public void UnlockItem(ItemHandler handler, bool immediate) { }
+        public void UnlockItem(ItemHandler handler, bool immediate) {
+            ArchipelagoStatic.SessionHandler.ItemHandler.VictoryAchieved = true;
+        }
     }
 }

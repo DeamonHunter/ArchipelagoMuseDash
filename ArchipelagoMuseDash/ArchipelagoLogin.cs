@@ -36,6 +36,9 @@ public class ArchipelagoLogin {
     private GUIStyle _textFieldStyle;
     private string _versionNumber;
 
+    private bool _hasCollected;
+    private bool _hasReleased;
+
     public ArchipelagoLogin(string versionNumber) {
 #if DEBUG
         _ipAddress = "localhost:38281";
@@ -70,8 +73,11 @@ public class ArchipelagoLogin {
                 SetupStyles(); //Todo: Add textures
 
             if (!_showLoginScreen) {
-                if (!_showLoginButton)
+                if (!_showLoginButton) {
+                    if (ArchipelagoStatic.SessionHandler.IsLoggedIn)
+                        DrawForfeitRelease();
                     return;
+                }
 
                 if (ArchipelagoStatic.LoadingSceneActive)
                     return;
@@ -145,6 +151,29 @@ public class ArchipelagoLogin {
             AttemptLogin();
 
         GUILayout.EndHorizontal();
+    }
+
+    private void DrawForfeitRelease() {
+        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+            return;
+
+        if (!ArchipelagoStatic.SessionHandler.ItemHandler.VictoryAchieved)
+            return;
+
+        //Todo: Work out if this can be done.
+        if (!_hasCollected && ArchipelagoStatic.SessionHandler.CanCollectOnVictory) {
+            if (!GUI.Button(new Rect(Screen.width - 220, Screen.height - 160, 200, 60), "Run !collect", _buttonNoStyle)) {
+                _hasCollected = true;
+                ArchipelagoStatic.SessionHandler.CollectItems();
+            }
+        }
+
+        if (!_hasReleased && ArchipelagoStatic.SessionHandler.CanReleaseOnVictory) {
+            if (!GUI.Button(new Rect(Screen.width - 220, Screen.height - 80, 200, 60), "Run !release", _buttonNoStyle)) {
+                _hasReleased = true;
+                ArchipelagoStatic.SessionHandler.ReleaseItems();
+            }
+        }
     }
 
     private void SetupStyles() {

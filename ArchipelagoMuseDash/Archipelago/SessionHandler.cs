@@ -1,5 +1,6 @@
 ﻿using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Packets;
 
 namespace ArchipelagoMuseDash.Archipelago {
     /// <summary>
@@ -13,11 +14,15 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         public SongSelectAdditions SongSelectAdditions;
 
+        public bool CanReleaseOnVictory { get; private set; }
+        public bool CanCollectOnVictory { get; private set; }
+
         public bool IsLoggedIn => _currentSession != null;
 
         private ArchipelagoSession _currentSession;
         private int _slot;
         private Dictionary<string, object> _slotData;
+
 
         /// <summary>
         /// Attempts to create a new <see cref="ArchipelagoSession"/> using the data provided.<br/>
@@ -68,6 +73,9 @@ namespace ArchipelagoMuseDash.Archipelago {
 
                 _currentSession.MessageLog.OnMessageReceived += ArchipelagoStatic.ArchLogger.LogMessage;
 
+                CanReleaseOnVictory = (_currentSession.RoomState.ReleasePermissions & (Permissions.Enabled | Permissions.Goal)) != 0;
+                CanCollectOnVictory = (_currentSession.RoomState.CollectPermissions & (Permissions.Enabled | Permissions.Goal)) != 0;
+
                 ArchipelagoStatic.AlbumDatabase.Setup();
                 ItemHandler.Setup(_slotData);
                 HintHandler.Setup();
@@ -110,6 +118,13 @@ namespace ArchipelagoMuseDash.Archipelago {
                 return;
 
             SongSelectAdditions?.MainSceneLoaded();
+        }
+
+        public void CollectItems() {
+            _currentSession.Socket.SendPacketAsync(new SayPacket { Text = $"!collect" });
+        }
+        public void ReleaseItems() {
+            _currentSession.Socket.SendPacketAsync(new SayPacket { Text = $"!release" });
         }
     }
 }

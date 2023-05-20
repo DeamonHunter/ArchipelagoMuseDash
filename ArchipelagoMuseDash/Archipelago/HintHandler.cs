@@ -111,13 +111,13 @@ public class HintHandler {
                 neededHintPoints = _currentSession.RoomState.HintCost;
 
             var hintPoints = _currentSession.RoomState.HintPoints;
-            //if (hintPoints >= neededHintPoints) {
-            ArchipelagoStatic.HideSongDialogue.Show();
-            ArchipelagoStatic.HideSongDialogue.m_Title.text = ARCHIPELAGO_DIALOGUE_TITLE;
-            ArchipelagoStatic.HideSongDialogue.m_Msg.text = $"Are you sure want to hint the song {songName}?\nYou have {hintPoints} Hint Points and {neededHintPoints} points for a hint.\nHint Points may not be correct.";
-            //}
-            //else
-            //    ShowText.ShowInfo($"You do not have enough points to hint this song. You have {hintPoints} and need {neededHintPoints}.");
+            if (hintPoints >= neededHintPoints) {
+                ArchipelagoStatic.HideSongDialogue.Show();
+                ArchipelagoStatic.HideSongDialogue.m_Title.text = ARCHIPELAGO_DIALOGUE_TITLE;
+                ArchipelagoStatic.HideSongDialogue.m_Msg.text = $"Are you sure want to hint the song {songName}?\nYou have {hintPoints} Hint Points and {neededHintPoints} points for a hint.\nHint Points may not be correct.";
+            }
+            else
+                ShowText.ShowInfo($"You do not have enough points to hint this song. You have {hintPoints} and need {neededHintPoints}.");
         }
     }
 
