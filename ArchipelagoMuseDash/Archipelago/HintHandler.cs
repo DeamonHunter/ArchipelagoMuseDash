@@ -4,6 +4,7 @@ using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using Il2CppAssets.Scripts.Database;
 using Il2CppAssets.Scripts.UI.Controls;
+using UnityEngine;
 
 namespace ArchipelagoMuseDash.Archipelago;
 
@@ -105,7 +106,7 @@ public class HintHandler {
             //Todo: Fix up when HintCost is properly calculated at the start
             int neededHintPoints;
             if (_currentSession.RoomState.HintCost <= 0)
-                neededHintPoints = _currentSession.Locations.AllLocations.Count / _currentSession.RoomState.HintCostPercentage;
+                neededHintPoints = Mathf.FloorToInt(_currentSession.Locations.AllLocations.Count * (_currentSession.RoomState.HintCostPercentage / 100f));
             else
                 neededHintPoints = _currentSession.RoomState.HintCost;
 
