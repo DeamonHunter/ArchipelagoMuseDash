@@ -19,11 +19,13 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
         private readonly string _itemName;
         private readonly string _songUid;
 
-        public ExternalItem(string itemName, string receivingPlayer) {
+        public ExternalItem(long itemId, string itemName, string receivingPlayer) {
             _itemName = itemName.Replace('_', ' ');
             _receivingPlayerName = receivingPlayer;
 
-            if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(itemName, out var info))
+            if (ArchipelagoStatic.AlbumDatabase.TryGetSongFromItemId(itemId, out var info))
+                _songUid = info.uid;
+            else if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(itemName, out info))
                 _songUid = info.uid;
         }
 

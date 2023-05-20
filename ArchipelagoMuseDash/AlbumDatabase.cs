@@ -10,9 +10,13 @@ public class AlbumDatabase {
     private Dictionary<string, MusicInfo> _songsByItemName = new();
     private Dictionary<string, List<MusicInfo>> _songsByAlbum = new();
 
+    private Dictionary<string, MusicInfo> _songsByUid = new();
+    private readonly Dictionary<long, string> _songIDToUid = new();
+
     public const int CHINESE_LOC_INDEX = 0;
     public const int ENGLISH_LOC_INDEX = 1;
     public const string RANDOM_PANEL_UID = "?";
+    private const int starting_music_item_id = 2900000 + 50; //Start ID + Music ID Offset
 
     public void Setup() {
         _songsByAlbum.Clear();
@@ -23,6 +27,7 @@ public class AlbumDatabase {
 
         _songsByAlbum = new Dictionary<string, List<MusicInfo>>();
         _songsByItemName = new Dictionary<string, MusicInfo>();
+        _songsByUid = new Dictionary<string, MusicInfo>();
 
         var configManager = ConfigManager.instance;
         if (configManager == null)
@@ -39,12 +44,34 @@ public class AlbumDatabase {
 
             var songName = GetItemNameFromMusicInfo(musicInfo);
             _songsByItemName.Add(songName, musicInfo);
+            _songsByUid.Add(musicInfo.uid, musicInfo);
 
             if (!_songsByAlbum.TryGetValue(albumLocal, out var albumList)) {
                 albumList = new List<MusicInfo>();
                 _songsByAlbum.Add(albumLocal, albumList);
             }
+
             albumList.Add(musicInfo);
+        }
+    }
+
+    public void LoadMusicList(Stream dataTextStream) {
+        //This section is to help improve compatibility between versions
+        var itemID = starting_music_item_id;
+        using var sr = new StreamReader(dataTextStream);
+
+        while (!sr.EndOfStream) {
+            var line = sr.ReadLine();
+            if (string.IsNullOrEmpty(line))
+                continue;
+
+            var sections = line.Split('|');
+            if (sections.Length < 2)
+                continue;
+
+            var uid = sections[1];
+            _songIDToUid[itemID] = uid;
+            itemID++;
         }
     }
 
@@ -58,6 +85,19 @@ public class AlbumDatabase {
     public string GetItemNameFromMusicInfo(MusicInfo musicInfo) {
         var localisedSongName = ArchipelagoStatic.SongNameChanger.GetSongName(musicInfo);
         return $"{localisedSongName}";
+    }
+
+    public bool TryGetSongFromItemId(long itemId, out MusicInfo info) {
+        info = null;
+        if (!_songIDToUid.TryGetValue(itemId, out var uid))
+            return false;
+
+        return _songsByUid.TryGetValue(uid, out info);
+    }
+
+    public long GetItemIdForSong(MusicInfo info) {
+        var pair = _songIDToUid.FirstOrDefault(x => x.Value == info.uid);
+        return pair.Value != null ? pair.Key : long.MaxValue;
     }
 
     public string GetLocalisedSongNameForMusicInfo(MusicInfo musicInfo) {

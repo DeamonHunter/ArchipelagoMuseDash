@@ -71,10 +71,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Assets\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Remove="Assets\APIcon.png" />
       <EmbeddedResource Include="Assets\APIcon.png" />
       <None Remove="Assets\APProgression.png" />
@@ -97,6 +93,8 @@
       <EmbeddedResource Include="Assets\LoginBackground.png" />
       <None Remove="Assets\SongNameReplacements.json" />
       <EmbeddedResource Include="Assets\SongNameReplacements.json" />
+      <None Remove="Assets\MuseDashData.txt" />
+      <EmbeddedResource Include="Assets\MuseDashData.txt" />
     </ItemGroup>
 
     <ItemGroup>

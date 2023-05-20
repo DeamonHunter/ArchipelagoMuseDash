@@ -18,6 +18,7 @@ public class ItemHandler {
     public MusicInfo GoalSong { get; private set; }
     public int NumberOfMusicSheetsToWin { get; private set; }
     public int CurrentNumberOfMusicSheets { get; private set; }
+    public bool VictoryAchieved { get; set; }
 
     public readonly HashSet<string> SongsInLogic = new();
     public readonly HashSet<string> UnlockedSongUids = new();
@@ -141,7 +142,7 @@ public class ItemHandler {
 
             name = name ?? $"Unknown Item: {item.Item}";
             ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", $"External Item: {playerName}, {name}");
-            return new ExternalItem(name, playerName) { Item = item };
+            return new ExternalItem(item.Item, name, playerName) { Item = item };
         }
 
         if (ArchipelagoStatic.SessionHandler.TrapHandler.EnqueueIfTrap(item))
@@ -150,6 +151,13 @@ public class ItemHandler {
         if (name == music_sheet_item_name)
             return new MusicSheetItem() { Item = item };
 
+        //Try to match by item id first
+        if (ArchipelagoStatic.AlbumDatabase.TryGetSongFromItemId(item.Item, out var itemInfo)) {
+            ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", "Matched item id");
+            return new SongItem(itemInfo) { Item = item };
+        }
+
+        //Then match by name
         if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(name, out var singularInfo))
             return new SongItem(singularInfo) { Item = item };
 

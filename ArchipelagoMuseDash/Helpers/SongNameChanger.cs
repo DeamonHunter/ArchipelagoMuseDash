@@ -20,7 +20,7 @@ public class SongNameChanger {
         '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
         ' ', '-', '+', '.', '_',
         //More Questionable ASCII Todo: Check to see what should be allowed
-        '\'', '!', ':', '&', '*', '#', '/', ',', '?', ';'
+        '\'', '!', '&', '*', '#', '/', ',', '?', ';'
     };
 
     private readonly Dictionary<char, char> _characterReplacements = new() {
@@ -97,8 +97,15 @@ public class SongNameChanger {
     /// </summary>
     /// <param name="filePath">The file to create.</param>
     public void DumpSongsToTextFile(string filePath) {
-        var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
-        GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
+        var databaseList = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
+        GlobalDataBase.dbMusicTag.GetAllMusicInfo(databaseList);
+
+        //Transfer to c# list to make it easier to sort.
+        var sortedList = new List<MusicInfo>(databaseList.Count);
+        foreach (var item in databaseList)
+            sortedList.Add(item);
+
+        sortedList.Sort(CompareItemIds);
 
         var sb = new StringBuilder();
         var failedSongsSB = new StringBuilder();
@@ -109,7 +116,7 @@ public class SongNameChanger {
         var configManager = ConfigManager.instance;
         var albumConfig = configManager.GetConfigObject<DBConfigAlbums>();
 
-        foreach (var musicInfo in list) {
+        foreach (var musicInfo in sortedList) {
             if (musicInfo.uid == AlbumDatabase.RANDOM_PANEL_UID)
                 continue;
 
@@ -133,7 +140,7 @@ public class SongNameChanger {
             }
 
             var availableInStreamerMode = !AnchorModule.instance.CheckLockByMusicUid(musicInfo.uid);
-            sb.AppendLine($"{englishName}|{albumLocal}|{availableInStreamerMode}|{musicInfo.difficulty1}|{musicInfo.difficulty2}|{musicInfo.difficulty3}|{musicInfo.difficulty4}");
+            sb.AppendLine($"{englishName}|{musicInfo.uid}|{albumLocal}|{availableInStreamerMode}|{musicInfo.difficulty1}|{musicInfo.difficulty2}|{musicInfo.difficulty3}|{musicInfo.difficulty4}");
         }
 
         AnchorModule.instance.isAnchorMode = originalStreamerMode;
@@ -142,6 +149,12 @@ public class SongNameChanger {
             Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
         File.WriteAllText(filePath, sb.ToString());
         File.WriteAllText(Path.Combine(Path.GetDirectoryName(filePath)!, "FailedOutput.txt"), failedSongsSB.ToString());
+    }
+
+    private int CompareItemIds(MusicInfo a, MusicInfo b) {
+        var itemIdA = ArchipelagoStatic.AlbumDatabase.GetItemIdForSong(a);
+        var itemIdB = ArchipelagoStatic.AlbumDatabase.GetItemIdForSong(b);
+        return itemIdA != itemIdB ? itemIdA.CompareTo(itemIdB) : string.Compare(a.uid, b.uid, StringComparison.Ordinal);
     }
 
     /// <summary>

@@ -26,6 +26,9 @@ public class ArchipelagoMuseDashMod : MelonMod {
 
         using (var stream = MelonAssembly.Assembly.GetManifestResourceStream("ArchipelagoMuseDash.Assets.SongNameReplacements.json"))
             ArchipelagoStatic.SongNameChanger = new SongNameChanger(stream);
+
+        using (var stream = MelonAssembly.Assembly.GetManifestResourceStream("ArchipelagoMuseDash.Assets.MuseDashData.txt"))
+            ArchipelagoStatic.AlbumDatabase.LoadMusicList(stream);
     }
 
 
