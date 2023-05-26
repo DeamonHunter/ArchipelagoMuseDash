@@ -225,6 +225,14 @@
   "62-3": "Numatta!!",
   //沼った！！
 
+  //Google Translated.
+  "63-1": "Centennial Streamers High",
+  // 100年モノのストリーマーズ・ハイ
+
+  //Romaji. Translates to City of Night.
+  "63-4": "Yoru no machi",
+  // 夜の街
+
   ///
   /// Song Cleanup Section
   ///
@@ -295,6 +303,12 @@
   // ENDLESS CIDER (feat. Such)
   "57-5": "Brilliant & Shining!",
   // Brilliant & Shining! (Game Edit.)
-  "59-1": "ManiFesto"
-  // ManiFesto：
+  "59-1": "ManiFesto",
+  // ManiFesto:
+  "63-0": "Doki Doki Jump!",
+  // Doki Doki Jump! feat. ぷにぷに電機
+  "63-3": "Mahorova",
+  // Mahorova feat.omoto
+  "63-5": "INTERNET YAMERO"
+  // INTERNET YAMERO（Aiobahn feat.KOTOKO）
 }
