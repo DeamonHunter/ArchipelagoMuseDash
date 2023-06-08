@@ -39,6 +39,7 @@ public class ArchipelagoLogin {
 
     private bool _hasCollected;
     private bool _hasReleased;
+    private bool _backedUpFile;
 
     public ArchipelagoLogin(string versionNumber) {
 #if DEBUG
@@ -87,6 +88,9 @@ public class ArchipelagoLogin {
                     _deltaTime += Time.deltaTime;
                     return;
                 }
+
+                if (!_backedUpFile)
+                    BackupSaveData();
 
                 if (!GUI.Button(new Rect(Screen.width - 320, Screen.height - 120, 300, 100), "Show Archipelago Login", _buttonNoStyle))
                     return;
@@ -266,9 +270,9 @@ public class ArchipelagoLogin {
     }
 
     private void SwapToArchipelagoSave() {
-        var path = Path.Combine(Application.absoluteURL, "UserData/ArchSaves");
+        var path = Path.Combine(Application.absoluteURL, "UserData", "ArchSaves");
         ArchipelagoStatic.SteamSync.m_FolderPath = path;
-        ArchipelagoStatic.SteamSync.m_FilePath = ArchipelagoStatic.SteamSync.m_FolderPath + "/" + ArchipelagoStatic.SteamSync.m_FileName;
+        ArchipelagoStatic.SteamSync.m_FilePath = Path.Combine(ArchipelagoStatic.SteamSync.m_FolderPath, ArchipelagoStatic.SteamSync.m_FileName);
 
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
@@ -286,6 +290,23 @@ public class ArchipelagoLogin {
             ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
 
         HideLoginOverlay();
+    }
+
+    private void BackupSaveData() {
+        var backupPath = Path.Combine(Application.absoluteURL, "UserData", "Backups");
+        if (!Directory.Exists(backupPath))
+            Directory.CreateDirectory(backupPath);
+
+        var files = Directory.GetFiles(backupPath);
+        if (files.Length >= 20) {
+            var fileInfo = new DirectoryInfo(backupPath).GetFileSystemInfos().OrderBy(fi => fi.CreationTime).First();
+            File.Delete(fileInfo.FullName);
+        }
+
+        if (File.Exists(ArchipelagoStatic.OriginalFilePath))
+            File.Copy(ArchipelagoStatic.OriginalFilePath, Path.Combine(backupPath, DateTime.Now.ToString("yyyy.MM.dd_HHmmss") + ".sav"));
+
+        _backedUpFile = true;
     }
 
     private void HideLoginOverlay() {
