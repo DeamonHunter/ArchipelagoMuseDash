@@ -6,7 +6,9 @@ using ArchipelagoMuseDash.Archipelago.Items;
 using ArchipelagoMuseDash.Helpers;
 using Il2Cpp;
 using Il2CppAssets.Scripts.Database;
+using Il2CppAssets.Scripts.UI.Controls;
 using UnityEngine.EventSystems;
+using Task = System.Threading.Tasks.Task;
 
 namespace ArchipelagoMuseDash.Archipelago;
 
@@ -53,11 +55,17 @@ public class ItemHandler {
         //Todo: Handle these being missing
         if (slotData.TryGetValue("victoryLocation", out var victoryLocation)) {
             ArchipelagoStatic.ArchLogger.Log("Goal Song", victoryLocation.ToString());
-            GoalSong = ArchipelagoStatic.AlbumDatabase.GetMusicInfo((string)victoryLocation);
-            GlobalDataBase.dbMusicTag.RemoveHide(GoalSong);
-            GlobalDataBase.dbMusicTag.AddCollection(GoalSong);
+            try {
+                GoalSong = ArchipelagoStatic.AlbumDatabase.GetMusicInfo((string)victoryLocation);
+                GlobalDataBase.dbMusicTag.RemoveHide(GoalSong);
+                GlobalDataBase.dbMusicTag.AddCollection(GoalSong);
 
-            SongsInLogic.Add(GoalSong.uid);
+                SongsInLogic.Add(GoalSong.uid);
+            }
+            catch {
+                ArchipelagoStatic.ArchLogger.Warning("ItemHandler", "Catastrophic failure occured: Goal song doesn't exist?\nPlease report this!");
+                ShowText.ShowInfo("Catastrophic failure occured: Goal song doesn't exist?\nPlease report this!");
+            }
         }
 
         if (slotData.TryGetValue("musicSheetWinCount", out var tokenWinCount)) {

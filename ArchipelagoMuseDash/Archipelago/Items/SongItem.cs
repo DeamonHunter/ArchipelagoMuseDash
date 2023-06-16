@@ -40,7 +40,7 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
         }
 
         private string GetUnlockedBannerText() {
-            if (ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong.uid == _song.uid)
+            if (ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong?.uid == _song.uid)
                 return "Its the Goal!";
 
             return _isDuplicate ? "Its a duplicate..." : null;
