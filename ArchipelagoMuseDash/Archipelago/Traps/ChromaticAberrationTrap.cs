@@ -29,6 +29,8 @@ public class ChromaticAberrationTrap : ITrap {
         TrapHelper.FixIndexes(data);
     }
 
+    public void OnEnd() { }
+
     private NoteConfigData CreateChromaticAberrationNoteData() => new NoteConfigData() {
         id = "79",
         ibms_id = "2C",

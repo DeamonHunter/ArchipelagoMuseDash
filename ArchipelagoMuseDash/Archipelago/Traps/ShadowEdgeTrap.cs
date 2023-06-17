@@ -29,6 +29,8 @@ public class ShadowEdgeTrap : ITrap {
         TrapHelper.FixIndexes(data);
     }
 
+    public void OnEnd() { }
+
     private NoteConfigData CreateShadowEdgeInNoteData() => new NoteConfigData() {
         id = "85",
         ibms_id = "2E",

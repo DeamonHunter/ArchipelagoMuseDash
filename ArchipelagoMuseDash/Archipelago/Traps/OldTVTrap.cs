@@ -31,6 +31,8 @@ public class OldTVTrap : ITrap {
         TrapHelper.FixIndexes(data);
     }
 
+    public void OnEnd() { }
+
     private NoteConfigData CreateOldTVNoteData() => new NoteConfigData() {
         id = "91",
         ibms_id = "2G",

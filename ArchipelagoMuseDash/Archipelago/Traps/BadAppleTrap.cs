@@ -29,6 +29,8 @@ public class BadAppleTrap : ITrap {
         TrapHelper.FixIndexes(data);
     }
 
+    public void OnEnd() { }
+
     private void ChangeToBadApple(List<MusicData> data) {
         for (int i = data.Count - 1; i >= 0; i--) {
             var md = data[i];

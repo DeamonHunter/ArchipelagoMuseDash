@@ -29,6 +29,8 @@ public class BGFreezeTrap : ITrap {
         TrapHelper.FixIndexes(data);
     }
 
+    public void OnEnd() { }
+
     private NoteConfigData CreateBackgroundFreezeNoteData() => new NoteConfigData() {
         id = "112",
         ibms_id = "2N",

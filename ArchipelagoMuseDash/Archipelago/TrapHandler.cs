@@ -33,6 +33,8 @@ public class TrapHandler {
             2900005 => new ChromaticAberrationTrap(),
             2900006 => new BGFreezeTrap(),
             2900007 => new GrayScaleTrap(),
+            2900008 => new NyaaTrap(),
+            2900009 => new ErrorSFXTrap(),
             _ => null
         };
 
@@ -63,6 +65,8 @@ public class TrapHandler {
     public void SetTrapFinished() {
         if (_activatedTrap == null)
             return;
+
+        _activatedTrap.OnEnd();
 
         //This will cause issues if multiple people are running the same game and don't go through all traps. But I'm fine with that.
         _dataStorageHelper["lastTrap"] = _lastHandledTrap;

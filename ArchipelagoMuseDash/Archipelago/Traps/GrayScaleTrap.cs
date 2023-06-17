@@ -29,6 +29,8 @@ public class GrayScaleTrap : ITrap {
         TrapHelper.FixIndexes(data);
     }
 
+    public void OnEnd() { }
+
     private NoteConfigData CreateGreyScaleNoteData() => new NoteConfigData() {
         id = "124",
         ibms_id = "2R",

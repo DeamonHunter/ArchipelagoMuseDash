@@ -29,6 +29,8 @@ public class PixelateTrap : ITrap {
         TrapHelper.FixIndexes(data);
     }
 
+    public void OnEnd() { }
+
     private NoteConfigData CreatePixelateNoteData() => new NoteConfigData() {
         id = "118",
         ibms_id = "2P",

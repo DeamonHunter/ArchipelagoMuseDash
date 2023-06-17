@@ -32,6 +32,8 @@ public class CanvasScrollTrap : ITrap {
         TrapHelper.FixIndexes(data);
     }
 
+    public void OnEnd() { }
+
     private NoteConfigData CreateUpScrollNoteData() => new NoteConfigData() {
         id = "64",
         ibms_id = "27",

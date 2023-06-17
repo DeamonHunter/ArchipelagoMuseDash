@@ -29,6 +29,8 @@ public class RandomWaveTrap : ITrap {
         TrapHelper.FixIndexes(data);
     }
 
+    public void OnEnd() { }
+
     private NoteConfigData CreateRandomWaveNoteData() => new NoteConfigData() {
         id = "73",
         ibms_id = "2A",

@@ -10,4 +10,5 @@ public interface ITrap {
     void PreGameSceneLoad();
     void LoadMusicDataByFilenameHook();
     void SetRuntimeMusicDataHook(List<MusicData> result);
+    void OnEnd();
 }
