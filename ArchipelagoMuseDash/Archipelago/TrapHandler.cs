@@ -12,12 +12,15 @@ public class TrapHandler {
 
     private int _lastHandledTrap;
     private ITrap _activatedTrap;
+    private string _trapStorageIndex;
 
     private readonly List<ITrap> _knownTraps = new();
 
-    public TrapHandler(DataStorageHelper dataStorageHelper) {
+    public TrapHandler(int slotNumber, int teamNumber, DataStorageHelper dataStorageHelper) {
         _dataStorageHelper = dataStorageHelper;
-        _lastHandledTrap = dataStorageHelper["lastTrap"];
+        _trapStorageIndex = $"last_trap_{slotNumber}_{teamNumber}";
+        _lastHandledTrap = dataStorageHelper[_trapStorageIndex];
+        ArchipelagoStatic.ArchLogger.LogDebug("TrapHandler", $"Trap Key: {_trapStorageIndex}. Handled Trap Count: {_lastHandledTrap}");
         _knownTraps.Clear();
     }
 
@@ -70,7 +73,7 @@ public class TrapHandler {
         _activatedTrap.OnEnd();
 
         //This will cause issues if multiple people are running the same game and don't go through all traps. But I'm fine with that.
-        _dataStorageHelper["lastTrap"] = _lastHandledTrap;
+        _dataStorageHelper[_trapStorageIndex] = _lastHandledTrap;
         _activatedTrap = null;
     }
 

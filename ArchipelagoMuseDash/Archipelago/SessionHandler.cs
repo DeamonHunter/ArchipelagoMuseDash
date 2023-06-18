@@ -21,6 +21,7 @@ namespace ArchipelagoMuseDash.Archipelago {
 
         private ArchipelagoSession _currentSession;
         private int _slot;
+        private int _team;
         private Dictionary<string, object> _slotData;
 
 
@@ -53,6 +54,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             var successful = (LoginSuccessful)loginResult;
 
             _slot = successful.Slot;
+            _team = successful.Team;
             _slotData = successful.SlotData;
             _currentSession = session;
 
@@ -68,7 +70,7 @@ namespace ArchipelagoMuseDash.Archipelago {
                 ItemHandler = new ItemHandler(_currentSession, _slot);
                 HintHandler = new HintHandler(_currentSession, _slot);
                 DeathLinkHandler = new DeathLinkHandler(_currentSession, _slot, _slotData);
-                TrapHandler = new TrapHandler(_currentSession.DataStorage);
+                TrapHandler = new TrapHandler(_slot, _team, _currentSession.DataStorage);
                 SongSelectAdditions = new SongSelectAdditions();
 
                 _currentSession.MessageLog.OnMessageReceived += ArchipelagoStatic.ArchLogger.LogMessage;
