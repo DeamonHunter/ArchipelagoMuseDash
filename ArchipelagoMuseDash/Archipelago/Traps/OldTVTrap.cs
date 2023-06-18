@@ -5,7 +5,7 @@ using Il2CppPeroPeroGames.GlobalDefines;
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
 /// <summary>
-/// Do not use this trap. It blocks the entire screen. Left here so it doesn't accidentally get readded
+/// This trap activates a white noise texture over the screen. It makes the game unplayable, so its left deactivated
 /// </summary>
 public class OldTVTrap : ITrap {
     public string TrapMessage => "★★ Trap Activated ★★\nOld TV!";

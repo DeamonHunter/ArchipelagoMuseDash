@@ -5,7 +5,7 @@ using Il2CppPeroPeroGames.GlobalDefines;
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
 /// <summary>
-/// This trap only partially works. (Probably a value somewhere.) but it is also too visually noisy to be a good trap.
+/// This trap works, but is very visually noisy. There may be a value somewhere that can be controlled to slow it down, but have not found it.
 /// </summary>
 public class CanvasScrollTrap : ITrap {
     public string TrapMessage => "★★ Trap Activated ★★\nCanvas Scroll!";

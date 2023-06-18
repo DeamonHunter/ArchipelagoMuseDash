@@ -90,7 +90,6 @@ public class DeathLinkHandler {
         _deathLinkReason = $"Killed By {deathLink.Source}\n\"{deathLink.Cause}\"";
         _killingPlayer = true;
 
-
         var battleStage = ArchipelagoStatic.BattleComponent;
         if (battleStage == null || battleStage.isDead || battleStage.isPause || battleStage.isSucceed)
             _deathDelay = 3f;
