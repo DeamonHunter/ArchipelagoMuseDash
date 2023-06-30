@@ -12,7 +12,7 @@ public class ErrorSFXTrap : ITrap {
     private int? _originalSFX;
 
     public void PreGameSceneLoad() {
-        _originalSFX = GlobalDataBase.dbUISpecial.battleSfxType;
+        _originalSFX ??= GlobalDataBase.dbUISpecial.battleSfxType;
         GlobalDataBase.dbUISpecial.battleSfxType = BattleSfxType.error;
     }
 
@@ -21,6 +21,8 @@ public class ErrorSFXTrap : ITrap {
     public void SetRuntimeMusicDataHook(List<MusicData> data) { }
 
     public void OnEnd() {
+        if (!_originalSFX.HasValue)
+            return;
         GlobalDataBase.dbUISpecial.battleSfxType = _originalSFX.Value;
     }
 }
