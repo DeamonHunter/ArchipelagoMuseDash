@@ -291,11 +291,9 @@ public class ItemHandler {
     }
 
     private void CheckRemoteLocation(string locationName, bool force) {
-        var subSection = locationName[..locationName.Length];
-
-        if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(subSection, out var singularInfo)) {
+        if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(locationName, out var singularInfo)) {
             //If a person collects 1 of 2 locations, we don't want to check it.
-            if (!force && !IsSongFullyCompleted(subSection))
+            if (!force && !IsSongFullyCompleted(locationName))
                 return;
 
             //Check to see if the song is favourited, and remove if it is

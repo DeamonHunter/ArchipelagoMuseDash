@@ -52,7 +52,8 @@ public class TrapHandler {
 
     public void ActivateNextTrap() {
         if (_lastHandledTrap >= _knownTraps.Count || _activatedTrap != null) {
-            ShowText.ShowInfo(_activatedTrap.TrapMessage);
+            if (_activatedTrap != null)
+                ShowText.ShowInfo(_activatedTrap.TrapMessage);
             return;
         }
 
