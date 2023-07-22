@@ -1,21 +1,24 @@
-﻿using HarmonyLib;
-using Il2CppAssets.Scripts.Database;
-using Il2CppGameLogic;
+﻿using Assets.Scripts.Database;
+using GameLogic;
+using HarmonyLib;
 
-namespace ArchipelagoMuseDash.Patches;
+namespace ArchipelagoMuseDash.Patches
+{
 
-[HarmonyPatch(typeof(GameMusic), "LoadMusicDataByFileName")]
-sealed class GameMusicLoadMusicDataByFileNamePatch {
-    static void Postfix(GameMusic __instance) {
-        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
-            return;
+    [HarmonyPatch(typeof(GameMusic), "LoadMusicDataByFileName")]
+    sealed class GameMusicLoadMusicDataByFileNamePatch
+    {
+        static void Postfix(GameMusic __instance)
+        {
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+                return;
 
-        ArchipelagoStatic.ArchLogger.LogDebug("GameMusic", "LoadMusicDataByFileName");
-        ArchipelagoStatic.ArchLogger.LogDebug("GameMusic", $"Scene Started: {GlobalDataBase.dbBattleStage.m_BeganScene} : {GlobalDataBase.dbBattleStage.m_BeganSceneIdx}");
+            ArchipelagoStatic.ArchLogger.LogDebug("GameMusic", "LoadMusicDataByFileName");
+            ArchipelagoStatic.ArchLogger.LogDebug("GameMusic", $"Scene Started: {GlobalDataBase.dbBattleStage.m_BeganScene} : {GlobalDataBase.dbBattleStage.m_BeganSceneIdx}");
 
-        ArchipelagoStatic.SessionHandler.TrapHandler.LoadMusicDataByFilenameHook();
+            ArchipelagoStatic.SessionHandler.TrapHandler.LoadMusicDataByFilenameHook();
+        }
     }
-}
 /*
 [HarmonyPatch(typeof(StageBattleComponent), "GetMusicDataFromStageInfo")]
 sealed class StageBattleComponentGetMusicDataFromStageInfo {
@@ -29,35 +32,40 @@ sealed class StageBattleComponentGetMusicDataFromStageInfo {
     }
 }
 */
-[HarmonyPatch(typeof(DBStageInfo), "SetRuntimeMusicData")]
-sealed class DBStageInfoSetRuntimeMusicData {
-    static void Postfix(Il2CppSystem.Collections.Generic.List<MusicData> data) {
-        //for (int i = 0; i < data.Count; i++) {
-        //    var md = data._items[i];
-        //    TrapHelper.OutputNote(md);
-        //}
+    [HarmonyPatch(typeof(DBStageInfo), "SetRuntimeMusicData")]
+    sealed class DBStageInfoSetRuntimeMusicData
+    {
+        static void Postfix(Il2CppSystem.Collections.Generic.List<MusicData> data)
+        {
+            //for (int i = 0; i < data.Count; i++) {
+            //    var md = data._items[i];
+            //    TrapHelper.OutputNote(md);
+            //}
 
-        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
-            return;
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+                return;
 
-        ArchipelagoStatic.ArchLogger.Log("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
-        ArchipelagoStatic.SessionHandler.TrapHandler.SetRuntimeMusicDataHook(data);
-        //for (int i = 0; i < data.Count; i++) {
-        //    var md = data._items[i];
-        //    TrapHelper.OutputNote(md);
-        //}
+            ArchipelagoStatic.ArchLogger.Log("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
+            ArchipelagoStatic.SessionHandler.TrapHandler.SetRuntimeMusicDataHook(data);
+            //for (int i = 0; i < data.Count; i++) {
+            //    var md = data._items[i];
+            //    TrapHelper.OutputNote(md);
+            //}
+        }
     }
-}
-[HarmonyPatch(typeof(DBTouhou), "AwakeInit")]
-sealed class DBTouhouAwakeInitPatch {
-    static void Postfix() {
-        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
-            return;
+    [HarmonyPatch(typeof(DBTouhou), "AwakeInit")]
+    sealed class DBTouhouAwakeInitPatch
+    {
+        static void Postfix()
+        {
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+                return;
 
-        //This is one of the earliest things that loads in a game scene. (That we care about that is.)
+            //This is one of the earliest things that loads in a game scene. (That we care about that is.)
 
-        ArchipelagoStatic.ArchLogger.LogDebug("DBTouhou", "Awake Trigger");
-        ArchipelagoStatic.SessionHandler.TrapHandler.ActivateNextTrap();
-        ArchipelagoStatic.SessionHandler.TrapHandler.PreGameSceneLoad();
+            ArchipelagoStatic.ArchLogger.LogDebug("DBTouhou", "Awake Trigger");
+            ArchipelagoStatic.SessionHandler.TrapHandler.ActivateNextTrap();
+            ArchipelagoStatic.SessionHandler.TrapHandler.PreGameSceneLoad();
+        }
     }
 }
