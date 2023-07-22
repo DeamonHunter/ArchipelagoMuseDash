@@ -18,7 +18,7 @@ namespace ArchipelagoMuseDash
             AssetHelpers.Assembly = MelonAssembly;
 
             ArchipelagoStatic.ArchLogger = new ArchLogger();
-            ArchipelagoStatic.Login = new ArchipelagoLogin(Info.Version + "(Melon Loader v0.5.7)");
+            ArchipelagoStatic.Login = new ArchipelagoLogin(Info.Version + " (Melon Loader v0.5.7)");
             ArchipelagoStatic.SessionHandler = new SessionHandler();
 
             ArchipelagoStatic.ArchipelagoIcons = new[]
