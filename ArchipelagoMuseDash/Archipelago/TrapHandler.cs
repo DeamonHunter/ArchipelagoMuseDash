@@ -77,11 +77,13 @@ namespace ArchipelagoMuseDash.Archipelago
         {
             if (_lastHandledTrap >= _knownTraps.Count || _activatedTrap != null)
             {
-                ShowText.ShowInfo(_activatedTrap.TrapMessage);
+                if (_activatedTrap != null)
+                    ShowText.ShowInfo(_activatedTrap.TrapMessage);
                 return;
             }
 
             _activatedTrap = _knownTraps[_lastHandledTrap];
+
             if (_activatedTrap.NetworkItem.Player == 0 && _activatedTrap.NetworkItem.Location < 0)
                 _knownTraps.RemoveAt(_lastHandledTrap);
             else
