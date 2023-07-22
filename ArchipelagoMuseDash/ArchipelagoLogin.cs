@@ -1,44 +1,53 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using ArchipelagoMuseDash.Helpers;
 using Assets.Scripts.Database;
+using Assets.Scripts.UI.Controls;
 using MelonLoader;
 using UnhollowerBaseLib;
 using UnityEngine;
 
-namespace ArchipelagoMuseDash {
-    public class ArchipelagoLogin {
-        bool _showLoginButton;
-        bool _showLoginScreen;
+namespace ArchipelagoMuseDash
+{
+    public class ArchipelagoLogin
+    {
+        private bool _showLoginButton;
+        private bool _showLoginScreen;
 
-        string _ipAddress;
-        string _username;
-        string _password;
+        private string _ipAddress;
+        private string _username;
+        private string _password;
 
-        string _error;
-        readonly string _lastLoginPath;
+        private string _error;
+        private readonly string _lastLoginPath;
 
-        float _deltaTime;
+        private float _deltaTime;
 
-        const float archipelago_login_display_delay = 0.25f;
+        private const float archipelago_login_display_delay = 0.25f;
 
-        Texture2D _yesTexture;
-        Texture2D _yesTextureHighlighted;
-        Texture2D _noTexture;
-        Texture2D _noTextureHighlighted;
-        Texture2D _backgroundTexture;
+        private Texture2D _yesTexture;
+        private Texture2D _yesTextureHighlighted;
+        private Texture2D _noTexture;
+        private Texture2D _noTextureHighlighted;
+        private Texture2D _backgroundTexture;
 
-        GUIStyle _windowStyle;
-        GUIStyle _buttonYesStyle;
-        GUIStyle _buttonNoStyle;
-        GUIStyle _labelStyle;
-        GUIStyle _textFieldStyle;
-        string _versionNumber;
+        private GUIStyle _windowStyle;
+        private GUIStyle _buttonYesStyle;
+        private GUIStyle _buttonNoStyle;
+        private GUIStyle _labelStyle;
+        private GUIStyle _textFieldStyle;
+        private string _versionNumber;
 
-        public ArchipelagoLogin(string versionNumber) {
+        private bool _hasCollected;
+        private bool _hasReleased;
+        private bool _backedUpFile;
+
+        public ArchipelagoLogin(string versionNumber)
+        {
 #if DEBUG
-            _ipAddress = "localhost:38281";
+        _ipAddress = "localhost:38281";
 #else
             _ipAddress = "archipelago.gg:38281";
 #endif
@@ -55,21 +64,28 @@ namespace ArchipelagoMuseDash {
             MelonEvents.OnGUI.Subscribe(DrawArchLogin);
         }
 
-        public void OnUpdate() {
+        public void OnUpdate()
+        {
             _showLoginButton = !ArchipelagoStatic.SessionHandler.IsLoggedIn && ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlHome");
         }
 
-        public void SceneSwitch() {
+        public void SceneSwitch()
+        {
             _deltaTime = 0;
         }
 
-        void DrawArchLogin() {
-            try {
+        private void DrawArchLogin()
+        {
+            try
+            {
                 //Can only call this in GUI
                 if (_windowStyle == null)
                     SetupStyles(); //Todo: Add textures
 
-                if (!_showLoginScreen) {
+                DrawForfeitRelease();
+
+                if (!_showLoginScreen)
+                {
                     if (!_showLoginButton)
                         return;
 
@@ -77,19 +93,26 @@ namespace ArchipelagoMuseDash {
                         return;
 
                     //Due to the way muse dash works, the home screen is enable for a frame or two after the load screen finishes.
-                    if (_deltaTime < archipelago_login_display_delay) {
+                    if (_deltaTime < archipelago_login_display_delay)
+                    {
                         _deltaTime += Time.deltaTime;
                         return;
                     }
+
+                    if (!_backedUpFile)
+                        BackupSaveData();
 
                     if (!GUI.Button(new Rect(Screen.width - 320, Screen.height - 120, 300, 100), "Show Archipelago Login", _buttonNoStyle))
                         return;
 
                     _showLoginScreen = true;
 
-                    if (File.Exists(_lastLoginPath)) {
-                        using (var file = File.OpenRead(_lastLoginPath)) {
-                            using (var sr = new StreamReader(file)) {
+                    if (File.Exists(_lastLoginPath))
+                    {
+                        using (var file = File.OpenRead(_lastLoginPath))
+                        {
+                            using (var sr = new StreamReader(file))
+                            {
                                 _ipAddress = sr.ReadLine();
                                 _username = sr.ReadLine();
                             }
@@ -107,14 +130,17 @@ namespace ArchipelagoMuseDash {
 
                 GUI.ModalWindow(0, new Rect(Screen.width / 2.0f - 250, Screen.height / 2.0f - 185, 500, 370), (GUI.WindowFunction)DrawArchWindow, "Connect to an Archipelago Server", _windowStyle);
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 ArchipelagoStatic.ArchLogger.Error("DrawArchLogin", e);
                 MelonEvents.OnGUI.Unsubscribe(DrawArchLogin);
             }
         }
 
-        void DrawArchWindow(int windowID) {
-            GUILayout.Label("", _labelStyle, new Il2CppReferenceArray<GUILayoutOption>(new[] {
+        private void DrawArchWindow(int windowID)
+        {
+            GUILayout.Label("", _labelStyle, new Il2CppReferenceArray<GUILayoutOption>(new[]
+            {
                 GUILayout.Height(40f)
             }));
 
@@ -129,17 +155,20 @@ namespace ArchipelagoMuseDash {
 
             GUILayout.Label("Version: " + _versionNumber, _labelStyle, null);
 
-            GUILayout.Label(_error ?? "", _labelStyle, new Il2CppReferenceArray<GUILayoutOption>(new[] {
+            GUILayout.Label(_error ?? "", _labelStyle, new Il2CppReferenceArray<GUILayoutOption>(new[]
+            {
                 GUILayout.Height(60f)
             }));
 
             GUILayout.BeginHorizontal(null);
-            if (GUILayout.Button("Back Out", _buttonNoStyle, new Il2CppReferenceArray<GUILayoutOption>(new[] {
+            if (GUILayout.Button("Back Out", _buttonNoStyle, new Il2CppReferenceArray<GUILayoutOption>(new[]
+                {
                     GUILayout.Height(40f)
                 })))
                 HideLoginOverlay();
 
-            if (GUILayout.Button("Log In", _buttonYesStyle, new Il2CppReferenceArray<GUILayoutOption>(new[] {
+            if (GUILayout.Button("Log In", _buttonYesStyle, new Il2CppReferenceArray<GUILayoutOption>(new[]
+                {
                     GUILayout.Height(40f)
                 })))
                 AttemptLogin();
@@ -147,68 +176,116 @@ namespace ArchipelagoMuseDash {
             GUILayout.EndHorizontal();
         }
 
-        void SetupStyles() {
-            var mainState = new GUIStyleState() {
+        private void DrawForfeitRelease()
+        {
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+                return;
+
+            if (!ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlHome"))
+                return;
+
+            if (!ArchipelagoStatic.SessionHandler.ItemHandler.VictoryAchieved)
+                return;
+
+            //Todo: Work out if this can be done.
+            if (!_hasCollected && ArchipelagoStatic.SessionHandler.CanCollectOnVictory)
+            {
+                if (GUI.Button(new Rect(Screen.width - 220, Screen.height - 160, 200, 60), "Run !collect", _buttonNoStyle))
+                {
+                    _hasCollected = true;
+                    ArchipelagoStatic.SessionHandler.CollectItems();
+                    ShowText.ShowInfo("Collected items.");
+                }
+            }
+
+            if (!_hasReleased && ArchipelagoStatic.SessionHandler.CanReleaseOnVictory)
+            {
+                if (GUI.Button(new Rect(Screen.width - 220, Screen.height - 80, 200, 60), "Run !release", _buttonNoStyle))
+                {
+                    _hasReleased = true;
+                    ArchipelagoStatic.SessionHandler.ReleaseItems();
+                    ShowText.ShowInfo("Released items.");
+                }
+            }
+        }
+
+        private void SetupStyles()
+        {
+            var mainState = new GUIStyleState()
+            {
                 background = _backgroundTexture,
                 textColor = new Color(1, 1, 1, 1)
             };
 
-            _windowStyle = new GUIStyle(GUI.skin.window) {
+            _windowStyle = new GUIStyle(GUI.skin.window)
+            {
                 fontSize = 24,
                 normal = mainState,
                 hover = mainState,
                 active = mainState
             };
 
-            var yesState = new GUIStyleState() {
+            var yesState = new GUIStyleState()
+            {
                 background = _yesTexture,
                 textColor = Color.white
             };
-            var yesStateHighlighted = new GUIStyleState() {
+            var yesStateHighlighted = new GUIStyleState()
+            {
                 background = _yesTextureHighlighted,
                 textColor = Color.white
             };
 
-            _buttonYesStyle = new GUIStyle(GUI.skin.button) {
+            _buttonYesStyle = new GUIStyle(GUI.skin.button)
+            {
                 fontSize = 20,
                 normal = yesState,
                 hover = yesStateHighlighted,
                 active = yesStateHighlighted
             };
 
-            var noState = new GUIStyleState() {
+            var noState = new GUIStyleState()
+            {
                 background = _noTexture,
                 textColor = Color.white
             };
-            var noStateHighlighted = new GUIStyleState() {
+            var noStateHighlighted = new GUIStyleState()
+            {
                 background = _noTextureHighlighted,
                 textColor = Color.white
             };
 
-            _buttonNoStyle = new GUIStyle(GUI.skin.button) {
+            _buttonNoStyle = new GUIStyle(GUI.skin.button)
+            {
                 fontSize = 20,
                 normal = noState,
                 hover = noStateHighlighted,
                 active = noStateHighlighted
             };
 
-            _labelStyle = new GUIStyle(GUI.skin.label) {
+            _labelStyle = new GUIStyle(GUI.skin.label)
+            {
                 fontSize = 16
             };
-            _textFieldStyle = new GUIStyle(GUI.skin.textField) {
+            _textFieldStyle = new GUIStyle(GUI.skin.textField)
+            {
                 fontSize = 16
             };
         }
 
-        void AttemptLogin() {
-            try {
-                if (!ArchipelagoStatic.SessionHandler.TryFreshLogin(_ipAddress, _username, _password, out var reason)) {
+        private void AttemptLogin()
+        {
+            try
+            {
+                if (!ArchipelagoStatic.SessionHandler.TryFreshLogin(_ipAddress, _username, _password, out var reason))
+                {
                     _error = reason;
                     return;
                 }
 
                 var baseDirectory = Path.GetDirectoryName(_lastLoginPath);
-                if (baseDirectory != null) {
+                if (baseDirectory != null)
+                {
                     if (!Directory.Exists(baseDirectory))
                         Directory.CreateDirectory(baseDirectory);
 
@@ -221,20 +298,22 @@ namespace ArchipelagoMuseDash {
                 SwapToArchipelagoSave();
                 ArchipelagoStatic.SessionHandler.StartSession();
 #if DEBUG
-                //Attach this to playing normally so that it can be easily triggered, once everything *should* be loaded
-                ArchipelagoStatic.SongNameChanger.DumpSongsToTextFile(Path.Combine(Application.absoluteURL, "Output/SongDump.txt"));
+            //Attach this to playing normally so that it can be easily triggered, once everything *should* be loaded
+            ArchipelagoStatic.SongNameChanger.DumpSongsToTextFile(Path.Combine(Application.absoluteURL, "Output/SongDump.txt"));
 #endif
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 ArchipelagoStatic.ArchLogger.Error("Login", e);
                 _error = e.Message;
             }
         }
 
-        void SwapToArchipelagoSave() {
-            var path = Path.Combine(Application.absoluteURL, "UserData/ArchSaves");
+        private void SwapToArchipelagoSave()
+        {
+            var path = Path.Combine(Application.absoluteURL, "UserData", "ArchSaves");
             ArchipelagoStatic.SteamSync.m_FolderPath = path;
-            ArchipelagoStatic.SteamSync.m_FilePath = ArchipelagoStatic.SteamSync.m_FolderPath + "/" + ArchipelagoStatic.SteamSync.m_FileName;
+            ArchipelagoStatic.SteamSync.m_FilePath = Path.Combine(ArchipelagoStatic.SteamSync.m_FolderPath, ArchipelagoStatic.SteamSync.m_FileName);
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
@@ -247,14 +326,37 @@ namespace ArchipelagoMuseDash {
 
             //Force collection update
             MusicTagManager.instance.RefreshDBDisplayMusics();
-            ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
+
+            if (ArchipelagoStatic.SongSelectPanel)
+                ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
 
             HideLoginOverlay();
         }
 
-        void HideLoginOverlay() {
+        private void BackupSaveData()
+        {
+            var backupPath = Path.Combine(Application.absoluteURL, "UserData", "Backups");
+            if (!Directory.Exists(backupPath))
+                Directory.CreateDirectory(backupPath);
+
+            var files = Directory.GetFiles(backupPath);
+            if (files.Length >= 20)
+            {
+                var fileInfo = new DirectoryInfo(backupPath).GetFileSystemInfos().OrderBy(fi => fi.CreationTime).First();
+                File.Delete(fileInfo.FullName);
+            }
+
+            if (File.Exists(ArchipelagoStatic.OriginalFilePath))
+                File.Copy(ArchipelagoStatic.OriginalFilePath, Path.Combine(backupPath, DateTime.Now.ToString("yyyy.MM.dd_HHmmss") + ".sav"));
+
+            _backedUpFile = true;
+        }
+
+        private void HideLoginOverlay()
+        {
             var museCharacter = ArchipelagoStatic.MuseCharacter;
-            if (museCharacter != null) {
+            if (museCharacter != null)
+            {
                 //Traverse up the tree so that we reenable all UI
                 var uiParent = museCharacter.transform.parent.parent.parent;
                 uiParent.gameObject.SetActive(true);

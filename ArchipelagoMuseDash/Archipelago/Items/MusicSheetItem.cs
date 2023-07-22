@@ -1,5 +1,4 @@
-﻿using Archipelago.MultiClient.Net.Enums;
-using Archipelago.MultiClient.Net.Models;
+﻿using Archipelago.MultiClient.Net.Models;
 
 namespace ArchipelagoMuseDash.Archipelago.Items {
     public class MusicSheetItem : IMuseDashItem {
@@ -17,7 +16,7 @@ namespace ArchipelagoMuseDash.Archipelago.Items {
         public string PreUnlockBannerText => "A new song?";
         public string PostUnlockBannerText => $"Music Sheet No. {ArchipelagoStatic.SessionHandler.ItemHandler.NumberOfMusicSheetsToWin - (TokensLeft() + 1)}";
 
-        float TokensLeft() => (ArchipelagoStatic.SessionHandler.ItemHandler.NumberOfMusicSheetsToWin - ArchipelagoStatic.SessionHandler.ItemHandler.CurrentNumberOfMusicSheets) - 1;
+        private float TokensLeft() => (ArchipelagoStatic.SessionHandler.ItemHandler.NumberOfMusicSheetsToWin - ArchipelagoStatic.SessionHandler.ItemHandler.CurrentNumberOfMusicSheets) - 1;
 
         public void UnlockItem(ItemHandler handler, bool immediate) {
             ArchipelagoStatic.SessionHandler.ItemHandler.AddMusicSheet();

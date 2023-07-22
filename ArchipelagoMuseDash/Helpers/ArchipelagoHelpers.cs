@@ -1,13 +1,18 @@
-﻿using ArchipelagoMuseDash.Archipelago;
+﻿using System.ComponentModel;
+using Archipelago.MultiClient.Net.Models;
+using ArchipelagoMuseDash.Archipelago;
 using Assets.Scripts.Database;
 
-namespace ArchipelagoMuseDash.Helpers {
-    public static class ArchipelagoHelpers {
+namespace ArchipelagoMuseDash.Helpers
+{
+    public static class ArchipelagoHelpers
+    {
         /// <summary>
         /// Chooses the next available song in the shown music list.
         /// - This should be run before any songs are hidden.
         /// </summary>
-        public static void SelectNextAvailableSong() {
+        public static void SelectNextAvailableSong()
+        {
             var selectedInfo = GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo;
             if (selectedInfo == null)
                 return;
@@ -17,7 +22,8 @@ namespace ArchipelagoMuseDash.Helpers {
                 return;
 
             var index = GlobalDataBase.dbMusicTag.m_StageShowMusicUids.IndexOf(selectedInfo.uid);
-            if (index < 0) {
+            if (index < 0)
+            {
                 ArchipelagoStatic.ArchLogger.LogDebug("SelectNextAvailableSong", "Song wasn't available. So giving up.");
                 return;
             }
@@ -25,7 +31,8 @@ namespace ArchipelagoMuseDash.Helpers {
             var array = GlobalDataBase.dbMusicTag.m_StageShowMusicUids.ToArray();
 
             MusicInfo nextSong = null;
-            for (int i = index + 1; i < array.Count; i++) {
+            for (int i = index + 1; i < array.Count; i++)
+            {
                 var songUid = array[i];
                 if (!IsSongStillShown(songUid))
                     continue;
@@ -33,8 +40,10 @@ namespace ArchipelagoMuseDash.Helpers {
                 break;
             }
 
-            if (nextSong == null) {
-                for (int i = 0; i < index; i++) {
+            if (nextSong == null)
+            {
+                for (int i = 0; i < index; i++)
+                {
                     var songUid = array[i];
                     if (!IsSongStillShown(songUid))
                         continue;
@@ -47,20 +56,32 @@ namespace ArchipelagoMuseDash.Helpers {
                 GlobalDataBase.dbMusicTag.SetSelectedMusic(nextSong);
         }
 
-        static bool IsSongStillShown(string uid) {
+        private static bool IsSongStillShown(string uid)
+        {
             var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
-            switch (itemHandler.HiddenSongMode) {
+
+            switch (itemHandler.HiddenSongMode)
+            {
                 case ShownSongMode.AllInLogic:
                     return itemHandler.SongsInLogic.Contains(uid);
                 case ShownSongMode.Unlocks:
                     return itemHandler.SongsInLogic.Contains(uid) && itemHandler.UnlockedSongUids.Contains(uid);
                 case ShownSongMode.Unplayed:
-                    return itemHandler.SongsInLogic.Contains(uid)
-                           && itemHandler.UnlockedSongUids.Contains(uid)
-                           && !itemHandler.CompletedSongUids.Contains(uid);
+                    return itemHandler.SongsInLogic.Contains(uid) && itemHandler.UnlockedSongUids.Contains(uid) && !itemHandler.CompletedSongUids.Contains(uid);
+                default:
+                    throw new InvalidEnumArgumentException(nameof(itemHandler.HiddenSongMode), (int)itemHandler.HiddenSongMode, typeof(ShownSongMode));
             }
+        }
 
-            return true;
+        public static bool IsItemDuplicate(NetworkItem itemA, NetworkItem itemB)
+        {
+            //If either item is given by the server (cheat or starting item) then never say its a duplicate
+            if (itemA.Player == 0 && itemA.Location < 0)
+                return false;
+            if (itemB.Player == 0 && itemB.Location < 0)
+                return false;
+
+            return itemA.Item == itemB.Item && itemA.Location == itemB.Location;
         }
     }
 }

@@ -6,35 +6,42 @@ using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
 using Assets.Scripts.Database;
 using Assets.Scripts.UI.Controls;
+using UnityEngine;
 
-namespace ArchipelagoMuseDash.Archipelago {
-    public class HintHandler {
-        public const string ArchipelagoDialogueTitle = "Archipelago Hint";
+namespace ArchipelagoMuseDash.Archipelago
+{
+    public class HintHandler
+    {
+        public const string ARCHIPELAGO_DIALOGUE_TITLE = "Archipelago Hint";
 
-        ArchipelagoSession _currentSession;
-        int _currentPlayerSlot;
+        private readonly ArchipelagoSession _currentSession;
+        private readonly int _currentPlayerSlot;
 
-        Dictionary<long, Hint> _musicSheetHints = new Dictionary<long, Hint>();
-        Dictionary<string, Hint> _locationHints = new Dictionary<string, Hint>();
-        Dictionary<string, Hint> _itemsHints = new Dictionary<string, Hint>();
+        private readonly Dictionary<long, Hint> _musicSheetHints = new Dictionary<long, Hint>();
+        private readonly Dictionary<string, Hint> _locationHints = new Dictionary<string, Hint>();
+        private readonly Dictionary<string, Hint> _itemsHints = new Dictionary<string, Hint>();
 
-        MusicInfo _lastMusic;
-        bool _forceUpdate;
+        private MusicInfo _lastMusic;
+        private bool _forceUpdate;
 
-        public HintHandler(ArchipelagoSession session, int playerSlot) {
+        public HintHandler(ArchipelagoSession session, int playerSlot)
+        {
             _currentSession = session;
             _currentPlayerSlot = playerSlot;
         }
 
-        public void Setup() {
+        public void Setup()
+        {
             _locationHints.Clear();
             _itemsHints.Clear();
             _musicSheetHints.Clear();
             _currentSession.DataStorage.TrackHints(HandleHints);
         }
 
-        public void OnUpdate() {
-            if (ArchipelagoStatic.SessionHandler.SongSelectAdditions.HintButton == null) {
+        public void OnUpdate()
+        {
+            if (ArchipelagoStatic.SessionHandler.SongSelectAdditions.HintButton == null)
+            {
                 _forceUpdate = true;
                 return;
             }
@@ -58,7 +65,8 @@ namespace ArchipelagoMuseDash.Archipelago {
             songTitleComp.text = isSongRandomSelect ? "" : ArchipelagoStatic.SongNameChanger.GetSongName(currentlySelectedSong);
             ArchipelagoStatic.ArchLogger.LogDebug("Hint Handler", songTitleComp.text);
 
-            if (!isSongRandomSelect && _currentSession.RoomState.HintCostPercentage <= 100) {
+            if (!isSongRandomSelect && _currentSession.RoomState.HintCostPercentage <= 100)
+            {
                 var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
                 if (itemHandler.SongsInLogic.Contains(currentlySelectedSong.uid) && !itemHandler.UnlockedSongUids.Contains(currentlySelectedSong.uid))
                     hintButton.interactable = true; //Todo: Check to see if all hints are exhausted
@@ -68,7 +76,8 @@ namespace ArchipelagoMuseDash.Archipelago {
             else
                 hintButton.interactable = false;
 
-            if (!isSongRandomSelect && ArchipelagoStatic.SessionHandler.HintHandler.TryGetSongHints(currentlySelectedSong, out var hintStr)) {
+            if (!isSongRandomSelect && ArchipelagoStatic.SessionHandler.HintHandler.TryGetSongHints(currentlySelectedSong, out var hintStr))
+            {
                 ArchipelagoStatic.ArchLogger.LogDebug("Hinting", hintStr);
                 hintText.SetActive(true);
                 hintTextComp.text = hintStr;
@@ -77,51 +86,59 @@ namespace ArchipelagoMuseDash.Archipelago {
                 hintText.SetActive(false);
         }
 
-        public void ShowHintPopup() {
+        public void ShowHintPopup()
+        {
             var song = GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo;
-            if (song == null || song.uid == "?") {
+            if (song == null || song.uid == "?")
+            {
                 ShowText.ShowInfo("Cannot buy a hint for the random button.");
                 return;
             }
 
-            if (ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(song.uid)) {
+            if (ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(song.uid))
+            {
                 ShowText.ShowInfo("You have already unlocked this song.");
                 return;
             }
 
-            if (_currentSession.RoomState.HintCostPercentage > 100) {
+            if (_currentSession.RoomState.HintCostPercentage > 100)
+            {
                 ShowText.ShowInfo("Hint buying has been disabled.");
                 return;
             }
 
             var songName = ArchipelagoStatic.AlbumDatabase.GetLocalisedSongNameForMusicInfo(song);
 
-            if (_currentSession.RoomState.HintCostPercentage <= 0) {
+            if (_currentSession.RoomState.HintCostPercentage <= 0)
+            {
                 //Todo: Save the original message somewhere.
                 ArchipelagoStatic.HideSongDialogue.Show();
-                ArchipelagoStatic.HideSongDialogue.m_Title.text = ArchipelagoDialogueTitle;
+                ArchipelagoStatic.HideSongDialogue.m_Title.text = ARCHIPELAGO_DIALOGUE_TITLE;
                 ArchipelagoStatic.HideSongDialogue.m_Msg.text = $"Are you sure want to hint the song {songName}?";
             }
-            else {
+            else
+            {
                 //Todo: Fix up when HintCost is properly calculated at the start
                 int neededHintPoints;
                 if (_currentSession.RoomState.HintCost <= 0)
-                    neededHintPoints = _currentSession.Locations.AllLocations.Count / _currentSession.RoomState.HintCostPercentage;
+                    neededHintPoints = Mathf.FloorToInt(_currentSession.Locations.AllLocations.Count * (_currentSession.RoomState.HintCostPercentage / 100f));
                 else
                     neededHintPoints = _currentSession.RoomState.HintCost;
 
                 var hintPoints = _currentSession.RoomState.HintPoints;
-                //if (hintPoints >= neededHintPoints) {
-                ArchipelagoStatic.HideSongDialogue.Show();
-                ArchipelagoStatic.HideSongDialogue.m_Title.text = ArchipelagoDialogueTitle;
-                ArchipelagoStatic.HideSongDialogue.m_Msg.text = $"Are you sure want to hint the song {songName}?\nYou have {hintPoints} Hint Points and {neededHintPoints} points for a hint.\nHint Points may not be correct.";
-                //}
-                //else
-                //    ShowText.ShowInfo($"You do not have enough points to hint this song. You have {hintPoints} and need {neededHintPoints}.");
+                if (hintPoints >= neededHintPoints)
+                {
+                    ArchipelagoStatic.HideSongDialogue.Show();
+                    ArchipelagoStatic.HideSongDialogue.m_Title.text = ARCHIPELAGO_DIALOGUE_TITLE;
+                    ArchipelagoStatic.HideSongDialogue.m_Msg.text = $"Are you sure want to hint the song {songName}?\nYou have {hintPoints} Hint Points and {neededHintPoints} points for a hint.\nHint Points may not be correct.";
+                }
+                else
+                    ShowText.ShowInfo($"You do not have enough points to hint this song. You have {hintPoints} and need {neededHintPoints}.");
             }
         }
 
-        public void HintSong(MusicInfo song) {
+        public void HintSong(MusicInfo song)
+        {
             if (song == null)
                 throw new ArgumentException("Tried to get hint on null MusicInfo.");
 
@@ -132,13 +149,16 @@ namespace ArchipelagoMuseDash.Archipelago {
                 _currentSession.Socket.SendPacketAsync(new SayPacket { Text = $"!hint {ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(song)}" });
         }
 
-        public void HandleHints(Hint[] hints) {
+        private void HandleHints(Hint[] hints)
+        {
             ArchipelagoStatic.ArchLogger.Log("Hinting", "Got new hints.");
             _forceUpdate = true;
 
-            foreach (var hint in hints) {
+            foreach (var hint in hints)
+            {
                 var itemName = _currentSession.Items.GetItemName(hint.ItemId);
-                if (itemName == "Music Sheet" && hint.ReceivingPlayer == _currentPlayerSlot) {
+                if (itemName == "Music Sheet" && hint.ReceivingPlayer == _currentPlayerSlot)
+                {
                     if (hint.Found)
                         _musicSheetHints.Remove(hint.LocationId);
                     else
@@ -147,7 +167,8 @@ namespace ArchipelagoMuseDash.Archipelago {
                     continue;
                 }
 
-                if (hint.FindingPlayer == _currentPlayerSlot) {
+                if (hint.FindingPlayer == _currentPlayerSlot)
+                {
                     var locationName = _currentSession.Locations.GetLocationNameFromId(hint.LocationId);
 
                     ArchipelagoStatic.ArchLogger.LogDebug("Hinting", $"Got Hint for location: {locationName}, Finding Player, {hint.Found}");
@@ -157,31 +178,42 @@ namespace ArchipelagoMuseDash.Archipelago {
                         _locationHints[locationName] = hint;
                 }
 
-                if (hint.ReceivingPlayer == _currentPlayerSlot) {
-                    ArchipelagoStatic.ArchLogger.LogDebug("Hinting", $"Got Hint for location: {itemName}, Recieving Player, {hint.Found}");
+                if (hint.ReceivingPlayer != _currentPlayerSlot)
+                    continue;
 
-                    if (hint.Found)
-                        _itemsHints.Remove(itemName);
-                    else
-                        _itemsHints[itemName] = hint;
-                }
+                ArchipelagoStatic.ArchLogger.LogDebug("Hinting", $"Got Hint for location: {itemName}, Receiving Player, {hint.Found}");
+
+                if (hint.Found)
+                    _itemsHints.Remove(itemName);
+                else
+                    _itemsHints[itemName] = hint;
             }
         }
 
-        public bool TryGetSongHints(MusicInfo info, out string hint) {
+        private bool TryGetSongHints(MusicInfo info, out string hint)
+        {
             if (info == null)
                 throw new ArgumentException("Tried to get hint on null MusicInfo.");
 
+            if (ArchipelagoStatic.SessionHandler.ItemHandler.CompletedSongUids.Contains(info.uid))
+            {
+                hint = null;
+                return false;
+            }
+
             var sb = new StringBuilder();
 
-            if (info.uid == ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong?.uid) {
-                if (_musicSheetHints.Count <= 0) {
+            if (info.uid == ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong?.uid)
+            {
+                if (_musicSheetHints.Count <= 0)
+                {
                     hint = null;
                     return false;
                 }
 
                 sb.AppendLine($"{_musicSheetHints.Count} known locations for music sheets: ");
-                foreach (var musicSheetHint in _musicSheetHints.Values) {
+                foreach (var musicSheetHint in _musicSheetHints.Values)
+                {
                     var locationName = _currentSession.Locations.GetLocationNameFromId(musicSheetHint.LocationId);
                     if (musicSheetHint.FindingPlayer == _currentPlayerSlot) //Local Item
                         sb.AppendLine($"{locationName.Substring(0, locationName.Length - 2)}");
@@ -194,7 +226,8 @@ namespace ArchipelagoMuseDash.Archipelago {
             }
 
             var itemName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(info);
-            if (_itemsHints.TryGetValue(itemName, out var locatedHint)) {
+            if (_itemsHints.TryGetValue(itemName, out var locatedHint))
+            {
                 var locationName = _currentSession.Locations.GetLocationNameFromId(locatedHint.LocationId);
                 if (locatedHint.FindingPlayer == _currentPlayerSlot) //Local Item
                     sb.Append($"To be found at {locationName.Substring(0, locationName.Length - 2)}");
@@ -204,7 +237,8 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             bool addedItemHint = false;
 
-            if (_locationHints.TryGetValue(itemName + "-0", out var itemHint1)) {
+            if (_locationHints.TryGetValue(itemName + "-0", out var itemHint1))
+            {
                 var item = _currentSession.Items.GetItemName(itemHint1.ItemId);
                 if (itemHint1.ReceivingPlayer != _currentPlayerSlot)
                     item += $"[{_currentSession.Players.GetPlayerAlias(itemHint1.ReceivingPlayer)}]";
@@ -215,14 +249,16 @@ namespace ArchipelagoMuseDash.Archipelago {
                 sb.Append($"Has: {item}");
             }
 
-            if (_locationHints.TryGetValue(itemName + "-1", out var itemHint2)) {
+            if (_locationHints.TryGetValue(itemName + "-1", out var itemHint2))
+            {
                 var item = _currentSession.Items.GetItemName(itemHint2.ItemId);
                 if (itemHint2.ReceivingPlayer != _currentPlayerSlot)
                     item += $"[{_currentSession.Players.GetPlayerAlias(itemHint2.ReceivingPlayer)}]";
 
                 if (addedItemHint)
                     sb.Append($", {item}");
-                else {
+                else
+                {
                     if (sb.Length > 0)
                         sb.AppendLine();
                     sb.Append($"Has: {item}");

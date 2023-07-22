@@ -6,22 +6,29 @@ using ArchipelagoMuseDash.Patches;
 using Assets.Scripts.Database;
 using Assets.Scripts.GameCore.HostComponent;
 using Assets.Scripts.UI.Controls;
+using UnityEngine;
+using Random = System.Random;
 
-namespace ArchipelagoMuseDash.Archipelago {
+namespace ArchipelagoMuseDash.Archipelago
+{
+
     /// <summary>
     /// Handles DeathLink for the Archipelago Randomiser
     /// </summary>
-    public class DeathLinkHandler {
-        ArchipelagoSession _session;
-        int _slotID;
-        DeathLinkService _deathLinkService;
+    public class DeathLinkHandler
+    {
+        private readonly ArchipelagoSession _session;
+        private readonly int _slotID;
+        private readonly DeathLinkService _deathLinkService;
 
-        bool _killingPlayer;
-        string _deathLinkReason;
+        private bool _killingPlayer;
+        private string _deathLinkReason;
 
-        Random _random = new Random();
+        private readonly Random _random = new Random();
+        private float _deathDelay = 0;
 
-        List<string> _deathReasons = new List<string>() {
+        private readonly List<string> _deathReasons = new List<string>()
+        {
             //Generic
             "{0} has ran out of rhythm.",
             "{0} took one too many to the face.",
@@ -45,7 +52,8 @@ namespace ArchipelagoMuseDash.Archipelago {
             "{0} ran out of energy for their synergy matrix."
         };
 
-        public DeathLinkHandler(ArchipelagoSession session, int slotID, Dictionary<string, object> slotData) {
+        public DeathLinkHandler(ArchipelagoSession session, int slotID, Dictionary<string, object> slotData)
+        {
             _session = session;
             _slotID = slotID;
 
@@ -59,12 +67,14 @@ namespace ArchipelagoMuseDash.Archipelago {
             ShowText.ShowInfo("Death Link is enabled.\nYou can disable Death Link by swapping to the Silencer Elfin.");
         }
 
-        public void PlayerDied() {
+        public void PlayerDied()
+        {
             ArchipelagoStatic.ArchLogger.LogDebug("DeathLink", $"Player Died. Current Status: {(_deathLinkService != null ? "Active" : "Deactive")}, {_killingPlayer}");
             if (_deathLinkService == null || _killingPlayer)
                 return;
 
-            if (GlobalDataBase.dbBattleStage.IsSelectElfin(PnlVictoryPatch.silencer_elfin_id)) {
+            if (GlobalDataBase.dbBattleStage.IsSelectElfin(PnlVictoryPatch.SILENCER_ELFIN_ID))
+            {
                 ArchipelagoStatic.ArchLogger.LogDebug("DeathLink", "Ignoring Death Link due to silencer elfin.");
                 return;
             }
@@ -78,28 +88,39 @@ namespace ArchipelagoMuseDash.Archipelago {
             _deathLinkService.SendDeathLink(new DeathLink(alias, chosenReason));
         }
 
-        void OnDeathLinkReceived(DeathLink deathLink) {
+        private void OnDeathLinkReceived(DeathLink deathLink)
+        {
             ArchipelagoStatic.ArchLogger.Log("DeathLink", $"Received DeathLink: {deathLink.Source}: {deathLink.Cause}");
-            if (GlobalDataBase.dbBattleStage.IsSelectElfin(PnlVictoryPatch.silencer_elfin_id)) {
+            if (GlobalDataBase.dbBattleStage.IsSelectElfin(PnlVictoryPatch.SILENCER_ELFIN_ID))
+            {
                 ArchipelagoStatic.ArchLogger.LogDebug("DeathLink", "Ignoring Death Link due to silencer elfin.");
                 return;
             }
 
             _deathLinkReason = $"Killed By {deathLink.Source}\n\"{deathLink.Cause}\"";
             _killingPlayer = true;
+
+            var battleStage = ArchipelagoStatic.BattleComponent;
+            if (battleStage == null || battleStage.isDead || battleStage.isPause || battleStage.isSucceed)
+                _deathDelay = 3f;
         }
 
-        public string GetDeathLinkReason() {
+        public string GetDeathLinkReason()
+        {
             var reason = _deathLinkReason;
             _deathLinkReason = null;
             return reason;
         }
 
-        public void Update() {
+        public bool HasDeathLinkReason() => _deathLinkReason != null;
+
+        public void Update()
+        {
             if (!_killingPlayer)
                 return;
 
-            if (GlobalDataBase.dbBattleStage.IsSelectElfin(PnlVictoryPatch.silencer_elfin_id)) {
+            if (GlobalDataBase.dbBattleStage.IsSelectElfin(PnlVictoryPatch.SILENCER_ELFIN_ID))
+            {
                 ArchipelagoStatic.ArchLogger.LogDebug("DeathLink", "Ignoring Death Link due to silencer elfin.");
                 _killingPlayer = false;
                 return;
@@ -109,13 +130,22 @@ namespace ArchipelagoMuseDash.Archipelago {
             if (battleStage == null || battleStage.isDead || battleStage.isPause || battleStage.isSucceed)
                 return;
 
-            try {
+            if (_deathDelay > 0)
+            {
+                _deathDelay -= Time.deltaTime;
+                return;
+            }
+
+            try
+            {
                 BattleRoleAttributeComponent.instance.Hurt(-9999, false);
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 ArchipelagoStatic.ArchLogger.Error("DeathLink", e);
             }
-            finally {
+            finally
+            {
                 _killingPlayer = false;
             }
         }

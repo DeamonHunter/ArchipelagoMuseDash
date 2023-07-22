@@ -6,20 +6,26 @@ using Account;
 using Assets.Scripts.Database;
 using HarmonyLib;
 
-namespace ArchipelagoMuseDash.Patches {
+namespace ArchipelagoMuseDash.Patches
+{
+
     /// <summary>
     /// Patches the API calls to block certain ones while playing archipelago
     /// </summary>
     [HarmonyPatch(typeof(GameAccountSystem), "SendToUrl")]
-    static class WebAPIPatch {
-        private static bool Prefix(string url, string method) {
+    static class WebAPIPatch
+    {
+        private static bool Prefix(string url, string method)
+        {
             //If we aren't logged in to an archipelago. Work as normal.
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return true;
 
             //Todo: Do we need to block other stuff?
-            try {
-                switch (url) {
+            try
+            {
+                switch (url)
+                {
                     case "statistics/pc-play-statistics-feedback":
                         ArchipelagoStatic.ArchLogger.LogDebug("SendToURLPatch", "Blocked play feedback upload.");
                         return false;
@@ -31,7 +37,8 @@ namespace ArchipelagoMuseDash.Patches {
                         return false;
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 ArchipelagoStatic.ArchLogger.Error("SendToURLPatch", e);
                 return false;
             }

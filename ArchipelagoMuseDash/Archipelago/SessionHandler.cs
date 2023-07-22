@@ -2,23 +2,32 @@
 using System.Collections.Generic;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
+using Archipelago.MultiClient.Net.Packets;
 
-namespace ArchipelagoMuseDash.Archipelago {
+namespace ArchipelagoMuseDash.Archipelago
+{
     /// <summary>
     /// The main class which handles the creation and usage of <see cref="ArchipelagoSession"/>.
     /// </summary>
-    public class SessionHandler {
+    public class SessionHandler
+    {
         public ItemHandler ItemHandler;
         public HintHandler HintHandler;
         public DeathLinkHandler DeathLinkHandler;
+        public TrapHandler TrapHandler;
 
         public SongSelectAdditions SongSelectAdditions;
 
+        public bool CanReleaseOnVictory { get; private set; }
+        public bool CanCollectOnVictory { get; private set; }
+
         public bool IsLoggedIn => _currentSession != null;
 
-        ArchipelagoSession _currentSession;
-        int _slot;
-        Dictionary<string, object> _slotData;
+        private ArchipelagoSession _currentSession;
+        private int _slot;
+        private int _team;
+        private Dictionary<string, object> _slotData;
+
 
         /// <summary>
         /// Attempts to create a new <see cref="ArchipelagoSession"/> using the data provided.<br/>
@@ -30,7 +39,8 @@ namespace ArchipelagoMuseDash.Archipelago {
         /// <param name="password">The password for this slot.</param>
         /// <param name="reason">The first error code that was generated if the attempt was unsuccessful.</param>
         /// <returns>Whether the session was successfully created.</returns>
-        public bool TryFreshLogin(string ipAddress, string username, string password, out string reason) {
+        public bool TryFreshLogin(string ipAddress, string username, string password, out string reason)
+        {
             if (_currentSession != null)
                 throw new NotImplementedException("Changing sessions is not implemented atm.");
 
@@ -38,7 +48,8 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             var loginResult = session.TryConnectAndLogin("Muse Dash", username, ItemsHandlingFlags.AllItems, password: password);
 
-            if (!loginResult.Successful) {
+            if (!loginResult.Successful)
+            {
                 var failed = (LoginFailure)loginResult;
 
                 //Todo: When does multiple errors show up? And should we handle that case here.
@@ -49,6 +60,7 @@ namespace ArchipelagoMuseDash.Archipelago {
             var successful = (LoginSuccessful)loginResult;
 
             _slot = successful.Slot;
+            _team = successful.Team;
             _slotData = successful.SlotData;
             _currentSession = session;
 
@@ -59,20 +71,27 @@ namespace ArchipelagoMuseDash.Archipelago {
         /// <summary>
         /// Starts up all Archipelago related services. Should be started after loading save file to ensure nothing is broken.
         /// </summary>
-        public void StartSession() {
-            try {
+        public void StartSession()
+        {
+            try
+            {
                 ItemHandler = new ItemHandler(_currentSession, _slot);
                 HintHandler = new HintHandler(_currentSession, _slot);
                 DeathLinkHandler = new DeathLinkHandler(_currentSession, _slot, _slotData);
+                TrapHandler = new TrapHandler(_slot, _team, _currentSession.DataStorage);
                 SongSelectAdditions = new SongSelectAdditions();
 
                 _currentSession.MessageLog.OnMessageReceived += ArchipelagoStatic.ArchLogger.LogMessage;
+
+                CanReleaseOnVictory = (_currentSession.RoomState.ReleasePermissions & (Permissions.Enabled | Permissions.Goal)) != 0;
+                CanCollectOnVictory = (_currentSession.RoomState.CollectPermissions & (Permissions.Enabled | Permissions.Goal)) != 0;
 
                 ArchipelagoStatic.AlbumDatabase.Setup();
                 ItemHandler.Setup(_slotData);
                 HintHandler.Setup();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 ArchipelagoStatic.ArchLogger.Error("ItemHandler", e);
             }
         }
@@ -80,7 +99,8 @@ namespace ArchipelagoMuseDash.Archipelago {
         /// <summary>
         /// Runs on Every Unity's OnUpdate(). Passes the update along to child handlers, if the session was started.
         /// </summary>
-        public void OnUpdate() {
+        public void OnUpdate()
+        {
             if (!IsLoggedIn)
                 return;
 
@@ -95,7 +115,8 @@ namespace ArchipelagoMuseDash.Archipelago {
         /// <summary>
         /// Runs on Every Unity's OnLateUpdate(). Passes the update along to child handlers, if the session was started.
         /// </summary>
-        public void OnLateUpdate() {
+        public void OnLateUpdate()
+        {
             if (!IsLoggedIn)
                 return;
 
@@ -105,11 +126,21 @@ namespace ArchipelagoMuseDash.Archipelago {
         /// <summary>
         /// Runs on Unity's Scene has changed.
         /// </summary>
-        public void SceneChanged(string sceneName) {
+        public void SceneChanged(string sceneName)
+        {
             if (sceneName != "UISystem_PC")
                 return;
 
             SongSelectAdditions?.MainSceneLoaded();
+        }
+
+        public void CollectItems()
+        {
+            _currentSession.Socket.SendPacketAsync(new SayPacket { Text = $"!collect" });
+        }
+        public void ReleaseItems()
+        {
+            _currentSession.Socket.SendPacketAsync(new SayPacket { Text = $"!release" });
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿namespace ArchipelagoMuseDash.Archipelago {
-    public enum GradeOption {
+﻿namespace ArchipelagoMuseDash.Archipelago
+{
+    public enum GradeOption
+    {
         Any = 0,
         C = 1,
         B = 2,

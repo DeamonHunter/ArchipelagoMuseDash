@@ -1,201 +1,322 @@
 {
-    //
-    // Translated Section
-    //
+  //
+  // Translated Section
+  //
 
-    // Steps taken to translate each song:
-    // 1. Tried to find an official source. (Some do actually have translations, just not in Muse Dash)
-    // 2. Tried to find a vid with the name in english
-    // 3. Attempted to find translation. (Usually within the main uploads to youtube)
-    // 4. Translate with google translate.
+  // Steps taken to translate each song:
+  // 1. Tried to find an official source. (Some do actually have translations, just not in Muse Dash)
+  // 2. Tried to find a vid with the name in english
+  // 3. Attempted to find translation. (Usually within the main uploads to youtube)
+  // 4. Translate with google translate.
 
-    //Shout out to litchfirmian7562 on youtube for making translations of a lot of muse dash songs.
+  //Shout out to litchfirmian7562 on youtube for making translations of a lot of muse dash songs.
 
-    //Youtube Vid description: https://www.youtube.com/watch?v=gaxDJiJn4WQ
-    "0-4": "One-Way Subway", //单向地铁 Feat.karin
+  //Youtube Vid description: https://www.youtube.com/watch?v=gaxDJiJn4WQ
+  "0-4": "One-Way Subway",
+  //单向地铁 Feat.karin
 
-    //Youtube Vid: https://www.youtube.com/watch?v=4J68z96ht1s
-    "0-6": "Shiguang Tuya", //时光涂鸦
+  //Youtube Vid: https://www.youtube.com/watch?v=4J68z96ht1s
+  "0-6": "Shiguang Tuya",
+  //时光涂鸦
 
-    //Youtube Vid: https://www.youtube.com/watch?v=H3wCZQm8AlU
-    "0-7": "Dolphin and Broadcast", //海豚与广播 feat.Uranyan
+  //Youtube Vid: https://www.youtube.com/watch?v=H3wCZQm8AlU
+  "0-7": "Dolphin and Broadcast",
+  //海豚与广播 feat.Uranyan
 
-    //(Official) Youtube Vid: https://www.youtube.com/watch?v=lLpU7uL7aX8
-    "0-10": "Lian Ai Audio Navigation", //恋爱语音导航 feat.yousa
+  //(Official) Youtube Vid: https://www.youtube.com/watch?v=lLpU7uL7aX8
+  "0-10": "Lian Ai Audio Navigation",
+  //恋爱语音导航 feat.yousa
 
-    //Youtube Comment: https://www.youtube.com/watch?v=35FOEZ5Y0uU&lc=UgzPZsVjSEqw_5CIjFh4AaABAg
-    "0-31": "Candy-coloured Love Theory", //糖果色恋爱学
+  //Youtube Comment: https://www.youtube.com/watch?v=35FOEZ5Y0uU&lc=UgzPZsVjSEqw_5CIjFh4AaABAg
+  "0-31": "Candy-coloured Love Theory",
+  //糖果色恋爱学
 
-    //Youtube Vid: https://www.youtube.com/watch?v=1eW9rc6QujQ
-    "0-35": "Tu Hua", //徒 花
+  //Youtube Vid: https://www.youtube.com/watch?v=1eW9rc6QujQ
+  "0-35": "Tu Hua",
+  //徒 花
 
-    //(Official) Youtube Vid Description: https://www.youtube.com/watch?v=9a-dCsq8ofg
-    "0-42": "From the New World", //新世界より
+  //(Official) Youtube Vid Description: https://www.youtube.com/watch?v=9a-dCsq8ofg
+  "0-42": "From the New World",
+  //新世界より
 
-    //Youtube Comment: https://www.youtube.com/watch?v=4CWKA3yDIgM&lc=UgwCwmZq0Mdxtz-o7rZ4AaABAg
-    "13-0": "Instant Soluble Neon", //速溶霓虹 feat.kumako
+  //Youtube Comment: https://www.youtube.com/watch?v=4CWKA3yDIgM&lc=UgwCwmZq0Mdxtz-o7rZ4AaABAg
+  "13-0": "Instant Soluble Neon",
+  //速溶霓虹 feat.kumako
 
-    //Google Translated
-    "13-1": "Retrospective Peom on the Planet", //星球上的追溯诗
+  //Google Translated
+  "13-1": "Retrospective Poem on the Planet",
+  //星球上的追溯诗
 
-    //(Official) Youtube Vid: https://www.youtube.com/watch?v=V-CnJEiuklA
-    "13-2": "I'm Gonna Buy! Buy! Buy!", //我要买买买
+  //(Official) Youtube Vid: https://www.youtube.com/watch?v=V-CnJEiuklA
+  "13-2": "I'm Gonna Buy! Buy! Buy!",
+  //我要买买买
 
-    //Google Translated
-    "13-3": "Dating Manifesto", //约会宣言
+  //Google Translated
+  "13-3": "Dating Manifesto",
+  //约会宣言
 
-    //Google Translated
-    "13-4": "First Snow", //初雪
+  //Google Translated
+  "13-4": "First Snow",
+  //初雪
 
-    //Youtube Comment: https://www.youtube.com/watch?v=RGYlQEO0RzY&lc=UgzeK9gf_8Z1YOtjgH54AaABAg
-    "13-5": "Xin Shang Huahai", //心上华海
+  //Youtube Comment: https://www.youtube.com/watch?v=RGYlQEO0RzY&lc=UgzeK9gf_8Z1YOtjgH54AaABAg
+  "13-5": "Xin Shang Huahai",
+  //心上华海
 
-    //Youtube Comment: https://www.youtube.com/watch?v=eQjuYUyLOWs&lc=Ugz_8QpaGMOMkjfolNN4AaABAg
-    "15-0": "Magic Spell", //魔咒 feat.早木旋子
+  //Youtube Comment: https://www.youtube.com/watch?v=eQjuYUyLOWs&lc=Ugz_8QpaGMOMkjfolNN4AaABAg
+  "15-0": "Magic Spell",
+  //魔咒 feat.早木旋子
 
-    //Google Translated
-    "15-1": "Colorful Star, Colored Drawing, Travel Poem", //斑斓星，彩绘，旅行诗
+  //Google Translated
+  "15-1": "Colorful Star, Colored Drawing, Travel Poem",
+  //斑斓星，彩绘，旅行诗
 
-    //Youtube comment: https://www.youtube.com/watch?v=x8pHDjXRFfY&lc=UgwTg4iPqk_MPl17rrt4AaABAg
-    "15-4": "I am sorry for my existence", //生而为人，我很抱歉
+  //Youtube comment: https://www.youtube.com/watch?v=x8pHDjXRFfY&lc=UgwTg4iPqk_MPl17rrt4AaABAg
+  "15-4": "I am sorry",
+  //生而为人，我很抱歉
 
-    //Youtube comment: https://www.youtube.com/watch?v=DkP2jwPNdAA&lc=Ugxb77fK5MhiG0E_7jl4AaABAg
-    "18-1": "Deep Blue and the Breaths of the Night", //深蓝与夜的呼吸
+  //Youtube comment: https://www.youtube.com/watch?v=DkP2jwPNdAA&lc=Ugxb77fK5MhiG0E_7jl4AaABAg
+  "18-1": "Deep Blue and the Breaths of the Night",
+  //深蓝与夜的呼吸
 
-    //Google Translated
-    "18-4": "Just Disobedient", //就是不听话
+  //Google Translated
+  "18-4": "Just Disobedient",
+  //就是不听话
 
-    //A single greek letter.
-    "22-2": "Phi", //Φ
+  //A single greek letter.
+  "22-2": "Phi",
+  //Φ
 
-    //Youtube comment: https://www.youtube.com/watch?v=vh0euHbzTFU&lc=Ugw3GpeqJdrDZh3imy54AaABAg
-    //Weirdly the official youtube does not translate this song's title, and only this song.
-    "23-0": "The Dessert After Rain", //雨后甜点
+  //Youtube comment: https://www.youtube.com/watch?v=vh0euHbzTFU&lc=Ugw3GpeqJdrDZh3imy54AaABAg
+  //Weirdly the official youtube does not translate this song's title, and only this song.
+  "23-0": "The Dessert After Rain",
+  //雨后甜点
 
-    //Google Translated
-    "23-1": "Confession Support Formula", //告白应援方程式
+  //Google Translated
+  "23-1": "Confession Support Formula",
+  //告白应援方程式
 
-    //Google Translated
-    "25-5": "Kimi to pool disco", //君とpool disco
+  //Google Translated
+  "25-5": "Kimi to pool disco",
+  //君とpool disco
 
-    //This is a weird one. The actual song title seems to be ニニ which translates to nini...
-    // Gonna go with nini-nini- to make it similar to the Muse Dash title.
-    "28-5": "nini-nini-", //ニニ-nini-
+  //This is a weird one. The actual song title seems to be ニニ which translates to nini...
+  // Gonna go with nini-nini- to make it similar to the Muse Dash title.
+  "28-5": "nini-nini-",
+  //ニニ-nini-
 
-    //Groove Coaster for Steam
-    "29-3": "HG Makaizou Polyvinyl Shounen", //HG魔改造ポリビニル少年
+  //Groove Coaster for Steam
+  "29-3": "HG Makaizou Polyvinyl Shounen",
+  //HG魔改造ポリビニル少年
 
-    //Groove Coaster for Steam
-    "29-4": "Seizya no Ibuki", //聖者の息吹
+  //Groove Coaster for Steam
+  "29-4": "Seizya no Ibuki",
+  //聖者の息吹
 
-    //Youtube Comment: https://www.youtube.com/watch?v=FGTwXloFXvE&lc=UgzRZuWNvzPzA4lLWAB4AaABAg
-    "30-5": "Focus Point", //焦点 feat.早木旋子
+  //Youtube Comment: https://www.youtube.com/watch?v=FGTwXloFXvE&lc=UgzRZuWNvzPzA4lLWAB4AaABAg
+  "30-5": "Focus Point",
+  //焦点 feat.早木旋子
 
-    //Google translated and then shortened
-    "35-0": "PeroPeroGames goes Bankrupt", //MuseDashを作っているPeroPeroGamesさんが倒産しちゃったよ～
+  //Google translated and then shortened
+  "35-0": "PeroPeroGames goes Bankrupt",
+  //MuseDashを作っているPeroPeroGamesさんが倒産しちゃったよ～
 
-    //Youtube Comment: https://www.youtube.com/watch?v=yIxCnj2d7vY&lc=Ugzbc_uBMhSXetFPCrR4AaABAg
-    "35-2": "I am really good at Japanese style", //僕の和風本当上手
+  //Youtube Comment: https://www.youtube.com/watch?v=yIxCnj2d7vY&lc=Ugzbc_uBMhSXetFPCrR4AaABAg
+  "35-2": "I am really good at Japanese style",
+  //僕の和風本当上手
 
-    //Youtube Comment (Apparently Official?): https://www.youtube.com/watch?v=JOAR3sQhnJM&lc=Ugwu3Sgbh-sQVPNp47N4AaABAg
-    "37-0": "Colored Glass", //琉璃色前奏曲
+  //Youtube Comment (Apparently Official?): https://www.youtube.com/watch?v=JOAR3sQhnJM&lc=Ugwu3Sgbh-sQVPNp47N4AaABAg
+  "37-0": "Colored Glass",
+  //琉璃色前奏曲
 
-    // Google Translates to "Snowfall, merikuri", but is likely "Snowfall, Merry Christmas"
-    "38-1": "Snowfall, Merry Christmas", // 雪降り、メリクリ （MD edit）
+  // Google Translates to "Snowfall, merikuri", but is likely "Snowfall, Merry Christmas"
+  "38-1": "Snowfall, Merry Christmas",
+  // 雪降り、メリクリ （MD edit）
 
-    //(Official) Youtube Vid: https://www.youtube.com/watch?v=_OoONfTXOm8
-    "39-0": "See-Saw Day", //去剪海的日子
+  //(Official) Youtube Vid: https://www.youtube.com/watch?v=_OoONfTXOm8
+  "39-0": "See-Saw Day",
+  //去剪海的日子
 
-    //Google Translate
-    "39-6": "Naked Summer", //裸のSummer
+  //Google Translate
+  "39-6": "Naked Summer",
+  //裸のSummer
 
-    //Touhou song. Generally accepted name.
-    "42-1": "Iro wa Nioedo, Chirinuru wo", //色は匂へど散りぬるを
+  //Touhou song. Generally accepted name.
+  "42-1": "Iro wa Nioedo, Chirinuru wo",
+  //色は匂へど散りぬるを
 
-    //Touhou song. Generally accepted name.
-    "42-3": "Hiiro Gekka Kyousai no Zetsu", //緋色月下、狂咲ノ絶
+  //Touhou song. Generally accepted name.
+  "42-3": "Hiiro Gekka Kyousai no Zetsu",
+  //緋色月下、狂咲ノ絶
 
-    //Touhou song. Generally accepted name. (Although Whether its Night of Nights or Night of Knights is up for debate. :P)
-    "43-3": "Night of Nights", //ナイト・オブ・ナイツ
+  //Touhou song. Generally accepted name. (Although Whether its Night of Nights or Night of Knights is up for debate. :P)
+  "43-3": "Night of Nights",
+  //ナイト・オブ・ナイツ
 
-    //Google Translate
-    "43-10": "Catalyst", //カタリスト
+  //Google Translate
+  "43-10": "Catalyst",
+  //カタリスト
 
-    //Touhou song. Generally accepted name.
-    "43-18": "Frightfully-insane Flan-chan's frightful song", //物凄い狂っとるフランちゃんが物凄いうた
+  //Touhou song. Generally accepted name.
+  "43-18": "Frightfully-insane Flan-chan's frightful song",
+  //物凄い狂っとるフランちゃんが物凄いうた
 
-    //Phonetically translated as google just translates this to "war"
-    "44-1": "Ying Ying da Zuozhan", //嘤嘤大作战
+  //Official Lyrics: https://www.youtube.com/watch?v=qalJfQkFMD8 (Song name is untranslated but the same lines come up in the song.)
+  "43-24": "Abracadabra",
+  // 天靈靈地靈靈
 
-    //Youtube Comment: https://www.youtube.com/watch?v=pi-qdh647cA&lc=UgwubFBO2MNmyUw4Osx4AaABAg
-    "49-1": "Love-Avoidance Addiction", //恋愛回避依存症
+  //Tried to translate to pinyin. No consensus for the translation and vid is hard to find.
+  "43-29": "Jiumeng",
+  // 旧梦
 
-    //Google Translated
-    "51-0": "Masquerade Diary", //假面日记
+  //Phonetically translated as google just translates this to "war"
+  "44-1": "Ying Ying da Zuozhan",
+  //嘤嘤大作战
 
-    //Google Translated
-    "51-4": "Boys in Virtual Land", //男子in☆バーチャランド
+  //Youtube Comment: https://www.youtube.com/watch?v=pi-qdh647cA&lc=UgwubFBO2MNmyUw4Osx4AaABAg
+  "49-1": "Love-Avoidance Addiction",
+  //恋愛回避依存症
 
-    //Google Translated
-    "52-2": "Not Ornament", //Ornamentじゃない(Muse Dash Mix)
+  //Google Translated
+  "51-0": "Masquerade Diary",
+  //假面日记
 
-    //Google Translated
-    "54-2": "Find this Month's Featured Playlist", //今月のおすすめプレイリストを検索します
+  //Google Translated
+  "51-4": "Boys in Virtual Land",
+  //男子in☆バーチャランド
 
-    //Touhou song. Generally accepted name.
-    "55-0": "Tsuki ni Murakumo Hana ni Kaze", //物凄いスペースシャトルでこいしが物凄いうた
+  //Google Translated
+  "52-2": "Not Ornament",
+  //Ornamentじゃない(Muse Dash Mix)
 
-    //Touhou song. Generally accepted name.
-    "55-2": "Monosugoi Space Shuttle de Koishi ga Monosugoi uta", //物凄いスペースシャトルでこいしが物凄いうた
+  //Google Translated
+  "54-2": "Find this Month's Featured Playlist",
+  //今月のおすすめプレイリストを検索します
 
-    //(Official) Youtube Vid: https://www.youtube.com/watch?v=Xx_IOTxjH_g
-    "55-3": "Kakoinaki Yo wa Ichigo no Tsukikage", //囲い無き世は一期の月影
+  //Touhou song. Generally accepted name.
+  "55-0": "Tsuki ni Murakumo Hana ni Kaze",
+  //物凄いスペースシャトルでこいしが物凄いうた
 
-    //Youtube Vid Description: https://www.youtube.com/watch?v=G5wwb3lKxok
-    "57-3": "Sorewa mo Lovechu", //それはもうらぶちゅ
+  //Touhou song. Generally accepted name.
+  "55-2": "Monosugoi Space Shuttle de Koishi ga Monosugoi uta",
+  //物凄いスペースシャトルでこいしが物凄いうた
 
-    //Youtube Comment: https://www.youtube.com/watch?v=gpBkXZsq2no&lc=Ugzg9pcp36mTlLK4Nsl4AaABAg
-    "58-3": "Don't Make the Vocalist do Anything Insane", //ボーカルに無茶させんな
-    
-    //This doesn't translate well due to it being somewhat corrupted
-    "61-0": "MuseDash ka nanika hi", //MuseDashかヾ何かヽ干∋ッ`⊂ぉヵヽU<ナょナニ気がヾ£ゑょ
-    
-    //Google Translated
-    "61-2": "Buttoba Supernova", //ぶっとばスーパーノヴァ
-    
-    ///
-    /// Song Cleanup Section
-    ///
+  //(Official) Youtube Vid: https://www.youtube.com/watch?v=Xx_IOTxjH_g
+  "55-3": "Kakoinaki Yo wa Ichigo no Tsukikage",
+  //囲い無き世は一期の月影
 
-    "0-28": "Mujinku-Vacuum", // Mujinku-Vacuum Track#ADD8E6-
-    "0-38": "Night Wander", // Night Wander (cnsouka Remix)
-    "0-48": "Magical Wonderland", // Magical Wonderland (More colorful mix)
-    "0-52": "INTERNET OVERDOSE",// INTERNET OVERDOSE（Aiobahn feat.KOTOKO)
-    "4-5": "GOODTEK", // GOODTEK(Hyper Edit)
-    "7-5": "GOODBOUNCE", // GOODBOUNCE (Groove Edit)
-    "17-5": "energy night", // energy night(DASH mix)
-    "18-5": "Holy Sh*t Grass Snake", //Holy Shit Grass Snake
-    "21-0": "Glimmer", // Glimmer feat.祈Inory
-    "21-1": "EXIST", // EXIST feat.米雅
-    "21-2": "Irreplaceable", // Irreplaceable feat.夏铜子
-    "22-5": "Disorder", // Disorder (feat.YURI)
-    "23-2": "Omatsuri", //Omatsuri feat.兔子ST
-    "25-3": "Strawberry Godzilla", // <b>sᴛʀᴀᴡʙᴇʀʀʏ ɢᴏᴅᴢɪʟʟᴀ</b>
-    "26-2": "Punai Punai Genso", // Punai Punai Genso ~Punai Punai in Wonderland~
-    "27-2": "Renji de haochi", // Renji de haochi☆Denshi choriki shiyou chuka ryori 4000nen rekishi shunkan chori kanryo butouteki ryoricho☆
-    "27-4": "Newbies, Geeks, Internets", // Newbies take 3 years, geeks 8 years, and internets are forever
-    "31-4": "Cross Ray", // Cross†Ray (feat. 月下Lia)
-    "33-0": "Fireflies", // Fireflies (Funk Fiction remix)
-    "39-5": "Blush", // Blush (feat. MYLK)
-    "39-7": "BLESS ME", // BLESS ME(Samplingsource)
-    "43-17": "DROPS", // DROPS (feat. Such)
-    "43-15": "AKUMU /", // AKUMU / feat.tug
-    "44-0": "Party in the HOLLOWood", // Party in the HOLLOWood feat. ななひら
-    "52-3": "Baby Pink", // Baby Pink (w/ YUC'e)
-    "54-0": "White Canvas", // White Canvas (feat. 藍月なくる)
-    "54-1": "Gloomy Flash", // Gloomy Flash (feat. Mami)
-    "54-3": "Sunday Night", // Sunday Night (feat. Kanata.N)
-    "54-4": "Goodbye Goodnight", // Goodbye Goodnight (feat. Shully)
-    "54-5": "ENDLESS CIDER", // ENDLESS CIDER (feat. Such)
-    "57-5": "Brilliant & Shining!", // Brilliant & Shining! (Game Edit.)
+  //Youtube Vid Description: https://www.youtube.com/watch?v=G5wwb3lKxok
+  "57-3": "Sorewa mo Lovechu",
+  //それはもうらぶちゅ
+
+  //Youtube Comment: https://www.youtube.com/watch?v=gpBkXZsq2no&lc=Ugzg9pcp36mTlLK4Nsl4AaABAg
+  "58-3": "Don't Make the Vocalist do Anything Insane",
+  //ボーカルに無茶させんな
+
+  //This doesn't translate well due to it being somewhat corrupted
+  "61-0": "MuseDash ka nanika hi",
+  //MuseDashかヾ何かヽ干∋ッ`⊂ぉヵヽU<ナょナニ気がヾ£ゑょ
+
+  //Google Translated
+  "61-2": "Buttoba Supernova",
+  //ぶっとばスーパーノヴァ
+
+  //Deep L Translated. Chinese V-Tuber song with no english translation. Wanted to avoid "Dong Ai Li Lovely"...
+  "62-0": "East Ai Li Lovely",
+  //【东爱璃Lovely】Lovely
+
+  //Romaji. Translates to Forest Sea Ship?
+  "62-1": "Mori Umi no Fune",
+  //森海の船
+
+  //Romaji. Translates to I'm Swamped!!
+  "62-3": "Numatta!!",
+  //沼った！！
+
+  //Google Translated.
+  "63-1": "Centennial Streamers High",
+  // 100年モノのストリーマーズ・ハイ
+
+  //Romaji. Translates to City of Night.
+  "63-4": "Yoru no machi",
+  // 夜の街
+
+  ///
+  /// Song Cleanup Section
+  ///
+
+  "0-28": "Mujinku-Vacuum",
+  // Mujinku-Vacuum Track#ADD8E6-
+  "0-38": "Night Wander",
+  // Night Wander (cnsouka Remix)
+  "0-48": "Magical Wonderland",
+  // Magical Wonderland (More colorful mix)
+  "0-52": "INTERNET OVERDOSE",
+  // INTERNET OVERDOSE（Aiobahn feat.KOTOKO)
+  "4-5": "GOODTEK",
+  // GOODTEK(Hyper Edit)
+  "7-5": "GOODBOUNCE",
+  // GOODBOUNCE (Groove Edit)
+  "12-5": "RUBY LINTe",
+  // ЯUBY:LINTe
+  "16-1": "Re End of a Dream",
+  // Re：End of a Dream
+  "17-5": "energy night",
+  // energy night(DASH mix)
+  "18-5": "Holy Sh*t Grass Snake",
+  //Holy Shit Grass Snake
+  "21-0": "Glimmer",
+  // Glimmer feat.祈Inory
+  "21-1": "EXIST",
+  // EXIST feat.米雅
+  "21-2": "Irreplaceable",
+  // Irreplaceable feat.夏铜子
+  "22-5": "Disorder",
+  // Disorder (feat.YURI)
+  "23-2": "Omatsuri",
+  //Omatsuri feat.兔子ST
+  "25-3": "Strawberry Godzilla",
+  // <b>sᴛʀᴀᴡʙᴇʀʀʏ ɢᴏᴅᴢɪʟʟᴀ</b>
+  "26-2": "Punai Punai Genso",
+  // Punai Punai Genso ~Punai Punai in Wonderland~
+  "27-2": "Renji de haochi",
+  // Renji de haochi☆Denshi choriki shiyou chuka ryori 4000nen rekishi shunkan chori kanryo butouteki ryoricho☆
+  "27-4": "Newbies, Geeks, Internets",
+  // Newbies take 3 years, geeks 8 years, and internets are forever
+  "31-4": "Cross Ray",
+  // Cross†Ray (feat. 月下Lia)
+  "33-0": "Fireflies",
+  // Fireflies (Funk Fiction remix)
+  "39-5": "Blush",
+  // Blush (feat. MYLK)
+  "39-7": "BLESS ME",
+  // BLESS ME(Samplingsource)
+  "43-17": "DROPS",
+  // DROPS (feat. Such)
+  "43-15": "AKUMU",
+  // AKUMU / feat.tug
+  "44-0": "Party in the HOLLOWood",
+  // Party in the HOLLOWood feat. ななひら
+  "52-3": "Baby Pink",
+  // Baby Pink (w/ YUC'e)
+  "54-0": "White Canvas",
+  // White Canvas (feat. 藍月なくる)
+  "54-1": "Gloomy Flash",
+  // Gloomy Flash (feat. Mami)
+  "54-3": "Sunday Night",
+  // Sunday Night (feat. Kanata.N)
+  "54-4": "Goodbye Goodnight",
+  // Goodbye Goodnight (feat. Shully)
+  "54-5": "ENDLESS CIDER",
+  // ENDLESS CIDER (feat. Such)
+  "57-5": "Brilliant & Shining!",
+  // Brilliant & Shining! (Game Edit.)
+  "59-1": "ManiFesto",
+  // ManiFesto:
+  "63-0": "Doki Doki Jump!",
+  // Doki Doki Jump! feat. ぷにぷに電機
+  "63-3": "Mahorova",
+  // Mahorova feat.omoto
+  "63-5": "INTERNET YAMERO"
+  // INTERNET YAMERO（Aiobahn feat.KOTOKO）
 }

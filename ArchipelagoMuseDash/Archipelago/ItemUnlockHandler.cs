@@ -3,82 +3,80 @@ using System.Collections.Generic;
 using System.Linq;
 using Archipelago.MultiClient.Net.Models;
 using ArchipelagoMuseDash.Archipelago.Items;
+using ArchipelagoMuseDash.Helpers;
 using ArchipelagoMuseDash.Patches;
 using Assets.Scripts.PeroTools.Nice.Datas;
 using Assets.Scripts.PeroTools.Nice.Interface;
 using UnityEngine;
 
-namespace ArchipelagoMuseDash.Archipelago {
+namespace ArchipelagoMuseDash.Archipelago
+{
+
     /// <summary>
     /// Handles Item Unlocks
     /// </summary>
-    public class ItemUnlockHandler {
-        ItemHandler _handler;
+    public class ItemUnlockHandler
+    {
+        private readonly ItemHandler _handler;
+        private readonly Queue<IMuseDashItem> _enqueuedItems = new Queue<IMuseDashItem>();
+        private readonly HashSet<NetworkItem> _knownItems = new HashSet<NetworkItem>();
 
-        readonly Queue<IMuseDashItem> _enqueuedItems = new Queue<IMuseDashItem>();
+        private IMuseDashItem _unlockingItem;
+        private bool _hasUnlockedItem;
+        private const float on_show_stage_select_delay = 0.75f;
+        private float _itemGiveDelay;
 
-        readonly HashSet<NetworkItem> _knownItems = new HashSet<NetworkItem>();
-
-        IMuseDashItem _unlockingItem;
-        bool _hasUnlockedItem;
-
-        const float on_show_stage_select_delay = 0.75f;
-        float _itemGiveDelay;
-
-        public ItemUnlockHandler(ItemHandler handler) {
+        public ItemUnlockHandler(ItemHandler handler)
+        {
             _handler = handler;
         }
 
-        public void AddItem(IMuseDashItem item) {
-            lock (_enqueuedItems) {
-                ArchipelagoStatic.ArchLogger.LogDebug("ItemUnlockHandler", $"Attempting to add item: {item.Item}");
+        public void AddItem(IMuseDashItem item)
+        {
+            lock (_enqueuedItems)
+            {
                 if (_knownItems.Contains(item.Item))
                     return;
-                ArchipelagoStatic.ArchLogger.LogDebug("ItemUnlockHandler", "No duplicate found.");
 
                 _knownItems.Add(item.Item);
                 _enqueuedItems.Enqueue(item);
             }
         }
 
-        public void PrioritiseItems(NetworkItem[] items) {
-            lock (_enqueuedItems) {
-                var dequeuedItems = new List<IMuseDashItem>();
-                var matchingItems = new List<IMuseDashItem>();
+        public void PrioritiseItems(NetworkItem[] items)
+        {
+            lock (_enqueuedItems)
+            {
+                var itemsWithoutDuplicates = new List<IMuseDashItem>();
+                var itemsWithDuplicates = new List<IMuseDashItem>();
 
-                while (_enqueuedItems.Count > 0) {
+                while (_enqueuedItems.Count > 0)
+                {
                     var enqueuedItem = _enqueuedItems.Dequeue();
-
-                    bool includedItem = false;
-                    foreach (var item in items) {
-                        if (!IsNetworkItemSame(enqueuedItem.Item, item))
-                            continue;
-
-                        includedItem = true;
-                        break;
-                    }
-
-                    if (includedItem)
-                        matchingItems.Add(enqueuedItem);
+                    var hasDuplicate = items.Any(item => ArchipelagoHelpers.IsItemDuplicate(item, enqueuedItem.Item));
+                    if (hasDuplicate)
+                        itemsWithDuplicates.Add(enqueuedItem);
                     else
-                        dequeuedItems.Add(enqueuedItem);
+                        itemsWithoutDuplicates.Add(enqueuedItem);
                 }
 
-                foreach (var item in matchingItems)
+
+                //This reorders duplicate items such that they show first.
+                //Duplicate items happens in one (normal) case, which is items a player has gotten
+                foreach (var item in itemsWithDuplicates)
                     _enqueuedItems.Enqueue(item);
 
-                foreach (var item in dequeuedItems)
+                foreach (var item in itemsWithoutDuplicates)
                     _enqueuedItems.Enqueue(item);
             }
         }
 
-        bool IsNetworkItemSame(NetworkItem item1, NetworkItem item2) {
-            return item1.Item == item2.Item && item1.Location == item2.Location;
-        }
-
-        public void UnlockAllItems() {
-            lock (_enqueuedItems) {
-                while (_enqueuedItems.Count > 0) {
+        public void UnlockAllItems()
+        {
+            lock (_enqueuedItems)
+            {
+                while (_enqueuedItems.Count > 0)
+                {
                     var itemToUnlock = _enqueuedItems.Dequeue();
                     itemToUnlock.UnlockItem(_handler, true);
                 }
@@ -86,21 +84,28 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             //Force a refresh of the song select and relevant classes, so new songs should show.
             MusicTagManager.instance.RefreshDBDisplayMusics();
-            ArchipelagoStatic.SongSelectPanel?.RefreshMusicFSV();
+            if (ArchipelagoStatic.SongSelectPanel)
+                ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
         }
 
-        void ShowItem(IMuseDashItem item) {
+        private void ShowItem(IMuseDashItem item)
+        {
             if (_unlockingItem != null)
                 throw new Exception("Tried to unlock an item while one was already unlocking.");
 
-            if (item is MusicSheetItem) {
+            if (item is MusicSheetItem)
+            {
                 var handler = ArchipelagoStatic.SessionHandler.ItemHandler;
 
-                if (handler.CurrentNumberOfMusicSheets + 1 == handler.NumberOfMusicSheetsToWin)
+                if (handler.CurrentNumberOfMusicSheets + 1 >= handler.NumberOfMusicSheetsToWin
+                    && !handler.UnlockedSongUids.Contains(handler.GoalSong.uid))
+                {
+                    handler.AddMusicSheet();
                     item = new SongItem(handler.GoalSong);
+                }
             }
-            
-            
+
+
             _unlockingItem = item;
             _hasUnlockedItem = false;
 
@@ -109,9 +114,11 @@ namespace ArchipelagoMuseDash.Archipelago {
             ArchipelagoStatic.UnlockStagePanel.UnlockNewSong(data.Cast<IData>());
         }
 
-        public void OnUpdate() {
+        public void OnUpdate()
+        {
             //We only want to show items when Stage Select is the enabled display. TODO: Does options disable the stage.
-            if (ArchipelagoStatic.CurrentScene != "UISystem_PC" || !ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlStage")) {
+            if (ArchipelagoStatic.CurrentScene != "UISystem_PC" || !ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlStage"))
+            {
                 _itemGiveDelay = on_show_stage_select_delay;
                 return;
             }
@@ -123,7 +130,8 @@ namespace ArchipelagoMuseDash.Archipelago {
             if (_itemGiveDelay > 0)
                 return;
 
-            lock (_enqueuedItems) {
+            lock (_enqueuedItems)
+            {
                 if (_enqueuedItems.Count <= 0)
                     return;
 
@@ -132,11 +140,13 @@ namespace ArchipelagoMuseDash.Archipelago {
             }
         }
 
-        public void OnLateUpdate() {
+        public void OnLateUpdate()
+        {
             if (_unlockingItem == null)
                 return;
 
-            if (!ArchipelagoStatic.UnlockStagePanel.gameObject.activeSelf) {
+            if (!ArchipelagoStatic.UnlockStagePanel.gameObject.activeSelf)
+            {
                 if (!_hasUnlockedItem)
                     return; //Todo: Is this possible to trigger?
                 _unlockingItem = null;
@@ -147,7 +157,8 @@ namespace ArchipelagoMuseDash.Archipelago {
             if (ArchipelagoStatic.UnlockStagePanel.unlockText.gameObject.activeSelf)
                 return;
 
-            if (!_hasUnlockedItem) {
+            if (!_hasUnlockedItem)
+            {
                 _unlockingItem.UnlockItem(_handler, false);
                 _hasUnlockedItem = true;
             }
@@ -156,7 +167,8 @@ namespace ArchipelagoMuseDash.Archipelago {
         }
 
 
-        public IMuseDashItem GetCurrentItem() {
+        public IMuseDashItem GetCurrentItem()
+        {
             return _unlockingItem;
         }
     }

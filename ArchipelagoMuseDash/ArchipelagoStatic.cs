@@ -7,11 +7,13 @@ using Assets.Scripts.UI.Panels;
 using FormulaBase;
 using UnityEngine;
 
-namespace ArchipelagoMuseDash {
+namespace ArchipelagoMuseDash
+{
     /// <summary>
     /// Static Helper class which stores information to make it easier for patches to do things
     /// </summary>
-    public static class ArchipelagoStatic {
+    public static class ArchipelagoStatic
+    {
         public static ArchLogger ArchLogger;
 
         //Loaded Assets
@@ -19,7 +21,7 @@ namespace ArchipelagoMuseDash {
         public static Texture2D[] ArchipelagoIcons;
 
         //Archipelago Controllers
-        public static AlbumDatabase AlbumDatabase = new AlbumDatabase();
+        public static readonly AlbumDatabase AlbumDatabase = new AlbumDatabase();
         public static ArchipelagoLogin Login;
         public static SessionHandler SessionHandler;
 
@@ -27,7 +29,7 @@ namespace ArchipelagoMuseDash {
         public static bool LoadingSceneActive;
         public static string CurrentScene;
         public static StageBattleComponent BattleComponent;
-        public static HashSet<string> ActivatedEnableDisableHookers = new HashSet<string>();
+        public static readonly HashSet<string> ActivatedEnableDisableHookers = new HashSet<string>();
         public static GameObject MuseCharacter;
         public static PnlStage SongSelectPanel;
         public static PnlUnlockStage UnlockStagePanel;

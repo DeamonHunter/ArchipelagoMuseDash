@@ -1,5 +1,7 @@
-﻿namespace ArchipelagoMuseDash.Archipelago {
-    public enum ShownSongMode {
+﻿namespace ArchipelagoMuseDash.Archipelago
+{
+    public enum ShownSongMode
+    {
         Unlocks,
         Unplayed,
         AllInLogic

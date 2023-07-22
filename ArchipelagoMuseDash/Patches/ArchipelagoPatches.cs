@@ -10,22 +10,27 @@ using Assets.Scripts.UI.Controls;
 using Assets.Scripts.UI.Panels;
 using DG.Tweening;
 using HarmonyLib;
-using Il2CppSystem.Collections.Generic;
 using PeroTools2.Resources;
+using UnhollowerBaseLib;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 // Due to how IL2CPP works, some things can't be invoked as an extension.
 // ReSharper disable InvokeAsExtensionMethod
 
-namespace ArchipelagoMuseDash.Patches {
+namespace ArchipelagoMuseDash.Patches
+{
+
     /// <summary>
     /// Various changes so that we can use the Unlock Song panel to show archipelago stuff.
     /// Also attempts to fix the rare bug where the texture itself is broken
     /// </summary>
     [HarmonyPatch(typeof(PnlUnlockStage), "UnlockNewSong")]
-    sealed class PnlUnlockStagePatch {
-        static void Postfix(PnlUnlockStage __instance) {
+    sealed class PnlUnlockStagePatch
+    {
+        private static void Postfix(PnlUnlockStage __instance)
+        {
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
@@ -50,9 +55,11 @@ namespace ArchipelagoMuseDash.Patches {
 
             __instance.unlockText.text = currentItem.PreUnlockBannerText;
 
-            if (currentItem.UseArchipelagoLogo) {
+            if (currentItem.UseArchipelagoLogo)
+            {
                 int iconIndex = 0;
-                if (currentItem is ExternalItem) {
+                if (currentItem is ExternalItem)
+                {
                     if ((currentItem.Item.Flags & ItemFlags.Advancement) != 0)
                         iconIndex = 0;
                     else if ((currentItem.Item.Flags & ItemFlags.NeverExclude) != 0)
@@ -74,14 +81,16 @@ namespace ArchipelagoMuseDash.Patches {
                 AttemptToFixBrokenAlbumImage(__instance);
         }
 
-        static void AttemptToFixBrokenAlbumImage(PnlUnlockStage instance) {
+        private static void AttemptToFixBrokenAlbumImage(PnlUnlockStage instance)
+        {
             ArchipelagoStatic.ArchLogger.Warning("PnlUnlockStage", "Base Song Sprite was null... attempting to fix.");
 
-            var songIDs = new List<string>();
+            var songIDs = new Il2CppSystem.Collections.Generic.List<string>();
             songIDs.Add(instance.newSongUid);
-            var buffer = new List<MusicInfo>();
+            var buffer = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
             GlobalDataBase.dbMusicTag.GetMusicInfosByUids(songIDs, buffer);
-            if (buffer.Count <= 0) {
+            if (buffer.Count <= 0)
+            {
                 ArchipelagoStatic.ArchLogger.Warning("PnlUnlockStage", "Fix failed couldn't find ID.");
                 return;
             }
@@ -92,8 +101,10 @@ namespace ArchipelagoMuseDash.Patches {
             ArchipelagoStatic.ArchLogger.Warning("PnlUnlockStage", $"Fix was attempted. Success: {instance.unlockCover.sprite != null}");
         }
 
-        public static Text GetTitleText(GameObject pnlUnlockStageObject) {
-            for (int i = 0; i < pnlUnlockStageObject.transform.childCount; i++) {
+        public static Text GetTitleText(GameObject pnlUnlockStageObject)
+        {
+            for (int i = 0; i < pnlUnlockStageObject.transform.childCount; i++)
+            {
                 if (pnlUnlockStageObject.transform.GetChild(i).gameObject.name != "AnimationTittleText")
                     continue;
 
@@ -103,7 +114,8 @@ namespace ArchipelagoMuseDash.Patches {
             throw new Exception("Failed to find title text?");
         }
 
-        public static void ShowPostBanner(PnlUnlockStage pnlUnlockStage, IMuseDashItem item) {
+        public static void ShowPostBanner(PnlUnlockStage pnlUnlockStage, IMuseDashItem item)
+        {
             var postBannerText = item.PostUnlockBannerText;
             if (postBannerText == null)
                 return;
@@ -116,32 +128,38 @@ namespace ArchipelagoMuseDash.Patches {
             pnlUnlockStage.unlockText.text = postBannerText;
         }
     }
-
     /// <summary>
     /// Gets called when the player completes the song. Uses this to activate location checks.
     /// </summary>
-    [HarmonyPatch(typeof(PnlVictory), "OnVictory")]
-    sealed class PnlVictoryPatch {
-        public const int neko_character_id = 16;
-        public const int silencer_elfin_id = 9;
+    [HarmonyPatch(typeof(PnlVictory), "OnVictory", new[] { typeof(Il2CppSystem.Object), typeof(Il2CppSystem.Object), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
+    sealed class PnlVictoryPatch
+    {
+        public const int NEKO_CHARACTER_ID = 16;
+        public const int SILENCER_ELFIN_ID = 9;
 
-        static void Postfix() {
+        private static void Postfix()
+        {
             //Don't override normal gameplay
             ArchipelagoStatic.ArchLogger.LogDebug("PnlVictory", $"Selected Role: {GlobalDataBase.dbBattleStage.selectedRole}");
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
             // Block Sleepwalker Rin (Auto Mode) from getting completions
-            if (BattleHelper.isAutoSleepy) {
+            if (BattleHelper.isAutoSleepy)
+            {
                 var reason = "No Items Given:\nSleepwalker Rin was used without Silencer.";
                 ShowText.ShowInfo(reason);
                 ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
                 return;
             }
 
+            ArchipelagoStatic.SessionHandler.TrapHandler.SetTrapFinished();
+
             // Cover Neko's death
-            if (GlobalDataBase.dbBattleStage.IsSelectRole(neko_character_id) && !GlobalDataBase.dbBattleStage.IsSelectElfin(silencer_elfin_id)) {
-                if (GlobalDataBase.dbSkill.nekoSkillInvoke) {
+            if (GlobalDataBase.dbBattleStage.IsSelectRole(NEKO_CHARACTER_ID) && !GlobalDataBase.dbBattleStage.IsSelectElfin(SILENCER_ELFIN_ID))
+            {
+                if (GlobalDataBase.dbSkill.nekoSkillInvoke)
+                {
                     var reason = "No Items Given:\nDied as NEKO.";
                     ShowText.ShowInfo(reason);
                     ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
@@ -150,7 +168,8 @@ namespace ArchipelagoMuseDash.Patches {
             }
 
             var kvp = TaskStageTarget.instance.GetStageEvaluate();
-            if (kvp.Value < (int)ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded) {
+            if (kvp.Value < (int)ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded)
+            {
                 var reason = $"No Items Given:\nGrade result was worse than {ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded}";
                 ShowText.ShowInfo(reason);
                 ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
@@ -164,14 +183,15 @@ namespace ArchipelagoMuseDash.Patches {
             ArchipelagoStatic.SessionHandler.ItemHandler.CheckLocation(musicInfo.uid, locationName);
         }
     }
-
     /// <summary>
     /// Called every time the Cell moves. Used to update the cell to show the right status.
     /// Note that this is call per frame during movement.
     /// </summary>
     [HarmonyPatch(typeof(MusicStageCell), "OnChangeCell")]
-    sealed class MusicStageCellOnChangeCellPatch {
-        static void Postfix(MusicStageCell __instance) {
+    sealed class MusicStageCellOnChangeCellPatch
+    {
+        private static void Postfix(MusicStageCell __instance)
+        {
             //Don't override normal gameplay
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || __instance.musicInfo == null)
                 return;
@@ -185,9 +205,13 @@ namespace ArchipelagoMuseDash.Patches {
             var darkenImage = __instance.m_LockObj.transform.GetChild(0).gameObject;
             var lockImage = __instance.m_LockObj.transform.GetChild(1).gameObject;
             var banner = __instance.m_LockObj.transform.GetChild(2).gameObject;
-            if (itemHandler.GoalSong.uid == __instance.musicInfo.uid) {
+            if (itemHandler.GoalSong.uid == __instance.musicInfo.uid)
+            {
                 __instance.m_LockObj.SetActive(true);
-                if (itemHandler.NumberOfMusicSheetsToWin > 1 && itemHandler.NumberOfMusicSheetsToWin - itemHandler.CurrentNumberOfMusicSheets > 0)
+
+                if (itemHandler.VictoryAchieved)
+                    __instance.m_LockTxt.text = "Goal [Completed]";
+                else if (itemHandler.NumberOfMusicSheetsToWin > 1 && itemHandler.NumberOfMusicSheetsToWin - itemHandler.CurrentNumberOfMusicSheets > 0)
                     __instance.m_LockTxt.text = $"Goal [{itemHandler.NumberOfMusicSheetsToWin - itemHandler.CurrentNumberOfMusicSheets} Left]";
                 else
                     __instance.m_LockTxt.text = "Goal";
@@ -198,21 +222,25 @@ namespace ArchipelagoMuseDash.Patches {
                 banner.SetActive(true);
                 __instance.m_LockTxt.gameObject.SetActive(true);
             }
-            else {
+            else
+            {
                 var locked = !itemHandler.UnlockedSongUids.Contains(__instance.musicInfo.uid);
                 lockImage.SetActive(locked);
                 darkenImage.SetActive(locked);
                 __instance.m_LockObj.SetActive(locked);
 
-                if (locked) {
+                if (locked)
+                {
                     var songInLogic = ArchipelagoStatic.SessionHandler.ItemHandler.SongsInLogic.Contains(__instance.musicInfo.uid);
 
-                    if (songInLogic) {
+                    if (songInLogic)
+                    {
                         __instance.m_LockTxt.text = "Not yet unlocked.";
                         banner.SetActive(true);
                         __instance.m_LockTxt.gameObject.SetActive(true);
                     }
-                    else {
+                    else
+                    {
                         banner.SetActive(false);
                         __instance.m_LockTxt.gameObject.SetActive(false);
                     }
@@ -220,13 +248,14 @@ namespace ArchipelagoMuseDash.Patches {
             }
         }
     }
-
     /// <summary>
     /// Overrides the Play Song Button click so that we can enforce our own restrictions, and bypass the level restriction
     /// </summary>
     [HarmonyPatch(typeof(PnlStage), "OnBtnPlayClicked")]
-    sealed class PnlStageOnBtnPlayClickedPatch {
-        static bool Prefix(PnlStage __instance, out int __state) {
+    sealed class PnlStageOnBtnPlayClickedPatch
+    {
+        private static bool Prefix(PnlStage __instance, out int __state)
+        {
             __state = DataHelper.Level;
             //Don't override normal gameplay
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
@@ -234,7 +263,8 @@ namespace ArchipelagoMuseDash.Patches {
 
             ArchipelagoStatic.ArchLogger.LogDebug("PnlStage", "OnBtnPlayClicked");
             MusicInfo musicInfo = GlobalDataBase.s_DbMusicTag.CurMusicInfo();
-            if (musicInfo.uid == "?" || ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(musicInfo.uid)) {
+            if (musicInfo.uid == "?" || ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(musicInfo.uid))
+            {
                 //This bypasses level checks in order to allow players to play everything
                 DataHelper.Level = 999;
                 return true;
@@ -245,15 +275,17 @@ namespace ArchipelagoMuseDash.Patches {
             return false;
         }
 
-        static void Postfix(int __state) {
+        private static void Postfix(int __state)
+        {
             //This should fix the level bypass
             DataHelper.Level = __state;
         }
     }
-
     [HarmonyPatch(typeof(DBMusicTag), "SelectRandomMusic")]
-    sealed class DBMusicTagSelectRandomMusicPatch {
-        static bool Prefix(DBMusicTag __instance, out MusicInfo __result) {
+    sealed class DBMusicTagSelectRandomMusicPatch
+    {
+        private static bool Prefix(DBMusicTag __instance, out MusicInfo __result)
+        {
             __result = null;
             //Don't override normal gameplay
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
@@ -267,27 +299,29 @@ namespace ArchipelagoMuseDash.Patches {
             return false;
         }
     }
-
     /// <summary>
     /// Only allow the favourite/hide button to be clicked during normal gameplay
     /// </summary>
     [HarmonyPatch(typeof(StageLikeToggle), "OnClicked")]
-    sealed class OnClickedOnClickedPatch {
-        static bool Prefix() {
+    sealed class OnClickedOnClickedPatch
+    {
+        private static bool Prefix()
+        {
             //Don't override normal gameplay
             return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
         }
     }
-
     /// <summary>
     /// Only allow the favourite/hide button to be clicked during normal gameplay
     /// </summary>
     [HarmonyPatch(typeof(PnlRole), "OnApplyClicked")]
-    sealed class PnlRoleApplyPatch {
-        const int sleepwalker_rin_character_id = 2;
-        const int neko_character_id = 16;
+    sealed class PnlRoleApplyPatch
+    {
+        private const int sleepwalker_rin_character_id = 2;
+        private const int neko_character_id = 16;
 
-        static void Postfix() {
+        private static void Postfix()
+        {
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
@@ -297,13 +331,14 @@ namespace ArchipelagoMuseDash.Patches {
                 ShowText.ShowInfo("NEKO will not unlock items if she dies before completing the stage.");
         }
     }
-
     /// <summary>
     /// Show the reason briefly for deathlink
     /// </summary>
     [HarmonyPatch(typeof(PnlFail), "OnEnable")]
-    sealed class PnlFailOnEnablePatch {
-        static void Postfix() {
+    sealed class PnlFailOnEnablePatch
+    {
+        private static void Postfix()
+        {
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || ArchipelagoStatic.SessionHandler?.DeathLinkHandler == null)
                 return;
 
@@ -312,13 +347,14 @@ namespace ArchipelagoMuseDash.Patches {
                 ShowText.ShowInfo(reason);
         }
     }
-
     /// <summary>
     /// Gets called when the player completes the song. Uses this to activate location checks.
     /// </summary>
     [HarmonyPatch(typeof(PnlVictory), "OnContinueClicked")]
-    sealed class PnlVictoryOnContinueClickedPatch {
-        static void Postfix() {
+    sealed class PnlVictoryOnContinueClickedPatch
+    {
+        private static void Postfix()
+        {
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
@@ -328,13 +364,14 @@ namespace ArchipelagoMuseDash.Patches {
             ArchipelagoHelpers.SelectNextAvailableSong();
         }
     }
-
     /// <summary>
     /// Slightly extend Show Text messages so they are readable
     /// </summary>
     [HarmonyPatch(typeof(ShowText), "DoTweenInit")]
-    sealed class ShowTextDoTweenInitPatch {
-        static void Postfix(ShowText __instance) {
+    sealed class ShowTextDoTweenInitPatch
+    {
+        private static void Postfix(ShowText __instance)
+        {
             var tween = DOTweenModuleUI.DOFade(__instance.m_CanvasGroup, 1f, 5f);
             TweenSettingsExtensions.SetEase(tween, __instance.m_Curve);
             tween.onComplete = __instance.m_Tween.onComplete;
@@ -343,13 +380,14 @@ namespace ArchipelagoMuseDash.Patches {
             __instance.m_Tween = tween;
         }
     }
-
     /// <summary>
     /// Disable the level up panel during archipelago
     /// </summary>
     [HarmonyPatch(typeof(PnlLevelUpAward), "OnLevelUp")]
-    sealed class PnlLevelUpAwardOnLevelUpPatch {
-        static bool Prefix() {
+    sealed class PnlLevelUpAwardOnLevelUpPatch
+    {
+        private static bool Prefix()
+        {
             return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
         }
     }

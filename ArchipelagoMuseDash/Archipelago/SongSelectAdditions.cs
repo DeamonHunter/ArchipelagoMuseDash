@@ -6,8 +6,10 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace ArchipelagoMuseDash.Archipelago {
-    public class SongSelectAdditions {
+namespace ArchipelagoMuseDash.Archipelago
+{
+    public class SongSelectAdditions
+    {
         public GameObject HintButton;
         public Button HintButtonComp;
 
@@ -21,26 +23,31 @@ namespace ArchipelagoMuseDash.Archipelago {
         public GameObject SongText;
         public Text SongTitleComp;
 
-        public void OnUpdate() {
+        public void OnUpdate()
+        {
             if (!ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlStage"))
                 return;
 
-            if (HintButton != null) {
+            if (HintButton != null)
+            {
                 if (EventSystem.current == null)
                     return;
 
-                if (EventSystem.current.currentSelectedGameObject == HintButton) {
+                if (EventSystem.current.currentSelectedGameObject == HintButton)
+                {
                     ArchipelagoStatic.ArchLogger.LogDebug("SongSelectAdditions", "Force deselecting Hint Button");
                     EventSystem.current.SetSelectedGameObject(null);
                 }
-                if (EventSystem.current.currentSelectedGameObject == ToggleSongsButton) {
+                if (EventSystem.current.currentSelectedGameObject == ToggleSongsButton)
+                {
                     ArchipelagoStatic.ArchLogger.LogDebug("SongSelectAdditions", "Force deselecting Toggle Songs Button");
                     EventSystem.current.SetSelectedGameObject(null);
                 }
                 return;
             }
 
-            if (ArchipelagoStatic.HideSongDialogue?.m_YesButton == null || ArchipelagoStatic.HideSongDialogue?.m_NoButton == null || ArchipelagoStatic.SongSelectPanel == null)
+            if (!ArchipelagoStatic.HideSongDialogue || !ArchipelagoStatic.HideSongDialogue.m_YesButton
+                || !ArchipelagoStatic.HideSongDialogue.m_NoButton || !ArchipelagoStatic.SongSelectPanel)
                 return;
 
             var likeButton = ArchipelagoStatic.SongSelectPanel.gameObject.GetComponentInChildren<StageLikeToggle>(true);
@@ -58,17 +65,17 @@ namespace ArchipelagoMuseDash.Archipelago {
             AddHintBox(likeButton);
         }
 
-        public void MainSceneLoaded() {
+        public void MainSceneLoaded()
+        {
             HintButton = null;
             ToggleSongsButton = null;
             ToggleSongsText = null;
             SongText = null;
         }
 
-        public void AddHintBox(StageLikeToggle likeButton) {
+        public void AddHintBox(StageLikeToggle likeButton)
+        {
             //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
-
-            var pnlStage = ArchipelagoStatic.SongSelectPanel;
 
             //The HideSongDialogue has the button we want, and it should be available at this time.
             var noButton = ArchipelagoStatic.HideSongDialogue.m_NoButton;
@@ -106,10 +113,9 @@ namespace ArchipelagoMuseDash.Archipelago {
             hintTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
         }
 
-        public void AddSongTitleBox(StageLikeToggle likeButton) {
+        public void AddSongTitleBox(StageLikeToggle likeButton)
+        {
             //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
-
-            var pnlStage = ArchipelagoStatic.SongSelectPanel;
 
             //The HideSongDialogue has the button we want, and it should be available at this time.
             var noButton = ArchipelagoStatic.HideSongDialogue.m_NoButton;
@@ -147,9 +153,8 @@ namespace ArchipelagoMuseDash.Archipelago {
             songTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
         }
 
-        private GameObject CreateButton(StageLikeToggle likeButton, string buttonName, string buttonText, Vector2 offset, Vector2 pivot, Action onClick) {
-            var pnlStage = ArchipelagoStatic.SongSelectPanel;
-
+        private GameObject CreateButton(StageLikeToggle likeButton, string buttonName, string buttonText, Vector2 offset, Vector2 pivot, Action onClick)
+        {
             //The HideSongDialogue has the button we want, and it should be available at this time.
             var yesButton = ArchipelagoStatic.HideSongDialogue.m_YesButton;
             var yesButtonImage = yesButton.GetComponent<Image>();
