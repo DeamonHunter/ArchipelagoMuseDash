@@ -70,13 +70,13 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
                         continue;
 
                     noteData.scene = "scene_08";
-                    noteData.prefab_name = string.Concat("08", md.noteData.prefab_name);
+                    noteData.prefab_name = "08" + md.noteData.prefab_name;
                     md.noteData = noteData;
                     data[i] = md;
                     continue;
                 }
 
-                if (noteData.scene == null || noteData.scene.Length > 2)
+                if (noteData.scene == null || noteData.scene.Length <= 2)
                     continue;
 
                 noteData.scene = "scene_08";
@@ -88,7 +88,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
                         case BmsNodeUid.Hp:
                             break;
                         default:
-                            noteData.prefab_name = string.Concat("08", md.noteData.prefab_name.Substring(2));
+                            noteData.prefab_name = "08" + md.noteData.prefab_name.Substring(2);
                             break;
                     }
                 }
