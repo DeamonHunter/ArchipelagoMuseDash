@@ -5,7 +5,7 @@ using Il2CppPeroPeroGames.GlobalDefines;
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
 public class RandomWaveTrap : ITrap {
-    public string TrapMessage => "★★ Trap Activated ★★\nRandom Waves!";
+    public string TrapMessage => "★★ Trap Activated ★★\nRipple!";
     public NetworkItem NetworkItem { get; set; }
 
     public void PreGameSceneLoad() { }

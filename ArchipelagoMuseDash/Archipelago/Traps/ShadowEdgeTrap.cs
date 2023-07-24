@@ -5,7 +5,7 @@ using Il2CppPeroPeroGames.GlobalDefines;
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
 public class ShadowEdgeTrap : ITrap {
-    public string TrapMessage => "★★ Trap Activated ★★\nShadow Edge!";
+    public string TrapMessage => "★★ Trap Activated ★★\nVignette!";
     public NetworkItem NetworkItem { get; set; }
 
     public void PreGameSceneLoad() { }
