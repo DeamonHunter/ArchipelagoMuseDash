@@ -250,6 +250,10 @@ sealed class PnlStageOnBtnPlayClickedPatch {
     }
 
     private static void Postfix(int __state) {
+        //If we aren't logged in, don't bypass
+        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+            return;
+
         //This should fix the level bypass
         DataHelper.Level = __state;
     }
