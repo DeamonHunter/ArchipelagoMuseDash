@@ -15,6 +15,7 @@ namespace ArchipelagoMuseDash.Patches
             ArchipelagoStatic.HideSongDialogue = __instance;
         }
     }
+
     [HarmonyPatch(typeof(AbstractMessageBox), "OnYesClicked")]
     sealed class AbstractMessageBoxOnYesClickedPatch
     {

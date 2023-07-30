@@ -4,11 +4,10 @@ using HarmonyLib;
 
 namespace ArchipelagoMuseDash.Patches
 {
-
     [HarmonyPatch(typeof(GameMusic), "LoadMusicDataByFileName")]
     sealed class GameMusicLoadMusicDataByFileNamePatch
     {
-        static void Postfix(GameMusic __instance)
+        private static void Postfix(GameMusic __instance)
         {
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
@@ -19,44 +18,23 @@ namespace ArchipelagoMuseDash.Patches
             ArchipelagoStatic.SessionHandler.TrapHandler.LoadMusicDataByFilenameHook();
         }
     }
-/*
-[HarmonyPatch(typeof(StageBattleComponent), "GetMusicDataFromStageInfo")]
-sealed class StageBattleComponentGetMusicDataFromStageInfo {
-    static void Postfix(ref Il2CppSystem.Collections.Generic.List<MusicData> __result) {
-        ArchipelagoStatic.ArchLogger.Log("StageBattleComponent", $"GetMusicDataFromStageInfo Trigger");
-        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
-            return;
 
-        ArchipelagoStatic.ArchLogger.Log("StageBattleComponent", $"GetMusicDataFromStageInfo {__result.Count}");
-        ArchipelagoStatic.SessionHandler.TrapHandler.GetMusicDataFromStageInfoHook(__result);
-    }
-}
-*/
     [HarmonyPatch(typeof(DBStageInfo), "SetRuntimeMusicData")]
     sealed class DBStageInfoSetRuntimeMusicData
     {
-        static void Postfix(Il2CppSystem.Collections.Generic.List<MusicData> data)
+        private static void Postfix(Il2CppSystem.Collections.Generic.List<MusicData> data)
         {
-            //for (int i = 0; i < data.Count; i++) {
-            //    var md = data._items[i];
-            //    TrapHelper.OutputNote(md);
-            //}
-
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
             ArchipelagoStatic.ArchLogger.Log("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
             ArchipelagoStatic.SessionHandler.TrapHandler.SetRuntimeMusicDataHook(data);
-            //for (int i = 0; i < data.Count; i++) {
-            //    var md = data._items[i];
-            //    TrapHelper.OutputNote(md);
-            //}
         }
     }
     [HarmonyPatch(typeof(DBTouhou), "AwakeInit")]
     sealed class DBTouhouAwakeInitPatch
     {
-        static void Postfix()
+        private static void Postfix()
         {
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;

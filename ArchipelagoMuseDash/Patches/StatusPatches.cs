@@ -6,7 +6,6 @@ using HarmonyLib;
 
 namespace ArchipelagoMuseDash.Patches
 {
-
     /// <summary>
     /// Gets when overlays are disabled so we can trigger things at the correct time.
     /// </summary>
@@ -19,6 +18,7 @@ namespace ArchipelagoMuseDash.Patches
             ArchipelagoStatic.ActivatedEnableDisableHookers.Add(__instance.name);
         }
     }
+
     /// <summary>
     /// Gets when overlays are disabled so we can trigger things at the correct time.
     /// </summary>
@@ -31,6 +31,7 @@ namespace ArchipelagoMuseDash.Patches
             ArchipelagoStatic.ActivatedEnableDisableHookers.Remove(__instance.name);
         }
     }
+
     /// <summary>
     /// Gets the Muse Character on the main menu. This allows us to turn off the main menu.
     /// </summary>
@@ -43,6 +44,7 @@ namespace ArchipelagoMuseDash.Patches
             ArchipelagoStatic.MuseCharacter = __instance.gameObject;
         }
     }
+
     /// <summary>
     /// Gets the Unlock Song Panel so that we can trigger it when we want
     /// </summary>
@@ -55,6 +57,7 @@ namespace ArchipelagoMuseDash.Patches
             ArchipelagoStatic.SongSelectPanel = __instance;
         }
     }
+
     /// <summary>
     /// Gets the Unlock Song Panel so that we can trigger it when we want
     /// </summary>

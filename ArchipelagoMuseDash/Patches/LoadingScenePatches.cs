@@ -12,6 +12,7 @@ namespace ArchipelagoMuseDash.Patches
             ArchipelagoStatic.LoadingSceneActive = true;
         }
     }
+
     [HarmonyPatch(typeof(LoadingScene), "Complete")]
     public static class LoadingSceneCompletePatch
     {
