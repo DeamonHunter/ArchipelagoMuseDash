@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Archipelago.MultiClient.Net.Helpers;
 using Archipelago.MultiClient.Net.Models;
 using ArchipelagoMuseDash.Archipelago.Traps;
 using ArchipelagoMuseDash.Helpers;
@@ -12,7 +11,6 @@ namespace ArchipelagoMuseDash.Archipelago
 
     public class TrapHandler
     {
-        private readonly DataStorageHelper _dataStorageHelper;
 
         private int _lastHandledTrap;
         private ITrap _activatedTrap;
@@ -20,11 +18,9 @@ namespace ArchipelagoMuseDash.Archipelago
 
         private readonly List<ITrap> _knownTraps = new List<ITrap>();
 
-        public TrapHandler(int slotNumber, int teamNumber, DataStorageHelper dataStorageHelper)
+        public TrapHandler()
         {
-            _dataStorageHelper = dataStorageHelper;
-            _trapStorageIndex = $"last_trap_{slotNumber}_{teamNumber}";
-            _lastHandledTrap = dataStorageHelper[_trapStorageIndex];
+            _lastHandledTrap = ArchipelagoStatic.SessionHandler.DataStorageHandler.GetHandledTrapCount();
             ArchipelagoStatic.ArchLogger.LogDebug("TrapHandler", $"Trap Key: {_trapStorageIndex}. Handled Trap Count: {_lastHandledTrap}");
             _knownTraps.Clear();
         }
@@ -101,7 +97,7 @@ namespace ArchipelagoMuseDash.Archipelago
             _activatedTrap.OnEnd();
 
             //This will cause issues if multiple people are running the same game and don't go through all traps. But I'm fine with that.
-            _dataStorageHelper[_trapStorageIndex] = _lastHandledTrap;
+            ArchipelagoStatic.SessionHandler.DataStorageHandler.SetHandledTrapCount(_lastHandledTrap);
             _activatedTrap = null;
         }
 

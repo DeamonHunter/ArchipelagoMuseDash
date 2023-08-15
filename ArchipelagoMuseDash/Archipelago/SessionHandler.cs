@@ -15,6 +15,7 @@ namespace ArchipelagoMuseDash.Archipelago
         public HintHandler HintHandler;
         public DeathLinkHandler DeathLinkHandler;
         public TrapHandler TrapHandler;
+        public DataStorageHandler DataStorageHandler;
 
         public SongSelectAdditions SongSelectAdditions;
 
@@ -75,10 +76,11 @@ namespace ArchipelagoMuseDash.Archipelago
         {
             try
             {
+                DataStorageHandler = new DataStorageHandler(_slot, _team, _currentSession.DataStorage);
                 ItemHandler = new ItemHandler(_currentSession, _slot);
                 HintHandler = new HintHandler(_currentSession, _slot);
                 DeathLinkHandler = new DeathLinkHandler(_currentSession, _slot, _slotData);
-                TrapHandler = new TrapHandler(_slot, _team, _currentSession.DataStorage);
+                TrapHandler = new TrapHandler();
                 SongSelectAdditions = new SongSelectAdditions();
 
                 _currentSession.MessageLog.OnMessageReceived += ArchipelagoStatic.ArchLogger.LogMessage;
