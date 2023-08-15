@@ -206,9 +206,12 @@ namespace ArchipelagoMuseDash.Archipelago
 
             if (name == fever_filler_item)
             {
+                if (locallyObtained)
+                    return new FeverRefillItem();
+
                 _triggeredFeverFillerCount++;
                 _triggerFeverFiller = true;
-                return locallyObtained ? new FeverRefillItem() : null;
+                return null;
             }
 
             if (name == music_sheet_item_name)

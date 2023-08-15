@@ -14,14 +14,12 @@ namespace ArchipelagoMuseDash.Archipelago
 
         private int _lastHandledTrap;
         private ITrap _activatedTrap;
-        private string _trapStorageIndex;
 
         private readonly List<ITrap> _knownTraps = new List<ITrap>();
 
         public TrapHandler()
         {
             _lastHandledTrap = ArchipelagoStatic.SessionHandler.DataStorageHandler.GetHandledTrapCount();
-            ArchipelagoStatic.ArchLogger.LogDebug("TrapHandler", $"Trap Key: {_trapStorageIndex}. Handled Trap Count: {_lastHandledTrap}");
             _knownTraps.Clear();
         }
 
