@@ -6,6 +6,7 @@ using ArchipelagoMuseDash.Archipelago.Items;
 using ArchipelagoMuseDash.Helpers;
 using Il2Cpp;
 using Il2CppAssets.Scripts.Database;
+using Il2CppAssets.Scripts.GameCore.Managers;
 using Il2CppAssets.Scripts.UI.Controls;
 using UnityEngine.EventSystems;
 using Task = System.Threading.Tasks.Task;
@@ -30,9 +31,12 @@ public class ItemHandler {
     private const string showing_unlocked_songs_text = "Showing: Unlocked";
     private const string showing_unplayed_songs_text = "Showing: Unplayed";
     private const string music_sheet_item_name = "Music Sheet";
+    private const string fever_filler_item = "Full Fever Guage";
 
     private readonly ArchipelagoSession _currentSession;
     private readonly int _currentPlayerSlot;
+    private int _triggeredFeverFillerCount;
+    private bool _triggerFeverFiller;
 
     private readonly Random _random = new();
 
@@ -96,6 +100,10 @@ public class ItemHandler {
         CheckForNewItems();
         Unlocker.UnlockAllItems();
 
+        var prevFillerCount = ArchipelagoStatic.SessionHandler.DataStorageHandler.GetHandledFeverCount();
+        if (prevFillerCount < _triggeredFeverFillerCount)
+            _triggerFeverFiller = true;
+
         foreach (var location in _currentSession.Locations.AllLocationsChecked) {
             var name = _currentSession.Locations.GetLocationNameFromId(location);
             CheckRemoteLocation(name[..^2], false);
@@ -106,6 +114,15 @@ public class ItemHandler {
 
     public void OnUpdate() {
         CheckForNewItems();
+
+        if (_triggerFeverFiller) {
+            var battleStage = ArchipelagoStatic.BattleComponent;
+            if (battleStage != null && !battleStage.isDead && !battleStage.isPause && !battleStage.isSucceed) {
+                GlobalManagers.feverManager.AddFever(9999);
+                _triggerFeverFiller = false;
+                ArchipelagoStatic.SessionHandler.DataStorageHandler.SetHandledFeverCount(_triggeredFeverFillerCount);
+            }
+        }
 
         if (ArchipelagoStatic.SessionHandler.SongSelectAdditions.ToggleSongsButton == null)
             return;
@@ -124,7 +141,7 @@ public class ItemHandler {
         while (_currentSession.Items.Any()) {
             var networkItem = _currentSession.Items.DequeueItem();
             //These items should always be for the local player.
-            var item = GetItemFromNetworkItem(networkItem, false);
+            var item = GetItemFromNetworkItem(networkItem, false, false);
             if (item != null)
                 Unlocker.AddItem(item);
         }
@@ -138,7 +155,7 @@ public class ItemHandler {
         }
     }
 
-    private IMuseDashItem GetItemFromNetworkItem(NetworkItem item, bool otherPlayersItem) {
+    private IMuseDashItem GetItemFromNetworkItem(NetworkItem item, bool otherPlayersItem, bool locallyObtained) {
         var name = _currentSession.Items.GetItemName(item.Item);
 
         ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", $"Got Item: {name}({item.Item}). Player {item.Player}, Location {item.Location}, Flags {item.Flags}.");
@@ -155,6 +172,15 @@ public class ItemHandler {
 
         if (ArchipelagoStatic.SessionHandler.TrapHandler.EnqueueIfTrap(item))
             return null;
+
+        if (name == fever_filler_item) {
+            if (locallyObtained)
+                return new FeverRefillItem();
+
+            _triggeredFeverFillerCount++;
+            _triggerFeverFiller = true;
+            return null;
+        }
 
         if (name == music_sheet_item_name)
             return new MusicSheetItem() { Item = item };
@@ -278,7 +304,7 @@ public class ItemHandler {
             ArchipelagoStatic.ArchLogger.LogDebug("CheckLocations", "Received Items Packet.");
             CheckRemoteLocation(locationName, true);
             foreach (var networkItem in items.Locations) {
-                var item = GetItemFromNetworkItem(networkItem, networkItem.Player != _currentPlayerSlot);
+                var item = GetItemFromNetworkItem(networkItem, networkItem.Player != _currentPlayerSlot, true);
                 if (item != null)
                     Unlocker.AddItem(item);
             }
