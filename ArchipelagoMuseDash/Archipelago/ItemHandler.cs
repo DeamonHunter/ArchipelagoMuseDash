@@ -327,7 +327,7 @@ public class ItemHandler {
                 GlobalDataBase.dbMusicTag.m_CollectionList.Remove(singularInfo.uid); //Due to internal changes, the normal method will crash outside of song select.
 
             if (HiddenSongMode == ShownSongMode.Unplayed)
-                AddHide(singularInfo);
+                AddHide(singularInfo, true);
 
             CompletedSongUids.Add(singularInfo.uid);
             return;
@@ -377,7 +377,7 @@ public class ItemHandler {
                 continue;
 
             if (!SongsInLogic.Contains(song.uid)) {
-                AddHide(song);
+                AddHide(song, false);
                 GlobalDataBase.dbMusicTag.RemoveCollection(song);
                 continue;
             }
@@ -400,7 +400,7 @@ public class ItemHandler {
 
                 case ShownSongMode.Unlocks:
                     if (!UnlockedSongUids.Contains(song.uid)) {
-                        AddHide(song);
+                        AddHide(song, false);
 
                         if (GlobalDataBase.dbMusicTag.ContainsCollection(song))
                             GlobalDataBase.dbMusicTag.RemoveCollection(song);
@@ -416,7 +416,7 @@ public class ItemHandler {
 
                 case ShownSongMode.Unplayed:
                     if (!UnlockedSongUids.Contains(song.uid) || CompletedSongUids.Contains(song.uid)) {
-                        AddHide(song);
+                        AddHide(song, false);
 
                         if (GlobalDataBase.dbMusicTag.ContainsCollection(song))
                             GlobalDataBase.dbMusicTag.RemoveCollection(song);
@@ -437,11 +437,14 @@ public class ItemHandler {
             ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
     }
 
-    private void AddHide(MusicInfo song) {
+    private void AddHide(MusicInfo song, bool outsideSongSelect) {
         if (GlobalDataBase.dbMusicTag.ContainsHide(song))
             return;
 
-        GlobalDataBase.dbMusicTag.AddHide(song);
+        if (outsideSongSelect)
+            GlobalDataBase.dbMusicTag.m_HideList.Add(song.uid);
+        else
+            GlobalDataBase.dbMusicTag.AddHide(song);
         GlobalDataBase.dbMusicTag.RemoveShowMusicUid(song);
     }
 
