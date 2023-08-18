@@ -7,6 +7,7 @@ using Il2Cpp;
 using Il2CppAssets.Scripts.Database;
 using Il2CppAssets.Scripts.GameCore.HostComponent;
 using Il2CppAssets.Scripts.PeroTools.Managers;
+using Il2CppAssets.Scripts.PeroTools.Nice.Interface;
 using Il2CppAssets.Scripts.UI.Controls;
 using Il2CppAssets.Scripts.UI.Panels;
 using Il2CppDG.Tweening;
@@ -171,15 +172,21 @@ sealed class PnlVictoryPatch {
 /// Called every time the Cell moves. Used to update the cell to show the right status.
 /// Note that this is call per frame during movement.
 /// </summary>
-[HarmonyPatch(typeof(MusicStageCell), "OnChangeCell")]
+[HarmonyPatch(typeof(MusicStageCell), "RefreshData")]
 sealed class MusicStageCellOnChangeCellPatch {
-    private static void Postfix(MusicStageCell __instance) {
+    private static void Postfix(MusicStageCell __instance, int targetCellIndex) {
         //Don't override normal gameplay
-        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || __instance.musicInfo == null)
+        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return;
 
-        if (__instance.musicInfo.uid == "?")
+        if (targetCellIndex == -1)
+            targetCellIndex = VariableUtils.GetResult<int>(__instance.m_VariableBehaviour.Cast<IVariable>());
+
+        var cellInfo = __instance.GetMusicStageCellInfo(targetCellIndex);
+        if (cellInfo.uidIsRandom)
             return; //This is the Random song cell
+
+        var uid = cellInfo.musicUid;
 
         var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
 
@@ -187,7 +194,7 @@ sealed class MusicStageCellOnChangeCellPatch {
         var darkenImage = __instance.m_LockObj.transform.GetChild(0).gameObject;
         var lockImage = __instance.m_LockObj.transform.GetChild(1).gameObject;
         var banner = __instance.m_LockObj.transform.GetChild(2).gameObject;
-        if (itemHandler.GoalSong.uid == __instance.musicInfo.uid) {
+        if (itemHandler.GoalSong.uid == uid) {
             __instance.m_LockObj.SetActive(true);
 
             if (itemHandler.VictoryAchieved)
@@ -197,20 +204,20 @@ sealed class MusicStageCellOnChangeCellPatch {
             else
                 __instance.m_LockTxt.text = "Goal";
 
-            var unlocked = itemHandler.UnlockedSongUids.Contains(__instance.musicInfo.uid);
+            var unlocked = itemHandler.UnlockedSongUids.Contains(uid);
             darkenImage.SetActive(!unlocked);
             lockImage.SetActive(!unlocked);
             banner.SetActive(true);
             __instance.m_LockTxt.gameObject.SetActive(true);
         }
         else {
-            var locked = !itemHandler.UnlockedSongUids.Contains(__instance.musicInfo.uid);
+            var locked = !itemHandler.UnlockedSongUids.Contains(uid);
             lockImage.SetActive(locked);
             darkenImage.SetActive(locked);
             __instance.m_LockObj.SetActive(locked);
 
             if (locked) {
-                var songInLogic = ArchipelagoStatic.SessionHandler.ItemHandler.SongsInLogic.Contains(__instance.musicInfo.uid);
+                var songInLogic = ArchipelagoStatic.SessionHandler.ItemHandler.SongsInLogic.Contains(uid);
 
                 if (songInLogic) {
                     __instance.m_LockTxt.text = "Not yet unlocked.";
