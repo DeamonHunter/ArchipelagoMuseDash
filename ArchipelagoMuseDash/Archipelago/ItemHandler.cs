@@ -324,7 +324,7 @@ public class ItemHandler {
 
             //Check to see if the song is favourited, and remove if it is
             if (GlobalDataBase.dbMusicTag.ContainsCollection(singularInfo))
-                GlobalDataBase.dbMusicTag.RemoveCollection(singularInfo);
+                GlobalDataBase.dbMusicTag.m_CollectionList.Remove(singularInfo.uid); //Due to internal changes, the normal method will crash outside of song select.
 
             if (HiddenSongMode == ShownSongMode.Unplayed)
                 AddHide(singularInfo);
