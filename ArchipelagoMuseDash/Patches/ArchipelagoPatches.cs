@@ -6,6 +6,7 @@ using ArchipelagoMuseDash.Helpers;
 using Assets.Scripts.Database;
 using Assets.Scripts.GameCore.HostComponent;
 using Assets.Scripts.PeroTools.Managers;
+using Assets.Scripts.PeroTools.Nice.Interface;
 using Assets.Scripts.UI.Controls;
 using Assets.Scripts.UI.Panels;
 using DG.Tweening;
@@ -187,17 +188,23 @@ namespace ArchipelagoMuseDash.Patches
     /// Called every time the Cell moves. Used to update the cell to show the right status.
     /// Note that this is call per frame during movement.
     /// </summary>
-    [HarmonyPatch(typeof(MusicStageCell), "OnChangeCell")]
+    [HarmonyPatch(typeof(MusicStageCell), "RefreshData")]
     sealed class MusicStageCellOnChangeCellPatch
     {
-        private static void Postfix(MusicStageCell __instance)
+        private static void Postfix(MusicStageCell __instance, int targetCellIndex)
         {
             //Don't override normal gameplay
-            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || __instance.musicInfo == null)
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
-            if (__instance.musicInfo.uid == "?")
+            if (targetCellIndex == -1)
+                targetCellIndex = VariableUtils.GetResult<int>(__instance.m_VariableBehaviour.Cast<IVariable>());
+
+            var cellInfo = __instance.GetMusicStageCellInfo(targetCellIndex);
+            if (cellInfo.uidIsRandom)
                 return; //This is the Random song cell
+
+            var uid = cellInfo.musicUid;
 
             var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
 
@@ -205,7 +212,7 @@ namespace ArchipelagoMuseDash.Patches
             var darkenImage = __instance.m_LockObj.transform.GetChild(0).gameObject;
             var lockImage = __instance.m_LockObj.transform.GetChild(1).gameObject;
             var banner = __instance.m_LockObj.transform.GetChild(2).gameObject;
-            if (itemHandler.GoalSong.uid == __instance.musicInfo.uid)
+            if (itemHandler.GoalSong.uid == uid)
             {
                 __instance.m_LockObj.SetActive(true);
 
@@ -216,7 +223,7 @@ namespace ArchipelagoMuseDash.Patches
                 else
                     __instance.m_LockTxt.text = "Goal";
 
-                var unlocked = itemHandler.UnlockedSongUids.Contains(__instance.musicInfo.uid);
+                var unlocked = itemHandler.UnlockedSongUids.Contains(uid);
                 darkenImage.SetActive(!unlocked);
                 lockImage.SetActive(!unlocked);
                 banner.SetActive(true);
@@ -224,14 +231,14 @@ namespace ArchipelagoMuseDash.Patches
             }
             else
             {
-                var locked = !itemHandler.UnlockedSongUids.Contains(__instance.musicInfo.uid);
+                var locked = !itemHandler.UnlockedSongUids.Contains(uid);
                 lockImage.SetActive(locked);
                 darkenImage.SetActive(locked);
                 __instance.m_LockObj.SetActive(locked);
 
                 if (locked)
                 {
-                    var songInLogic = ArchipelagoStatic.SessionHandler.ItemHandler.SongsInLogic.Contains(__instance.musicInfo.uid);
+                    var songInLogic = ArchipelagoStatic.SessionHandler.ItemHandler.SongsInLogic.Contains(uid);
 
                     if (songInLogic)
                     {
