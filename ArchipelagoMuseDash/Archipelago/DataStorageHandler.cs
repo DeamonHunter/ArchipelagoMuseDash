@@ -16,5 +16,5 @@ public class DataStorageHandler {
     public int GetHandledTrapCount() => _dataStorageHelper[_trapStorageIndex];
     public int GetHandledFeverCount() => _dataStorageHelper[_feverStorageIndex];
     public void SetHandledTrapCount(int count) => _dataStorageHelper[_trapStorageIndex] = count;
-    public void SetHandledFeverCount(int count) => _dataStorageHelper[_trapStorageIndex] = count;
+    public void SetHandledFeverCount(int count) => _dataStorageHelper[_feverStorageIndex] = count;
 }
