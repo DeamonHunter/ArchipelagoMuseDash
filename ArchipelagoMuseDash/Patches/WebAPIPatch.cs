@@ -23,6 +23,7 @@ static class WebAPIPatch {
                 case "statistics/pc-play-statistics-feedback":
                     ArchipelagoStatic.ArchLogger.LogDebug("SendToURLPatch", "Blocked play feedback upload.");
                     return false;
+                case "musedash/v3/pcleaderboard/high-score":
                 case "musedash/v2/pcleaderboard/high-score":
                     ArchipelagoStatic.ArchLogger.LogDebug("SendToURLPatch", "Blocked high score upload:" + GlobalDataBase.dbBattleStage.musicUid);
                     return false;
