@@ -31,7 +31,7 @@ public class ItemHandler {
     private const string showing_unlocked_songs_text = "Showing: Unlocked";
     private const string showing_unplayed_songs_text = "Showing: Unplayed";
     private const string music_sheet_item_name = "Music Sheet";
-    private const string fever_filler_item = "Full Fever Guage";
+    private const string fever_filler_item = "Fever Refill";
 
     private readonly ArchipelagoSession _currentSession;
     private readonly int _currentPlayerSlot;
