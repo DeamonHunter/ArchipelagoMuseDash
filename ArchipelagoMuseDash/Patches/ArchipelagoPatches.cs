@@ -197,21 +197,27 @@ namespace ArchipelagoMuseDash.Patches
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
-            if (targetCellIndex == -1)
-                targetCellIndex = VariableUtils.GetResult<int>(__instance.m_VariableBehaviour.Cast<IVariable>());
-
-            var cellInfo = __instance.GetMusicStageCellInfo(targetCellIndex);
-            if (cellInfo.uidIsRandom)
-                return; //This is the Random song cell
-
-            var uid = cellInfo.musicUid;
-
-            var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
-
             //Todo: Possibly fragile. PurchaseLock -> ImgDarken, ImgLock
             var darkenImage = __instance.m_LockObj.transform.GetChild(0).gameObject;
             var lockImage = __instance.m_LockObj.transform.GetChild(1).gameObject;
             var banner = __instance.m_LockObj.transform.GetChild(2).gameObject;
+
+
+            if (targetCellIndex == -1)
+                targetCellIndex = VariableUtils.GetResult<int>(__instance.m_VariableBehaviour.Cast<IVariable>());
+
+            var cellInfo = __instance.GetMusicStageCellInfo(targetCellIndex);
+            if (cellInfo.uidIsRandom || cellInfo.musicUid == "?")
+            {
+                lockImage.SetActive(false);
+                darkenImage.SetActive(false);
+                __instance.m_LockObj.SetActive(false);
+                return;
+            }
+
+            var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
+            var uid = cellInfo.musicUid;
+
             if (itemHandler.GoalSong.uid == uid)
             {
                 __instance.m_LockObj.SetActive(true);
