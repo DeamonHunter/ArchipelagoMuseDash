@@ -13,7 +13,7 @@ public class ShadowEdgeTrap : ITrap {
     public void LoadMusicDataByFilenameHook() { }
 
     public void SetRuntimeMusicDataHook(List<MusicData> data) {
-        ArchipelagoStatic.ArchLogger.LogDebug("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
+        ArchipelagoStatic.ArchLogger.LogDebug("ShadowEdgeTrap", "SetRuntimeMusicDataHook");
 
         var shadowEdgeInNoteData = CreateShadowEdgeInNoteData();
         TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(shadowEdgeInNoteData.uid, shadowEdgeInNoteData));

@@ -13,7 +13,7 @@ public class RandomWaveTrap : ITrap {
     public void LoadMusicDataByFilenameHook() { }
 
     public void SetRuntimeMusicDataHook(List<MusicData> data) {
-        ArchipelagoStatic.ArchLogger.LogDebug("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
+        ArchipelagoStatic.ArchLogger.LogDebug("RandomWaveTrap", "SetRuntimeMusicDataHook");
 
         var randomWaveNote = CreateRandomWaveNoteData();
         TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(randomWaveNote.uid, randomWaveNote));

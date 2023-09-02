@@ -12,6 +12,7 @@ public class ErrorSFXTrap : ITrap {
     private int? _originalSFX;
 
     public void PreGameSceneLoad() {
+        ArchipelagoStatic.ArchLogger.LogDebug("ErrorSFXTrap", "PreGameSceneLoad");
         _originalSFX ??= GlobalDataBase.dbUISpecial.battleSfxType;
         GlobalDataBase.dbUISpecial.battleSfxType = BattleSfxType.error;
     }
@@ -21,6 +22,7 @@ public class ErrorSFXTrap : ITrap {
     public void SetRuntimeMusicDataHook(List<MusicData> data) { }
 
     public void OnEnd() {
+        ArchipelagoStatic.ArchLogger.LogDebug("ErrorSFXTrap", "OnEnd");
         if (!_originalSFX.HasValue)
             return;
         GlobalDataBase.dbUISpecial.battleSfxType = _originalSFX.Value;

@@ -13,7 +13,7 @@ public class GrayScaleTrap : ITrap {
     public void LoadMusicDataByFilenameHook() { }
 
     public void SetRuntimeMusicDataHook(List<MusicData> data) {
-        ArchipelagoStatic.ArchLogger.LogDebug("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
+        ArchipelagoStatic.ArchLogger.LogDebug("GrayScaleTrap", "SetRuntimeMusicDataHook");
 
         var greyScaleNoteData = CreateGreyScaleNoteData();
         TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(greyScaleNoteData.uid, greyScaleNoteData));

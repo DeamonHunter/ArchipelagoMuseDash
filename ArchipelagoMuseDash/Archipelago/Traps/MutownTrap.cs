@@ -15,7 +15,8 @@ public class MutownTrap : ITrap {
     private int? _originalSFX;
 
     public void PreGameSceneLoad() {
-        _originalSFX = GlobalDataBase.dbUISpecial.battleSfxType;
+        ArchipelagoStatic.ArchLogger.LogDebug("MutownTrap", "PreGameSceneLoad");
+        _originalSFX ??= GlobalDataBase.dbUISpecial.battleSfxType;
         GlobalDataBase.dbUISpecial.battleSfxType = BattleSfxType.mutown;
     }
 
@@ -24,6 +25,9 @@ public class MutownTrap : ITrap {
     public void SetRuntimeMusicDataHook(List<MusicData> data) { }
 
     public void OnEnd() {
+        ArchipelagoStatic.ArchLogger.LogDebug("MutownTrap", "OnEnd");
+        if (!_originalSFX.HasValue)
+            return;
         GlobalDataBase.dbUISpecial.battleSfxType = _originalSFX.Value;
     }
 }

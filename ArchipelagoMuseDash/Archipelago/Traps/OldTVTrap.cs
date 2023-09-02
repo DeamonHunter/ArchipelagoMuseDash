@@ -16,7 +16,7 @@ public class OldTVTrap : ITrap {
     public void LoadMusicDataByFilenameHook() { }
 
     public void SetRuntimeMusicDataHook(List<MusicData> data) {
-        ArchipelagoStatic.ArchLogger.LogDebug("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
+        ArchipelagoStatic.ArchLogger.LogDebug("MutownTrap", "SetRuntimeMusicDataHook");
 
         var oldTVNoteData = CreateOldTVNoteData();
         TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(oldTVNoteData.uid, oldTVNoteData));

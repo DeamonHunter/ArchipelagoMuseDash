@@ -13,7 +13,7 @@ public class ChromaticAberrationTrap : ITrap {
     public void LoadMusicDataByFilenameHook() { }
 
     public void SetRuntimeMusicDataHook(List<MusicData> data) {
-        ArchipelagoStatic.ArchLogger.LogDebug("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
+        ArchipelagoStatic.ArchLogger.LogDebug("ChromaticAberrationTrap", "SetRuntimeMusicDataHook");
 
         var chromaticAberrationNoteData = CreateChromaticAberrationNoteData();
         TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(chromaticAberrationNoteData.uid, chromaticAberrationNoteData));

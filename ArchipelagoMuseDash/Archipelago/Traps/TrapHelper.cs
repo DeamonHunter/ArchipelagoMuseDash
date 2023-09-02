@@ -17,7 +17,7 @@ public static class TrapHelper {
         for (var i = 0; i < list.Count; i++) {
             var note = list[i];
 
-            if (!note.isDouble || note.doubleIdx < i)
+            if (!note.isDouble || note.doubleIdx < index)
                 continue;
 
             note.doubleIdx--;

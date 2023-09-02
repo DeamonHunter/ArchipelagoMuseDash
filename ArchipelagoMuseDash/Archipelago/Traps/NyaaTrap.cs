@@ -12,6 +12,7 @@ public class NyaaTrap : ITrap {
     private int? _originalSFX;
 
     public void PreGameSceneLoad() {
+        ArchipelagoStatic.ArchLogger.LogDebug("NyaaTrap", "PreGameSceneLoad");
         _originalSFX ??= GlobalDataBase.dbUISpecial.battleSfxType;
         GlobalDataBase.dbUISpecial.battleSfxType = BattleSfxType.neko;
     }
@@ -21,6 +22,7 @@ public class NyaaTrap : ITrap {
     public void SetRuntimeMusicDataHook(List<MusicData> data) { }
 
     public void OnEnd() {
+        ArchipelagoStatic.ArchLogger.LogDebug("NyaaTrap", "OnEnd");
         if (!_originalSFX.HasValue)
             return;
         GlobalDataBase.dbUISpecial.battleSfxType = _originalSFX.Value;

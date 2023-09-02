@@ -19,11 +19,6 @@ sealed class GameMusicLoadMusicDataByFileNamePatch {
 [HarmonyPatch(typeof(DBStageInfo), "SetRuntimeMusicData")]
 sealed class DBStageInfoSetRuntimeMusicData {
     static void Postfix(Il2CppSystem.Collections.Generic.List<MusicData> data) {
-        //for (int i = 0; i < data.Count; i++) {
-        //    var md = data._items[i];
-        //    TrapHelper.OutputNote(md);
-        //}
-
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return;
 
