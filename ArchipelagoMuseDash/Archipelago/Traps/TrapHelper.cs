@@ -24,7 +24,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
             {
                 var note = list[i];
 
-                if (!note.isDouble || note.doubleIdx < i)
+                if (!note.isDouble || note.doubleIdx < index)
                     continue;
 
                 note.doubleIdx--;

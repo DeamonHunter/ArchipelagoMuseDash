@@ -16,7 +16,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 
         public void SetRuntimeMusicDataHook(List<MusicData> data)
         {
-            ArchipelagoStatic.ArchLogger.LogDebug("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
+            ArchipelagoStatic.ArchLogger.LogDebug("GrayScaleTrap", "SetRuntimeMusicDataHook");
 
             var greyScaleNoteData = CreateGreyScaleNoteData();
             TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(greyScaleNoteData.uid, greyScaleNoteData));

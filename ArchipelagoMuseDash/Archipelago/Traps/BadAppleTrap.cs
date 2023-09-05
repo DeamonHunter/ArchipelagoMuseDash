@@ -15,6 +15,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 
         public void PreGameSceneLoad()
         {
+            ArchipelagoStatic.ArchLogger.LogDebug("BadAppleTrap", "PreGameSceneLoad");
             GlobalDataBase.dbTouhou.isBadApple = true;
             GlobalDataBase.s_DbOther.m_HpFx = TouhouLogic.ReplaceBadAppleString("fx_hp_ground");
             GlobalDataBase.s_DbOther.m_MusicFx = TouhouLogic.ReplaceBadAppleString("fx_score_ground");
@@ -23,6 +24,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 
         public void LoadMusicDataByFilenameHook()
         {
+            ArchipelagoStatic.ArchLogger.LogDebug("BadAppleTrap", "LoadMusicDataByFilenameHook");
             //This is used to force the scene into the Touhou scene. The Touhou scene is the only one that can handle the bad apple look.
             GlobalDataBase.dbBattleStage.m_BeganScene = "scene_08";
             GlobalDataBase.dbBattleStage.m_BeganSceneIdx = 8;
@@ -30,7 +32,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 
         public void SetRuntimeMusicDataHook(List<MusicData> data)
         {
-            ArchipelagoStatic.ArchLogger.LogDebug("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
+            ArchipelagoStatic.ArchLogger.LogDebug("BadAppleTrap", "SetRuntimeMusicDataHook");
             ChangeToBadApple(data);
             TrapHelper.FixIndexes(data);
         }

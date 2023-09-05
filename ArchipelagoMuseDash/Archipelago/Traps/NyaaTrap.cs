@@ -15,6 +15,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 
         public void PreGameSceneLoad()
         {
+            ArchipelagoStatic.ArchLogger.LogDebug("NyaaTrap", "PreGameSceneLoad");
             if (!_originalSFX.HasValue)
                 _originalSFX = GlobalDataBase.dbUISpecial.battleSfxType;
             GlobalDataBase.dbUISpecial.battleSfxType = BattleSfxType.neko;
@@ -26,6 +27,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 
         public void OnEnd()
         {
+            ArchipelagoStatic.ArchLogger.LogDebug("NyaaTrap", "OnEnd");
             if (!_originalSFX.HasValue)
                 return;
             GlobalDataBase.dbUISpecial.battleSfxType = _originalSFX.Value;

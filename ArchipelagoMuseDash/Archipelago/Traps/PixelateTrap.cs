@@ -16,7 +16,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 
         public void SetRuntimeMusicDataHook(List<MusicData> data)
         {
-            ArchipelagoStatic.ArchLogger.LogDebug("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
+            ArchipelagoStatic.ArchLogger.LogDebug("PixelateTrap", "SetRuntimeMusicDataHook");
 
             var pixelateNoteData = CreatePixelateNoteData();
             TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(pixelateNoteData.uid, pixelateNoteData));
