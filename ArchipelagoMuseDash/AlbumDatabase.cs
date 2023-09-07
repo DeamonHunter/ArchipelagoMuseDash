@@ -38,7 +38,7 @@ public class AlbumDatabase {
         var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>().GetLocal(ENGLISH_LOC_INDEX);
 
         foreach (var musicInfo in list) {
-            if (musicInfo.uid == RANDOM_PANEL_UID)
+            if (musicInfo.uid == RANDOM_PANEL_UID || musicInfo.uid.StartsWith("999"))
                 continue;
 
             var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
