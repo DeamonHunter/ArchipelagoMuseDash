@@ -46,7 +46,7 @@ namespace ArchipelagoMuseDash
 
             foreach (var musicInfo in list)
             {
-                if (musicInfo.uid == RANDOM_PANEL_UID)
+                if (musicInfo.uid == RANDOM_PANEL_UID || musicInfo.uid.StartsWith("999"))
                     continue;
 
                 var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);

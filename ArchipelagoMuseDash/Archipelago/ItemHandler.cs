@@ -427,7 +427,7 @@ namespace ArchipelagoMuseDash.Archipelago
 
             foreach (var song in list)
             {
-                if (song == null || song.uid == "?")
+                if (song.uid == AlbumDatabase.RANDOM_PANEL_UID)
                     continue;
 
                 if (!SongsInLogic.Contains(song.uid))

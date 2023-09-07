@@ -131,7 +131,7 @@ namespace ArchipelagoMuseDash.Helpers
 
             foreach (var musicInfo in sortedList)
             {
-                if (musicInfo.uid == AlbumDatabase.RANDOM_PANEL_UID)
+                if (musicInfo.uid == AlbumDatabase.RANDOM_PANEL_UID || musicInfo.uid.Contains("999"))
                     continue;
 
                 var englishName = GetSongName(musicInfo);
