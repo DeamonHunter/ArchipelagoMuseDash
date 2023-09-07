@@ -1,45 +1,10 @@
-﻿using System.IO;
-using Account;
+﻿using Account;
 using Assets.Scripts.PeroTools.Nice.Datas;
 using Assets.Scripts.PeroTools.Platforms.Steam;
 using HarmonyLib;
 
 namespace ArchipelagoMuseDash.Patches
 {
-    [HarmonyPatch(typeof(SteamSync), "LoadLocal")]
-    static class SteamSyncLoadLocal
-    {
-        private static void Prefix(SteamSync __instance)
-        {
-            if (ArchipelagoStatic.SteamSync != null)
-                return;
-
-            ArchipelagoStatic.SteamSync = __instance;
-            ArchipelagoStatic.OriginalFolderName = __instance.m_FolderPath;
-            ArchipelagoStatic.OriginalFilePath = __instance.m_FilePath;
-        }
-    }
-
-    /// <summary>
-    /// Removes the file removal part of this function if we are dealing with our own saves
-    /// </summary>
-    [HarmonyPatch(typeof(SteamSync), "SaveLocal")]
-    static class SteamSyncSaveLocalPatch
-    {
-        private static bool Prefix(SteamSync __instance)
-        {
-            if (ArchipelagoStatic.OriginalFolderName == __instance.m_FolderPath)
-                return true;
-
-            DataManager.instance["GameConfig"].Save();
-            byte[] bytes = DataManager.instance.ToBytes();
-            if (!Directory.Exists(__instance.m_FolderPath))
-                Directory.CreateDirectory(__instance.m_FolderPath);
-            File.WriteAllBytes(__instance.m_FilePath, bytes);
-            return false;
-        }
-    }
-
     /// <summary>
     /// Removes the file removal part of this
     /// </summary>
@@ -52,6 +17,36 @@ namespace ArchipelagoMuseDash.Patches
             return false;
         }
     }
+
+    /// <summary>
+    /// Grabs the path in order to back it up.
+    /// </summary>
+    [HarmonyPatch(typeof(SteamSync), "LoadLocal")]
+    static class SteamSyncLoadLocal
+    {
+        private static void Prefix(SteamSync __instance)
+        {
+            ArchipelagoStatic.SaveDataPath = __instance.m_FilePath;
+        }
+    }
+
+    /// <summary>
+    /// Blocks synchronising the save if the player is logged in while playing in AP mode.
+    /// </summary>
+    [HarmonyPatch(typeof(DataManager), "Save")]
+    static class DataManagerSavePatch
+    {
+        //Todo: Patch this instead of completely removing it
+        private static bool Prefix()
+        {
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+                return true;
+
+            ArchipelagoStatic.ArchLogger.LogDebug("DataManager", "Interrupting save...");
+            return false;
+        }
+    }
+
 
     /// <summary>
     /// Blocks synchronising the save if the player is logged in while playing in AP mode.

@@ -2,7 +2,6 @@
 using ArchipelagoMuseDash.Archipelago;
 using ArchipelagoMuseDash.Helpers;
 using ArchipelagoMuseDash.Logging;
-using Assets.Scripts.PeroTools.Platforms.Steam;
 using Assets.Scripts.UI.Panels;
 using FormulaBase;
 using UnityEngine;
@@ -34,8 +33,7 @@ namespace ArchipelagoMuseDash
         public static PnlStage SongSelectPanel;
         public static PnlUnlockStage UnlockStagePanel;
         public static SongHideAskMsg HideSongDialogue;
-        public static SteamSync SteamSync;
-        public static string OriginalFolderName;
-        public static string OriginalFilePath;
+
+        public static string SaveDataPath;
     }
 }
