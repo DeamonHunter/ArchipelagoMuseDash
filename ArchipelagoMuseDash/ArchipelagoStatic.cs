@@ -2,7 +2,6 @@
 using ArchipelagoMuseDash.Helpers;
 using ArchipelagoMuseDash.Logging;
 using Il2Cpp;
-using Il2CppAssets.Scripts.PeroTools.Platforms.Steam;
 using Il2CppAssets.Scripts.UI.Panels;
 using Il2CppFormulaBase;
 using UnityEngine;
@@ -33,7 +32,6 @@ public static class ArchipelagoStatic {
     public static PnlStage SongSelectPanel;
     public static PnlUnlockStage UnlockStagePanel;
     public static SongHideAskMsg HideSongDialogue;
-    public static SteamSync SteamSync;
-    public static string OriginalFolderName;
-    public static string OriginalFilePath;
+
+    public static string SaveDataPath;
 }

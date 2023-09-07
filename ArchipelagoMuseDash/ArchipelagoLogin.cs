@@ -256,8 +256,11 @@ public class ArchipelagoLogin {
                 File.WriteAllText(_lastLoginPath, sb.ToString());
             }
 
-            SwapToArchipelagoSave();
+            DataHelper.isUnlockAllMaster = true;
             ArchipelagoStatic.SessionHandler.StartSession();
+
+            HideLoginOverlay();
+            RefreshSongs();
 #if DEBUG
             //Attach this to playing normally so that it can be easily triggered, once everything *should* be loaded
             ArchipelagoStatic.SongNameChanger.DumpSongsToTextFile(Path.Combine(Application.absoluteURL, "Output/SongDump.txt"));
@@ -269,30 +272,21 @@ public class ArchipelagoLogin {
         }
     }
 
-    private void SwapToArchipelagoSave() {
-        var path = Path.Combine(Application.absoluteURL, "UserData", "ArchSaves");
-        ArchipelagoStatic.SteamSync.m_FolderPath = path;
-        ArchipelagoStatic.SteamSync.m_FilePath = Path.Combine(ArchipelagoStatic.SteamSync.m_FolderPath, ArchipelagoStatic.SteamSync.m_FileName);
-
-        if (!Directory.Exists(path))
-            Directory.CreateDirectory(path);
-
-        //Copy over current data
-        if (!File.Exists(ArchipelagoStatic.SteamSync.m_FilePath) && File.Exists(ArchipelagoStatic.OriginalFilePath))
-            File.Copy(ArchipelagoStatic.OriginalFilePath, ArchipelagoStatic.SteamSync.m_FilePath);
-
-        DataHelper.isUnlockAllMaster = true;
-
+    private void RefreshSongs() {
         //Force collection update
         MusicTagManager.instance.RefreshDBDisplayMusics();
 
         if (ArchipelagoStatic.SongSelectPanel)
             ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
-
-        HideLoginOverlay();
     }
 
     private void BackupSaveData() {
+        if (ArchipelagoStatic.SaveDataPath == null) {
+            //This mod is possibly used by a non-steam client.
+            _backedUpFile = true;
+            return;
+        }
+
         var backupPath = Path.Combine(Application.absoluteURL, "UserData", "Backups");
         if (!Directory.Exists(backupPath))
             Directory.CreateDirectory(backupPath);
@@ -303,8 +297,8 @@ public class ArchipelagoLogin {
             File.Delete(fileInfo.FullName);
         }
 
-        if (File.Exists(ArchipelagoStatic.OriginalFilePath))
-            File.Copy(ArchipelagoStatic.OriginalFilePath, Path.Combine(backupPath, DateTime.Now.ToString("yyyy.MM.dd_HHmmss") + ".sav"));
+        if (File.Exists(ArchipelagoStatic.SaveDataPath))
+            File.Copy(ArchipelagoStatic.SaveDataPath, Path.Combine(backupPath, DateTime.Now.ToString("yyyy.MM.dd_HHmmss") + ".sav"));
 
         _backedUpFile = true;
     }
