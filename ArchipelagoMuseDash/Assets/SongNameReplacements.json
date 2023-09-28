@@ -169,6 +169,10 @@
   "43-29": "Jiumeng",
   // 旧梦
 
+  //Google Translate backed up by song
+  "43-36": "Mermaid Radio",
+  //人鱼电台
+
   //Phonetically translated as google just translates this to "war"
   "44-1": "Ying Ying da Zuozhan",
   //嘤嘤大作战
@@ -249,6 +253,42 @@
   "64-4": "Kawai Splendid Space Thief",
   // Kawaiク華麗に宇宙怪盗
 
+  //Official Translation
+  "66-0": "39 Music!",
+  //39みゅーじっく!
+
+  //Official Translation
+  "66-2": "Cynical Night Plan",
+  //シニカルナイトプラン
+
+  //Official Translation
+  "66-3": "God-ish",
+  //神っぽいな
+
+  //Official Translation
+  "66-4": "Darling Dance",
+  //ダーリンダンス
+
+  //Official Translation
+  "66-5": "Hatsune Creation Myth",
+  //初音天地開闢神話
+
+  //Official Translation
+  "66-6": "The Vampire",
+  //ヴァンパイア
+
+  //Official Translation
+  "66-7": "Future Eve",
+  //フューチャー・イヴ
+
+  //Official Translation
+  "66-8": "Unknown Mother Goose",
+  //Unknown・MotherGoose
+
+  //Official Translation
+  "66-9": "Shun-ran",
+  //春嵐
+
   ///
   /// Song Cleanup Section
   ///
@@ -325,6 +365,9 @@
   // Doki Doki Jump! feat. ぷにぷに電機
   "63-3": "Mahorova",
   // Mahorova feat.omoto
-  "63-5": "INTERNET YAMERO"
+  "63-5": "INTERNET YAMERO",
   // INTERNET YAMERO（Aiobahn feat.KOTOKO）
+
+  "43-33": "OTOGE-BOSS-KYOKU-CHAN"
+  //Is there no way I'm defeated by OTOGE-BOSS-KYOKU-CHAN is strongly provoking?????
 }
