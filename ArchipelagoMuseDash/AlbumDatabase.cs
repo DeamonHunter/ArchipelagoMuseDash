@@ -95,6 +95,13 @@ public class AlbumDatabase {
         var localisedSongName = ArchipelagoStatic.SongNameChanger.GetSongName(musicInfo);
         return $"{localisedSongName}";
     }
+    public string GetItemNameFromUid(string uid) {
+        if (!_songsByUid.TryGetValue(uid, out var musicInfo))
+            return "";
+
+        var localisedSongName = ArchipelagoStatic.SongNameChanger.GetSongName(musicInfo);
+        return $"{localisedSongName}";
+    }
 
     public bool TryGetSongFromItemId(long itemId, out MusicInfo info) {
         info = null;

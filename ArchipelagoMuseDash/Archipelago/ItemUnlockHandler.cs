@@ -102,6 +102,8 @@ public class ItemUnlockHandler {
         if (_unlockingItem != null)
             throw new Exception("Tried to unlock an item while one was already unlocking.");
 
+        ArchipelagoStatic.ArchLogger.Log("ItemUnlocks", "Too many items. Compressing.");
+
         var itemList = new List<IMuseDashItem>();
         lock (_enqueuedItems) {
             while (_enqueuedItems.TryDequeue(out var item))
@@ -136,7 +138,7 @@ public class ItemUnlockHandler {
                 return;
             }
 
-            if (_currentItemCount >= 2 && _enqueuedItems.Count > 1) {
+            if (_currentItemCount >= 3 && _enqueuedItems.Count > 1) {
                 ShowCompressedItem();
                 _currentItemCount = 0;
                 return;

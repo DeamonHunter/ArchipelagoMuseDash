@@ -58,8 +58,7 @@ public static class ArchipelagoHelpers {
             ShownSongMode.AllInLogic => itemHandler.SongsInLogic.Contains(uid),
             ShownSongMode.Unlocks => itemHandler.SongsInLogic.Contains(uid) && itemHandler.UnlockedSongUids.Contains(uid),
             ShownSongMode.Unplayed => itemHandler.SongsInLogic.Contains(uid) && itemHandler.UnlockedSongUids.Contains(uid) && !itemHandler.CompletedSongUids.Contains(uid),
-            ShownSongMode.Hinted => itemHandler.SongsInLogic.Contains(uid) && ArchipelagoStatic.SessionHandler.HintHandler.HasLocationHint(uid)
-                && !itemHandler.CompletedSongUids.Contains(uid),
+            ShownSongMode.Hinted => itemHandler.SongsInLogic.Contains(uid) && ArchipelagoStatic.SessionHandler.HintHandler.HasLocationHint(uid) && !itemHandler.CompletedSongUids.Contains(uid),
             _ => true
         };
     }

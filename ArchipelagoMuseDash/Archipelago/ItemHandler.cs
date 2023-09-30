@@ -368,7 +368,7 @@ public class ItemHandler {
         EventSystem.current.SetSelectedGameObject(null);
 
         ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", "Choosing next song shown mode.");
-        var nextMode = (ShownSongMode)(((int)HiddenSongMode + 1) % ((int)ShownSongMode.Hinted + 1));
+        var nextMode = (ShownSongMode)(((int)HiddenSongMode + 1) % ((int)ShownSongMode.AllInLogic + 1));
         SetVisibilityOfAllSongs(nextMode);
     }
 
@@ -441,7 +441,8 @@ public class ItemHandler {
                     break;
 
                 case ShownSongMode.Hinted:
-                    if (!hintedSongs.Contains(song.uid) || CompletedSongUids.Contains(song.uid)) {
+                    var name = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(song);
+                    if ((!hintedSongs.Contains(name + "-0") && !hintedSongs.Contains(name + "-1")) || CompletedSongUids.Contains(song.uid)) {
                         AddHide(song, false);
 
                         if (GlobalDataBase.dbMusicTag.ContainsCollection(song))

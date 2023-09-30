@@ -170,7 +170,10 @@ public class HintHandler {
     }
 
     public HashSet<string> GetHintedSongs() => _locationHints.Keys.ToHashSet();
-    public bool HasLocationHint(string uid) => _locationHints.ContainsKey(uid);
+    public bool HasLocationHint(string uid) {
+        var itemName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromUid(uid);
+        return _locationHints.ContainsKey(itemName + "-0") || _locationHints.ContainsKey(itemName + "-1");
+    }
 
     private bool TryGetSongHints(MusicInfo info, out string hint) {
         if (info == null)
