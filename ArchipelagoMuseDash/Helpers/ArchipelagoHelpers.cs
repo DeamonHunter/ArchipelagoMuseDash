@@ -50,6 +50,9 @@ public static class ArchipelagoHelpers {
     }
 
     private static bool IsSongStillShown(string uid) {
+        if (uid == AlbumDatabase.RANDOM_PANEL_UID)
+            return true;
+
         var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
         return itemHandler.HiddenSongMode switch {
             ShownSongMode.AllInLogic => itemHandler.SongsInLogic.Contains(uid),

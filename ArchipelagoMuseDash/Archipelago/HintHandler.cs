@@ -52,7 +52,7 @@ public class HintHandler {
         _forceUpdate = false;
         _lastMusic = currentlySelectedSong;
 
-        var isSongRandomSelect = currentlySelectedSong == null || currentlySelectedSong.uid == "?";
+        var isSongRandomSelect = currentlySelectedSong == null || currentlySelectedSong.uid == AlbumDatabase.RANDOM_PANEL_UID;
 
         songTitleComp.gameObject.SetActive(!isSongRandomSelect);
         songTitleComp.text = isSongRandomSelect ? "" : ArchipelagoStatic.SongNameChanger.GetSongName(currentlySelectedSong);
@@ -79,7 +79,7 @@ public class HintHandler {
 
     public void ShowHintPopup() {
         var song = GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo;
-        if (song == null || song.uid == "?") {
+        if (song == null || song.uid == AlbumDatabase.RANDOM_PANEL_UID) {
             ShowText.ShowInfo("Cannot buy a hint for the random button.");
             return;
         }

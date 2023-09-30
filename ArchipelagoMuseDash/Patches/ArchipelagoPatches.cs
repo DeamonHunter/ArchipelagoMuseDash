@@ -188,7 +188,7 @@ sealed class MusicStageCellOnChangeCellPatch {
             targetCellIndex = VariableUtils.GetResult<int>(__instance.m_VariableBehaviour.Cast<IVariable>());
 
         var cellInfo = __instance.GetMusicStageCellInfo(targetCellIndex);
-        if (cellInfo.uidIsRandom || cellInfo.musicUid == "?") {
+        if (cellInfo.uidIsRandom || cellInfo.musicUid == AlbumDatabase.RANDOM_PANEL_UID) {
             lockImage.SetActive(false);
             darkenImage.SetActive(false);
             __instance.m_LockObj.SetActive(false);
@@ -255,7 +255,7 @@ sealed class PnlStageOnBtnPlayClickedPatch {
 
         ArchipelagoStatic.ArchLogger.LogDebug("PnlStage", "OnBtnPlayClicked");
         MusicInfo musicInfo = GlobalDataBase.s_DbMusicTag.CurMusicInfo();
-        if (musicInfo.uid == "?" || ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(musicInfo.uid)) {
+        if (musicInfo.uid == AlbumDatabase.RANDOM_PANEL_UID || ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(musicInfo.uid)) {
             //This bypasses level checks in order to allow players to play everything
             DataHelper.Level = 999;
             return true;
