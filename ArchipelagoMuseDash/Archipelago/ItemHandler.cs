@@ -212,8 +212,8 @@ public class ItemHandler {
         return null;
     }
 
-    public void AddMusicSheet() {
-        CurrentNumberOfMusicSheets++;
+    public void AddMusicSheet(int number = 1) {
+        CurrentNumberOfMusicSheets += number;
 
         if (CurrentNumberOfMusicSheets < NumberOfMusicSheetsToWin || UnlockedSongUids.Contains(GoalSong.uid)) {
             MusicTagManager.instance.RefreshDBDisplayMusics();
@@ -379,7 +379,7 @@ public class ItemHandler {
         ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"Visibility being set to {mode}");
         HiddenSongMode = mode;
         ArchipelagoHelpers.SelectNextAvailableSong();
-        
+
         var hintedSongs = mode == ShownSongMode.Hinted ? ArchipelagoStatic.SessionHandler.HintHandler.GetHintedSongs() : new HashSet<string>();
 
         foreach (var song in list) {

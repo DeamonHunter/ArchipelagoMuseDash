@@ -21,6 +21,7 @@ public class ItemUnlockHandler {
     private bool _hasUnlockedItem;
     private const float on_show_stage_select_delay = 0.75f;
     private float _itemGiveDelay;
+    private int _currentItemCount;
 
     public ItemUnlockHandler(ItemHandler handler) {
         _handler = handler;
@@ -89,8 +90,25 @@ public class ItemUnlockHandler {
             }
         }
 
-
         _unlockingItem = item;
+        _hasUnlockedItem = false;
+
+        Data data = new Data();
+        VariableUtils.SetResult(data["uid"], _unlockingItem.UnlockSongUid);
+        ArchipelagoStatic.UnlockStagePanel.UnlockNewSong(data.Cast<IData>());
+    }
+
+    private void ShowCompressedItem() {
+        if (_unlockingItem != null)
+            throw new Exception("Tried to unlock an item while one was already unlocking.");
+
+        var itemList = new List<IMuseDashItem>();
+        lock (_enqueuedItems) {
+            while (_enqueuedItems.TryDequeue(out var item))
+                itemList.Add(item);
+        }
+
+        _unlockingItem = new CompressedItems(itemList);
         _hasUnlockedItem = false;
 
         Data data = new Data();
@@ -113,11 +131,20 @@ public class ItemUnlockHandler {
             return;
 
         lock (_enqueuedItems) {
-            if (_enqueuedItems.Count <= 0)
+            if (_enqueuedItems.Count <= 0) {
+                _currentItemCount = 0;
                 return;
+            }
+
+            if (_currentItemCount >= 2 && _enqueuedItems.Count > 1) {
+                ShowCompressedItem();
+                _currentItemCount = 0;
+                return;
+            }
 
             var item = _enqueuedItems.Dequeue();
             ShowItem(item);
+            _currentItemCount++;
         }
     }
 
@@ -143,7 +170,6 @@ public class ItemUnlockHandler {
 
         PnlUnlockStagePatch.ShowPostBanner(ArchipelagoStatic.UnlockStagePanel, _unlockingItem);
     }
-
 
     public IMuseDashItem GetCurrentItem() {
         return _unlockingItem;
