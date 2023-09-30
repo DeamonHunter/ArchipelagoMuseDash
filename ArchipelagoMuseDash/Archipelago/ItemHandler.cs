@@ -29,6 +29,7 @@ public class ItemHandler {
     public readonly HashSet<string> StarterSongUIDs = new();
 
     private const string showing_all_songs_text = "Showing: All";
+    private const string showing_hinted_songs_text = "Showing: Hinted";
     private const string showing_unlocked_songs_text = "Showing: Unlocked";
     private const string showing_unplayed_songs_text = "Showing: Unplayed";
     private const string music_sheet_item_name = "Music Sheet";
@@ -135,6 +136,7 @@ public class ItemHandler {
             ShownSongMode.AllInLogic => showing_all_songs_text,
             ShownSongMode.Unplayed => showing_unplayed_songs_text,
             ShownSongMode.Unlocks => showing_unlocked_songs_text,
+            ShownSongMode.Hinted => showing_hinted_songs_text,
             _ => hideSongText.text
         };
     }
@@ -366,7 +368,7 @@ public class ItemHandler {
         EventSystem.current.SetSelectedGameObject(null);
 
         ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", "Choosing next song shown mode.");
-        var nextMode = (ShownSongMode)(((int)HiddenSongMode + 1) % ((int)ShownSongMode.AllInLogic + 1));
+        var nextMode = (ShownSongMode)(((int)HiddenSongMode + 1) % ((int)ShownSongMode.Hinted + 1));
         SetVisibilityOfAllSongs(nextMode);
     }
 
@@ -377,6 +379,8 @@ public class ItemHandler {
         ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"Visibility being set to {mode}");
         HiddenSongMode = mode;
         ArchipelagoHelpers.SelectNextAvailableSong();
+        
+        var hintedSongs = mode == ShownSongMode.Hinted ? ArchipelagoStatic.SessionHandler.HintHandler.GetHintedSongs() : new HashSet<string>();
 
         foreach (var song in list) {
             if (song.uid == AlbumDatabase.RANDOM_PANEL_UID)
@@ -422,6 +426,22 @@ public class ItemHandler {
 
                 case ShownSongMode.Unplayed:
                     if (!UnlockedSongUids.Contains(song.uid) || CompletedSongUids.Contains(song.uid)) {
+                        AddHide(song, false);
+
+                        if (GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                            GlobalDataBase.dbMusicTag.RemoveCollection(song);
+                    }
+                    else {
+                        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                            GlobalDataBase.dbMusicTag.RemoveHide(song);
+
+                        if (!GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                            GlobalDataBase.dbMusicTag.AddCollection(song);
+                    }
+                    break;
+
+                case ShownSongMode.Hinted:
+                    if (!hintedSongs.Contains(song.uid) || CompletedSongUids.Contains(song.uid)) {
                         AddHide(song, false);
 
                         if (GlobalDataBase.dbMusicTag.ContainsCollection(song))

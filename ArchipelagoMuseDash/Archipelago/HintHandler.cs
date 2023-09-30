@@ -169,6 +169,9 @@ public class HintHandler {
         }
     }
 
+    public HashSet<string> GetHintedSongs() => _locationHints.Keys.ToHashSet();
+    public bool HasLocationHint(string uid) => _locationHints.ContainsKey(uid);
+
     private bool TryGetSongHints(MusicInfo info, out string hint) {
         if (info == null)
             throw new ArgumentException("Tried to get hint on null MusicInfo.");

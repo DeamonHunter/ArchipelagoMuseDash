@@ -3,5 +3,6 @@
 public enum ShownSongMode {
     Unlocks,
     Unplayed,
-    AllInLogic
+    AllInLogic,
+    Hinted
 }
