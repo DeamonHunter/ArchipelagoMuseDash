@@ -233,6 +233,12 @@ sealed class MusicStageCellOnChangeCellPatch {
                     __instance.m_LockTxt.gameObject.SetActive(false);
                 }
             }
+            else if (itemHandler.StarterSongUIDs.Contains(uid)) {
+                __instance.m_LockObj.SetActive(true);
+                banner.SetActive(false);
+                __instance.m_LockTxt.gameObject.SetActive(true);
+                __instance.m_LockTxt.text = "Starter";
+            }
         }
     }
 }

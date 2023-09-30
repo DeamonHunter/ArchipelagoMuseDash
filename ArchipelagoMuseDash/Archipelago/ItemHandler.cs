@@ -26,6 +26,7 @@ public class ItemHandler {
     public readonly HashSet<string> SongsInLogic = new();
     public readonly HashSet<string> UnlockedSongUids = new();
     public readonly HashSet<string> CompletedSongUids = new();
+    public readonly HashSet<string> StarterSongUIDs = new();
 
     private const string showing_all_songs_text = "Showing: All";
     private const string showing_unlocked_songs_text = "Showing: Unlocked";
@@ -55,6 +56,7 @@ public class ItemHandler {
         SongsInLogic.Clear();
         UnlockedSongUids.Clear();
         CompletedSongUids.Clear();
+        StarterSongUIDs.Clear();
 
         //Todo: Handle these being missing
         if (slotData.TryGetValue("victoryLocation", out var victoryLocation)) {
@@ -188,6 +190,10 @@ public class ItemHandler {
         //Try to match by item id first
         if (ArchipelagoStatic.AlbumDatabase.TryGetSongFromItemId(item.Item, out var itemInfo)) {
             ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", "Matched item id");
+
+            if (item.Player == -2)
+                StarterSongUIDs.Add(itemInfo.uid);
+
             return new SongItem(itemInfo) { Item = item };
         }
 
