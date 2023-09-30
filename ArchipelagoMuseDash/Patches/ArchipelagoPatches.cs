@@ -286,7 +286,7 @@ sealed class DBMusicTagSelectRandomMusicPatch {
         __result = ArchipelagoStatic.SessionHandler.ItemHandler.GetRandomUnfinishedSong();
 
         if (__result != null)
-            __instance.SetSelectedMusic(__result);
+            __instance.SetSelectedMusic(__result, true);
 
         return false;
     }
