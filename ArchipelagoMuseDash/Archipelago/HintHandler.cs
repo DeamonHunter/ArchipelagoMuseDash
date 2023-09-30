@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Models;
@@ -59,7 +60,7 @@ namespace ArchipelagoMuseDash.Archipelago
             _forceUpdate = false;
             _lastMusic = currentlySelectedSong;
 
-            var isSongRandomSelect = currentlySelectedSong == null || currentlySelectedSong.uid == "?";
+            var isSongRandomSelect = currentlySelectedSong == null || currentlySelectedSong.uid == AlbumDatabase.RANDOM_PANEL_UID;
 
             songTitleComp.gameObject.SetActive(!isSongRandomSelect);
             songTitleComp.text = isSongRandomSelect ? "" : ArchipelagoStatic.SongNameChanger.GetSongName(currentlySelectedSong);
@@ -89,7 +90,7 @@ namespace ArchipelagoMuseDash.Archipelago
         public void ShowHintPopup()
         {
             var song = GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo;
-            if (song == null || song.uid == "?")
+            if (song == null || song.uid == AlbumDatabase.RANDOM_PANEL_UID)
             {
                 ShowText.ShowInfo("Cannot buy a hint for the random button.");
                 return;
@@ -188,6 +189,14 @@ namespace ArchipelagoMuseDash.Archipelago
                 else
                     _itemsHints[itemName] = hint;
             }
+        }
+
+        public HashSet<string> GetHintedSongs() => _locationHints.Keys.ToHashSet();
+
+        public bool HasLocationHint(string uid)
+        {
+            var itemName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromUid(uid);
+            return _locationHints.ContainsKey(itemName + "-0") || _locationHints.ContainsKey(itemName + "-1");
         }
 
         private bool TryGetSongHints(MusicInfo info, out string hint)

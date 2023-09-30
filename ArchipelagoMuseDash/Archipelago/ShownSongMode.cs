@@ -4,6 +4,7 @@
     {
         Unlocks,
         Unplayed,
+        Hinted,
         AllInLogic
     }
 }

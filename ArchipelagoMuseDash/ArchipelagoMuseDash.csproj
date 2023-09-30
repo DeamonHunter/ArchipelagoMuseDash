@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -67,21 +67,21 @@
             <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\PeroTools2.dll</HintPath>
         </Reference>
         <Reference Include="PeroTools2.Resources">
-          <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\PeroTools2.Resources.dll</HintPath>
+            <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\PeroTools2.Resources.dll</HintPath>
         </Reference>
         <Reference Include="Sirenix.Serialization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
             <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Managed\Sirenix.Serialization.dll</HintPath>
         </Reference>
-        <Reference Include="System" />
+        <Reference Include="System"/>
         <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
             <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
         </Reference>
-        <Reference Include="System.Core" />
+        <Reference Include="System.Core"/>
         <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
             <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
         </Reference>
-        <Reference Include="System.Numerics" />
+        <Reference Include="System.Numerics"/>
         <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
             <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
         </Reference>
@@ -91,12 +91,12 @@
         <Reference Include="System.Text.Encoding.CodePages, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
             <HintPath>..\packages\System.Text.Encoding.CodePages.5.0.0\lib\net461\System.Text.Encoding.CodePages.dll</HintPath>
         </Reference>
-        <Reference Include="System.Xml.Linq" />
-        <Reference Include="System.Data.DataSetExtensions" />
-        <Reference Include="Microsoft.CSharp" />
-        <Reference Include="System.Data" />
-        <Reference Include="System.Net.Http" />
-        <Reference Include="System.Xml" />
+        <Reference Include="System.Xml.Linq"/>
+        <Reference Include="System.Data.DataSetExtensions"/>
+        <Reference Include="Microsoft.CSharp"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Net.Http"/>
+        <Reference Include="System.Xml"/>
         <Reference Include="UnhollowerBaseLib, Version=0.4.18.0, Culture=neutral, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
             <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Dependencies\Il2CppAssemblyGenerator\Il2CppAssemblyUnhollower\UnhollowerBaseLib.dll</HintPath>
@@ -138,53 +138,54 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="AlbumDatabase.cs" />
-        <Compile Include="Archipelago\DataStorageHandler.cs" />
-        <Compile Include="Archipelago\DeathLinkHandler.cs" />
-        <Compile Include="Archipelago\GradeOption.cs" />
-        <Compile Include="Archipelago\HintHandler.cs" />
-        <Compile Include="Archipelago\ItemHandler.cs" />
-        <Compile Include="Archipelago\Items\FullFeverItem.cs" />
-        <Compile Include="Archipelago\Items\MusicSheetItem.cs" />
-        <Compile Include="Archipelago\Items\VictoryItem.cs" />
-        <Compile Include="Archipelago\ItemUnlockHandler.cs" />
-        <Compile Include="Archipelago\Items\ExternalItem.cs" />
-        <Compile Include="Archipelago\Items\IMuseDashItem.cs" />
-        <Compile Include="Archipelago\Items\AlbumItem.cs" />
-        <Compile Include="Archipelago\Items\SongItem.cs" />
-        <Compile Include="Archipelago\SessionHandler.cs" />
-        <Compile Include="ArchipelagoLogin.cs" />
-        <Compile Include="ArchipelagoMuseDashMod.cs" />
-        <Compile Include="ArchipelagoStatic.cs" />
-        <Compile Include="Archipelago\ShownSongMode.cs" />
-        <Compile Include="Archipelago\SongSelectAdditions.cs" />
-        <Compile Include="Archipelago\TrapHandler.cs" />
-        <Compile Include="Archipelago\Traps\BadAppleTrap.cs" />
-        <Compile Include="Archipelago\Traps\BGFreezeTrap.cs" />
-        <Compile Include="Archipelago\Traps\CanvasScrollTrap.cs" />
-        <Compile Include="Archipelago\Traps\ChromaticAberrationTrap.cs" />
-        <Compile Include="Archipelago\Traps\ErrorSFXTrap.cs" />
-        <Compile Include="Archipelago\Traps\GrayScaleTrap.cs" />
-        <Compile Include="Archipelago\Traps\ITrap.cs" />
-        <Compile Include="Archipelago\Traps\MutownTrap.cs" />
-        <Compile Include="Archipelago\Traps\NyaaTrap.cs" />
-        <Compile Include="Archipelago\Traps\OldTVTrap.cs" />
-        <Compile Include="Archipelago\Traps\PixelateTrap.cs" />
-        <Compile Include="Archipelago\Traps\RandomWaveTrap.cs" />
-        <Compile Include="Archipelago\Traps\ShadowEdgeTrap.cs" />
-        <Compile Include="Archipelago\Traps\TrapHelper.cs" />
-        <Compile Include="Helpers\ArchipelagoHelpers.cs" />
-        <Compile Include="Helpers\AssetHelpers.cs" />
-        <Compile Include="Helpers\SongNameChanger.cs" />
-        <Compile Include="Logging\ArchLogger.cs" />
-        <Compile Include="Patches\ArchipelagoPatches.cs" />
-        <Compile Include="Patches\HintPatches.cs" />
-        <Compile Include="Patches\LoadingScenePatches.cs" />
-        <Compile Include="Patches\SaveAPIPatch.cs" />
-        <Compile Include="Patches\StatusPatches.cs" />
-        <Compile Include="Patches\TrapPatches.cs" />
-        <Compile Include="Patches\WebAPIPatch.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="AlbumDatabase.cs"/>
+        <Compile Include="Archipelago\DataStorageHandler.cs"/>
+        <Compile Include="Archipelago\DeathLinkHandler.cs"/>
+        <Compile Include="Archipelago\GradeOption.cs"/>
+        <Compile Include="Archipelago\HintHandler.cs"/>
+        <Compile Include="Archipelago\ItemHandler.cs"/>
+        <Compile Include="Archipelago\Items\CompressedItems.cs"/>
+        <Compile Include="Archipelago\Items\FullFeverItem.cs"/>
+        <Compile Include="Archipelago\Items\MusicSheetItem.cs"/>
+        <Compile Include="Archipelago\Items\VictoryItem.cs"/>
+        <Compile Include="Archipelago\ItemUnlockHandler.cs"/>
+        <Compile Include="Archipelago\Items\ExternalItem.cs"/>
+        <Compile Include="Archipelago\Items\IMuseDashItem.cs"/>
+        <Compile Include="Archipelago\Items\AlbumItem.cs"/>
+        <Compile Include="Archipelago\Items\SongItem.cs"/>
+        <Compile Include="Archipelago\SessionHandler.cs"/>
+        <Compile Include="ArchipelagoLogin.cs"/>
+        <Compile Include="ArchipelagoMuseDashMod.cs"/>
+        <Compile Include="ArchipelagoStatic.cs"/>
+        <Compile Include="Archipelago\ShownSongMode.cs"/>
+        <Compile Include="Archipelago\SongSelectAdditions.cs"/>
+        <Compile Include="Archipelago\TrapHandler.cs"/>
+        <Compile Include="Archipelago\Traps\BadAppleTrap.cs"/>
+        <Compile Include="Archipelago\Traps\BGFreezeTrap.cs"/>
+        <Compile Include="Archipelago\Traps\CanvasScrollTrap.cs"/>
+        <Compile Include="Archipelago\Traps\ChromaticAberrationTrap.cs"/>
+        <Compile Include="Archipelago\Traps\ErrorSFXTrap.cs"/>
+        <Compile Include="Archipelago\Traps\GrayScaleTrap.cs"/>
+        <Compile Include="Archipelago\Traps\ITrap.cs"/>
+        <Compile Include="Archipelago\Traps\MutownTrap.cs"/>
+        <Compile Include="Archipelago\Traps\NyaaTrap.cs"/>
+        <Compile Include="Archipelago\Traps\OldTVTrap.cs"/>
+        <Compile Include="Archipelago\Traps\PixelateTrap.cs"/>
+        <Compile Include="Archipelago\Traps\RandomWaveTrap.cs"/>
+        <Compile Include="Archipelago\Traps\ShadowEdgeTrap.cs"/>
+        <Compile Include="Archipelago\Traps\TrapHelper.cs"/>
+        <Compile Include="Helpers\ArchipelagoHelpers.cs"/>
+        <Compile Include="Helpers\AssetHelpers.cs"/>
+        <Compile Include="Helpers\SongNameChanger.cs"/>
+        <Compile Include="Logging\ArchLogger.cs"/>
+        <Compile Include="Patches\ArchipelagoPatches.cs"/>
+        <Compile Include="Patches\HintPatches.cs"/>
+        <Compile Include="Patches\LoadingScenePatches.cs"/>
+        <Compile Include="Patches\SaveAPIPatch.cs"/>
+        <Compile Include="Patches\StatusPatches.cs"/>
+        <Compile Include="Patches\TrapPatches.cs"/>
+        <Compile Include="Patches\WebAPIPatch.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="Properties\Resources.Designer.cs">
             <AutoGen>True</AutoGen>
             <DesignTime>True</DesignTime>
@@ -192,9 +193,9 @@
         </Compile>
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Assets\SongNameReplacements.json" />
-        <None Include="App.config" />
-        <None Include="packages.config" />
+        <EmbeddedResource Include="Assets\SongNameReplacements.json"/>
+        <None Include="App.config"/>
+        <None Include="packages.config"/>
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="Properties\Resources.resx">
@@ -203,29 +204,29 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Assets\APIcon.png" />
+        <EmbeddedResource Include="Assets\APIcon.png"/>
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Assets\LoginBackground.png" />
+        <EmbeddedResource Include="Assets\LoginBackground.png"/>
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Assets\ButtonNo.png" />
-        <EmbeddedResource Include="Assets\ButtonYes.png" />
+        <EmbeddedResource Include="Assets\ButtonNo.png"/>
+        <EmbeddedResource Include="Assets\ButtonYes.png"/>
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Assets\ButtonNoHighlighted.png" />
-        <EmbeddedResource Include="Assets\ButtonYesHighlighted.png" />
+        <EmbeddedResource Include="Assets\ButtonNoHighlighted.png"/>
+        <EmbeddedResource Include="Assets\ButtonYesHighlighted.png"/>
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Assets\APTrap.png" />
-        <EmbeddedResource Include="Assets\APTrash.png" />
-        <EmbeddedResource Include="Assets\APUseful.png" />
+        <EmbeddedResource Include="Assets\APTrap.png"/>
+        <EmbeddedResource Include="Assets\APTrash.png"/>
+        <EmbeddedResource Include="Assets\APUseful.png"/>
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Assets\APProgression.png" />
+        <EmbeddedResource Include="Assets\APProgression.png"/>
     </ItemGroup>
     <ItemGroup>
-        <EmbeddedResource Include="Assets\MuseDashData.txt" />
+        <EmbeddedResource Include="Assets\MuseDashData.txt"/>
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>

@@ -79,14 +79,14 @@ East Ai Li Lovely|62-0|Happy Otaku Pack Vol.17|False|2|4|7|
 Mori Umi no Fune|62-1|Happy Otaku Pack Vol.17|True|5|7|9|
 Ooi|62-2|Happy Otaku Pack Vol.17|True|5|7|10|
 Numatta!!|62-3|Happy Otaku Pack Vol.17|True|5|7|9|
-SATELLITE|62-4|Happy Otaku Pack Vol.17|False|5|7|9|
+SATELLITE|62-4|Happy Otaku Pack Vol.17|False|5|7|9|10
 Fantasia Sonata Colorful feat. V!C|62-5|Happy Otaku Pack Vol.17|True|6|8|11|
 MuseDash ka nanika hi|61-0|Ola Dash|True|?|?|¿|
 Aleph-0|61-1|Ola Dash|True|7|9|11|
 Buttoba Supernova|61-2|Ola Dash|False|5|7|10|11
 Rush-Hour|61-3|Ola Dash|False|IG|Jh|a2|Eh
 3rd Avenue|61-4|Ola Dash|False|3|5|〇|
-WORLDINVADER|61-5|Ola Dash|True|5|8|10|
+WORLDINVADER|61-5|Ola Dash|True|5|8|10|11
 N3V3R G3T OV3R|60-0|maimai DX Limited-time Suite|True|4|7|10|
 Oshama Scramble!|60-1|maimai DX Limited-time Suite|True|5|7|10|
 Valsqotch|60-2|maimai DX Limited-time Suite|True|5|9|11|
@@ -469,12 +469,12 @@ BrainDance|65-0|NeonAbyss|True|3|6|9|
 My Focus!|65-1|NeonAbyss|True|5|7|10|
 ABABABA BURST|65-2|NeonAbyss|True|5|7|9|
 ULTRA HIGHER|65-3|NeonAbyss|True|4|7|10|
-Silver Bullet|43-31|MD Plus Project|False|5|7|10|
-Random|43-32|MD Plus Project|False|4|7|9|
+Silver Bullet|43-31|MD Plus Project|True|5|7|10|
+Random|43-32|MD Plus Project|True|4|7|9|
 OTOGE-BOSS-KYOKU-CHAN|43-33|MD Plus Project|False|6|8|10|11
-Crow Rabbit|43-34|MD Plus Project|False|7|9|11|
-SyZyGy|43-35|MD Plus Project|False|6|8|10|11
-Mermaid Radio|43-36|MD Plus Project|False|3|5|7|
+Crow Rabbit|43-34|MD Plus Project|True|7|9|11|
+SyZyGy|43-35|MD Plus Project|True|6|8|10|11
+Mermaid Radio|43-36|MD Plus Project|True|3|5|7|
 Helixir|43-37|MD Plus Project|False|6|8|10|
 Highway Cruisin'|43-38|MD Plus Project|False|3|5|8|
 JACK PT BOSS|43-39|MD Plus Project|False|6|8|10|

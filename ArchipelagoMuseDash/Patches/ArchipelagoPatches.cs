@@ -191,6 +191,8 @@ namespace ArchipelagoMuseDash.Patches
     [HarmonyPatch(typeof(MusicStageCell), "RefreshData")]
     sealed class MusicStageCellOnChangeCellPatch
     {
+        private static Color? _originalTextColor;
+
         private static void Postfix(MusicStageCell __instance, int targetCellIndex)
         {
             //Don't override normal gameplay
@@ -201,13 +203,18 @@ namespace ArchipelagoMuseDash.Patches
             var darkenImage = __instance.m_LockObj.transform.GetChild(0).gameObject;
             var lockImage = __instance.m_LockObj.transform.GetChild(1).gameObject;
             var banner = __instance.m_LockObj.transform.GetChild(2).gameObject;
+            var bannerImage = banner.GetComponent<Image>();
+            bannerImage.color = new Color(bannerImage.color.r, bannerImage.color.g, bannerImage.color.b, 1f);
 
+            if (!_originalTextColor.HasValue)
+                _originalTextColor = __instance.m_LockTxt.color;
+            __instance.m_LockTxt.color = _originalTextColor.Value;
 
             if (targetCellIndex == -1)
                 targetCellIndex = VariableUtils.GetResult<int>(__instance.m_VariableBehaviour.Cast<IVariable>());
 
             var cellInfo = __instance.GetMusicStageCellInfo(targetCellIndex);
-            if (cellInfo.uidIsRandom || cellInfo.musicUid == "?")
+            if (cellInfo.uidIsRandom || cellInfo.musicUid == AlbumDatabase.RANDOM_PANEL_UID)
             {
                 lockImage.SetActive(false);
                 darkenImage.SetActive(false);
@@ -233,6 +240,17 @@ namespace ArchipelagoMuseDash.Patches
                 darkenImage.SetActive(!unlocked);
                 lockImage.SetActive(!unlocked);
                 banner.SetActive(true);
+                __instance.m_LockTxt.gameObject.SetActive(true);
+            }
+            else if (itemHandler.StarterSongUIDs.Contains(uid))
+            {
+                __instance.m_LockObj.SetActive(true);
+                __instance.m_LockTxt.text = "Starter";
+                __instance.m_LockTxt.color = Color.white;
+                darkenImage.SetActive(false);
+                lockImage.SetActive(false);
+                banner.SetActive(true);
+                bannerImage.color = new Color(bannerImage.color.r, bannerImage.color.g, bannerImage.color.b, 0.5f);
                 __instance.m_LockTxt.gameObject.SetActive(true);
             }
             else
@@ -276,7 +294,7 @@ namespace ArchipelagoMuseDash.Patches
 
             ArchipelagoStatic.ArchLogger.LogDebug("PnlStage", "OnBtnPlayClicked");
             MusicInfo musicInfo = GlobalDataBase.s_DbMusicTag.CurMusicInfo();
-            if (musicInfo.uid == "?" || ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(musicInfo.uid))
+            if (musicInfo.uid == AlbumDatabase.RANDOM_PANEL_UID || ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(musicInfo.uid))
             {
                 //This bypasses level checks in order to allow players to play everything
                 DataHelper.Level = 999;
@@ -311,7 +329,7 @@ namespace ArchipelagoMuseDash.Patches
             __result = ArchipelagoStatic.SessionHandler.ItemHandler.GetRandomUnfinishedSong();
 
             if (__result != null)
-                __instance.SetSelectedMusic(__result);
+                __instance.SetSelectedMusic(__result, true);
 
             return false;
         }

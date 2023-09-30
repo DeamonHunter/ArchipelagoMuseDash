@@ -25,6 +25,7 @@ namespace ArchipelagoMuseDash.Archipelago
         private bool _hasUnlockedItem;
         private const float on_show_stage_select_delay = 0.75f;
         private float _itemGiveDelay;
+        private int _currentItemCount;
 
         public ItemUnlockHandler(ItemHandler handler)
         {
@@ -114,6 +115,28 @@ namespace ArchipelagoMuseDash.Archipelago
             ArchipelagoStatic.UnlockStagePanel.UnlockNewSong(data.Cast<IData>());
         }
 
+        private void ShowCompressedItem()
+        {
+            if (_unlockingItem != null)
+                throw new Exception("Tried to unlock an item while one was already unlocking.");
+
+            ArchipelagoStatic.ArchLogger.Log("ItemUnlocks", "Too many items. Compressing.");
+
+            var itemList = new List<IMuseDashItem>();
+            lock (_enqueuedItems)
+            {
+                while (_enqueuedItems.Count > 0)
+                    itemList.Add(_enqueuedItems.Dequeue());
+            }
+
+            _unlockingItem = new CompressedItems(itemList);
+            _hasUnlockedItem = false;
+
+            Data data = new Data();
+            VariableUtils.SetResult(data["uid"], _unlockingItem.UnlockSongUid);
+            ArchipelagoStatic.UnlockStagePanel.UnlockNewSong(data.Cast<IData>());
+        }
+
         public void OnUpdate()
         {
             //We only want to show items when Stage Select is the enabled display. TODO: Does options disable the stage.
@@ -133,10 +156,22 @@ namespace ArchipelagoMuseDash.Archipelago
             lock (_enqueuedItems)
             {
                 if (_enqueuedItems.Count <= 0)
+                    if (_enqueuedItems.Count <= 0)
+                    {
+                        _currentItemCount = 0;
+                        return;
+                    }
+
+                if (_currentItemCount >= 3 && _enqueuedItems.Count > 1)
+                {
+                    ShowCompressedItem();
+                    _currentItemCount = 0;
                     return;
+                }
 
                 var item = _enqueuedItems.Dequeue();
                 ShowItem(item);
+                _currentItemCount++;
             }
         }
 

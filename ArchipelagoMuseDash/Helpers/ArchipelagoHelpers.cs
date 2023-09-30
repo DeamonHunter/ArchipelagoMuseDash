@@ -58,6 +58,9 @@ namespace ArchipelagoMuseDash.Helpers
 
         private static bool IsSongStillShown(string uid)
         {
+            if (uid == AlbumDatabase.RANDOM_PANEL_UID)
+                return true;
+
             var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
 
             switch (itemHandler.HiddenSongMode)
@@ -68,6 +71,8 @@ namespace ArchipelagoMuseDash.Helpers
                     return itemHandler.SongsInLogic.Contains(uid) && itemHandler.UnlockedSongUids.Contains(uid);
                 case ShownSongMode.Unplayed:
                     return itemHandler.SongsInLogic.Contains(uid) && itemHandler.UnlockedSongUids.Contains(uid) && !itemHandler.CompletedSongUids.Contains(uid);
+                case ShownSongMode.Hinted:
+                    return itemHandler.SongsInLogic.Contains(uid) && ArchipelagoStatic.SessionHandler.HintHandler.HasLocationHint(uid) && !itemHandler.CompletedSongUids.Contains(uid);
                 default:
                     throw new InvalidEnumArgumentException(nameof(itemHandler.HiddenSongMode), (int)itemHandler.HiddenSongMode, typeof(ShownSongMode));
             }

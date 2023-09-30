@@ -30,8 +30,10 @@ namespace ArchipelagoMuseDash.Archipelago
         public readonly HashSet<string> SongsInLogic = new HashSet<string>();
         public readonly HashSet<string> UnlockedSongUids = new HashSet<string>();
         public readonly HashSet<string> CompletedSongUids = new HashSet<string>();
+        public readonly HashSet<string> StarterSongUIDs = new HashSet<string>();
 
         private const string showing_all_songs_text = "Showing: All";
+        private const string showing_hinted_songs_text = "Showing: Hinted";
         private const string showing_unlocked_songs_text = "Showing: Unlocked";
         private const string showing_unplayed_songs_text = "Showing: Unplayed";
         private const string music_sheet_item_name = "Music Sheet";
@@ -61,6 +63,7 @@ namespace ArchipelagoMuseDash.Archipelago
             SongsInLogic.Clear();
             UnlockedSongUids.Clear();
             CompletedSongUids.Clear();
+            StarterSongUIDs.Clear();
 
             //Todo: Handle these being missing
             if (slotData.TryGetValue("victoryLocation", out var victoryLocation))
@@ -156,6 +159,9 @@ namespace ArchipelagoMuseDash.Archipelago
                 case ShownSongMode.Unlocks:
                     hideSongText.text = showing_unlocked_songs_text;
                     break;
+                case ShownSongMode.Hinted:
+                    hideSongText.text = showing_hinted_songs_text;
+                    break;
                 default:
                     hideSongText.text = hideSongText.text;
                     break;
@@ -221,6 +227,10 @@ namespace ArchipelagoMuseDash.Archipelago
             if (ArchipelagoStatic.AlbumDatabase.TryGetSongFromItemId(item.Item, out var itemInfo))
             {
                 ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", "Matched item id");
+
+                if (item.Location == -2)
+                    StarterSongUIDs.Add(itemInfo.uid);
+
                 return new SongItem(itemInfo) { Item = item };
             }
 
@@ -237,9 +247,9 @@ namespace ArchipelagoMuseDash.Archipelago
             return null;
         }
 
-        public void AddMusicSheet()
+        public void AddMusicSheet(int number = 1)
         {
-            CurrentNumberOfMusicSheets++;
+            CurrentNumberOfMusicSheets += number;
 
             if (CurrentNumberOfMusicSheets < NumberOfMusicSheetsToWin || UnlockedSongUids.Contains(GoalSong.uid))
             {
@@ -425,6 +435,8 @@ namespace ArchipelagoMuseDash.Archipelago
             HiddenSongMode = mode;
             ArchipelagoHelpers.SelectNextAvailableSong();
 
+            var hintedSongs = mode == ShownSongMode.Hinted ? ArchipelagoStatic.SessionHandler.HintHandler.GetHintedSongs() : new HashSet<string>();
+
             foreach (var song in list)
             {
                 if (song.uid == AlbumDatabase.RANDOM_PANEL_UID)
@@ -475,6 +487,25 @@ namespace ArchipelagoMuseDash.Archipelago
 
                     case ShownSongMode.Unplayed:
                         if (!UnlockedSongUids.Contains(song.uid) || CompletedSongUids.Contains(song.uid))
+                        {
+                            AddHide(song, false);
+
+                            if (GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                                GlobalDataBase.dbMusicTag.RemoveCollection(song);
+                        }
+                        else
+                        {
+                            if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                                GlobalDataBase.dbMusicTag.RemoveHide(song);
+
+                            if (!GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                                GlobalDataBase.dbMusicTag.AddCollection(song);
+                        }
+                        break;
+
+                    case ShownSongMode.Hinted:
+                        var name = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(song);
+                        if ((!hintedSongs.Contains(name + "-0") && !hintedSongs.Contains(name + "-1")) || CompletedSongUids.Contains(song.uid))
                         {
                             AddHide(song, false);
 
