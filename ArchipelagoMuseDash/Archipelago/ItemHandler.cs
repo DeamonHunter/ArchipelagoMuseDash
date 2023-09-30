@@ -192,8 +192,7 @@ public class ItemHandler {
         //Try to match by item id first
         if (ArchipelagoStatic.AlbumDatabase.TryGetSongFromItemId(item.Item, out var itemInfo)) {
             ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", "Matched item id");
-
-            if (item.Player == -2)
+            if (item.Location == -2)
                 StarterSongUIDs.Add(itemInfo.uid);
 
             return new SongItem(itemInfo) { Item = item };
