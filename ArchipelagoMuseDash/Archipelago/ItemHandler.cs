@@ -130,7 +130,8 @@ namespace ArchipelagoMuseDash.Archipelago
 
         public void OnUpdate()
         {
-            CheckForNewItems();
+            if (ArchipelagoStatic.CurrentScene == "UISystem_PC")
+                CheckForNewItems();
 
             if (_triggerFeverFiller)
             {
