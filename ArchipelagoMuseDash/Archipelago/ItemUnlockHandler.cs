@@ -15,7 +15,10 @@ namespace ArchipelagoMuseDash.Archipelago;
 public class ItemUnlockHandler {
     private readonly ItemHandler _handler;
     private readonly Queue<IMuseDashItem> _enqueuedItems = new();
-    private readonly HashSet<NetworkItem> _knownItems = new();
+    //private readonly HashSet<NetworkItem> _knownItems = new HashSet<NetworkItem>();
+    private readonly HashSet<long> _knownReceivedLocations = new HashSet<long>();
+    private readonly HashSet<long> _knownStartingSongs = new HashSet<long>();
+
 
     private IMuseDashItem _unlockingItem;
     private bool _hasUnlockedItem;
@@ -29,10 +32,13 @@ public class ItemUnlockHandler {
 
     public void AddItem(IMuseDashItem item) {
         lock (_enqueuedItems) {
-            if (_knownItems.Contains(item.Item))
+            if (_knownStartingSongs.Contains(item.Item.Item) || LocationIsKnown(item.Item.Location))
                 return;
 
-            _knownItems.Add(item.Item);
+            if (item.Item.Location == -2)
+                _knownStartingSongs.Add(item.Item.Item);
+            if (item.Item.Item >= 0)
+                _knownReceivedLocations.Add(item.Item.Location);
             _enqueuedItems.Enqueue(item);
         }
     }
@@ -175,5 +181,9 @@ public class ItemUnlockHandler {
 
     public IMuseDashItem GetCurrentItem() {
         return _unlockingItem;
+    }
+
+    private bool LocationIsKnown(long location) {
+        return location >= 0 && _knownReceivedLocations.Contains(location);
     }
 }
