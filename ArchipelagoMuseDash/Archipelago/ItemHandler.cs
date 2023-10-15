@@ -116,7 +116,8 @@ public class ItemHandler {
     }
 
     public void OnUpdate() {
-        CheckForNewItems();
+        if (ArchipelagoStatic.CurrentScene == "UISystem_PC")
+            CheckForNewItems();
 
         if (_triggerFeverFiller) {
             var battleStage = ArchipelagoStatic.BattleComponent;
