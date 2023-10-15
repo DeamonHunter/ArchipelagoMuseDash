@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using ArchipelagoMuseDash.Helpers;
 using Il2Cpp;
 using Il2CppAssets.Scripts.Database;
@@ -15,7 +16,8 @@ public class ArchipelagoLogin {
 
     private string _ipAddress;
     private string _username;
-    private string _password;
+    private string _password = "";
+    private bool _showPassword;
 
     private string _error;
     private readonly string _lastLoginPath;
@@ -35,13 +37,22 @@ public class ArchipelagoLogin {
     private GUIStyle _buttonNoStyle;
     private GUIStyle _labelStyle;
     private GUIStyle _textFieldStyle;
+    private GUIStyle _toggleStyle;
     private string _versionNumber;
+    private string _trueVersion;
+
+    private VersionCheckState _checkVersionState;
+    private string _newVersionValue;
+
+    private readonly Il2CppReferenceArray<GUILayoutOption> _defaultInputHeight = new Il2CppReferenceArray<GUILayoutOption>(new[] {
+        GUILayout.Height(25f)
+    });
 
     private bool _hasCollected;
     private bool _hasReleased;
     private bool _backedUpFile;
 
-    public ArchipelagoLogin(string versionNumber) {
+    public ArchipelagoLogin(string versionNumber, string trueVersion) {
 #if DEBUG
         _ipAddress = "localhost:38281";
 #else
@@ -56,6 +67,7 @@ public class ArchipelagoLogin {
         _noTextureHighlighted = AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.ButtonNoHighlighted.png");
 
         _versionNumber = versionNumber;
+        _trueVersion = trueVersion;
 
         MelonEvents.OnGUI.Subscribe(DrawArchLogin);
     }
@@ -115,7 +127,7 @@ public class ArchipelagoLogin {
             var uiParent = museCharacter.transform.parent.parent.parent;
             uiParent.gameObject.SetActive(false);
 
-            GUI.ModalWindow(0, new Rect(Screen.width / 2.0f - 250, Screen.height / 2.0f - 185, 500, 370), (GUI.WindowFunction)DrawArchWindow, "Connect to an Archipelago Server", _windowStyle);
+            GUI.ModalWindow(0, new Rect(Screen.width / 2.0f - 250, Screen.height / 2.0f - 215, 500, 430), (GUI.WindowFunction)DrawArchWindow, "Connect to an Archipelago Server", _windowStyle);
         }
         catch (Exception e) {
             ArchipelagoStatic.ArchLogger.Error("DrawArchLogin", e);
@@ -129,18 +141,23 @@ public class ArchipelagoLogin {
         }));
 
         GUILayout.Label("IP Address And Port:", _labelStyle);
-        _ipAddress = GUILayout.TextField(_ipAddress, _textFieldStyle);
+        _ipAddress = GUILayout.TextField(_ipAddress, _textFieldStyle, _defaultInputHeight);
 
         GUILayout.Label("Username:", _labelStyle);
-        _username = GUILayout.TextField(_username, _textFieldStyle);
+        _username = GUILayout.TextField(_username, _textFieldStyle, _defaultInputHeight);
 
         GUILayout.Label("Password:", _labelStyle);
-        _password = GUILayout.TextField(_password, _textFieldStyle);
+        if (_showPassword)
+            _password = GUILayout.TextField(_password, _textFieldStyle, _defaultInputHeight);
+        else
+            _password = GUILayout.PasswordField(_password, '*', _textFieldStyle, _defaultInputHeight);
+        _showPassword = GUILayout.Toggle(_showPassword, "Show Password", _toggleStyle);
+
 
         GUILayout.Label("Version: " + _versionNumber, _labelStyle);
 
         GUILayout.Label(_error ?? "", _labelStyle, new Il2CppReferenceArray<GUILayoutOption>(new[] {
-            GUILayout.Height(60f)
+            GUILayout.Height(40f)
         }));
 
         GUILayout.BeginHorizontal();
@@ -154,6 +171,36 @@ public class ArchipelagoLogin {
             })))
             AttemptLogin();
 
+        GUILayout.EndHorizontal();
+        GUILayout.Space(20);
+
+        GUILayout.BeginHorizontal();
+        GUILayout.FlexibleSpace();
+        switch (_checkVersionState) {
+            case VersionCheckState.NotChecked: {
+                if (GUILayout.Button("Check for new version", new Il2CppReferenceArray<GUILayoutOption>(new[] {
+                        GUILayout.Height(30f),
+                        GUILayout.Width(300f)
+                    }))) {
+                    _checkVersionState = VersionCheckState.Checking;
+                    CheckForNewVersion().ConfigureAwait(false);
+                }
+                break;
+            }
+            case VersionCheckState.Checking:
+                GUILayout.Label("Checking for update. Please wait...", _labelStyle);
+                break;
+            case VersionCheckState.NewVersion:
+                GUILayout.Label($"New Version Available: {_newVersionValue}", _labelStyle);
+                break;
+            case VersionCheckState.UpToDate:
+                GUILayout.Label("Up to date!", _labelStyle);
+                break;
+            case VersionCheckState.Errored:
+                GUILayout.Label($"An error has occured: {_newVersionValue}", _labelStyle);
+                break;
+        }
+        GUILayout.FlexibleSpace();
         GUILayout.EndHorizontal();
     }
 
@@ -236,6 +283,9 @@ public class ArchipelagoLogin {
         _textFieldStyle = new GUIStyle(GUI.skin.textField) {
             fontSize = 16
         };
+        _toggleStyle = new GUIStyle(GUI.skin.toggle) {
+            fontSize = 16
+        };
     }
 
     private void AttemptLogin() {
@@ -311,5 +361,42 @@ public class ArchipelagoLogin {
             uiParent.gameObject.SetActive(true);
         }
         _showLoginScreen = false;
+    }
+
+    private async System.Threading.Tasks.Task CheckForNewVersion() {
+        //This is a very dumb, and likely to not work forever method to check updates.
+        var request = WebRequest.CreateHttp("https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest");
+        try {
+            var response = await request.GetResponseAsync();
+
+            var resolvedUrl = response.ResponseUri.ToString();
+            response.Close();
+
+            ArchipelagoStatic.ArchLogger.Log("GithubCheck", resolvedUrl);
+            if (resolvedUrl.EndsWith("/"))
+                resolvedUrl = resolvedUrl.Substring(0, resolvedUrl.Length - 1);
+
+            var lastIndex = resolvedUrl.LastIndexOf('/');
+            if (lastIndex > 0) {
+                var version = resolvedUrl.Substring(lastIndex + 1);
+                _checkVersionState = version == "v" + _trueVersion ? VersionCheckState.UpToDate : VersionCheckState.NewVersion;
+                if (_checkVersionState == VersionCheckState.NewVersion)
+                    _newVersionValue = version;
+            }
+            response.Close();
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("GithubCheck", e);
+            _checkVersionState = VersionCheckState.Errored;
+            _newVersionValue = e.Message;
+        }
+    }
+
+    private enum VersionCheckState {
+        NotChecked,
+        Checking,
+        UpToDate,
+        NewVersion,
+        Errored
     }
 }

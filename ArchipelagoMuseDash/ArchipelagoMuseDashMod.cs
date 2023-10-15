@@ -3,7 +3,7 @@ using ArchipelagoMuseDash.Archipelago;
 using ArchipelagoMuseDash.Helpers;
 using ArchipelagoMuseDash.Logging;
 using MelonLoader;
-[assembly: MelonInfo(typeof(ArchipelagoMuseDashMod), "Archipelago Muse Dash", "1.2.0", "DeamonHunter")]
+[assembly: MelonInfo(typeof(ArchipelagoMuseDashMod), "Archipelago Muse Dash", "1.3.0", "DeamonHunter")]
 [assembly: MelonGame("PeroPeroGames", "MuseDash")]
 
 namespace ArchipelagoMuseDash;
@@ -14,7 +14,7 @@ public class ArchipelagoMuseDashMod : MelonMod {
         AssetHelpers.Assembly = MelonAssembly;
 
         ArchipelagoStatic.ArchLogger = new ArchLogger();
-        ArchipelagoStatic.Login = new ArchipelagoLogin(Info.Version);
+        ArchipelagoStatic.Login = new ArchipelagoLogin(Info.Version, Info.Version);
         ArchipelagoStatic.SessionHandler = new SessionHandler();
 
         ArchipelagoStatic.ArchipelagoIcons = new[] {
@@ -30,7 +30,6 @@ public class ArchipelagoMuseDashMod : MelonMod {
         using (var stream = MelonAssembly.Assembly.GetManifestResourceStream("ArchipelagoMuseDash.Assets.MuseDashData.txt"))
             ArchipelagoStatic.AlbumDatabase.LoadMusicList(stream);
     }
-
 
     public override void OnSceneWasLoaded(int buildIndex, string sceneName) {
         base.OnSceneWasLoaded(buildIndex, sceneName);
