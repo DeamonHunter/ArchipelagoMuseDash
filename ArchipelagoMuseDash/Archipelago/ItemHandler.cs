@@ -112,6 +112,7 @@ public class ItemHandler {
             CheckRemoteLocation(name[..^2], false);
         }
 
+        ArchipelagoHelpers.SetBackToDefaultFilter();
         SetVisibilityOfAllSongs(ShownSongMode.Unlocks);
     }
 
