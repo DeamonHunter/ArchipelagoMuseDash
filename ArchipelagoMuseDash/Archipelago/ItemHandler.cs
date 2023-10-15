@@ -125,6 +125,7 @@ namespace ArchipelagoMuseDash.Archipelago
                 CheckRemoteLocation(name.Substring(0, name.Length - 2), false);
             }
 
+            ArchipelagoHelpers.SetBackToDefaultFilter();
             SetVisibilityOfAllSongs(ShownSongMode.Unlocks);
         }
 

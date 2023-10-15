@@ -88,5 +88,14 @@ namespace ArchipelagoMuseDash.Helpers
 
             return itemA.Item == itemB.Item && itemA.Location == itemB.Location;
         }
+
+        public static void SetBackToDefaultFilter()
+        {
+            ArchipelagoStatic.ArchLogger.Log("Helpers", $"Tag Index: {GlobalDataBase.dbMusicTag.selectedTagIndex}");
+            GlobalDataBase.dbMusicTag.selectedTagIndex = 1; // 0 is favourite songs, 1 is all songs
+            ArchipelagoStatic.SongSelectPanel.m_PnlMusicTag.SetTabIndex(0);
+            ArchipelagoStatic.SongSelectPanel.m_PnlMusicTag.RefreshAllShownItem();
+            MusicTagManager.instance.RefreshStageDisplayMusics();
+        }
     }
 }
