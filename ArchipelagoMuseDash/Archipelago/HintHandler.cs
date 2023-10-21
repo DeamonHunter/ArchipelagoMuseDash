@@ -143,8 +143,6 @@ public class HintHandler {
                     _musicSheetHints.Remove(hint.LocationId);
                 else
                     _musicSheetHints[hint.LocationId] = hint;
-
-                continue;
             }
 
             if (hint.FindingPlayer == _currentPlayerSlot) {
