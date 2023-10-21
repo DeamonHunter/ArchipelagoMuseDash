@@ -94,6 +94,8 @@ namespace ArchipelagoMuseDash.Archipelago {
             HintTextComp = hintText.AddComponent<Text>();
             AssetHelpers.CopyTextVariables(noTextComp, HintTextComp);
             HintTextComp.fontSize = 22;
+            var original = HintTextComp.color;
+            HintTextComp.color = new Color(original.r * 0.75f, original.g * 0.75f, original.b * 0.75f, 1f);
             HintTextComp.resizeTextForBestFit = true;
             HintTextComp.resizeTextMaxSize = 22;
             HintTextComp.resizeTextMinSize = 12;
@@ -132,6 +134,8 @@ namespace ArchipelagoMuseDash.Archipelago {
 
             SongTitleComp = songText.AddComponent<Text>();
             AssetHelpers.CopyTextVariables(noTextComp, SongTitleComp);
+            var original = SongTitleComp.color;
+            SongTitleComp.color = new Color(original.r * 0.75f, original.g * 0.75f, original.b * 0.75f, 1f);
             SongTitleComp.fontSize = 28;
             SongTitleComp.resizeTextForBestFit = true;
             SongTitleComp.resizeTextMaxSize = 28;
@@ -184,6 +188,8 @@ namespace ArchipelagoMuseDash.Archipelago {
             AssetHelpers.CopyTextVariables(yesTextComp, hintTextComp);
             hintTextComp.fontSize -= 15;
             hintTextComp.text = buttonText;
+            var original = hintTextComp.color;
+            hintTextComp.color = new Color(original.r * 0.75f, original.g * 0.75f, original.b * 0.75f, 1f);
 
             var rectTransfrom = hintButtonText.GetComponent<RectTransform>();
             var yesRectTransform = yesText.GetComponent<RectTransform>();
