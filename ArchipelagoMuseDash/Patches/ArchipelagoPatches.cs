@@ -387,7 +387,7 @@ sealed class PnlLevelUpAwardOnLevelUpPatch {
 /// Disable the level up panel during archipelago
 /// </summary>
 [HarmonyPatch(typeof(PnlUnlock), "OnStageUnlockOrNot")]
-sealed class PnlUnlockOnLevelUpPatch {
+sealed class PnlUnlockOnStageUnlockOrNotPatch {
     private static bool Prefix() {
         return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
     }
