@@ -426,4 +426,15 @@ namespace ArchipelagoMuseDash.Patches
             return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
         }
     }
+    /// <summary>
+    /// Disable the level up panel during archipelago
+    /// </summary>
+    [HarmonyPatch(typeof(PnlUnlock), "OnStageUnlockOrNot")]
+    sealed class PnlUnlockOnStageUnlockOrNotPatch
+    {
+        private static bool Prefix()
+        {
+            return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
+        }
+    }
 }

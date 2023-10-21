@@ -164,8 +164,6 @@ namespace ArchipelagoMuseDash.Archipelago
                         _musicSheetHints.Remove(hint.LocationId);
                     else
                         _musicSheetHints[hint.LocationId] = hint;
-
-                    continue;
                 }
 
                 if (hint.FindingPlayer == _currentPlayerSlot)
@@ -223,9 +221,21 @@ namespace ArchipelagoMuseDash.Archipelago
                 sb.AppendLine($"{_musicSheetHints.Count} known locations for music sheets: ");
                 foreach (var musicSheetHint in _musicSheetHints.Values)
                 {
+                    if (musicSheetHint.Found)
+                        continue;
+
                     var locationName = _currentSession.Locations.GetLocationNameFromId(musicSheetHint.LocationId);
-                    if (musicSheetHint.FindingPlayer == _currentPlayerSlot) //Local Item
+                    if (musicSheetHint.FindingPlayer == _currentPlayerSlot)
+                    {
                         sb.AppendLine($"{locationName.Substring(0, locationName.Length - 2)}");
+                        //Additional check, in case hints don't update
+                        if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(locationName, out var otherMusic)
+                            && ArchipelagoStatic.SessionHandler.ItemHandler.CompletedSongUids.Contains(otherMusic.uid))
+                            continue;
+
+                        //Local Item
+                        sb.AppendLine(locationName);
+                    }
                     else //Remote Item
                         sb.AppendLine($"By {_currentSession.Players.GetPlayerAlias(musicSheetHint.FindingPlayer)} at {locationName}");
                 }
