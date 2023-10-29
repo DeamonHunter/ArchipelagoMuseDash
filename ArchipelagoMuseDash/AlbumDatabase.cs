@@ -19,6 +19,10 @@ public class AlbumDatabase {
     public const string RANDOM_PANEL_UID = "?";
     private const int starting_music_item_id = 2900000 + 50; //Start ID + Music ID Offset
 
+    private static Dictionary<string, string> _currentNamesToOldNames = new() {
+        { "Crimson Nightingale", "Crimson Nightingle" }
+    };
+
     public void Setup() {
         _songsByAlbum.Clear();
         _songsByItemName.Clear();
@@ -46,6 +50,9 @@ public class AlbumDatabase {
             var songName = GetItemNameFromMusicInfo(musicInfo);
             _songsByItemName.Add(songName, musicInfo);
             _songsByUid.Add(musicInfo.uid, musicInfo);
+
+            if (_currentNamesToOldNames.TryGetValue(songName, out var oldName))
+                _songsByItemName.Add(oldName, musicInfo);
 
             if (!_songsByAlbum.TryGetValue(albumLocal, out var albumList)) {
                 albumList = new List<MusicInfo>();
