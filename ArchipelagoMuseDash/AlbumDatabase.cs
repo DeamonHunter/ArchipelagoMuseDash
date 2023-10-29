@@ -25,6 +25,11 @@ namespace ArchipelagoMuseDash
         public const string RANDOM_PANEL_UID = "?";
         private const int starting_music_item_id = 2900000 + 50; //Start ID + Music ID Offset
 
+        private static Dictionary<string, string> _currentNamesToOldNames = new Dictionary<string, string>()
+        {
+            { "Crimson Nightingale", "Crimson Nightingle" }
+        };
+
         public void Setup()
         {
             _songsByAlbum.Clear();
@@ -54,6 +59,9 @@ namespace ArchipelagoMuseDash
                 var songName = GetItemNameFromMusicInfo(musicInfo);
                 _songsByItemName.Add(songName, musicInfo);
                 _songsByUid.Add(musicInfo.uid, musicInfo);
+
+                if (_currentNamesToOldNames.TryGetValue(songName, out var oldName))
+                    _songsByItemName.Add(oldName, musicInfo);
 
                 if (!_songsByAlbum.TryGetValue(albumLocal, out var albumList))
                 {
