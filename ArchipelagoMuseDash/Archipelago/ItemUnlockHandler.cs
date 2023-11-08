@@ -20,7 +20,7 @@ namespace ArchipelagoMuseDash.Archipelago
         private readonly ItemHandler _handler;
         private readonly Queue<IMuseDashItem> _enqueuedItems = new Queue<IMuseDashItem>();
         //private readonly HashSet<NetworkItem> _knownItems = new HashSet<NetworkItem>();
-        private readonly HashSet<long> _knownReceivedLocations = new HashSet<long>();
+        private readonly HashSet<(long, long)> _knownReceivedLocations = new HashSet<(long, long)>();
         private readonly HashSet<long> _knownStartingSongs = new HashSet<long>();
 
         private IMuseDashItem _unlockingItem;
@@ -38,13 +38,16 @@ namespace ArchipelagoMuseDash.Archipelago
         {
             lock (_enqueuedItems)
             {
-                if (_knownStartingSongs.Contains(item.Item.Item) || LocationIsKnown(item.Item.Location))
+                if (_knownStartingSongs.Contains(item.Item.Item) || LocationIsKnown(item.Item))
+                {
+                    ArchipelagoStatic.ArchLogger.LogDebug("Item Unlock", $"Known Duplicate: {item.Item.Item}/{item.Item.Location}");
                     return;
+                }
 
                 if (item.Item.Location == -2)
                     _knownStartingSongs.Add(item.Item.Item);
                 if (item.Item.Item >= 0)
-                    _knownReceivedLocations.Add(item.Item.Location);
+                    _knownReceivedLocations.Add((item.Item.Player, item.Item.Location));
                 _enqueuedItems.Enqueue(item);
             }
         }
@@ -115,7 +118,8 @@ namespace ArchipelagoMuseDash.Archipelago
             _unlockingItem = item;
             _hasUnlockedItem = false;
 
-            Data data = new Data();
+            var data = new Data();
+            // ReSharper disable once InvokeAsExtensionMethod
             VariableUtils.SetResult(data["uid"], _unlockingItem.UnlockSongUid);
             ArchipelagoStatic.UnlockStagePanel.UnlockNewSong(data.Cast<IData>());
         }
@@ -137,7 +141,8 @@ namespace ArchipelagoMuseDash.Archipelago
             _unlockingItem = new CompressedItems(itemList);
             _hasUnlockedItem = false;
 
-            Data data = new Data();
+            var data = new Data();
+            // ReSharper disable once InvokeAsExtensionMethod
             VariableUtils.SetResult(data["uid"], _unlockingItem.UnlockSongUid);
             ArchipelagoStatic.UnlockStagePanel.UnlockNewSong(data.Cast<IData>());
         }
@@ -212,9 +217,9 @@ namespace ArchipelagoMuseDash.Archipelago
             return _unlockingItem;
         }
 
-        private bool LocationIsKnown(long location)
+        private bool LocationIsKnown(NetworkItem item)
         {
-            return location >= 0 && _knownReceivedLocations.Contains(location);
+            return item.Location >= 0 && _knownReceivedLocations.Contains((item.Player, item.Location));
         }
     }
 }
