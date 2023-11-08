@@ -16,9 +16,8 @@ public class ItemUnlockHandler {
     private readonly ItemHandler _handler;
     private readonly Queue<IMuseDashItem> _enqueuedItems = new();
     //private readonly HashSet<NetworkItem> _knownItems = new HashSet<NetworkItem>();
-    private readonly HashSet<long> _knownReceivedLocations = new HashSet<long>();
-    private readonly HashSet<long> _knownStartingSongs = new HashSet<long>();
-
+    private readonly HashSet<(long, long)> _knownReceivedLocations = new();
+    private readonly HashSet<long> _knownStartingSongs = new();
 
     private IMuseDashItem _unlockingItem;
     private bool _hasUnlockedItem;
@@ -32,13 +31,16 @@ public class ItemUnlockHandler {
 
     public void AddItem(IMuseDashItem item) {
         lock (_enqueuedItems) {
-            if (_knownStartingSongs.Contains(item.Item.Item) || LocationIsKnown(item.Item.Location))
+            if (_knownStartingSongs.Contains(item.Item.Item) || LocationIsKnown(item.Item))
+            {
+                ArchipelagoStatic.ArchLogger.LogDebug("Item Unlock", $"Known Duplicate: {item.Item.Item}/{item.Item.Location}");
                 return;
+            }
 
             if (item.Item.Location == -2)
                 _knownStartingSongs.Add(item.Item.Item);
             if (item.Item.Item >= 0)
-                _knownReceivedLocations.Add(item.Item.Location);
+                _knownReceivedLocations.Add((item.Item.Player, item.Item.Location));
             _enqueuedItems.Enqueue(item);
         }
     }
@@ -56,7 +58,6 @@ public class ItemUnlockHandler {
                 else
                     itemsWithoutDuplicates.Add(enqueuedItem);
             }
-
 
             //This reorders duplicate items such that they show first.
             //Duplicate items happens in one (normal) case, which is items a player has gotten
@@ -99,7 +100,8 @@ public class ItemUnlockHandler {
         _unlockingItem = item;
         _hasUnlockedItem = false;
 
-        Data data = new Data();
+        var data = new Data();
+        // ReSharper disable once InvokeAsExtensionMethod
         VariableUtils.SetResult(data["uid"], _unlockingItem.UnlockSongUid);
         ArchipelagoStatic.UnlockStagePanel.UnlockNewSong(data.Cast<IData>());
     }
@@ -119,7 +121,8 @@ public class ItemUnlockHandler {
         _unlockingItem = new CompressedItems(itemList);
         _hasUnlockedItem = false;
 
-        Data data = new Data();
+        var data = new Data();
+        // ReSharper disable once InvokeAsExtensionMethod
         VariableUtils.SetResult(data["uid"], _unlockingItem.UnlockSongUid);
         ArchipelagoStatic.UnlockStagePanel.UnlockNewSong(data.Cast<IData>());
     }
@@ -183,7 +186,7 @@ public class ItemUnlockHandler {
         return _unlockingItem;
     }
 
-    private bool LocationIsKnown(long location) {
-        return location >= 0 && _knownReceivedLocations.Contains(location);
+    private bool LocationIsKnown(NetworkItem item) {
+        return item.Location >= 0 && _knownReceivedLocations.Contains((item.Player, item.Location));
     }
 }
