@@ -3,7 +3,7 @@ using ArchipelagoMuseDash.Archipelago;
 using ArchipelagoMuseDash.Helpers;
 using ArchipelagoMuseDash.Logging;
 using MelonLoader;
-[assembly: MelonInfo(typeof(ArchipelagoMuseDashMod), "Archipelago Muse Dash", "1.3.3", "DeamonHunter")]
+[assembly: MelonInfo(typeof(ArchipelagoMuseDashMod), "Archipelago Muse Dash", "1.3.4", "DeamonHunter")]
 [assembly: MelonGame("PeroPeroGames", "MuseDash")]
 
 namespace ArchipelagoMuseDash;
@@ -21,7 +21,7 @@ public class ArchipelagoMuseDashMod : MelonMod {
             AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APProgression.png"),
             AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APUseful.png"),
             AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APTrash.png"),
-            AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APTrap.png"),
+            AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APTrap.png")
         };
 
         using (var stream = MelonAssembly.Assembly.GetManifestResourceStream("ArchipelagoMuseDash.Assets.SongNameReplacements.json"))
