@@ -349,8 +349,16 @@ namespace ArchipelagoMuseDash.Archipelago
                         locationsToCheck.Add(location2);
                 }
 
-                if (locationsToCheck.Count <= 0)
+                if (locationsToCheck.Count <= 0) {
+                    ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Failed to find any checks for {locationName}.");
+                    //This is a workaround for older generated worlds
+                    if (!ArchipelagoStatic.AlbumDatabase.TryGetOldName(locationName, out var oldName))
+                        return;
+
+                    ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Location had an older name checking for {oldName}");
+                    await CheckLocationsInner(uid, oldName);
                     return;
+                }
 
                 var locationsArray = locationsToCheck.ToArray();
 
