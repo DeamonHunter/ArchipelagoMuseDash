@@ -24,7 +24,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
             var oldTVNoteData = CreateOldTVNoteData();
             TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(oldTVNoteData.uid, oldTVNoteData));
 
-            for (int i = data.Count - 1; i > 1; i--)
+            for (var i = data.Count - 1; i > 1; i--)
             {
                 var bmsUid = data[i].noteData.bmsUid;
                 if (bmsUid != BmsNodeUid.OldTv && bmsUid != BmsNodeUid.OldTvOver)

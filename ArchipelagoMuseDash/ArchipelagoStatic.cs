@@ -35,5 +35,8 @@ namespace ArchipelagoMuseDash
         public static SongHideAskMsg HideSongDialogue;
 
         public static string SaveDataPath;
+
+        public static int ExtraLifesUsed;
+        public static GameObject PlaceholderElfin;
     }
 }

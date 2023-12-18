@@ -2,6 +2,7 @@
 using Archipelago.MultiClient.Net.Models;
 using GameLogic;
 using PeroPeroGames.GlobalDefines;
+using UnityEngine;
 
 namespace ArchipelagoMuseDash.Archipelago.Traps
 {
@@ -22,10 +23,10 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
         {
             ArchipelagoStatic.ArchLogger.LogDebug("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
 
-            var scrollNoteData = UnityEngine.Random.Range(0, 2) == 0 ? CreateUpScrollNoteData() : CreateDownScrollNoteData();
+            var scrollNoteData = Random.Range(0, 2) == 0 ? CreateUpScrollNoteData() : CreateDownScrollNoteData();
             TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(scrollNoteData.uid, scrollNoteData));
 
-            for (int i = data.Count - 1; i > 1; i--)
+            for (var i = data.Count - 1; i > 1; i--)
             {
                 var bmsUid = data[i].noteData.bmsUid;
                 if (bmsUid != BmsNodeUid.CanvasUpScroll && bmsUid != BmsNodeUid.CanvasDownScroll && bmsUid != BmsNodeUid.CanvasScrollOver)

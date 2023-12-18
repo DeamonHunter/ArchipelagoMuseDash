@@ -14,7 +14,7 @@ namespace ArchipelagoMuseDash.Archipelago
         public ItemHandler ItemHandler;
         public HintHandler HintHandler;
         public DeathLinkHandler DeathLinkHandler;
-        public TrapHandler TrapHandler;
+        public BattleHandler BattleHandler;
         public DataStorageHandler DataStorageHandler;
 
         public SongSelectAdditions SongSelectAdditions;
@@ -80,7 +80,7 @@ namespace ArchipelagoMuseDash.Archipelago
                 ItemHandler = new ItemHandler(_currentSession, _slot);
                 HintHandler = new HintHandler(_currentSession, _slot);
                 DeathLinkHandler = new DeathLinkHandler(_currentSession, _slot, _slotData);
-                TrapHandler = new TrapHandler();
+                BattleHandler = new BattleHandler();
                 SongSelectAdditions = new SongSelectAdditions();
 
                 _currentSession.MessageLog.OnMessageReceived += ArchipelagoStatic.ArchLogger.LogMessage;
@@ -111,6 +111,7 @@ namespace ArchipelagoMuseDash.Archipelago
             ItemHandler.OnUpdate();
             ItemHandler.Unlocker.OnUpdate();
             HintHandler.OnUpdate();
+            BattleHandler.OnUpdate();
             DeathLinkHandler.Update();
         }
 
@@ -138,11 +139,11 @@ namespace ArchipelagoMuseDash.Archipelago
 
         public void CollectItems()
         {
-            _currentSession.Socket.SendPacketAsync(new SayPacket { Text = $"!collect" });
+            _currentSession.Socket.SendPacketAsync(new SayPacket { Text = "!collect" });
         }
         public void ReleaseItems()
         {
-            _currentSession.Socket.SendPacketAsync(new SayPacket { Text = $"!release" });
+            _currentSession.Socket.SendPacketAsync(new SayPacket { Text = "!release" });
         }
     }
 }

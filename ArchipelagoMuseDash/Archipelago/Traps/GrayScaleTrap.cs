@@ -21,7 +21,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
             var greyScaleNoteData = CreateGreyScaleNoteData();
             TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(greyScaleNoteData.uid, greyScaleNoteData));
 
-            for (int i = data.Count - 1; i > 1; i--)
+            for (var i = data.Count - 1; i > 1; i--)
             {
                 var bmsUid = data[i].noteData.bmsUid;
                 if (bmsUid != BmsNodeUid.GrayScaleStart && bmsUid != BmsNodeUid.GrayScaleEnd)

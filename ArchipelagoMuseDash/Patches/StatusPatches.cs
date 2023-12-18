@@ -1,8 +1,10 @@
-﻿using Assets.Scripts.UI.Controls;
+﻿using Assets.Scripts.GameCore.GameObjectLogics.GameObjectManager;
+using Assets.Scripts.UI.Controls;
 using Assets.Scripts.UI.Panels;
 using Assets.Scripts.UI.Specials;
 using FormulaBase;
 using HarmonyLib;
+using UnityEngine;
 
 namespace ArchipelagoMuseDash.Patches
 {
@@ -96,7 +98,31 @@ namespace ArchipelagoMuseDash.Patches
             ArchipelagoStatic.ArchLogger.LogDebug("StageBattleComponent", "Dead");
             ArchipelagoStatic.SessionHandler.DeathLinkHandler.PlayerDied();
             if (!ArchipelagoStatic.SessionHandler.DeathLinkHandler.HasDeathLinkReason())
-                ArchipelagoStatic.SessionHandler.TrapHandler.SetTrapFinished();
+            {
+                ArchipelagoStatic.SessionHandler.BattleHandler.SetTrapFinished();
+                ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd();
+            }
+        }
+    }
+    /// <summary>
+    ///     Gets the Unlock Song Panel so that we can trigger it when we want
+    /// </summary>
+    [HarmonyPatch(typeof(AttackEffectManager), "InvokeElfinEffect")]
+    sealed class AttackEffectManagerInvokeElfinEffectPatch
+    {
+        private static bool Prefix(AttackEffectManager __instance, ref GameObject __result)
+        {
+            __result = null;
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+                return true;
+
+            if (__instance.m_ElfinEffect?.pool != null && __instance.m_ElfinEffect.pool.sourcePrefab)
+                return true;
+
+            if (!ArchipelagoStatic.PlaceholderElfin)
+                ArchipelagoStatic.PlaceholderElfin = new GameObject();
+            __result = ArchipelagoStatic.PlaceholderElfin;
+            return false;
         }
     }
 }

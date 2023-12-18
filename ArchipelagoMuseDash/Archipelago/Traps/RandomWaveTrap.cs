@@ -21,7 +21,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
             var randomWaveNote = CreateRandomWaveNoteData();
             TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(randomWaveNote.uid, randomWaveNote));
 
-            for (int i = data.Count - 1; i > 1; i--)
+            for (var i = data.Count - 1; i > 1; i--)
             {
                 var bmsUid = data[i].noteData.bmsUid;
                 if (bmsUid != BmsNodeUid.RandomWave && bmsUid != BmsNodeUid.RandomWaveOver)

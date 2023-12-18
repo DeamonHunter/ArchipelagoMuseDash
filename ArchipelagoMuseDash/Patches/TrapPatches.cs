@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Database;
 using GameLogic;
 using HarmonyLib;
+using Il2CppSystem.Collections.Generic;
 
 namespace ArchipelagoMuseDash.Patches
 {
@@ -15,20 +16,20 @@ namespace ArchipelagoMuseDash.Patches
             ArchipelagoStatic.ArchLogger.LogDebug("GameMusic", "LoadMusicDataByFileName");
             ArchipelagoStatic.ArchLogger.LogDebug("GameMusic", $"Scene Started: {GlobalDataBase.dbBattleStage.m_BeganScene} : {GlobalDataBase.dbBattleStage.m_BeganSceneIdx}");
 
-            ArchipelagoStatic.SessionHandler.TrapHandler.LoadMusicDataByFilenameHook();
+            ArchipelagoStatic.SessionHandler.BattleHandler.LoadMusicDataByFilenameHook();
         }
     }
 
     [HarmonyPatch(typeof(DBStageInfo), "SetRuntimeMusicData")]
     sealed class DBStageInfoSetRuntimeMusicData
     {
-        private static void Postfix(Il2CppSystem.Collections.Generic.List<MusicData> data)
+        private static void Postfix(List<MusicData> data)
         {
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
                 return;
 
             ArchipelagoStatic.ArchLogger.Log("DBStageInfo", $"SetRuntimeMusicData {data.Count}");
-            ArchipelagoStatic.SessionHandler.TrapHandler.SetRuntimeMusicDataHook(data);
+            ArchipelagoStatic.SessionHandler.BattleHandler.SetRuntimeMusicDataHook(data);
         }
     }
     [HarmonyPatch(typeof(DBTouhou), "AwakeInit")]
@@ -42,8 +43,8 @@ namespace ArchipelagoMuseDash.Patches
             //This is one of the earliest things that loads in a game scene. (That we care about that is.)
 
             ArchipelagoStatic.ArchLogger.LogDebug("DBTouhou", "Awake Trigger");
-            ArchipelagoStatic.SessionHandler.TrapHandler.ActivateNextTrap();
-            ArchipelagoStatic.SessionHandler.TrapHandler.PreGameSceneLoad();
+            ArchipelagoStatic.SessionHandler.BattleHandler.ActivateNextTrap();
+            ArchipelagoStatic.SessionHandler.BattleHandler.PreGameSceneLoad();
         }
     }
 }

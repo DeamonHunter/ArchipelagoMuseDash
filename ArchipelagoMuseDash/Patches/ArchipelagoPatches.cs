@@ -11,10 +11,12 @@ using Assets.Scripts.UI.Controls;
 using Assets.Scripts.UI.Panels;
 using DG.Tweening;
 using HarmonyLib;
+using Il2CppSystem.Collections.Generic;
 using PeroTools2.Resources;
 using UnhollowerBaseLib;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = Il2CppSystem.Object;
 
 
 // Due to how IL2CPP works, some things can't be invoked as an extension.
@@ -58,7 +60,7 @@ namespace ArchipelagoMuseDash.Patches
 
             if (currentItem.UseArchipelagoLogo)
             {
-                int iconIndex = 0;
+                var iconIndex = 0;
                 if (currentItem is ExternalItem)
                 {
                     if ((currentItem.Item.Flags & ItemFlags.Advancement) != 0)
@@ -86,9 +88,9 @@ namespace ArchipelagoMuseDash.Patches
         {
             ArchipelagoStatic.ArchLogger.Warning("PnlUnlockStage", "Base Song Sprite was null... attempting to fix.");
 
-            var songIDs = new Il2CppSystem.Collections.Generic.List<string>();
+            var songIDs = new List<string>();
             songIDs.Add(instance.newSongUid);
-            var buffer = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
+            var buffer = new List<MusicInfo>();
             GlobalDataBase.dbMusicTag.GetMusicInfosByUids(songIDs, buffer);
             if (buffer.Count <= 0)
             {
@@ -104,7 +106,7 @@ namespace ArchipelagoMuseDash.Patches
 
         public static Text GetTitleText(GameObject pnlUnlockStageObject)
         {
-            for (int i = 0; i < pnlUnlockStageObject.transform.childCount; i++)
+            for (var i = 0; i < pnlUnlockStageObject.transform.childCount; i++)
             {
                 if (pnlUnlockStageObject.transform.GetChild(i).gameObject.name != "AnimationTittleText")
                     continue;
@@ -132,7 +134,7 @@ namespace ArchipelagoMuseDash.Patches
     /// <summary>
     /// Gets called when the player completes the song. Uses this to activate location checks.
     /// </summary>
-    [HarmonyPatch(typeof(PnlVictory), "OnVictory", new[] { typeof(Il2CppSystem.Object), typeof(Il2CppSystem.Object), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
+    [HarmonyPatch(typeof(PnlVictory), "OnVictory", typeof(Object), typeof(Object), typeof(Il2CppReferenceArray<Object>))]
     sealed class PnlVictoryPatch
     {
         public const int NEKO_CHARACTER_ID = 16;
@@ -154,7 +156,7 @@ namespace ArchipelagoMuseDash.Patches
                 return;
             }
 
-            ArchipelagoStatic.SessionHandler.TrapHandler.SetTrapFinished();
+            ArchipelagoStatic.SessionHandler.BattleHandler.SetTrapFinished();
 
             // Cover Neko's death
             if (GlobalDataBase.dbBattleStage.IsSelectRole(NEKO_CHARACTER_ID) && !GlobalDataBase.dbBattleStage.IsSelectElfin(SILENCER_ELFIN_ID))
@@ -182,6 +184,7 @@ namespace ArchipelagoMuseDash.Patches
             var musicInfo = GlobalDataBase.dbBattleStage.selectedMusicInfo;
             var locationName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(musicInfo);
             ArchipelagoStatic.SessionHandler.ItemHandler.CheckLocation(musicInfo.uid, locationName);
+            ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd();
         }
     }
     /// <summary>
@@ -293,7 +296,7 @@ namespace ArchipelagoMuseDash.Patches
                 return true;
 
             ArchipelagoStatic.ArchLogger.LogDebug("PnlStage", "OnBtnPlayClicked");
-            MusicInfo musicInfo = GlobalDataBase.s_DbMusicTag.CurMusicInfo();
+            var musicInfo = GlobalDataBase.s_DbMusicTag.CurMusicInfo();
             if (musicInfo.uid == AlbumDatabase.RANDOM_PANEL_UID || ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(musicInfo.uid))
             {
                 //This bypasses level checks in order to allow players to play everything
@@ -435,6 +438,25 @@ namespace ArchipelagoMuseDash.Patches
         private static bool Prefix()
         {
             return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
+        }
+    }
+
+    [HarmonyPatch(typeof(BattleRoleAttributeComponent), "Hurt")]
+    sealed class BattleRoleAttributeComponentHurtPatch
+    {
+        private static bool Prefix(BattleRoleAttributeComponent __instance, int hurtValue, bool isAir)
+        {
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+                return true;
+
+            if (__instance.hp + hurtValue > 0)
+                return true;
+
+            if (!ArchipelagoStatic.SessionHandler.BattleHandler.TryUseExtraLife())
+                return true;
+
+            __instance.AddHp(__instance.GetHpMax() - __instance.hp);
+            return false;
         }
     }
 }

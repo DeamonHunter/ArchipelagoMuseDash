@@ -23,6 +23,9 @@ namespace ArchipelagoMuseDash.Archipelago
         public GameObject SongText;
         public Text SongTitleComp;
 
+        public GameObject FillerItemText;
+        public Text FillerTextComp;
+
         public void OnUpdate()
         {
             if (!ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlStage"))
@@ -63,6 +66,7 @@ namespace ArchipelagoMuseDash.Archipelago
 
             AddSongTitleBox(likeButton);
             AddHintBox(likeButton);
+            AddItemBox(likeButton);
         }
 
         public void MainSceneLoaded()
@@ -71,6 +75,8 @@ namespace ArchipelagoMuseDash.Archipelago
             ToggleSongsButton = null;
             ToggleSongsText = null;
             SongText = null;
+            FillerItemText = null;
+            FillerTextComp = null;
         }
 
         public void AddHintBox(StageLikeToggle likeButton)
@@ -156,6 +162,49 @@ namespace ArchipelagoMuseDash.Archipelago
             songTextRect.anchorMax = new Vector2(0.9f, 0.9f);
             songTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
         }
+
+        public void AddItemBox(StageLikeToggle likeButton)
+        {
+            //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
+
+            //The HideSongDialogue has the button we want, and it should be available at this time.
+            var yesButton = ArchipelagoStatic.HideSongDialogue.m_YesButton;
+            var yesButtonImage = yesButton.GetComponent<Image>();
+            var yesText = yesButton.transform.GetChild(0);
+            var yesTextComp = yesText.GetComponent<Text>();
+
+            FillerItemText = new GameObject("ArchipelagoFillerText");
+            FillerItemText.transform.SetParent(likeButton.transform.parent, false);
+
+            var hintBackgroundImage = FillerItemText.AddComponent<Image>();
+            hintBackgroundImage.sprite = yesButtonImage.sprite;
+            hintBackgroundImage.type = yesButtonImage.type;
+
+            var hintTransform = FillerItemText.GetComponent<RectTransform>();
+            hintTransform.anchorMax = hintTransform.anchorMin = new Vector2(0.5f, 0.5f);
+            hintTransform.anchoredPosition = new Vector2(-620, 50);
+            hintTransform.pivot = new Vector2(1, 0.5f);
+            hintTransform.sizeDelta = new Vector2(270, 100);
+
+            var hintText = new GameObject();
+            hintText.transform.SetParent(FillerItemText.transform, false);
+
+            FillerTextComp = hintText.AddComponent<Text>();
+            AssetHelpers.CopyTextVariables(yesTextComp, FillerTextComp);
+            var original = FillerTextComp.color;
+            FillerTextComp.color = new Color(original.r * 0.75f, original.g * 0.75f, original.b * 0.75f, 1f);
+            FillerTextComp.fontSize = 20;
+            FillerTextComp.resizeTextForBestFit = true;
+            FillerTextComp.resizeTextMaxSize = 20;
+            FillerTextComp.resizeTextMinSize = 12;
+            FillerTextComp.verticalOverflow = VerticalWrapMode.Truncate;
+
+            var hintTextRect = hintText.GetComponent<RectTransform>();
+            hintTextRect.anchorMin = new Vector2(0.1f, 0.1f);
+            hintTextRect.anchorMax = new Vector2(0.9f, 0.9f);
+            hintTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
+        }
+
 
         private GameObject CreateButton(StageLikeToggle likeButton, string buttonName, string buttonText, Vector2 offset, Vector2 pivot, Action onClick)
         {

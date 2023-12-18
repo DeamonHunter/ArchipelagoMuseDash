@@ -159,7 +159,7 @@
         <Compile Include="ArchipelagoStatic.cs"/>
         <Compile Include="Archipelago\ShownSongMode.cs"/>
         <Compile Include="Archipelago\SongSelectAdditions.cs"/>
-        <Compile Include="Archipelago\TrapHandler.cs"/>
+        <Compile Include="Archipelago\BattleHandler.cs"/>
         <Compile Include="Archipelago\Traps\BadAppleTrap.cs"/>
         <Compile Include="Archipelago\Traps\BGFreezeTrap.cs"/>
         <Compile Include="Archipelago\Traps\CanvasScrollTrap.cs"/>

@@ -21,7 +21,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
             var shadowEdgeInNoteData = CreateShadowEdgeInNoteData();
             TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(shadowEdgeInNoteData.uid, shadowEdgeInNoteData));
 
-            for (int i = data.Count - 1; i > 1; i--)
+            for (var i = data.Count - 1; i > 1; i--)
             {
                 var bmsUid = data[i].noteData.bmsUid;
                 if (bmsUid != BmsNodeUid.ShadowEdgeIn && bmsUid != BmsNodeUid.ShadowEdgeOut)

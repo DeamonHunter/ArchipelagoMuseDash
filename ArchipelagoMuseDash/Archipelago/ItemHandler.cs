@@ -18,19 +18,6 @@ namespace ArchipelagoMuseDash.Archipelago
 
     public class ItemHandler
     {
-        public ItemUnlockHandler Unlocker { get; }
-
-        public ShownSongMode HiddenSongMode { get; private set; } = ShownSongMode.Unlocks;
-        public GradeOption GradeNeeded { get; private set; }
-        public MusicInfo GoalSong { get; private set; }
-        public int NumberOfMusicSheetsToWin { get; private set; }
-        public int CurrentNumberOfMusicSheets { get; private set; }
-        public bool VictoryAchieved { get; set; }
-
-        public readonly HashSet<string> SongsInLogic = new HashSet<string>();
-        public readonly HashSet<string> UnlockedSongUids = new HashSet<string>();
-        public readonly HashSet<string> CompletedSongUids = new HashSet<string>();
-        public readonly HashSet<string> StarterSongUIDs = new HashSet<string>();
 
         private const string showing_all_songs_text = "Showing: All";
         private const string showing_hinted_songs_text = "Showing: Hinted";
@@ -38,6 +25,11 @@ namespace ArchipelagoMuseDash.Archipelago
         private const string showing_unplayed_songs_text = "Showing: Unplayed";
         private const string music_sheet_item_name = "Music Sheet";
         private const string fever_filler_item = "Fever Refill";
+
+        public readonly HashSet<string> SongsInLogic = new HashSet<string>();
+        public readonly HashSet<string> UnlockedSongUids = new HashSet<string>();
+        public readonly HashSet<string> CompletedSongUids = new HashSet<string>();
+        public readonly HashSet<string> StarterSongUIDs = new HashSet<string>();
 
         private readonly ArchipelagoSession _currentSession;
         private readonly int _currentPlayerSlot;
@@ -55,6 +47,14 @@ namespace ArchipelagoMuseDash.Archipelago
 
             Unlocker = new ItemUnlockHandler(this);
         }
+        public ItemUnlockHandler Unlocker { get; }
+
+        public ShownSongMode HiddenSongMode { get; private set; } = ShownSongMode.Unlocks;
+        public GradeOption GradeNeeded { get; private set; }
+        public MusicInfo GoalSong { get; private set; }
+        public int NumberOfMusicSheetsToWin { get; private set; }
+        public int CurrentNumberOfMusicSheets { get; private set; }
+        public bool VictoryAchieved { get; set; }
 
         public void Setup(Dictionary<string, object> slotData)
         {
@@ -87,12 +87,12 @@ namespace ArchipelagoMuseDash.Archipelago
             if (slotData.TryGetValue("musicSheetWinCount", out var tokenWinCount))
             {
                 ArchipelagoStatic.ArchLogger.Log("Music Sheets to Win", ((long)tokenWinCount).ToString());
-                NumberOfMusicSheetsToWin = (int)((long)tokenWinCount);
+                NumberOfMusicSheetsToWin = (int)(long)tokenWinCount;
             }
 
             if (slotData.TryGetValue("gradeNeeded", out var gradeNeeded))
             {
-                var grade = (GradeOption)((long)gradeNeeded);
+                var grade = (GradeOption)(long)gradeNeeded;
                 ArchipelagoStatic.ArchLogger.Log("Grade Needed to win", grade.ToString());
                 GradeNeeded = grade;
             }
@@ -114,6 +114,7 @@ namespace ArchipelagoMuseDash.Archipelago
 
             CheckForNewItems();
             Unlocker.UnlockAllItems();
+            ArchipelagoStatic.SessionHandler.BattleHandler.ResetNewItemCount();
 
             var prevFillerCount = ArchipelagoStatic.SessionHandler.DataStorageHandler.GetHandledFeverCount();
             if (prevFillerCount < _triggeredFeverFillerCount)
@@ -209,7 +210,7 @@ namespace ArchipelagoMuseDash.Archipelago
                 return new ExternalItem(item.Item, name, playerName) { Item = item };
             }
 
-            if (ArchipelagoStatic.SessionHandler.TrapHandler.EnqueueIfTrap(item))
+            if (ArchipelagoStatic.SessionHandler.BattleHandler.EnqueueIfBattleItem(item))
                 return null;
 
             if (name == fever_filler_item)
@@ -289,142 +290,6 @@ namespace ArchipelagoMuseDash.Archipelago
                 return info;
             throw new Exception("Failed to find random music info.");
         }
-
-        #region Locations
-
-        public void CheckLocation(string uid, string locationName)
-        {
-            if (CompletedSongUids.Contains(uid))
-            {
-                ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Location already checked for: {locationName}");
-                return;
-            }
-
-            if (!SongsInLogic.Contains(uid) && GoalSong.uid != uid)
-            {
-                ArchipelagoStatic.ArchLogger.Warning("CheckLocations", $"Tried to check location that wasn't in logic: {locationName}");
-                return;
-            }
-
-            ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Checking location for: {locationName}");
-            Task.Run(async () => await CheckLocationsInner(uid, locationName));
-        }
-
-        private async Task CheckLocationsInner(string uid, string locationName)
-        {
-            try
-            {
-                CompletedSongUids.Add(uid);
-
-                if (GoalSong != null && GoalSong.uid == uid)
-                {
-                    ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Victory achieved, enqueueing visuals for next available time.");
-
-                    //Todo: This maybe should be priority?
-                    Unlocker.AddItem(new VictoryItem(_currentSession.Players.GetPlayerAlias(_currentPlayerSlot), uid));
-                    Unlocker.PrioritiseItems(new[] { new NetworkItem() });
-
-                    var statusUpdatePacket = new StatusUpdatePacket
-                    {
-                        Status = ArchipelagoClientState.ClientGoal
-                    };
-
-                    await _currentSession.Socket.SendPacketAsync(statusUpdatePacket);
-                    return;
-                }
-
-                var locationsToCheck = new List<long>();
-
-                var location1 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-0");
-                if (location1 != -1 && _currentSession.Locations.AllLocations.Contains(location1))
-                {
-                    if (!_currentSession.Locations.AllLocationsChecked.Contains(location1))
-                        locationsToCheck.Add(location1);
-                }
-
-                var location2 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-1");
-                if (location2 != -1 && _currentSession.Locations.AllLocations.Contains(location2))
-                {
-                    if (!_currentSession.Locations.AllLocationsChecked.Contains(location2))
-                        locationsToCheck.Add(location2);
-                }
-
-                if (locationsToCheck.Count <= 0) {
-                    ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Failed to find any checks for {locationName}.");
-                    //This is a workaround for older generated worlds
-                    if (!ArchipelagoStatic.AlbumDatabase.TryGetOldName(locationName, out var oldName))
-                        return;
-
-                    ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Location had an older name checking for {oldName}");
-                    await CheckLocationsInner(uid, oldName);
-                    return;
-                }
-
-                var locationsArray = locationsToCheck.ToArray();
-
-                //Complete the location check, but also scout to ensure we get the items we are sending to other players.
-                await _currentSession.Locations.CompleteLocationChecksAsync(locationsArray);
-                var items = await _currentSession.Locations.ScoutLocationsAsync(false, locationsArray);
-
-                ArchipelagoStatic.ArchLogger.LogDebug("CheckLocations", "Received Items Packet.");
-                CheckRemoteLocation(locationName, true);
-                foreach (var networkItem in items.Locations)
-                {
-                    var item = GetItemFromNetworkItem(networkItem, networkItem.Player != _currentPlayerSlot, true);
-                    if (item != null)
-                        Unlocker.AddItem(item);
-                }
-
-                Unlocker.PrioritiseItems(items.Locations);
-            }
-            catch (Exception e)
-            {
-                ArchipelagoStatic.ArchLogger.Error("Check Location", e);
-            }
-        }
-
-        private void CheckRemoteLocation(string locationName, bool force)
-        {
-            if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(locationName, out var singularInfo))
-            {
-                //If a person collects 1 of 2 locations, we don't want to check it.
-                if (!force && !IsSongFullyCompleted(locationName))
-                    return;
-
-                //Check to see if the song is favourited, and remove if it is
-                if (GlobalDataBase.dbMusicTag.ContainsCollection(singularInfo))
-                    GlobalDataBase.dbMusicTag.m_CollectionList.Remove(singularInfo.uid); //Due to internal changes, the normal method will crash outside of song select.
-
-                if (HiddenSongMode == ShownSongMode.Unplayed)
-                    AddHide(singularInfo, true);
-
-                CompletedSongUids.Add(singularInfo.uid);
-                return;
-            }
-
-            ArchipelagoStatic.ArchLogger.Warning("HandleLocationChecked", $"Unknown Location: {locationName}");
-        }
-
-        private bool IsSongFullyCompleted(string songKey)
-        {
-            var location1 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", songKey + "-0");
-            if (location1 != -1 && _currentSession.Locations.AllLocations.Contains(location1))
-            {
-                if (!_currentSession.Locations.AllLocationsChecked.Contains(location1))
-                    return false;
-            }
-
-            var location2 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", songKey + "-1");
-            if (location2 != -1 && _currentSession.Locations.AllLocations.Contains(location2))
-            {
-                if (!_currentSession.Locations.AllLocationsChecked.Contains(location2))
-                    return false;
-            }
-
-            return true;
-        }
-
-        #endregion
 
         public void PickNextSongShownMode()
         {
@@ -515,7 +380,7 @@ namespace ArchipelagoMuseDash.Archipelago
 
                     case ShownSongMode.Hinted:
                         var name = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(song);
-                        if ((!hintedSongs.Contains(name + "-0") && !hintedSongs.Contains(name + "-1")) || CompletedSongUids.Contains(song.uid))
+                        if (!hintedSongs.Contains(name + "-0") && !hintedSongs.Contains(name + "-1") || CompletedSongUids.Contains(song.uid))
                         {
                             AddHide(song, false);
 
@@ -563,5 +428,142 @@ namespace ArchipelagoMuseDash.Archipelago
             if (!CompletedSongUids.Contains(song.uid))
                 GlobalDataBase.dbMusicTag.AddCollection(song);
         }
+
+#region Locations
+
+        public void CheckLocation(string uid, string locationName)
+        {
+            if (CompletedSongUids.Contains(uid))
+            {
+                ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Location already checked for: {locationName}");
+                return;
+            }
+
+            if (!SongsInLogic.Contains(uid) && GoalSong.uid != uid)
+            {
+                ArchipelagoStatic.ArchLogger.Warning("CheckLocations", $"Tried to check location that wasn't in logic: {locationName}");
+                return;
+            }
+
+            ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Checking location for: {locationName}");
+            Task.Run(async () => await CheckLocationsInner(uid, locationName));
+        }
+
+        private async Task CheckLocationsInner(string uid, string locationName)
+        {
+            try
+            {
+                CompletedSongUids.Add(uid);
+
+                if (GoalSong != null && GoalSong.uid == uid)
+                {
+                    ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Victory achieved, enqueueing visuals for next available time.");
+
+                    //Todo: This maybe should be priority?
+                    Unlocker.AddItem(new VictoryItem(_currentSession.Players.GetPlayerAlias(_currentPlayerSlot), uid));
+                    Unlocker.PrioritiseItems(new[] { new NetworkItem() });
+
+                    var statusUpdatePacket = new StatusUpdatePacket
+                    {
+                        Status = ArchipelagoClientState.ClientGoal
+                    };
+
+                    await _currentSession.Socket.SendPacketAsync(statusUpdatePacket);
+                    return;
+                }
+
+                var locationsToCheck = new List<long>();
+
+                var location1 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-0");
+                if (location1 != -1 && _currentSession.Locations.AllLocations.Contains(location1))
+                {
+                    if (!_currentSession.Locations.AllLocationsChecked.Contains(location1))
+                        locationsToCheck.Add(location1);
+                }
+
+                var location2 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-1");
+                if (location2 != -1 && _currentSession.Locations.AllLocations.Contains(location2))
+                {
+                    if (!_currentSession.Locations.AllLocationsChecked.Contains(location2))
+                        locationsToCheck.Add(location2);
+                }
+
+                if (locationsToCheck.Count <= 0)
+                {
+                    ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Failed to find any checks for {locationName}.");
+                    //This is a workaround for older generated worlds
+                    if (!ArchipelagoStatic.AlbumDatabase.TryGetOldName(locationName, out var oldName))
+                        return;
+
+                    ArchipelagoStatic.ArchLogger.Log("CheckLocations", $"Location had an older name checking for {oldName}");
+                    await CheckLocationsInner(uid, oldName);
+                    return;
+                }
+
+                var locationsArray = locationsToCheck.ToArray();
+
+                //Complete the location check, but also scout to ensure we get the items we are sending to other players.
+                await _currentSession.Locations.CompleteLocationChecksAsync(locationsArray);
+                var items = await _currentSession.Locations.ScoutLocationsAsync(false, locationsArray);
+
+                ArchipelagoStatic.ArchLogger.LogDebug("CheckLocations", "Received Items Packet.");
+                CheckRemoteLocation(locationName, true);
+                foreach (var networkItem in items.Locations)
+                {
+                    var item = GetItemFromNetworkItem(networkItem, networkItem.Player != _currentPlayerSlot, true);
+                    if (item != null)
+                        Unlocker.AddItem(item);
+                }
+
+                Unlocker.PrioritiseItems(items.Locations);
+            }
+            catch (Exception e)
+            {
+                ArchipelagoStatic.ArchLogger.Error("Check Location", e);
+            }
+        }
+
+        private void CheckRemoteLocation(string locationName, bool force)
+        {
+            if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(locationName, out var singularInfo))
+            {
+                //If a person collects 1 of 2 locations, we don't want to check it.
+                if (!force && !IsSongFullyCompleted(locationName))
+                    return;
+
+                //Check to see if the song is favourited, and remove if it is
+                if (GlobalDataBase.dbMusicTag.ContainsCollection(singularInfo))
+                    GlobalDataBase.dbMusicTag.m_CollectionList.Remove(singularInfo.uid); //Due to internal changes, the normal method will crash outside of song select.
+
+                if (HiddenSongMode == ShownSongMode.Unplayed)
+                    AddHide(singularInfo, true);
+
+                CompletedSongUids.Add(singularInfo.uid);
+                return;
+            }
+
+            ArchipelagoStatic.ArchLogger.Warning("HandleLocationChecked", $"Unknown Location: {locationName}");
+        }
+
+        private bool IsSongFullyCompleted(string songKey)
+        {
+            var location1 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", songKey + "-0");
+            if (location1 != -1 && _currentSession.Locations.AllLocations.Contains(location1))
+            {
+                if (!_currentSession.Locations.AllLocationsChecked.Contains(location1))
+                    return false;
+            }
+
+            var location2 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", songKey + "-1");
+            if (location2 != -1 && _currentSession.Locations.AllLocations.Contains(location2))
+            {
+                if (!_currentSession.Locations.AllLocationsChecked.Contains(location2))
+                    return false;
+            }
+
+            return true;
+        }
+
+#endregion
     }
 }
