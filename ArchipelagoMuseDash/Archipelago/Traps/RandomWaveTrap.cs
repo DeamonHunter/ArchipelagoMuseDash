@@ -7,6 +7,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 {
     public class RandomWaveTrap : ITrap
     {
+        public string TrapName => "Ripples";
         public string TrapMessage => "★★ Trap Activated ★★\nRipple!";
         public NetworkItem NetworkItem { get; set; }
 

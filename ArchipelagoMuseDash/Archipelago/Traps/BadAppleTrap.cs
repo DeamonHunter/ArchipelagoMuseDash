@@ -10,6 +10,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 
     public class BadAppleTrap : ITrap
     {
+        public string TrapName => "Bad Apple";
         public string TrapMessage => "★★ Trap Activated ★★\nBad Apple!";
         public NetworkItem NetworkItem { get; set; }
 

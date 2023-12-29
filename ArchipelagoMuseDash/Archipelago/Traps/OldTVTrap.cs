@@ -10,6 +10,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
     /// </summary>
     public class OldTVTrap : ITrap
     {
+        public string TrapName => "Old TV";
         public string TrapMessage => "★★ Trap Activated ★★\nOld TV!";
         public NetworkItem NetworkItem { get; set; }
 

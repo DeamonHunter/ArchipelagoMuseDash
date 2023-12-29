@@ -6,6 +6,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 {
     public interface ITrap
     {
+        string TrapName { get; }
         string TrapMessage { get; }
         NetworkItem NetworkItem { get; set; }
 

@@ -7,6 +7,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 {
     public class GrayScaleTrap : ITrap
     {
+        public string TrapName => "Gray Scale";
         public string TrapMessage => "★★ Trap Activated ★★\nGray Scale!";
         public NetworkItem NetworkItem { get; set; }
 

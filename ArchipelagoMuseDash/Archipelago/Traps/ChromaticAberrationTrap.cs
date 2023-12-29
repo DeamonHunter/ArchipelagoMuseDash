@@ -7,6 +7,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 {
     public class ChromaticAberrationTrap : ITrap
     {
+        public string TrapName => "Chromatic Aberration";
         public string TrapMessage => "★★ Trap Activated ★★\nChromatic Aberration!";
         public NetworkItem NetworkItem { get; set; }
 

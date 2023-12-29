@@ -7,6 +7,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 {
     public class ShadowEdgeTrap : ITrap
     {
+        public string TrapName => "Vignette";
         public string TrapMessage => "★★ Trap Activated ★★\nVignette!";
         public NetworkItem NetworkItem { get; set; }
 

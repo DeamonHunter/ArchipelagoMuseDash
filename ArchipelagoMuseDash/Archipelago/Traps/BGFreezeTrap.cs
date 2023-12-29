@@ -7,6 +7,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 {
     public class BGFreezeTrap : ITrap
     {
+        public string TrapName => "Background Freeze";
         public string TrapMessage => "★★ Trap Activated ★★\nBackground Frozen!";
         public NetworkItem NetworkItem { get; set; }
 

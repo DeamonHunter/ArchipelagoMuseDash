@@ -8,6 +8,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
 {
     public class ErrorSFXTrap : ITrap
     {
+        public string TrapName => "Error SFX";
         public string TrapMessage => "★★ Trap Activated ★★\nAn error has occured.";
         public NetworkItem NetworkItem { get; set; }
 

@@ -12,6 +12,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
     /// </summary>
     public class MutownTrap : ITrap
     {
+        public string TrapName => "Mutown";
         public string TrapMessage => "★★ Trap Activated ★★\nMutown!";
         public NetworkItem NetworkItem { get; set; }
 

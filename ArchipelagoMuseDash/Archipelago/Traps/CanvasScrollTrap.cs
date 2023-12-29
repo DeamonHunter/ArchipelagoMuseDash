@@ -12,6 +12,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps
     /// </summary>
     public class CanvasScrollTrap : ITrap
     {
+        public string TrapName => "Canvas Scroll";
         public string TrapMessage => "★★ Trap Activated ★★\nCanvas Scroll!";
         public NetworkItem NetworkItem { get; set; }
 
