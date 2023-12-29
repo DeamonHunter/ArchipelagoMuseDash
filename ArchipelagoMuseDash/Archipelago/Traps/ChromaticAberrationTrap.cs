@@ -5,6 +5,7 @@ using Il2CppPeroPeroGames.GlobalDefines;
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
 public class ChromaticAberrationTrap : ITrap {
+    public string TrapName => "Chromatic Aberration";
     public string TrapMessage => "★★ Trap Activated ★★\nChromatic Aberration!";
     public NetworkItem NetworkItem { get; set; }
 
@@ -18,7 +19,7 @@ public class ChromaticAberrationTrap : ITrap {
         var chromaticAberrationNoteData = CreateChromaticAberrationNoteData();
         TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(chromaticAberrationNoteData.uid, chromaticAberrationNoteData));
 
-        for (int i = data.Count - 1; i > 1; i--) {
+        for (var i = data.Count - 1; i > 1; i--) {
             var bmsUid = data[i].noteData.bmsUid;
             if (bmsUid != BmsNodeUid.RgbSplit && bmsUid != BmsNodeUid.RgbSplitOver)
                 continue;

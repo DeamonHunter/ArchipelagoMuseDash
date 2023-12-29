@@ -5,6 +5,7 @@ using Il2CppPeroPeroGames.GlobalDefines;
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
 public class GrayScaleTrap : ITrap {
+    public string TrapName => "Gray Scale";
     public string TrapMessage => "★★ Trap Activated ★★\nGray Scale!";
     public NetworkItem NetworkItem { get; set; }
 
@@ -18,7 +19,7 @@ public class GrayScaleTrap : ITrap {
         var greyScaleNoteData = CreateGreyScaleNoteData();
         TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(greyScaleNoteData.uid, greyScaleNoteData));
 
-        for (int i = data.Count - 1; i > 1; i--) {
+        for (var i = data.Count - 1; i > 1; i--) {
             var bmsUid = data[i].noteData.bmsUid;
             if (bmsUid != BmsNodeUid.GrayScaleStart && bmsUid != BmsNodeUid.GrayScaleEnd)
                 continue;

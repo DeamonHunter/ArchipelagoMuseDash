@@ -8,6 +8,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps;
 /// This trap activates a white noise texture over the screen. It makes the game unplayable, so its left deactivated
 /// </summary>
 public class OldTVTrap : ITrap {
+    public string TrapName => "Old TV";
     public string TrapMessage => "★★ Trap Activated ★★\nOld TV!";
     public NetworkItem NetworkItem { get; set; }
 

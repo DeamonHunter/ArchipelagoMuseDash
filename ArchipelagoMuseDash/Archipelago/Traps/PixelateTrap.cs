@@ -5,6 +5,7 @@ using Il2CppPeroPeroGames.GlobalDefines;
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
 public class PixelateTrap : ITrap {
+    public string TrapName => "Pixelate";
     public string TrapMessage => "★★ Trap Activated ★★\nPixelation!";
     public NetworkItem NetworkItem { get; set; }
 

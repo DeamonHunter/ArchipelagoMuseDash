@@ -5,6 +5,7 @@ using Il2CppPeroPeroGames.GlobalDefines;
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
 public class BGFreezeTrap : ITrap {
+    public string TrapName => "Background Freeze";
     public string TrapMessage => "★★ Trap Activated ★★\nBackground Frozen!";
     public NetworkItem NetworkItem { get; set; }
 
@@ -18,7 +19,7 @@ public class BGFreezeTrap : ITrap {
         var backgroundFreezeNoteData = CreateBackgroundFreezeNoteData();
         TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(backgroundFreezeNoteData.uid, backgroundFreezeNoteData));
 
-        for (int i = data.Count - 1; i > 1; i--) {
+        for (var i = data.Count - 1; i > 1; i--) {
             var bmsUid = data[i].noteData.bmsUid;
             if (bmsUid != BmsNodeUid.BgFreeze && bmsUid != BmsNodeUid.BgUnfreeze)
                 continue;

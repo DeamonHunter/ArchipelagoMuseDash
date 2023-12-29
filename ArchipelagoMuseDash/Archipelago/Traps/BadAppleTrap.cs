@@ -7,6 +7,7 @@ using Il2CppPeroPeroGames.GlobalDefines;
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
 public class BadAppleTrap : ITrap {
+    public string TrapName => "Bad Apple";
     public string TrapMessage => "★★ Trap Activated ★★\nBad Apple!";
     public NetworkItem NetworkItem { get; set; }
 
@@ -34,7 +35,7 @@ public class BadAppleTrap : ITrap {
     public void OnEnd() { }
 
     private void ChangeToBadApple(List<MusicData> data) {
-        for (int i = data.Count - 1; i >= 0; i--) {
+        for (var i = data.Count - 1; i >= 0; i--) {
             var md = data[i];
 
             var noteData = md.noteData;

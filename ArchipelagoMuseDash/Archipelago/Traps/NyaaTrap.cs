@@ -6,6 +6,7 @@ using Il2CppPeroPeroGames.GlobalDefines;
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
 public class NyaaTrap : ITrap {
+    public string TrapName => "Nyaa SFX";
     public string TrapMessage => "★★ Trap Activated ★★\nNyaa!";
     public NetworkItem NetworkItem { get; set; }
 

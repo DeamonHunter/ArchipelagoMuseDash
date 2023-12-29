@@ -1,6 +1,7 @@
 ﻿using Archipelago.MultiClient.Net.Models;
 using Il2CppGameLogic;
 using Il2CppPeroPeroGames.GlobalDefines;
+using Random = UnityEngine.Random;
 
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
@@ -8,6 +9,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps;
 /// This trap works, but is very visually noisy. There may be a value somewhere that can be controlled to slow it down, but have not found it.
 /// </summary>
 public class CanvasScrollTrap : ITrap {
+    public string TrapName => "Canvas Scroll";
     public string TrapMessage => "★★ Trap Activated ★★\nCanvas Scroll!";
     public NetworkItem NetworkItem { get; set; }
 
@@ -18,10 +20,10 @@ public class CanvasScrollTrap : ITrap {
     public void SetRuntimeMusicDataHook(List<MusicData> data) {
         ArchipelagoStatic.ArchLogger.LogDebug("CanvasScrollTrap", "SetRuntimeMusicDataHook");
 
-        var scrollNoteData = UnityEngine.Random.Range(0, 2) == 0 ? CreateUpScrollNoteData() : CreateDownScrollNoteData();
+        var scrollNoteData = Random.Range(0, 2) == 0 ? CreateUpScrollNoteData() : CreateDownScrollNoteData();
         TrapHelper.InsertAtStart(data, TrapHelper.CreateDefaultMusicData(scrollNoteData.uid, scrollNoteData));
 
-        for (int i = data.Count - 1; i > 1; i--) {
+        for (var i = data.Count - 1; i > 1; i--) {
             var bmsUid = data[i].noteData.bmsUid;
             if (bmsUid != BmsNodeUid.CanvasUpScroll && bmsUid != BmsNodeUid.CanvasDownScroll && bmsUid != BmsNodeUid.CanvasScrollOver)
                 continue;

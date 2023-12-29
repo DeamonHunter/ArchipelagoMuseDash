@@ -6,10 +6,11 @@ using Il2CppPeroPeroGames.GlobalDefines;
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
 public class ErrorSFXTrap : ITrap {
-    public string TrapMessage => "★★ Trap Activated ★★\nAn error has occured.";
-    public NetworkItem NetworkItem { get; set; }
 
     private int? _originalSFX;
+    public string TrapName => "Error SFX";
+    public string TrapMessage => "★★ Trap Activated ★★\nAn error has occured.";
+    public NetworkItem NetworkItem { get; set; }
 
     public void PreGameSceneLoad() {
         ArchipelagoStatic.ArchLogger.LogDebug("ErrorSFXTrap", "PreGameSceneLoad");
