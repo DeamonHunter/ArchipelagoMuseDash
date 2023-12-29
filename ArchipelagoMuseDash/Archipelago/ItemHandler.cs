@@ -24,7 +24,6 @@ namespace ArchipelagoMuseDash.Archipelago
         private const string showing_unlocked_songs_text = "Showing: Unlocked";
         private const string showing_unplayed_songs_text = "Showing: Unplayed";
         private const string music_sheet_item_name = "Music Sheet";
-        private const string fever_filler_item = "Fever Refill";
 
         public readonly HashSet<string> SongsInLogic = new HashSet<string>();
         public readonly HashSet<string> UnlockedSongUids = new HashSet<string>();
@@ -210,17 +209,11 @@ namespace ArchipelagoMuseDash.Archipelago
                 return new ExternalItem(item.Item, name, playerName) { Item = item };
             }
 
-            if (ArchipelagoStatic.SessionHandler.BattleHandler.EnqueueIfBattleItem(item))
-                return null;
-
-            if (name == fever_filler_item)
+            if (ArchipelagoStatic.SessionHandler.BattleHandler.EnqueueIfBattleItem(item, out var createFiller))
             {
-                if (locallyObtained)
-                    return new FeverRefillItem();
-
-                _triggeredFeverFillerCount++;
-                _triggerFeverFiller = true;
-                return null;
+                if (!createFiller || !locallyObtained)
+                    return null;
+                return new FillerItem() { Item = item };
             }
 
             if (name == music_sheet_item_name)

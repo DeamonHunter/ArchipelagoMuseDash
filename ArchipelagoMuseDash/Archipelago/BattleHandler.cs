@@ -38,8 +38,9 @@ namespace ArchipelagoMuseDash.Archipelago
             _extraLifeCount.CurrentCount -= ArchipelagoStatic.SessionHandler.DataStorageHandler.GetUsedExtraLifes();
         }
 
-        public bool EnqueueIfBattleItem(NetworkItem item)
+        public bool EnqueueIfBattleItem(NetworkItem item, out bool createFiller)
         {
+            createFiller = false;
             if (EnqueueIfTrap(item))
                 return true;
 
@@ -48,6 +49,8 @@ namespace ArchipelagoMuseDash.Archipelago
 
             if (_knownBattleItems.Any(n => ArchipelagoHelpers.IsItemDuplicate(n, item)))
                 return true;
+
+            createFiller = true;
 
             switch (item.Item)
             {
