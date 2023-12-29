@@ -10,6 +10,7 @@ using Il2CppAssets.Scripts.PeroTools.Managers;
 using Il2CppAssets.Scripts.PeroTools.Nice.Interface;
 using Il2CppAssets.Scripts.UI.Controls;
 using Il2CppAssets.Scripts.UI.Panels;
+using Il2CppAssets.Scripts.UI.Panels.PnlRole;
 using Il2CppDG.Tweening;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppPeroTools2.Resources;

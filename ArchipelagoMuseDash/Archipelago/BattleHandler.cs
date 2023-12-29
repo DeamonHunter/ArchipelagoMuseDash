@@ -203,7 +203,14 @@ public class BattleHandler {
             return;
         }
 
-        ArchipelagoStatic.SessionHandler.SongSelectAdditions.FillerTextComp.text = GetItemAmount();
+        if (ArchipelagoStatic.SessionHandler.ItemHandler.ShowFillerItems) {
+            if (!ArchipelagoStatic.SessionHandler.SongSelectAdditions.FillerItemText.activeSelf)
+                ArchipelagoStatic.SessionHandler.SongSelectAdditions.FillerItemText.SetActive(true);
+
+            ArchipelagoStatic.SessionHandler.SongSelectAdditions.FillerTextComp.text = GetItemAmount();
+        }
+        else
+            ArchipelagoStatic.SessionHandler.SongSelectAdditions.FillerItemText.SetActive(false);
     }
 
     public string GetItemAmount() {
