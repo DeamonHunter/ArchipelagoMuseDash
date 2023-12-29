@@ -6,200 +6,247 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace ArchipelagoMuseDash.Archipelago {
-    public class SongSelectAdditions {
-        public GameObject HintButton;
-        public Button HintButtonComp;
+namespace ArchipelagoMuseDash.Archipelago;
 
-        public GameObject ToggleSongsButton;
-        public Button ToggleSongsButtonComp;
-        public Text ToggleSongsText;
+public class SongSelectAdditions {
+    public GameObject HintButton;
+    public Button HintButtonComp;
 
-        public GameObject HintText;
-        public Text HintTextComp;
+    public GameObject ToggleSongsButton;
+    public Button ToggleSongsButtonComp;
+    public Text ToggleSongsText;
 
-        public GameObject SongText;
-        public Text SongTitleComp;
+    public GameObject HintText;
+    public Text HintTextComp;
 
-        public void OnUpdate() {
-            if (!ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlStage"))
+    public GameObject SongText;
+    public Text SongTitleComp;
+
+    public GameObject FillerItemText;
+    public Text FillerTextComp;
+
+    public void OnUpdate() {
+        if (!ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlStage"))
+            return;
+
+        if (HintButton != null) {
+            if (EventSystem.current == null)
                 return;
 
-            if (HintButton != null) {
-                if (EventSystem.current == null)
-                    return;
-
-                if (EventSystem.current.currentSelectedGameObject == HintButton) {
-                    ArchipelagoStatic.ArchLogger.LogDebug("SongSelectAdditions", "Force deselecting Hint Button");
-                    EventSystem.current.SetSelectedGameObject(null);
-                }
-                if (EventSystem.current.currentSelectedGameObject == ToggleSongsButton) {
-                    ArchipelagoStatic.ArchLogger.LogDebug("SongSelectAdditions", "Force deselecting Toggle Songs Button");
-                    EventSystem.current.SetSelectedGameObject(null);
-                }
-                return;
+            if (EventSystem.current.currentSelectedGameObject == HintButton) {
+                ArchipelagoStatic.ArchLogger.LogDebug("SongSelectAdditions", "Force deselecting Hint Button");
+                EventSystem.current.SetSelectedGameObject(null);
             }
-
-            if (!ArchipelagoStatic.HideSongDialogue || !ArchipelagoStatic.HideSongDialogue.m_YesButton
-                || !ArchipelagoStatic.HideSongDialogue.m_NoButton || !ArchipelagoStatic.SongSelectPanel)
-                return;
-
-            var likeButton = ArchipelagoStatic.SongSelectPanel.gameObject.GetComponentInChildren<StageLikeToggle>(true);
-            if (likeButton == null)
-                return;
-
-            ToggleSongsButton = CreateButton(likeButton, "ArchipelagoHideButton", "Show Locked Songs", new Vector2(660, 40), new Vector2(0, 0.5f), ArchipelagoStatic.SessionHandler.ItemHandler.PickNextSongShownMode);
-            ToggleSongsButtonComp = ToggleSongsButton.GetComponent<Button>();
-            ToggleSongsText = ToggleSongsButton.GetComponentInChildren<Text>();
-
-            HintButton = CreateButton(likeButton, "ArchipelagoHintButton", "Get Hint", new Vector2(415, 40), new Vector2(0, 0.5f), ArchipelagoStatic.SessionHandler.HintHandler.ShowHintPopup);
-            HintButtonComp = HintButton.GetComponent<Button>();
-
-            AddSongTitleBox(likeButton);
-            AddHintBox(likeButton);
+            if (EventSystem.current.currentSelectedGameObject == ToggleSongsButton) {
+                ArchipelagoStatic.ArchLogger.LogDebug("SongSelectAdditions", "Force deselecting Toggle Songs Button");
+                EventSystem.current.SetSelectedGameObject(null);
+            }
+            return;
         }
 
-        public void MainSceneLoaded() {
-            HintButton = null;
-            ToggleSongsButton = null;
-            ToggleSongsText = null;
-            SongText = null;
-        }
+        if (!ArchipelagoStatic.HideSongDialogue || !ArchipelagoStatic.HideSongDialogue.m_YesButton
+            || !ArchipelagoStatic.HideSongDialogue.m_NoButton || !ArchipelagoStatic.SongSelectPanel)
+            return;
 
-        public void AddHintBox(StageLikeToggle likeButton) {
-            //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
+        var likeButton = ArchipelagoStatic.SongSelectPanel.gameObject.GetComponentInChildren<StageLikeToggle>(true);
+        if (likeButton == null)
+            return;
 
-            //The HideSongDialogue has the button we want, and it should be available at this time.
-            var noButton = ArchipelagoStatic.HideSongDialogue.m_NoButton;
-            var noButtonImage = noButton.GetComponent<Image>();
-            var noText = noButton.transform.GetChild(0);
-            var noTextComp = noText.GetComponent<Text>();
+        ToggleSongsButton = CreateButton(likeButton, "ArchipelagoHideButton", "Show Locked Songs", new Vector2(660, 40), new Vector2(0, 0.5f), ArchipelagoStatic.SessionHandler.ItemHandler.PickNextSongShownMode);
+        ToggleSongsButtonComp = ToggleSongsButton.GetComponent<Button>();
+        ToggleSongsText = ToggleSongsButton.GetComponentInChildren<Text>();
 
-            HintText = new GameObject("ArchipelagoHintText");
-            HintText.transform.SetParent(likeButton.transform.parent, false);
+        HintButton = CreateButton(likeButton, "ArchipelagoHintButton", "Get Hint", new Vector2(415, 40), new Vector2(0, 0.5f), ArchipelagoStatic.SessionHandler.HintHandler.ShowHintPopup);
+        HintButtonComp = HintButton.GetComponent<Button>();
 
-            var hintBackgroundImage = HintText.AddComponent<Image>();
-            hintBackgroundImage.sprite = noButtonImage.sprite;
-            hintBackgroundImage.type = noButtonImage.type;
+        AddSongTitleBox(likeButton);
+        AddHintBox(likeButton);
+        AddItemBox(likeButton);
+    }
 
-            var hintTransform = HintText.GetComponent<RectTransform>();
-            hintTransform.anchorMax = hintTransform.anchorMin = new Vector2(0.5f, 0.5f);
-            hintTransform.anchoredPosition = new Vector2(400, 185);
-            hintTransform.pivot = new Vector2(0, 0.5f);
-            hintTransform.sizeDelta = new Vector2(500, 100);
+    public void MainSceneLoaded() {
+        HintButton = null;
+        ToggleSongsButton = null;
+        ToggleSongsText = null;
+        SongText = null;
+        FillerItemText = null;
+        FillerTextComp = null;
+    }
 
-            var hintText = new GameObject();
-            hintText.transform.SetParent(HintText.transform, false);
+    public void AddHintBox(StageLikeToggle likeButton) {
+        //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
 
-            HintTextComp = hintText.AddComponent<Text>();
-            AssetHelpers.CopyTextVariables(noTextComp, HintTextComp);
-            HintTextComp.fontSize = 22;
-            var original = HintTextComp.color;
-            HintTextComp.color = new Color(original.r * 0.75f, original.g * 0.75f, original.b * 0.75f, 1f);
-            HintTextComp.resizeTextForBestFit = true;
-            HintTextComp.resizeTextMaxSize = 22;
-            HintTextComp.resizeTextMinSize = 12;
-            HintTextComp.verticalOverflow = VerticalWrapMode.Truncate;
+        //The HideSongDialogue has the button we want, and it should be available at this time.
+        var noButton = ArchipelagoStatic.HideSongDialogue.m_NoButton;
+        var noButtonImage = noButton.GetComponent<Image>();
+        var noText = noButton.transform.GetChild(0);
+        var noTextComp = noText.GetComponent<Text>();
 
-            var hintTextRect = hintText.GetComponent<RectTransform>();
-            hintTextRect.anchorMin = new Vector2(0.1f, 0.1f);
-            hintTextRect.anchorMax = new Vector2(0.9f, 0.9f);
-            hintTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
-        }
+        HintText = new GameObject("ArchipelagoHintText");
+        HintText.transform.SetParent(likeButton.transform.parent, false);
 
-        public void AddSongTitleBox(StageLikeToggle likeButton) {
-            //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
+        var hintBackgroundImage = HintText.AddComponent<Image>();
+        hintBackgroundImage.sprite = noButtonImage.sprite;
+        hintBackgroundImage.type = noButtonImage.type;
 
-            //The HideSongDialogue has the button we want, and it should be available at this time.
-            var noButton = ArchipelagoStatic.HideSongDialogue.m_NoButton;
-            var noButtonImage = noButton.GetComponent<Image>();
-            var noText = noButton.transform.GetChild(0);
-            var noTextComp = noText.GetComponent<Text>();
+        var hintTransform = HintText.GetComponent<RectTransform>();
+        hintTransform.anchorMax = hintTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        hintTransform.anchoredPosition = new Vector2(400, 185);
+        hintTransform.pivot = new Vector2(0, 0.5f);
+        hintTransform.sizeDelta = new Vector2(500, 100);
 
-            SongText = new GameObject("ArchipelagoSongTitle");
-            SongText.transform.SetParent(likeButton.transform.parent, false);
+        var hintText = new GameObject();
+        hintText.transform.SetParent(HintText.transform, false);
 
-            var songBackgroundImage = SongText.AddComponent<Image>();
-            songBackgroundImage.sprite = noButtonImage.sprite;
-            songBackgroundImage.type = noButtonImage.type;
+        HintTextComp = hintText.AddComponent<Text>();
+        AssetHelpers.CopyTextVariables(noTextComp, HintTextComp);
+        HintTextComp.fontSize = 22;
+        var original = HintTextComp.color;
+        HintTextComp.color = new Color(original.r * 0.75f, original.g * 0.75f, original.b * 0.75f, 1f);
+        HintTextComp.resizeTextForBestFit = true;
+        HintTextComp.resizeTextMaxSize = 22;
+        HintTextComp.resizeTextMinSize = 12;
+        HintTextComp.verticalOverflow = VerticalWrapMode.Truncate;
 
-            var songTransform = SongText.GetComponent<RectTransform>();
-            songTransform.anchorMax = songTransform.anchorMin = new Vector2(0.5f, 0.5f);
-            songTransform.anchoredPosition = new Vector2(400, 100);
-            songTransform.pivot = new Vector2(0, 0.5f);
-            songTransform.sizeDelta = new Vector2(500, 60);
+        var hintTextRect = hintText.GetComponent<RectTransform>();
+        hintTextRect.anchorMin = new Vector2(0.1f, 0.1f);
+        hintTextRect.anchorMax = new Vector2(0.9f, 0.9f);
+        hintTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
+    }
 
-            var songText = new GameObject();
-            songText.transform.SetParent(SongText.transform, false);
+    public void AddSongTitleBox(StageLikeToggle likeButton) {
+        //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
 
-            SongTitleComp = songText.AddComponent<Text>();
-            AssetHelpers.CopyTextVariables(noTextComp, SongTitleComp);
-            var original = SongTitleComp.color;
-            SongTitleComp.color = new Color(original.r * 0.75f, original.g * 0.75f, original.b * 0.75f, 1f);
-            SongTitleComp.fontSize = 28;
-            SongTitleComp.resizeTextForBestFit = true;
-            SongTitleComp.resizeTextMaxSize = 28;
-            SongTitleComp.resizeTextMinSize = 12;
-            SongTitleComp.verticalOverflow = VerticalWrapMode.Truncate;
+        //The HideSongDialogue has the button we want, and it should be available at this time.
+        var noButton = ArchipelagoStatic.HideSongDialogue.m_NoButton;
+        var noButtonImage = noButton.GetComponent<Image>();
+        var noText = noButton.transform.GetChild(0);
+        var noTextComp = noText.GetComponent<Text>();
 
-            var songTextRect = songText.GetComponent<RectTransform>();
-            songTextRect.anchorMin = new Vector2(0.1f, 0.1f);
-            songTextRect.anchorMax = new Vector2(0.9f, 0.9f);
-            songTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
-        }
+        SongText = new GameObject("ArchipelagoSongTitle");
+        SongText.transform.SetParent(likeButton.transform.parent, false);
 
-        private GameObject CreateButton(StageLikeToggle likeButton, string buttonName, string buttonText, Vector2 offset, Vector2 pivot, Action onClick) {
-            //The HideSongDialogue has the button we want, and it should be available at this time.
-            var yesButton = ArchipelagoStatic.HideSongDialogue.m_YesButton;
-            var yesButtonImage = yesButton.GetComponent<Image>();
-            var yesText = yesButton.transform.GetChild(0);
-            var yesTextComp = yesText.GetComponent<Text>();
+        var songBackgroundImage = SongText.AddComponent<Image>();
+        songBackgroundImage.sprite = noButtonImage.sprite;
+        songBackgroundImage.type = noButtonImage.type;
 
-            var buttonParent = new GameObject(buttonName);
-            buttonParent.transform.SetParent(likeButton.transform.parent, false);
+        var songTransform = SongText.GetComponent<RectTransform>();
+        songTransform.anchorMax = songTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        songTransform.anchoredPosition = new Vector2(400, 100);
+        songTransform.pivot = new Vector2(0, 0.5f);
+        songTransform.sizeDelta = new Vector2(500, 60);
+
+        var songText = new GameObject();
+        songText.transform.SetParent(SongText.transform, false);
+
+        SongTitleComp = songText.AddComponent<Text>();
+        AssetHelpers.CopyTextVariables(noTextComp, SongTitleComp);
+        var original = SongTitleComp.color;
+        SongTitleComp.color = new Color(original.r * 0.75f, original.g * 0.75f, original.b * 0.75f, 1f);
+        SongTitleComp.fontSize = 28;
+        SongTitleComp.resizeTextForBestFit = true;
+        SongTitleComp.resizeTextMaxSize = 28;
+        SongTitleComp.resizeTextMinSize = 12;
+        SongTitleComp.verticalOverflow = VerticalWrapMode.Truncate;
+
+        var songTextRect = songText.GetComponent<RectTransform>();
+        songTextRect.anchorMin = new Vector2(0.1f, 0.1f);
+        songTextRect.anchorMax = new Vector2(0.9f, 0.9f);
+        songTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
+    }
+
+    public void AddItemBox(StageLikeToggle likeButton) {
+        //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
+
+        //The HideSongDialogue has the button we want, and it should be available at this time.
+        var yesButton = ArchipelagoStatic.HideSongDialogue.m_YesButton;
+        var yesButtonImage = yesButton.GetComponent<Image>();
+        var yesText = yesButton.transform.GetChild(0);
+        var yesTextComp = yesText.GetComponent<Text>();
+
+        FillerItemText = new GameObject("ArchipelagoFillerText");
+        FillerItemText.transform.SetParent(likeButton.transform.parent, false);
+
+        var hintBackgroundImage = FillerItemText.AddComponent<Image>();
+        hintBackgroundImage.sprite = yesButtonImage.sprite;
+        hintBackgroundImage.type = yesButtonImage.type;
+
+        var hintTransform = FillerItemText.GetComponent<RectTransform>();
+        hintTransform.anchorMax = hintTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        hintTransform.anchoredPosition = new Vector2(-620, 50);
+        hintTransform.pivot = new Vector2(1, 0.5f);
+        hintTransform.sizeDelta = new Vector2(270, 100);
+
+        var hintText = new GameObject();
+        hintText.transform.SetParent(FillerItemText.transform, false);
+
+        FillerTextComp = hintText.AddComponent<Text>();
+        AssetHelpers.CopyTextVariables(yesTextComp, FillerTextComp);
+        var original = FillerTextComp.color;
+        FillerTextComp.color = new Color(original.r * 0.75f, original.g * 0.75f, original.b * 0.75f, 1f);
+        FillerTextComp.fontSize = 20;
+        FillerTextComp.resizeTextForBestFit = true;
+        FillerTextComp.resizeTextMaxSize = 20;
+        FillerTextComp.resizeTextMinSize = 12;
+        FillerTextComp.verticalOverflow = VerticalWrapMode.Truncate;
+
+        var hintTextRect = hintText.GetComponent<RectTransform>();
+        hintTextRect.anchorMin = new Vector2(0.1f, 0.1f);
+        hintTextRect.anchorMax = new Vector2(0.9f, 0.9f);
+        hintTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
+    }
+
+    private GameObject CreateButton(StageLikeToggle likeButton, string buttonName, string buttonText, Vector2 offset, Vector2 pivot, Action onClick) {
+        //The HideSongDialogue has the button we want, and it should be available at this time.
+        var yesButton = ArchipelagoStatic.HideSongDialogue.m_YesButton;
+        var yesButtonImage = yesButton.GetComponent<Image>();
+        var yesText = yesButton.transform.GetChild(0);
+        var yesTextComp = yesText.GetComponent<Text>();
+
+        var buttonParent = new GameObject(buttonName);
+        buttonParent.transform.SetParent(likeButton.transform.parent, false);
 
 
-            var button = buttonParent.AddComponent<Button>();
-            button.onClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>(onClick));
-            button.transition = yesButton.transition;
-            button.navigation.mode = Navigation.Mode.None;
+        var button = buttonParent.AddComponent<Button>();
+        button.onClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>(onClick));
+        button.transition = yesButton.transition;
+        button.navigation.mode = Navigation.Mode.None;
 
-            var colours = yesButton.colors;
-            colours.disabledColor = new Color(colours.disabledColor.r * 0.8f, colours.disabledColor.g * 0.8f, colours.disabledColor.b * 0.8f, 1);
-            button.colors = colours;
+        var colours = yesButton.colors;
+        colours.disabledColor = new Color(colours.disabledColor.r * 0.8f, colours.disabledColor.g * 0.8f, colours.disabledColor.b * 0.8f, 1);
+        button.colors = colours;
 
-            var image = buttonParent.AddComponent<Image>();
-            image.sprite = yesButtonImage.sprite;
-            image.type = yesButtonImage.type;
-            button.targetGraphic = image;
+        var image = buttonParent.AddComponent<Image>();
+        image.sprite = yesButtonImage.sprite;
+        image.type = yesButtonImage.type;
+        button.targetGraphic = image;
 
-            var imageTransform = buttonParent.GetComponent<RectTransform>();
-            var yesButtonTransform = yesButton.gameObject.GetComponent<RectTransform>();
+        var imageTransform = buttonParent.GetComponent<RectTransform>();
+        var yesButtonTransform = yesButton.gameObject.GetComponent<RectTransform>();
 
-            imageTransform.sizeDelta = yesButtonTransform.sizeDelta * new Vector2(0.875f, 0.85f);
-            imageTransform.anchorMax = imageTransform.anchorMin = new Vector2(0.5f, 0.5f);
-            imageTransform.anchoredPosition = offset;
-            imageTransform.pivot = pivot;
+        imageTransform.sizeDelta = yesButtonTransform.sizeDelta * new Vector2(0.875f, 0.85f);
+        imageTransform.anchorMax = imageTransform.anchorMin = new Vector2(0.5f, 0.5f);
+        imageTransform.anchoredPosition = offset;
+        imageTransform.pivot = pivot;
 
-            var hintButtonText = new GameObject("Text");
-            hintButtonText.transform.SetParent(buttonParent.transform, false);
-            var hintTextComp = hintButtonText.AddComponent<Text>();
+        var hintButtonText = new GameObject("Text");
+        hintButtonText.transform.SetParent(buttonParent.transform, false);
+        var hintTextComp = hintButtonText.AddComponent<Text>();
 
-            AssetHelpers.CopyTextVariables(yesTextComp, hintTextComp);
-            hintTextComp.fontSize -= 15;
-            hintTextComp.text = buttonText;
-            var original = hintTextComp.color;
-            hintTextComp.color = new Color(original.r * 0.75f, original.g * 0.75f, original.b * 0.75f, 1f);
+        AssetHelpers.CopyTextVariables(yesTextComp, hintTextComp);
+        hintTextComp.fontSize -= 15;
+        hintTextComp.text = buttonText;
+        var original = hintTextComp.color;
+        hintTextComp.color = new Color(original.r * 0.75f, original.g * 0.75f, original.b * 0.75f, 1f);
 
-            var rectTransfrom = hintButtonText.GetComponent<RectTransform>();
-            var yesRectTransform = yesText.GetComponent<RectTransform>();
+        var rectTransfrom = hintButtonText.GetComponent<RectTransform>();
+        var yesRectTransform = yesText.GetComponent<RectTransform>();
 
-            rectTransfrom.anchorMin = yesRectTransform.anchorMin;
-            rectTransfrom.anchorMax = yesRectTransform.anchorMax;
-            rectTransfrom.pivot = yesRectTransform.pivot;
-            rectTransfrom.sizeDelta = yesRectTransform.sizeDelta;
+        rectTransfrom.anchorMin = yesRectTransform.anchorMin;
+        rectTransfrom.anchorMax = yesRectTransform.anchorMax;
+        rectTransfrom.pivot = yesRectTransform.pivot;
+        rectTransfrom.sizeDelta = yesRectTransform.sizeDelta;
 
-            return buttonParent;
-        }
+        return buttonParent;
     }
 }

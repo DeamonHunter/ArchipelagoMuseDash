@@ -9,7 +9,7 @@ using UnityEngine;
 namespace ArchipelagoMuseDash;
 
 /// <summary>
-/// Static Helper class which stores information to make it easier for patches to do things
+///     Static Helper class which stores information to make it easier for patches to do things
 /// </summary>
 public static class ArchipelagoStatic {
     public static ArchLogger ArchLogger;
@@ -34,4 +34,7 @@ public static class ArchipelagoStatic {
     public static SongHideAskMsg HideSongDialogue;
 
     public static string SaveDataPath;
+
+    public static int ExtraLifesUsed;
+    public static GameObject PlaceholderElfin;
 }

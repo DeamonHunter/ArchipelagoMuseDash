@@ -15,6 +15,7 @@ using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppPeroTools2.Resources;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = Il2CppSystem.Object;
 
 
 // Due to how IL2CPP works, some things can't be invoked as an extension.
@@ -23,8 +24,8 @@ using UnityEngine.UI;
 namespace ArchipelagoMuseDash.Patches;
 
 /// <summary>
-/// Various changes so that we can use the Unlock Song panel to show archipelago stuff.
-/// Also attempts to fix the rare bug where the texture itself is broken
+///     Various changes so that we can use the Unlock Song panel to show archipelago stuff.
+///     Also attempts to fix the rare bug where the texture itself is broken
 /// </summary>
 [HarmonyPatch(typeof(PnlUnlockStage), "UnlockNewSong")]
 sealed class PnlUnlockStagePatch {
@@ -54,7 +55,7 @@ sealed class PnlUnlockStagePatch {
         __instance.unlockText.text = currentItem.PreUnlockBannerText;
 
         if (currentItem.UseArchipelagoLogo) {
-            int iconIndex = 0;
+            var iconIndex = 0;
             if (currentItem is ExternalItem) {
                 if ((currentItem.Item.Flags & ItemFlags.Advancement) != 0)
                     iconIndex = 0;
@@ -96,7 +97,7 @@ sealed class PnlUnlockStagePatch {
     }
 
     public static Text GetTitleText(GameObject pnlUnlockStageObject) {
-        for (int i = 0; i < pnlUnlockStageObject.transform.childCount; i++) {
+        for (var i = 0; i < pnlUnlockStageObject.transform.childCount; i++) {
             if (pnlUnlockStageObject.transform.GetChild(i).gameObject.name != "AnimationTittleText")
                 continue;
 
@@ -120,9 +121,9 @@ sealed class PnlUnlockStagePatch {
     }
 }
 /// <summary>
-/// Gets called when the player completes the song. Uses this to activate location checks.
+///     Gets called when the player completes the song. Uses this to activate location checks.
 /// </summary>
-[HarmonyPatch(typeof(PnlVictory), "OnVictory", new[] { typeof(Il2CppSystem.Object), typeof(Il2CppSystem.Object), typeof(Il2CppReferenceArray<Il2CppSystem.Object>) })]
+[HarmonyPatch(typeof(PnlVictory), "OnVictory", typeof(Object), typeof(Object), typeof(Il2CppReferenceArray<Object>))]
 sealed class PnlVictoryPatch {
     public const int NEKO_CHARACTER_ID = 16;
     public const int SILENCER_ELFIN_ID = 9;
@@ -141,7 +142,7 @@ sealed class PnlVictoryPatch {
             return;
         }
 
-        ArchipelagoStatic.SessionHandler.TrapHandler.SetTrapFinished();
+        ArchipelagoStatic.SessionHandler.BattleHandler.SetTrapFinished();
 
         // Cover Neko's death
         if (GlobalDataBase.dbBattleStage.IsSelectRole(NEKO_CHARACTER_ID) && !GlobalDataBase.dbBattleStage.IsSelectElfin(SILENCER_ELFIN_ID)) {
@@ -166,11 +167,12 @@ sealed class PnlVictoryPatch {
         var musicInfo = GlobalDataBase.dbBattleStage.selectedMusicInfo;
         var locationName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(musicInfo);
         ArchipelagoStatic.SessionHandler.ItemHandler.CheckLocation(musicInfo.uid, locationName);
+        ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd();
     }
 }
 /// <summary>
-/// Called every time the Cell moves. Used to update the cell to show the right status.
-/// Note that this is call per frame during movement.
+///     Called every time the Cell moves. Used to update the cell to show the right status.
+///     Note that this is call per frame during movement.
 /// </summary>
 [HarmonyPatch(typeof(MusicStageCell), "RefreshData")]
 sealed class MusicStageCellOnChangeCellPatch {
@@ -255,7 +257,7 @@ sealed class MusicStageCellOnChangeCellPatch {
     }
 }
 /// <summary>
-/// Overrides the Play Song Button click so that we can enforce our own restrictions, and bypass the level restriction
+///     Overrides the Play Song Button click so that we can enforce our own restrictions, and bypass the level restriction
 /// </summary>
 [HarmonyPatch(typeof(PnlStage), "OnBtnPlayClicked")]
 sealed class PnlStageOnBtnPlayClickedPatch {
@@ -266,7 +268,7 @@ sealed class PnlStageOnBtnPlayClickedPatch {
             return true;
 
         ArchipelagoStatic.ArchLogger.LogDebug("PnlStage", "OnBtnPlayClicked");
-        MusicInfo musicInfo = GlobalDataBase.s_DbMusicTag.CurMusicInfo();
+        var musicInfo = GlobalDataBase.s_DbMusicTag.CurMusicInfo();
         if (musicInfo.uid == AlbumDatabase.RANDOM_PANEL_UID || ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(musicInfo.uid)) {
             //This bypasses level checks in order to allow players to play everything
             DataHelper.Level = 999;
@@ -304,7 +306,7 @@ sealed class DBMusicTagSelectRandomMusicPatch {
     }
 }
 /// <summary>
-/// Only allow the favourite/hide button to be clicked during normal gameplay
+///     Only allow the favourite/hide button to be clicked during normal gameplay
 /// </summary>
 [HarmonyPatch(typeof(StageLikeToggle), "OnClicked")]
 sealed class OnClickedOnClickedPatch {
@@ -314,7 +316,7 @@ sealed class OnClickedOnClickedPatch {
     }
 }
 /// <summary>
-/// Only allow the favourite/hide button to be clicked during normal gameplay
+///     Only allow the favourite/hide button to be clicked during normal gameplay
 /// </summary>
 [HarmonyPatch(typeof(PnlRole), "OnApplyClicked")]
 sealed class PnlRoleApplyPatch {
@@ -332,7 +334,7 @@ sealed class PnlRoleApplyPatch {
     }
 }
 /// <summary>
-/// Show the reason briefly for deathlink
+///     Show the reason briefly for deathlink
 /// </summary>
 [HarmonyPatch(typeof(PnlFail), "OnEnable")]
 sealed class PnlFailOnEnablePatch {
@@ -346,7 +348,7 @@ sealed class PnlFailOnEnablePatch {
     }
 }
 /// <summary>
-/// Gets called when the player completes the song. Uses this to activate location checks.
+///     Gets called when the player completes the song. Uses this to activate location checks.
 /// </summary>
 [HarmonyPatch(typeof(PnlVictory), "OnContinueClicked")]
 sealed class PnlVictoryOnContinueClickedPatch {
@@ -361,7 +363,7 @@ sealed class PnlVictoryOnContinueClickedPatch {
     }
 }
 /// <summary>
-/// Slightly extend Show Text messages so they are readable
+///     Slightly extend Show Text messages so they are readable
 /// </summary>
 [HarmonyPatch(typeof(ShowText), "DoTweenInit")]
 sealed class ShowTextDoTweenInitPatch {
@@ -375,7 +377,7 @@ sealed class ShowTextDoTweenInitPatch {
     }
 }
 /// <summary>
-/// Disable the level up panel during archipelago
+///     Disable the level up panel during archipelago
 /// </summary>
 [HarmonyPatch(typeof(PnlLevelUpAward), "OnLevelUp")]
 sealed class PnlLevelUpAwardOnLevelUpPatch {
@@ -384,11 +386,27 @@ sealed class PnlLevelUpAwardOnLevelUpPatch {
     }
 }
 /// <summary>
-/// Disable the level up panel during archipelago
+///     Disable the level up panel during archipelago
 /// </summary>
 [HarmonyPatch(typeof(PnlUnlock), "OnStageUnlockOrNot")]
 sealed class PnlUnlockOnStageUnlockOrNotPatch {
     private static bool Prefix() {
         return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
+    }
+}
+[HarmonyPatch(typeof(BattleRoleAttributeComponent), "Hurt")]
+sealed class BattleRoleAttributeComponentHurtPatch {
+    private static bool Prefix(BattleRoleAttributeComponent __instance, int hurtValue, bool isAir) {
+        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+            return true;
+
+        if (__instance.hp + hurtValue > 0)
+            return true;
+
+        if (!ArchipelagoStatic.SessionHandler.BattleHandler.TryUseExtraLife())
+            return true;
+
+        __instance.AddHp(__instance.GetHpMax() - __instance.hp);
+        return false;
     }
 }

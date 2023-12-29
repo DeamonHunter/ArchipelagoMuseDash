@@ -14,19 +14,6 @@ using Task = System.Threading.Tasks.Task;
 namespace ArchipelagoMuseDash.Archipelago;
 
 public class ItemHandler {
-    public ItemUnlockHandler Unlocker { get; }
-
-    public ShownSongMode HiddenSongMode { get; private set; } = ShownSongMode.Unlocks;
-    public GradeOption GradeNeeded { get; private set; }
-    public MusicInfo GoalSong { get; private set; }
-    public int NumberOfMusicSheetsToWin { get; private set; }
-    public int CurrentNumberOfMusicSheets { get; private set; }
-    public bool VictoryAchieved { get; set; }
-
-    public readonly HashSet<string> SongsInLogic = new();
-    public readonly HashSet<string> UnlockedSongUids = new();
-    public readonly HashSet<string> CompletedSongUids = new();
-    public readonly HashSet<string> StarterSongUIDs = new();
 
     private const string showing_all_songs_text = "Showing: All";
     private const string showing_hinted_songs_text = "Showing: Hinted";
@@ -34,6 +21,11 @@ public class ItemHandler {
     private const string showing_unplayed_songs_text = "Showing: Unplayed";
     private const string music_sheet_item_name = "Music Sheet";
     private const string fever_filler_item = "Fever Refill";
+
+    public readonly HashSet<string> SongsInLogic = new();
+    public readonly HashSet<string> UnlockedSongUids = new();
+    public readonly HashSet<string> CompletedSongUids = new();
+    public readonly HashSet<string> StarterSongUIDs = new();
 
     private readonly ArchipelagoSession _currentSession;
     private readonly int _currentPlayerSlot;
@@ -50,6 +42,14 @@ public class ItemHandler {
 
         Unlocker = new ItemUnlockHandler(this);
     }
+    public ItemUnlockHandler Unlocker { get; }
+
+    public ShownSongMode HiddenSongMode { get; private set; } = ShownSongMode.Unlocks;
+    public GradeOption GradeNeeded { get; private set; }
+    public MusicInfo GoalSong { get; private set; }
+    public int NumberOfMusicSheetsToWin { get; private set; }
+    public int CurrentNumberOfMusicSheets { get; private set; }
+    public bool VictoryAchieved { get; set; }
 
     public void Setup(Dictionary<string, object> slotData) {
         ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Setup Called.");
@@ -77,11 +77,11 @@ public class ItemHandler {
 
         if (slotData.TryGetValue("musicSheetWinCount", out var tokenWinCount)) {
             ArchipelagoStatic.ArchLogger.Log("Music Sheets to Win", ((long)tokenWinCount).ToString());
-            NumberOfMusicSheetsToWin = (int)((long)tokenWinCount);
+            NumberOfMusicSheetsToWin = (int)(long)tokenWinCount;
         }
 
         if (slotData.TryGetValue("gradeNeeded", out var gradeNeeded)) {
-            var grade = (GradeOption)((long)gradeNeeded);
+            var grade = (GradeOption)(long)gradeNeeded;
             ArchipelagoStatic.ArchLogger.Log("Grade Needed to win", grade.ToString());
             GradeNeeded = grade;
         }
@@ -102,6 +102,7 @@ public class ItemHandler {
 
         CheckForNewItems();
         Unlocker.UnlockAllItems();
+        ArchipelagoStatic.SessionHandler.BattleHandler.ResetNewItemCount();
 
         var prevFillerCount = ArchipelagoStatic.SessionHandler.DataStorageHandler.GetHandledFeverCount();
         if (prevFillerCount < _triggeredFeverFillerCount)
@@ -176,7 +177,7 @@ public class ItemHandler {
             return new ExternalItem(item.Item, name, playerName) { Item = item };
         }
 
-        if (ArchipelagoStatic.SessionHandler.TrapHandler.EnqueueIfTrap(item))
+        if (ArchipelagoStatic.SessionHandler.BattleHandler.EnqueueIfTrap(item))
             return null;
 
         if (name == fever_filler_item) {
@@ -189,7 +190,7 @@ public class ItemHandler {
         }
 
         if (name == music_sheet_item_name)
-            return new MusicSheetItem() { Item = item };
+            return new MusicSheetItem { Item = item };
 
         //Try to match by item id first
         if (ArchipelagoStatic.AlbumDatabase.TryGetSongFromItemId(item.Item, out var itemInfo)) {
@@ -251,7 +252,131 @@ public class ItemHandler {
         throw new Exception("Failed to find random music info.");
     }
 
-        #region Locations
+    public void PickNextSongShownMode() {
+        //Try to fix jank button selection logic
+        EventSystem.current.SetSelectedGameObject(null);
+
+        ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", "Choosing next song shown mode.");
+        var nextMode = (ShownSongMode)(((int)HiddenSongMode + 1) % ((int)ShownSongMode.AllInLogic + 1));
+        SetVisibilityOfAllSongs(nextMode);
+    }
+
+    private void SetVisibilityOfAllSongs(ShownSongMode mode) {
+        var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
+        GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
+
+        ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"Visibility being set to {mode}");
+        HiddenSongMode = mode;
+        ArchipelagoHelpers.SelectNextAvailableSong();
+
+        var hintedSongs = mode == ShownSongMode.Hinted ? ArchipelagoStatic.SessionHandler.HintHandler.GetHintedSongs() : new HashSet<string>();
+
+        foreach (var song in list) {
+            if (song.uid == AlbumDatabase.RANDOM_PANEL_UID)
+                continue;
+
+            if (!SongsInLogic.Contains(song.uid)) {
+                AddHide(song, false);
+                GlobalDataBase.dbMusicTag.RemoveCollection(song);
+                continue;
+            }
+
+            //Goal should always be visible
+            if (GoalSong?.uid == song.uid) {
+                GlobalDataBase.dbMusicTag.RemoveHide(song);
+                GlobalDataBase.dbMusicTag.AddCollection(song);
+                continue;
+            }
+
+            switch (mode) {
+                case ShownSongMode.AllInLogic:
+                    if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                        GlobalDataBase.dbMusicTag.RemoveHide(song);
+
+                    if (UnlockedSongUids.Contains(song.uid) && !CompletedSongUids.Contains(song.uid) && !GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                        GlobalDataBase.dbMusicTag.AddCollection(song);
+                    break;
+
+                case ShownSongMode.Unlocks:
+                    if (!UnlockedSongUids.Contains(song.uid)) {
+                        AddHide(song, false);
+
+                        if (GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                            GlobalDataBase.dbMusicTag.RemoveCollection(song);
+                    }
+                    else {
+                        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                            GlobalDataBase.dbMusicTag.RemoveHide(song);
+
+                        if (!CompletedSongUids.Contains(song.uid) && !GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                            GlobalDataBase.dbMusicTag.AddCollection(song);
+                    }
+                    break;
+
+                case ShownSongMode.Unplayed:
+                    if (!UnlockedSongUids.Contains(song.uid) || CompletedSongUids.Contains(song.uid)) {
+                        AddHide(song, false);
+
+                        if (GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                            GlobalDataBase.dbMusicTag.RemoveCollection(song);
+                    }
+                    else {
+                        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                            GlobalDataBase.dbMusicTag.RemoveHide(song);
+
+                        if (!GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                            GlobalDataBase.dbMusicTag.AddCollection(song);
+                    }
+                    break;
+
+                case ShownSongMode.Hinted:
+                    var name = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(song);
+                    if (!hintedSongs.Contains(name + "-0") && !hintedSongs.Contains(name + "-1") || CompletedSongUids.Contains(song.uid)) {
+                        AddHide(song, false);
+
+                        if (GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                            GlobalDataBase.dbMusicTag.RemoveCollection(song);
+                    }
+                    else {
+                        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                            GlobalDataBase.dbMusicTag.RemoveHide(song);
+
+                        if (!GlobalDataBase.dbMusicTag.ContainsCollection(song))
+                            GlobalDataBase.dbMusicTag.AddCollection(song);
+                    }
+                    break;
+            }
+        }
+
+        MusicTagManager.instance.RefreshDBDisplayMusics();
+        if (ArchipelagoStatic.SongSelectPanel)
+            ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
+    }
+
+    private void AddHide(MusicInfo song, bool outsideSongSelect) {
+        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+            return;
+
+        if (outsideSongSelect)
+            GlobalDataBase.dbMusicTag.m_HideList.Add(song.uid);
+        else
+            GlobalDataBase.dbMusicTag.AddHide(song);
+        GlobalDataBase.dbMusicTag.RemoveShowMusicUid(song);
+    }
+
+    public void UnlockSong(MusicInfo song) {
+        UnlockedSongUids.Add(song.uid);
+        if (HiddenSongMode == ShownSongMode.AllInLogic || !SongsInLogic.Contains(song.uid))
+            return;
+
+        if (HiddenSongMode == ShownSongMode.Unlocks || !CompletedSongUids.Contains(song.uid))
+            GlobalDataBase.dbMusicTag.RemoveHide(song);
+
+        if (!CompletedSongUids.Contains(song.uid))
+            GlobalDataBase.dbMusicTag.AddCollection(song);
+    }
+
+#region Locations
 
     public void CheckLocation(string uid, string locationName) {
         if (CompletedSongUids.Contains(uid)) {
@@ -288,7 +413,7 @@ public class ItemHandler {
             }
 
             var locationsToCheck = new List<long>();
-            
+
             var location1 = _currentSession.Locations.GetLocationIdFromName("Muse Dash", locationName + "-0");
             if (location1 != -1 && _currentSession.Locations.AllLocations.Contains(location1)) {
                 if (!_currentSession.Locations.AllLocationsChecked.Contains(location1))
@@ -370,129 +495,5 @@ public class ItemHandler {
         return true;
     }
 
-        #endregion
-
-    public void PickNextSongShownMode() {
-        //Try to fix jank button selection logic
-        EventSystem.current.SetSelectedGameObject(null);
-
-        ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", "Choosing next song shown mode.");
-        var nextMode = (ShownSongMode)(((int)HiddenSongMode + 1) % ((int)ShownSongMode.AllInLogic + 1));
-        SetVisibilityOfAllSongs(nextMode);
-    }
-
-    private void SetVisibilityOfAllSongs(ShownSongMode mode) {
-        var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
-        GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
-
-        ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"Visibility being set to {mode}");
-        HiddenSongMode = mode;
-        ArchipelagoHelpers.SelectNextAvailableSong();
-
-        var hintedSongs = mode == ShownSongMode.Hinted ? ArchipelagoStatic.SessionHandler.HintHandler.GetHintedSongs() : new HashSet<string>();
-
-        foreach (var song in list) {
-            if (song.uid == AlbumDatabase.RANDOM_PANEL_UID)
-                continue;
-
-            if (!SongsInLogic.Contains(song.uid)) {
-                AddHide(song, false);
-                GlobalDataBase.dbMusicTag.RemoveCollection(song);
-                continue;
-            }
-
-            //Goal should always be visible
-            if (GoalSong?.uid == song.uid) {
-                GlobalDataBase.dbMusicTag.RemoveHide(song);
-                GlobalDataBase.dbMusicTag.AddCollection(song);
-                continue;
-            }
-
-            switch (mode) {
-                case ShownSongMode.AllInLogic:
-                    if (GlobalDataBase.dbMusicTag.ContainsHide(song))
-                        GlobalDataBase.dbMusicTag.RemoveHide(song);
-
-                    if (UnlockedSongUids.Contains(song.uid) && !CompletedSongUids.Contains(song.uid) && !GlobalDataBase.dbMusicTag.ContainsCollection(song))
-                        GlobalDataBase.dbMusicTag.AddCollection(song);
-                    break;
-
-                case ShownSongMode.Unlocks:
-                    if (!UnlockedSongUids.Contains(song.uid)) {
-                        AddHide(song, false);
-
-                        if (GlobalDataBase.dbMusicTag.ContainsCollection(song))
-                            GlobalDataBase.dbMusicTag.RemoveCollection(song);
-                    }
-                    else {
-                        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
-                            GlobalDataBase.dbMusicTag.RemoveHide(song);
-
-                        if (!CompletedSongUids.Contains(song.uid) && !GlobalDataBase.dbMusicTag.ContainsCollection(song))
-                            GlobalDataBase.dbMusicTag.AddCollection(song);
-                    }
-                    break;
-
-                case ShownSongMode.Unplayed:
-                    if (!UnlockedSongUids.Contains(song.uid) || CompletedSongUids.Contains(song.uid)) {
-                        AddHide(song, false);
-
-                        if (GlobalDataBase.dbMusicTag.ContainsCollection(song))
-                            GlobalDataBase.dbMusicTag.RemoveCollection(song);
-                    }
-                    else {
-                        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
-                            GlobalDataBase.dbMusicTag.RemoveHide(song);
-
-                        if (!GlobalDataBase.dbMusicTag.ContainsCollection(song))
-                            GlobalDataBase.dbMusicTag.AddCollection(song);
-                    }
-                    break;
-
-                case ShownSongMode.Hinted:
-                    var name = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(song);
-                    if ((!hintedSongs.Contains(name + "-0") && !hintedSongs.Contains(name + "-1")) || CompletedSongUids.Contains(song.uid)) {
-                        AddHide(song, false);
-
-                        if (GlobalDataBase.dbMusicTag.ContainsCollection(song))
-                            GlobalDataBase.dbMusicTag.RemoveCollection(song);
-                    }
-                    else {
-                        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
-                            GlobalDataBase.dbMusicTag.RemoveHide(song);
-
-                        if (!GlobalDataBase.dbMusicTag.ContainsCollection(song))
-                            GlobalDataBase.dbMusicTag.AddCollection(song);
-                    }
-                    break;
-            }
-        }
-
-        MusicTagManager.instance.RefreshDBDisplayMusics();
-        if (ArchipelagoStatic.SongSelectPanel)
-            ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
-    }
-
-    private void AddHide(MusicInfo song, bool outsideSongSelect) {
-        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
-            return;
-
-        if (outsideSongSelect)
-            GlobalDataBase.dbMusicTag.m_HideList.Add(song.uid);
-        else
-            GlobalDataBase.dbMusicTag.AddHide(song);
-        GlobalDataBase.dbMusicTag.RemoveShowMusicUid(song);
-    }
-
-    public void UnlockSong(MusicInfo song) {
-        UnlockedSongUids.Add(song.uid);
-        if (HiddenSongMode == ShownSongMode.AllInLogic || !SongsInLogic.Contains(song.uid))
-            return;
-
-        if (HiddenSongMode == ShownSongMode.Unlocks || !CompletedSongUids.Contains(song.uid))
-            GlobalDataBase.dbMusicTag.RemoveHide(song);
-
-        if (!CompletedSongUids.Contains(song.uid))
-            GlobalDataBase.dbMusicTag.AddCollection(song);
-    }
+#endregion
 }

@@ -1,14 +1,16 @@
 ﻿using HarmonyLib;
 using Il2Cpp;
+using Il2CppAssets.Scripts.GameCore.GameObjectLogics.GameObjectManager;
 using Il2CppAssets.Scripts.UI.Controls;
 using Il2CppAssets.Scripts.UI.Panels;
 using Il2CppAssets.Scripts.UI.Specials;
 using Il2CppFormulaBase;
+using UnityEngine;
 
 namespace ArchipelagoMuseDash.Patches;
 
 /// <summary>
-/// Gets when overlays are disabled so we can trigger things at the correct time.
+///     Gets when overlays are disabled so we can trigger things at the correct time.
 /// </summary>
 [HarmonyPatch(typeof(EnableDisableHooker), "OnEnable")]
 sealed class EnableDisableHookerOnEnablePatch {
@@ -18,7 +20,7 @@ sealed class EnableDisableHookerOnEnablePatch {
     }
 }
 /// <summary>
-/// Gets when overlays are disabled so we can trigger things at the correct time.
+///     Gets when overlays are disabled so we can trigger things at the correct time.
 /// </summary>
 [HarmonyPatch(typeof(EnableDisableHooker), "OnDisable")]
 sealed class EnableDisableHookerOnDisablePatch {
@@ -28,7 +30,7 @@ sealed class EnableDisableHookerOnDisablePatch {
     }
 }
 /// <summary>
-/// Gets the Muse Character on the main menu. This allows us to turn off the main menu.
+///     Gets the Muse Character on the main menu. This allows us to turn off the main menu.
 /// </summary>
 [HarmonyPatch(typeof(CharacterExpression), "Awake")]
 sealed class CharacterExpressionAwakePatch {
@@ -38,7 +40,7 @@ sealed class CharacterExpressionAwakePatch {
     }
 }
 /// <summary>
-/// Gets the Unlock Song Panel so that we can trigger it when we want
+///     Gets the Unlock Song Panel so that we can trigger it when we want
 /// </summary>
 [HarmonyPatch(typeof(PnlStage), "Awake")]
 sealed class PnlStageAwakePatch {
@@ -48,7 +50,7 @@ sealed class PnlStageAwakePatch {
     }
 }
 /// <summary>
-/// Gets the Unlock Song Panel so that we can trigger it when we want
+///     Gets the Unlock Song Panel so that we can trigger it when we want
 /// </summary>
 [HarmonyPatch(typeof(PnlUnlock), "Awake")]
 sealed class PnlUnlockPatch {
@@ -58,7 +60,7 @@ sealed class PnlUnlockPatch {
     }
 }
 /// <summary>
-/// Gets the Unlock Song Panel so that we can trigger it when we want
+///     Gets the Unlock Song Panel so that we can trigger it when we want
 /// </summary>
 [HarmonyPatch(typeof(StageBattleComponent), "GameStart")]
 sealed class StageBattleComponentGameStartPatch {
@@ -68,7 +70,7 @@ sealed class StageBattleComponentGameStartPatch {
     }
 }
 /// <summary>
-/// Gets the Unlock Song Panel so that we can trigger it when we want
+///     Gets the Unlock Song Panel so that we can trigger it when we want
 /// </summary>
 [HarmonyPatch(typeof(StageBattleComponent), "Dead")]
 sealed class StageBattleComponentDeadPatch {
@@ -78,7 +80,28 @@ sealed class StageBattleComponentDeadPatch {
 
         ArchipelagoStatic.ArchLogger.LogDebug("StageBattleComponent", "Dead");
         ArchipelagoStatic.SessionHandler.DeathLinkHandler.PlayerDied();
-        if (!ArchipelagoStatic.SessionHandler.DeathLinkHandler.HasDeathLinkReason())
-            ArchipelagoStatic.SessionHandler.TrapHandler.SetTrapFinished();
+        if (!ArchipelagoStatic.SessionHandler.DeathLinkHandler.HasDeathLinkReason()) {
+            ArchipelagoStatic.SessionHandler.BattleHandler.SetTrapFinished();
+            ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd();
+        }
+    }
+}
+/// <summary>
+///     Gets the Unlock Song Panel so that we can trigger it when we want
+/// </summary>
+[HarmonyPatch(typeof(AttackEffectManager), "InvokeElfinEffect")]
+sealed class AttackEffectManagerInvokeElfinEffectPatch {
+    private static bool Prefix(AttackEffectManager __instance, ref GameObject __result) {
+        __result = null;
+        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+            return true;
+
+        if (__instance.m_ElfinEffect?.pool != null && __instance.m_ElfinEffect.pool.sourcePrefab)
+            return true;
+
+        if (!ArchipelagoStatic.PlaceholderElfin)
+            ArchipelagoStatic.PlaceholderElfin = new GameObject();
+        __result = ArchipelagoStatic.PlaceholderElfin;
+        return false;
     }
 }
