@@ -54,6 +54,7 @@ namespace ArchipelagoMuseDash.Archipelago
         public int NumberOfMusicSheetsToWin { get; private set; }
         public int CurrentNumberOfMusicSheets { get; private set; }
         public bool VictoryAchieved { get; set; }
+        public bool ShowFillerItems { get; set; }
 
         public void Setup(Dictionary<string, object> slotData)
         {
@@ -97,6 +98,11 @@ namespace ArchipelagoMuseDash.Archipelago
             }
             else
                 GradeNeeded = GradeOption.Any;
+
+            if (slotData.TryGetValue("hasFiller", out var hasFiller))
+                ShowFillerItems = (bool)hasFiller;
+            else
+                ShowFillerItems = false;
 
             foreach (var location in _currentSession.Locations.AllLocations)
             {

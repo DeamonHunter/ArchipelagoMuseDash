@@ -52,6 +52,7 @@ namespace ArchipelagoMuseDash.Helpers
             { '†', ' ' },
             { 'Ⅰ', '1' },
             { 'Ⅱ', '2' },
+            { 'Ⅲ', '3' },
             { 'ä', 'a' },
             { 'ë', 'e' },
             { 'Я', 'R' },

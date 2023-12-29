@@ -9,6 +9,7 @@ using Assets.Scripts.PeroTools.Managers;
 using Assets.Scripts.PeroTools.Nice.Interface;
 using Assets.Scripts.UI.Controls;
 using Assets.Scripts.UI.Panels;
+using Assets.Scripts.UI.Panels.PnlRole;
 using DG.Tweening;
 using HarmonyLib;
 using Il2CppSystem.Collections.Generic;

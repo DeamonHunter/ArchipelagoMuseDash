@@ -289,6 +289,10 @@
   "66-9": "Shun-ran",
   //春嵐
 
+  //Touhou song. Generally accepted name.
+  "69-5": "Tsurupettan",
+  //つるぺったん
+
   ///
   /// Song Cleanup Section
   ///
@@ -368,6 +372,11 @@
   "63-5": "INTERNET YAMERO",
   // INTERNET YAMERO（Aiobahn feat.KOTOKO）
 
-  "43-33": "OTOGE-BOSS-KYOKU-CHAN"
+  "43-33": "OTOGE-BOSS-KYOKU-CHAN",
   //Is there no way I'm defeated by OTOGE-BOSS-KYOKU-CHAN is strongly provoking?????
+
+  "69-0": "Samayoi no mei Amatsu",
+  //Samayoi no mei ～Amatsu～
+  "69-2": "Shuki*RaiRai"
+  //Shuki*RaiRai
 }

@@ -129,6 +129,8 @@ namespace ArchipelagoMuseDash.Archipelago
             SongText = null;
             FillerItemText = null;
             FillerTextComp = null;
+            RecordText = null;
+            RecordTextComp = null;
         }
 
         public void AddHintBox(StageLikeToggle likeButton)
