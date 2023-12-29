@@ -112,15 +112,17 @@ public class BattleHandler {
         ArchipelagoStatic.ArchLogger.Log("TrapHandler", $"Activated trap {_activatedTrap}");
     }
 
-    public void SetTrapFinished() {
+    public string SetTrapFinished() {
         if (_activatedTrap == null)
-            return;
+            return "";
 
+        var trapName = _activatedTrap.TrapName;
         _activatedTrap.OnEnd();
 
         //This will cause issues if multiple people are running the same game and don't go through all traps. But I'm fine with that.
         ArchipelagoStatic.SessionHandler.DataStorageHandler.SetHandledTrapCount(_lastHandledTrap);
         _activatedTrap = null;
+        return trapName;
     }
 
     public void PreGameSceneLoad() {
@@ -161,7 +163,7 @@ public class BattleHandler {
         return true;
     }
 
-    public void OnBattleEnd() {
+    public void OnBattleEnd(bool playerDead, string activeTrap) {
         var property = BattleProperty.instance;
 
         if (property.greatToPerfect < _greatToPerfectCount.CurrentCount) {
@@ -183,7 +185,11 @@ public class BattleHandler {
             _missToGreatCount.CurrentCount -= _extraLifesUsed;
             ArchipelagoStatic.SessionHandler.DataStorageHandler.SetUsedExtraLifes(_extraLifeCount.TotalCount - _extraLifeCount.CurrentCount);
         }
+
+        if (!playerDead)
+            ArchipelagoStatic.Records.RecordHighScore(activeTrap);
     }
+
     public void ResetNewItemCount() {
         _forceUpdate = true;
         _greatToPerfectCount.NewCount = 0;
@@ -199,6 +205,7 @@ public class BattleHandler {
 
         ArchipelagoStatic.SessionHandler.SongSelectAdditions.FillerTextComp.text = GetItemAmount();
     }
+
     public string GetItemAmount() {
         var sb = new StringBuilder();
         sb.AppendLine("<b>Single Use Items</b>");

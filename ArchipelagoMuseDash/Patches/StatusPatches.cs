@@ -50,6 +50,16 @@ sealed class PnlStageAwakePatch {
     }
 }
 /// <summary>
+/// Gets the Unlock Song Panel so that we can trigger it when we want
+/// </summary>
+[HarmonyPatch(typeof(PnlPreparation), "Awake")]
+sealed class PnlPreparationAwakePatch {
+    private static void Postfix(PnlPreparation __instance) {
+        ArchipelagoStatic.ArchLogger.LogDebug("PnlPreparation", "Awake");
+        ArchipelagoStatic.PreparationPanel = __instance;
+    }
+}
+/// <summary>
 ///     Gets the Unlock Song Panel so that we can trigger it when we want
 /// </summary>
 [HarmonyPatch(typeof(PnlUnlock), "Awake")]
@@ -82,7 +92,7 @@ sealed class StageBattleComponentDeadPatch {
         ArchipelagoStatic.SessionHandler.DeathLinkHandler.PlayerDied();
         if (!ArchipelagoStatic.SessionHandler.DeathLinkHandler.HasDeathLinkReason()) {
             ArchipelagoStatic.SessionHandler.BattleHandler.SetTrapFinished();
-            ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd();
+            ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd(true, "");
         }
     }
 }

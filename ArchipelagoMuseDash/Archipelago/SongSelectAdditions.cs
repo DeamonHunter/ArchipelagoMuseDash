@@ -1,5 +1,7 @@
 ﻿using ArchipelagoMuseDash.Helpers;
 using Il2Cpp;
+using Il2CppAssets.Scripts.Database;
+using Il2CppAssets.Scripts.PeroTools.Managers;
 using Il2CppInterop.Runtime;
 using UnityEngine;
 using UnityEngine.Events;
@@ -25,10 +27,20 @@ public class SongSelectAdditions {
     public GameObject FillerItemText;
     public Text FillerTextComp;
 
-    public void OnUpdate() {
-        if (!ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlStage"))
-            return;
+    public GameObject RecordText;
+    public Text RecordTextComp;
 
+    private string _lastRecord;
+    private int _lastDifficulty;
+
+    public void OnUpdate() {
+        if (ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlStage"))
+            SongSelectActive();
+        if (ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlPreparation"))
+            PreparationActive();
+    }
+
+    private void SongSelectActive() {
         if (HintButton != null) {
             if (EventSystem.current == null)
                 return;
@@ -64,6 +76,41 @@ public class SongSelectAdditions {
         AddItemBox(likeButton);
     }
 
+    private void PreparationActive() {
+        if (!RecordText) {
+            ArchipelagoStatic.ArchLogger.LogDebug("Song Select Additions", "Button not created");
+            if (!ArchipelagoStatic.HideSongDialogue || !ArchipelagoStatic.HideSongDialogue.m_YesButton
+                || !ArchipelagoStatic.HideSongDialogue.m_NoButton || !ArchipelagoStatic.PreparationPanel)
+                return;
+
+            ArchipelagoStatic.ArchLogger.LogDebug("Song Select Additions", "Past Test");
+
+            AddRecordBox(ArchipelagoStatic.PreparationPanel.pnlRecord.transform);
+            _lastRecord = null;
+            _lastDifficulty = -1;
+        }
+
+        if (_lastRecord == GlobalDataBase.dbBattleStage.selectedMusicInfo.uid && _lastDifficulty == GlobalDataBase.dbBattleStage.selectedDifficulty)
+            return;
+
+        ArchipelagoStatic.ArchLogger.LogDebug("Song Select Additions", "Resetting text");
+
+        _lastRecord = GlobalDataBase.dbBattleStage.selectedMusicInfo.uid;
+        _lastDifficulty = GlobalDataBase.dbBattleStage.selectedDifficulty;
+
+        if (!ArchipelagoStatic.Records.TryGetRecord(_lastRecord, _lastDifficulty, out var record)) {
+            RecordTextComp.text = "Archipelago Record\nNot played yet.";
+            return;
+        }
+
+        var configManager = ConfigManager.instance;
+        var elfin = configManager.GetConfigObject<DBConfigElfin>().GetLocal();
+        var character = configManager.GetConfigObject<DBConfigCharacter>().GetLocal();
+
+        RecordTextComp.text = $"Archipelago Record\nScore: {record.Score} ({record.Accuracy:P2})\nCharacter: {character.GetInfoByIndex(record.Character).characterName}"
+            + $"\nElfin: {elfin.GetInfoByIndex(record.Elfin).name}\nTrap: {(string.IsNullOrEmpty(record.Trap) ? "None" : record.Trap)}";
+    }
+
     public void MainSceneLoaded() {
         HintButton = null;
         ToggleSongsButton = null;
@@ -71,6 +118,8 @@ public class SongSelectAdditions {
         SongText = null;
         FillerItemText = null;
         FillerTextComp = null;
+        RecordText = null;
+        RecordTextComp = null;
     }
 
     public void AddHintBox(StageLikeToggle likeButton) {
@@ -173,9 +222,9 @@ public class SongSelectAdditions {
 
         var hintTransform = FillerItemText.GetComponent<RectTransform>();
         hintTransform.anchorMax = hintTransform.anchorMin = new Vector2(0.5f, 0.5f);
-        hintTransform.anchoredPosition = new Vector2(-620, 50);
+        hintTransform.anchoredPosition = new Vector2(-590, 50);
         hintTransform.pivot = new Vector2(1, 0.5f);
-        hintTransform.sizeDelta = new Vector2(270, 100);
+        hintTransform.sizeDelta = new Vector2(320, 100);
 
         var hintText = new GameObject();
         hintText.transform.SetParent(FillerItemText.transform, false);
@@ -187,13 +236,54 @@ public class SongSelectAdditions {
         FillerTextComp.fontSize = 20;
         FillerTextComp.resizeTextForBestFit = true;
         FillerTextComp.resizeTextMaxSize = 20;
-        FillerTextComp.resizeTextMinSize = 12;
+        FillerTextComp.resizeTextMinSize = 10;
         FillerTextComp.verticalOverflow = VerticalWrapMode.Truncate;
 
         var hintTextRect = hintText.GetComponent<RectTransform>();
         hintTextRect.anchorMin = new Vector2(0.1f, 0.1f);
         hintTextRect.anchorMax = new Vector2(0.9f, 0.9f);
         hintTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
+    }
+
+    public void AddRecordBox(Transform transform) {
+        //Todo: This needs a bit of cleaning up. Maybe split into other methods to make it easier to follow.
+
+        //The HideSongDialogue has the button we want, and it should be available at this time.
+        var yesButton = ArchipelagoStatic.HideSongDialogue.m_YesButton;
+        var yesButtonImage = yesButton.GetComponent<Image>();
+        var yesText = yesButton.transform.GetChild(0);
+        var yesTextComp = yesText.GetComponent<Text>();
+
+        RecordText = new GameObject("ArchipelagoFillerText");
+        RecordText.transform.SetParent(transform, false);
+
+        var hintBackgroundImage = RecordText.AddComponent<Image>();
+        hintBackgroundImage.sprite = yesButtonImage.sprite;
+        hintBackgroundImage.type = yesButtonImage.type;
+
+        var recordTransform = RecordText.GetComponent<RectTransform>();
+        recordTransform.anchorMax = recordTransform.anchorMin = new Vector2(0.5f, 0f);
+        recordTransform.anchoredPosition = new Vector2(0, 30);
+        recordTransform.pivot = new Vector2(0.5f, 0.5f);
+        recordTransform.sizeDelta = new Vector2(340, 180);
+
+        var recordText = new GameObject();
+        recordText.transform.SetParent(RecordText.transform, false);
+
+        RecordTextComp = recordText.AddComponent<Text>();
+        AssetHelpers.CopyTextVariables(yesTextComp, RecordTextComp);
+        var original = RecordTextComp.color;
+        RecordTextComp.color = new Color(original.r * 0.75f, original.g * 0.75f, original.b * 0.75f, 1f);
+        RecordTextComp.fontSize = 20;
+        RecordTextComp.resizeTextForBestFit = true;
+        RecordTextComp.resizeTextMaxSize = 20;
+        RecordTextComp.resizeTextMinSize = 10;
+        RecordTextComp.verticalOverflow = VerticalWrapMode.Truncate;
+
+        var recordTextRect = recordText.GetComponent<RectTransform>();
+        recordTextRect.anchorMin = new Vector2(0.1f, 0.1f);
+        recordTextRect.anchorMax = new Vector2(0.9f, 0.9f);
+        recordTextRect.sizeDelta = Vector2.zero; //Resets the size back to the anchors
     }
 
     private GameObject CreateButton(StageLikeToggle likeButton, string buttonName, string buttonText, Vector2 offset, Vector2 pivot, Action onClick) {

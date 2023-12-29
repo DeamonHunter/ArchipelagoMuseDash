@@ -16,6 +16,7 @@ public class ArchipelagoMuseDashMod : MelonMod {
         ArchipelagoStatic.ArchLogger = new ArchLogger();
         ArchipelagoStatic.Login = new ArchipelagoLogin(Info.Version, Info.Version);
         ArchipelagoStatic.SessionHandler = new SessionHandler();
+        ArchipelagoStatic.Records = new ArchipelagoRecords();
 
         ArchipelagoStatic.ArchipelagoIcons = new[] {
             AssetHelpers.LoadTexture("ArchipelagoMuseDash.Assets.APProgression.png"),
@@ -29,6 +30,8 @@ public class ArchipelagoMuseDashMod : MelonMod {
 
         using (var stream = MelonAssembly.Assembly.GetManifestResourceStream("ArchipelagoMuseDash.Assets.MuseDashData.txt"))
             ArchipelagoStatic.AlbumDatabase.LoadMusicList(stream);
+
+        ArchipelagoStatic.Records.Load();
     }
 
     public override void OnSceneWasLoaded(int buildIndex, string sceneName) {
@@ -48,7 +51,6 @@ public class ArchipelagoMuseDashMod : MelonMod {
 
     public override void OnUpdate() {
         base.OnUpdate();
-
         ArchipelagoStatic.Login.OnUpdate();
 
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
