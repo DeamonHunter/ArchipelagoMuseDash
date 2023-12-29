@@ -205,24 +205,27 @@ public class BattleHandler {
 
         if (_greatToPerfectCount.CurrentCount > 0) {
             sb.AppendLine(_greatToPerfectCount.NewCount > 0
-                ? $"Great To Perfect: {_greatToPerfectCount.CurrentCount} (+{_greatToPerfectCount.NewCount})"
+                ? $"Great To Perfect: {_greatToPerfectCount.CurrentCount} ({_greatToPerfectCount.NewCount}↑)"
                 : $"Great To Perfect: {_greatToPerfectCount.CurrentCount}"
             );
         }
 
         if (_missToGreatCount.CurrentCount > 0) {
             sb.AppendLine(_missToGreatCount.NewCount > 0
-                ? $"Miss To Great: {_missToGreatCount.CurrentCount} (+{_missToGreatCount.NewCount})"
+                ? $"Miss To Great: {_missToGreatCount.CurrentCount} ({_missToGreatCount.NewCount}↑)"
                 : $"Miss To Great: {_missToGreatCount.CurrentCount}"
             );
         }
 
         if (_extraLifeCount.CurrentCount > 0) {
             sb.AppendLine(_missToGreatCount.NewCount > 0
-                ? $"Extra Lives: {_missToGreatCount.CurrentCount} (+{_missToGreatCount.NewCount})"
+                ? $"Extra Lives: {_missToGreatCount.CurrentCount} ({_missToGreatCount.NewCount}↑)"
                 : $"Extra Lives: {_missToGreatCount.CurrentCount}"
             );
         }
+
+        if (_extraLifeCount.CurrentCount <= 0 && _missToGreatCount.CurrentCount <= 0 && _greatToPerfectCount.CurrentCount <= 0)
+            sb.AppendLine("No items.");
 
         return sb.ToString().Trim();
     }
