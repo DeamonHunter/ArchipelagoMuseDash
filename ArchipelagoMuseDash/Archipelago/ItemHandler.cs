@@ -177,12 +177,15 @@ public class ItemHandler {
             return new ExternalItem(item.Item, name, playerName) { Item = item };
         }
 
-        if (ArchipelagoStatic.SessionHandler.BattleHandler.EnqueueIfTrap(item))
-            return null;
+        if (ArchipelagoStatic.SessionHandler.BattleHandler.EnqueueIfBattleItem(item, out var createFiller)) {
+            if (!createFiller || !locallyObtained)
+                return null;
+            return new FillerItem() { Item = item };
+        }
 
         if (name == fever_filler_item) {
             if (locallyObtained)
-                return new FeverRefillItem();
+                return new FillerItem();
 
             _triggeredFeverFillerCount++;
             _triggerFeverFiller = true;

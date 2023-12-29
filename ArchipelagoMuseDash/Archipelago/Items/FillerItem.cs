@@ -2,7 +2,7 @@
 
 namespace ArchipelagoMuseDash.Archipelago.Items;
 
-public class FeverRefillItem : IMuseDashItem {
+public class FillerItem : IMuseDashItem {
     public NetworkItem Item { get; set; }
 
     public string UnlockSongUid => ArchipelagoStatic.AlbumDatabase.GetMusicInfo("Magical Wonderland").uid;
@@ -13,7 +13,12 @@ public class FeverRefillItem : IMuseDashItem {
     public string AuthorText => "";
 
     public string PreUnlockBannerText => "A new item?";
-    public string PostUnlockBannerText => "Fever Refill";
+    public string PostUnlockBannerText => Item.Item switch {
+        2900030 => "Great to Perfect (5x)",
+        2900031 => "Miss to Great (5x)",
+        2900032 => "Extra Life",
+        _ => "Unknown Filler",
+    };
 
     public void UnlockItem(ItemHandler handler, bool immediate) { }
 }
