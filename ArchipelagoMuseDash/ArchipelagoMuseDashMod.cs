@@ -20,6 +20,7 @@ namespace ArchipelagoMuseDash
             ArchipelagoStatic.ArchLogger = new ArchLogger();
             ArchipelagoStatic.Login = new ArchipelagoLogin(Info.Version + " (Melon Loader v0.5.7)", Info.Version);
             ArchipelagoStatic.SessionHandler = new SessionHandler();
+            ArchipelagoStatic.Records = new ArchipelagoRecords();
 
             ArchipelagoStatic.ArchipelagoIcons = new[]
             {
@@ -34,6 +35,8 @@ namespace ArchipelagoMuseDash
 
             using (var stream = MelonAssembly.Assembly.GetManifestResourceStream("ArchipelagoMuseDash.Assets.MuseDashData.txt"))
                 ArchipelagoStatic.AlbumDatabase.LoadMusicList(stream);
+
+            ArchipelagoStatic.Records.Load();
         }
 
         public override void OnSceneWasLoaded(int buildIndex, string sceneName)
@@ -57,7 +60,6 @@ namespace ArchipelagoMuseDash
         public override void OnUpdate()
         {
             base.OnUpdate();
-
             ArchipelagoStatic.Login.OnUpdate();
 
             if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)

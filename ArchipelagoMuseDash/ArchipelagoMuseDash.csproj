@@ -139,13 +139,14 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="AlbumDatabase.cs"/>
+        <Compile Include="ArchipelagoRecords.cs"/>
         <Compile Include="Archipelago\DataStorageHandler.cs"/>
         <Compile Include="Archipelago\DeathLinkHandler.cs"/>
         <Compile Include="Archipelago\GradeOption.cs"/>
         <Compile Include="Archipelago\HintHandler.cs"/>
         <Compile Include="Archipelago\ItemHandler.cs"/>
         <Compile Include="Archipelago\Items\CompressedItems.cs"/>
-        <Compile Include="Archipelago\Items\FullFeverItem.cs"/>
+        <Compile Include="Archipelago\Items\FillerItem.cs"/>
         <Compile Include="Archipelago\Items\MusicSheetItem.cs"/>
         <Compile Include="Archipelago\Items\VictoryItem.cs"/>
         <Compile Include="Archipelago\ItemUnlockHandler.cs"/>

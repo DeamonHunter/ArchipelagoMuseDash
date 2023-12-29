@@ -156,7 +156,7 @@ namespace ArchipelagoMuseDash.Patches
                 return;
             }
 
-            ArchipelagoStatic.SessionHandler.BattleHandler.SetTrapFinished();
+            var activeTrap = ArchipelagoStatic.SessionHandler.BattleHandler.SetTrapFinished();
 
             // Cover Neko's death
             if (GlobalDataBase.dbBattleStage.IsSelectRole(NEKO_CHARACTER_ID) && !GlobalDataBase.dbBattleStage.IsSelectElfin(SILENCER_ELFIN_ID))
@@ -184,7 +184,7 @@ namespace ArchipelagoMuseDash.Patches
             var musicInfo = GlobalDataBase.dbBattleStage.selectedMusicInfo;
             var locationName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(musicInfo);
             ArchipelagoStatic.SessionHandler.ItemHandler.CheckLocation(musicInfo.uid, locationName);
-            ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd();
+            ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd(false, activeTrap);
         }
     }
     /// <summary>

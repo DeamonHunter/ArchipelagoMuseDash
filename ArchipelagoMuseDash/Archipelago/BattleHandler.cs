@@ -144,16 +144,18 @@ namespace ArchipelagoMuseDash.Archipelago
             ArchipelagoStatic.ArchLogger.Log("TrapHandler", $"Activated trap {_activatedTrap}");
         }
 
-        public void SetTrapFinished()
+        public string SetTrapFinished()
         {
             if (_activatedTrap == null)
-                return;
+                return "";
 
+            var trapName = _activatedTrap.TrapName;
             _activatedTrap.OnEnd();
 
             //This will cause issues if multiple people are running the same game and don't go through all traps. But I'm fine with that.
             ArchipelagoStatic.SessionHandler.DataStorageHandler.SetHandledTrapCount(_lastHandledTrap);
             _activatedTrap = null;
+            return trapName;
         }
 
         public void PreGameSceneLoad()
@@ -199,7 +201,7 @@ namespace ArchipelagoMuseDash.Archipelago
             return true;
         }
 
-        public void OnBattleEnd()
+        public void OnBattleEnd(bool playerDead, string activeTrap)
         {
             var property = BattleProperty.instance;
 
@@ -225,6 +227,9 @@ namespace ArchipelagoMuseDash.Archipelago
                 _missToGreatCount.CurrentCount -= _extraLifesUsed;
                 ArchipelagoStatic.SessionHandler.DataStorageHandler.SetUsedExtraLifes(_extraLifeCount.TotalCount - _extraLifeCount.CurrentCount);
             }
+
+            if (!playerDead)
+                ArchipelagoStatic.Records.RecordHighScore(activeTrap);
         }
 
         public void ResetNewItemCount()

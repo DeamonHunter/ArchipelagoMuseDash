@@ -23,6 +23,7 @@ namespace ArchipelagoMuseDash
         public static readonly AlbumDatabase AlbumDatabase = new AlbumDatabase();
         public static ArchipelagoLogin Login;
         public static SessionHandler SessionHandler;
+        public static ArchipelagoRecords Records;
 
         //Needed MuseDash components
         public static bool LoadingSceneActive;
@@ -31,6 +32,7 @@ namespace ArchipelagoMuseDash
         public static readonly HashSet<string> ActivatedEnableDisableHookers = new HashSet<string>();
         public static GameObject MuseCharacter;
         public static PnlStage SongSelectPanel;
+        public static PnlPreparation PreparationPanel;
         public static PnlUnlockStage UnlockStagePanel;
         public static SongHideAskMsg HideSongDialogue;
 
