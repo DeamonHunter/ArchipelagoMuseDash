@@ -196,18 +196,9 @@ public class HintHandler {
                     continue;
 
                 var locationName = _currentSession.Locations.GetLocationNameFromId(musicSheetHint.LocationId);
-                if (musicSheetHint.FindingPlayer == _currentPlayerSlot) {
-                    locationName = locationName[..^2];
-                    //Additional check, in case hints don't update
-                    if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(locationName, out var otherMusic)
-                        && ArchipelagoStatic.SessionHandler.ItemHandler.CompletedSongUids.Contains(otherMusic.uid))
-                        continue;
-
-                    //Local Item
-                    sb.AppendLine(locationName);
-                }
-                else //Remote Item
-                    sb.AppendLine($"By {_currentSession.Players.GetPlayerAlias(musicSheetHint.FindingPlayer)} at {locationName}");
+                GetHintFromLocationName(musicSheetHint, sb, locationName);
+                if (locationName.Length > 2 && ArchipelagoStatic.AlbumDatabase.TryGetOldName(locationName[..^2], out var oldName))
+                    GetHintFromLocationName(musicSheetHint, sb, oldName);
             }
 
             hint = sb.ToString();
@@ -215,10 +206,36 @@ public class HintHandler {
         }
 
         var itemName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(info);
+        GetHintFromItemName(itemName, sb);
+        if (itemName.Length > 2 && ArchipelagoStatic.AlbumDatabase.TryGetOldName(itemName[..^2], out var oldItemName))
+            GetHintFromItemName(oldItemName, sb);
+
+        hint = sb.ToString();
+        return hint.Length > 0;
+    }
+
+
+    private void GetHintFromLocationName(Hint musicSheetHint, StringBuilder sb, string locationName) {
+        if (musicSheetHint.FindingPlayer == _currentPlayerSlot) {
+            sb.AppendLine($"{locationName.Substring(0, locationName.Length - 2)}");
+            //Additional check, in case hints don't update
+            if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(locationName, out var otherMusic)
+                && ArchipelagoStatic.SessionHandler.ItemHandler.CompletedSongUids.Contains(otherMusic.uid))
+                return;
+
+            //Local Item
+            sb.AppendLine(locationName);
+        }
+        else //Remote Item
+            sb.AppendLine($"By {_currentSession.Players.GetPlayerAlias(musicSheetHint.FindingPlayer)} at {locationName}");
+    }
+
+    private void GetHintFromItemName(string itemName, StringBuilder sb) {
+
         if (_itemsHints.TryGetValue(itemName, out var locatedHint)) {
             var locationName = _currentSession.Locations.GetLocationNameFromId(locatedHint.LocationId);
             if (locatedHint.FindingPlayer == _currentPlayerSlot) //Local Item
-                sb.Append($"To be found at {locationName.Substring(0, locationName.Length - 2)}");
+                sb.Append($"To be found at {locationName[..^2]}");
             else //Remote Item
                 sb.Append($"To be found by {_currentSession.Players.GetPlayerAlias(locatedHint.FindingPlayer)} at {locationName}");
         }
@@ -249,8 +266,5 @@ public class HintHandler {
                 sb.Append($"Has: {item}");
             }
         }
-
-        hint = sb.ToString();
-        return hint.Length > 0;
     }
 }
