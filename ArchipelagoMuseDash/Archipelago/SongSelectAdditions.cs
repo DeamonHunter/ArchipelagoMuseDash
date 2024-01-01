@@ -222,9 +222,9 @@ public class SongSelectAdditions {
 
         var hintTransform = FillerItemText.GetComponent<RectTransform>();
         hintTransform.anchorMax = hintTransform.anchorMin = new Vector2(0.5f, 0.5f);
-        hintTransform.anchoredPosition = new Vector2(-590, 50);
+        hintTransform.anchoredPosition = new Vector2(-560, 50);
         hintTransform.pivot = new Vector2(1, 0.5f);
-        hintTransform.sizeDelta = new Vector2(320, 100);
+        hintTransform.sizeDelta = new Vector2(340, 100);
 
         var hintText = new GameObject();
         hintText.transform.SetParent(FillerItemText.transform, false);

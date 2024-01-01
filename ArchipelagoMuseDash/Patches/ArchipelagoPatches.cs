@@ -67,6 +67,8 @@ sealed class PnlUnlockStagePatch {
                 else
                     iconIndex = 2;
             }
+            else if (currentItem is FillerItem)
+                iconIndex = 2;
 
             var icon = ArchipelagoStatic.ArchipelagoIcons[iconIndex];
 
@@ -129,6 +131,7 @@ sealed class PnlVictoryPatch {
     public const int NEKO_CHARACTER_ID = 16;
     public const int SILENCER_ELFIN_ID = 9;
 
+    [HarmonyPriority(Priority.Low)]
     private static void Postfix() {
         //Don't override normal gameplay
         ArchipelagoStatic.ArchLogger.LogDebug("PnlVictory", $"Selected Role: {GlobalDataBase.dbBattleStage.selectedRole}");

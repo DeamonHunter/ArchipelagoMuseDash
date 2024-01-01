@@ -232,9 +232,9 @@ public class BattleHandler {
         }
 
         if (_extraLifeCount.CurrentCount > 0) {
-            sb.AppendLine(_missToGreatCount.NewCount > 0
-                ? $"Extra Lives: {_missToGreatCount.CurrentCount} ({_missToGreatCount.NewCount}↑)"
-                : $"Extra Lives: {_missToGreatCount.CurrentCount}"
+            sb.AppendLine(_extraLifeCount.NewCount > 0
+                ? $"Extra Lives: {_extraLifeCount.CurrentCount} ({_extraLifeCount.NewCount}↑)"
+                : $"Extra Lives: {_extraLifeCount.CurrentCount}"
             );
         }
 
