@@ -73,6 +73,8 @@ namespace ArchipelagoMuseDash.Patches
                     else
                         iconIndex = 2;
                 }
+                else if (currentItem is FillerItem)
+                    iconIndex = 2;
 
                 var icon = ArchipelagoStatic.ArchipelagoIcons[iconIndex];
 
@@ -141,6 +143,7 @@ namespace ArchipelagoMuseDash.Patches
         public const int NEKO_CHARACTER_ID = 16;
         public const int SILENCER_ELFIN_ID = 9;
 
+        [HarmonyPriority(Priority.Low)]
         private static void Postfix()
         {
             //Don't override normal gameplay
