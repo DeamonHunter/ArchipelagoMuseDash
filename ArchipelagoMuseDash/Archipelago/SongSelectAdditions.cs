@@ -80,7 +80,8 @@ public class SongSelectAdditions {
         if (!RecordText) {
             ArchipelagoStatic.ArchLogger.LogDebug("Song Select Additions", "Button not created");
             if (!ArchipelagoStatic.HideSongDialogue || !ArchipelagoStatic.HideSongDialogue.m_YesButton
-                || !ArchipelagoStatic.HideSongDialogue.m_NoButton || !ArchipelagoStatic.PreparationPanel)
+                || !ArchipelagoStatic.HideSongDialogue.m_NoButton || !ArchipelagoStatic.PreparationPanel
+                || !ArchipelagoStatic.PreparationPanel.pnlRecord)
                 return;
 
             ArchipelagoStatic.ArchLogger.LogDebug("Song Select Additions", "Past Test");
@@ -89,6 +90,9 @@ public class SongSelectAdditions {
             _lastRecord = null;
             _lastDifficulty = -1;
         }
+
+        if (string.IsNullOrEmpty(GlobalDataBase.dbBattleStage?.selectedMusicInfo?.uid))
+            return;
 
         if (_lastRecord == GlobalDataBase.dbBattleStage.selectedMusicInfo.uid && _lastDifficulty == GlobalDataBase.dbBattleStage.selectedDifficulty)
             return;
@@ -104,11 +108,16 @@ public class SongSelectAdditions {
         }
 
         var configManager = ConfigManager.instance;
-        var elfin = configManager.GetConfigObject<DBConfigElfin>().GetLocal();
-        var character = configManager.GetConfigObject<DBConfigCharacter>().GetLocal();
 
-        RecordTextComp.text = $"Archipelago Record\nScore: {record.Score} ({record.Accuracy:P2})\nCharacter: {character.GetInfoByIndex(record.Character).characterName}"
-            + $"\nElfin: {elfin.GetInfoByIndex(record.Elfin).name}\nTrap: {(string.IsNullOrEmpty(record.Trap) ? "None" : record.Trap)}";
+        var elfinName = record.Elfin >= 0
+            ? configManager.GetConfigObject<DBConfigElfin>().GetLocal().GetInfoByIndex(record.Elfin).name
+            : "None";
+        var characterName = record.Character >= 0
+            ? configManager.GetConfigObject<DBConfigCharacter>().GetLocal().GetInfoByIndex(record.Character).cosName
+            : "None";
+
+        RecordTextComp.text = $"Archipelago Record\nScore: {record.Score} ({record.Accuracy:P2})\nCharacter: {characterName}"
+            + $"\nElfin: {elfinName}\nTrap: {(string.IsNullOrEmpty(record.Trap) ? "None" : record.Trap)}";
     }
 
     public void MainSceneLoaded() {

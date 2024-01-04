@@ -127,11 +127,12 @@ sealed class PnlUnlockStagePatch {
 ///     Gets called when the player completes the song. Uses this to activate location checks.
 /// </summary>
 [HarmonyPatch(typeof(PnlVictory), "OnVictory", typeof(Object), typeof(Object), typeof(Il2CppReferenceArray<Object>))]
+[HarmonyPriority(Priority.Last)]
 sealed class PnlVictoryPatch {
     public const int NEKO_CHARACTER_ID = 16;
     public const int SILENCER_ELFIN_ID = 9;
 
-    [HarmonyPriority(Priority.Low)]
+    [HarmonyPriority(Priority.Last)]
     private static void Postfix() {
         //Don't override normal gameplay
         ArchipelagoStatic.ArchLogger.LogDebug("PnlVictory", $"Selected Role: {GlobalDataBase.dbBattleStage.selectedRole}");
