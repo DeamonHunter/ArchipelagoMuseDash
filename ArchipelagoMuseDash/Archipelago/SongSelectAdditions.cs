@@ -89,7 +89,8 @@ namespace ArchipelagoMuseDash.Archipelago
             {
                 ArchipelagoStatic.ArchLogger.LogDebug("Song Select Additions", "Button not created");
                 if (!ArchipelagoStatic.HideSongDialogue || !ArchipelagoStatic.HideSongDialogue.m_YesButton
-                    || !ArchipelagoStatic.HideSongDialogue.m_NoButton || !ArchipelagoStatic.PreparationPanel)
+                    || !ArchipelagoStatic.HideSongDialogue.m_NoButton || !ArchipelagoStatic.PreparationPanel
+                    || !ArchipelagoStatic.PreparationPanel.pnlRecord)
                     return;
 
                 ArchipelagoStatic.ArchLogger.LogDebug("Song Select Additions", "Past Test");
@@ -98,6 +99,9 @@ namespace ArchipelagoMuseDash.Archipelago
                 _lastRecord = null;
                 _lastDifficulty = -1;
             }
+
+            if (string.IsNullOrEmpty(GlobalDataBase.dbBattleStage?.selectedMusicInfo?.uid))
+                return;
 
             if (_lastRecord == GlobalDataBase.dbBattleStage.selectedMusicInfo.uid && _lastDifficulty == GlobalDataBase.dbBattleStage.selectedDifficulty)
                 return;
@@ -112,6 +116,7 @@ namespace ArchipelagoMuseDash.Archipelago
                 RecordTextComp.text = "Archipelago Record\nNot played yet.";
                 return;
             }
+            ArchipelagoStatic.ArchLogger.LogDebug("Song Select Additions", "Found record.");
 
             var configManager = ConfigManager.instance;
             var elfin = configManager.GetConfigObject<DBConfigElfin>().GetLocal();
