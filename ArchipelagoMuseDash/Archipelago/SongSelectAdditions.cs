@@ -119,11 +119,15 @@ namespace ArchipelagoMuseDash.Archipelago
             ArchipelagoStatic.ArchLogger.LogDebug("Song Select Additions", "Found record.");
 
             var configManager = ConfigManager.instance;
-            var elfin = configManager.GetConfigObject<DBConfigElfin>().GetLocal();
-            var character = configManager.GetConfigObject<DBConfigCharacter>().GetLocal();
+            var elfinName = record.Elfin >= 0
+                ? configManager.GetConfigObject<DBConfigElfin>().GetLocal().GetInfoByIndex(record.Elfin).name
+                : "None";
+            var characterName = record.Character >= 0
+                ? configManager.GetConfigObject<DBConfigCharacter>().GetLocal().GetInfoByIndex(record.Character).cosName
+                : "None";
 
-            RecordTextComp.text = $"Archipelago Record\nScore: {record.Score} ({record.Accuracy:P2})\nCharacter: {character.GetInfoByIndex(record.Character).characterName}"
-                + $"\nElfin: {elfin.GetInfoByIndex(record.Elfin).name}\nTrap: {(string.IsNullOrEmpty(record.Trap) ? "None" : record.Trap)}";
+            RecordTextComp.text = $"Archipelago Record\nScore: {record.Score} ({record.Accuracy:P2})\nCharacter: {characterName}"
+                + $"\nElfin: {elfinName}\nTrap: {(string.IsNullOrEmpty(record.Trap) ? "None" : record.Trap)}";
         }
 
         public void MainSceneLoaded()
