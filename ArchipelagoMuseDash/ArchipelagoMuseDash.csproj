@@ -229,5 +229,8 @@
     <ItemGroup>
         <EmbeddedResource Include="Assets\MuseDashData.txt"/>
     </ItemGroup>
+    <ItemGroup>
+      <Content Include="Assets\LICENSE.txt" />
+    </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>
