@@ -116,7 +116,9 @@ public class SongSelectAdditions {
             ? configManager.GetConfigObject<DBConfigCharacter>().GetLocal().GetInfoByIndex(record.Character).cosName
             : "None";
 
-        RecordTextComp.text = $"Archipelago Record\nScore: {record.Score} ({record.Accuracy:P2})\nCharacter: {characterName}"
+        var combo = record.IsFullCombo ? $"{record.Combo} (FC)" : record.Combo > 0 ? record.Combo.ToString() : "Unknown";
+
+        RecordTextComp.text = $"Archipelago Record\nScore: {record.Score} ({record.Accuracy:P2})\nCombo: {combo}\nCharacter: {characterName}"
             + $"\nElfin: {elfinName}\nTrap: {(string.IsNullOrEmpty(record.Trap) ? "None" : record.Trap)}";
     }
 
@@ -274,7 +276,7 @@ public class SongSelectAdditions {
         recordTransform.anchorMax = recordTransform.anchorMin = new Vector2(0.5f, 0f);
         recordTransform.anchoredPosition = new Vector2(0, 30);
         recordTransform.pivot = new Vector2(0.5f, 0.5f);
-        recordTransform.sizeDelta = new Vector2(340, 180);
+        recordTransform.sizeDelta = new Vector2(340, 200);
 
         var recordText = new GameObject();
         recordText.transform.SetParent(RecordText.transform, false);
