@@ -2,11 +2,14 @@
 using Il2Cpp;
 using Il2CppAssets.Scripts.Database;
 using Il2CppAssets.Scripts.PeroTools.Managers;
+using Il2CppFormulaBase;
 using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Object = Il2CppSystem.Object;
 
 namespace ArchipelagoMuseDash.Archipelago;
 
@@ -32,12 +35,18 @@ public class SongSelectAdditions {
 
     private string _lastRecord;
     private int _lastDifficulty;
+    private bool _inGameMode;
+    private bool _hasAdjustedSkills;
+    private GameObject _skillIconGroup;
+    private int _frameCount;
 
     public void OnUpdate() {
         if (ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlStage"))
             SongSelectActive();
         if (ArchipelagoStatic.ActivatedEnableDisableHookers.Contains("PnlPreparation"))
             PreparationActive();
+        if (_inGameMode)
+            BattleUpdate();
     }
 
     private void SongSelectActive() {
@@ -131,6 +140,42 @@ public class SongSelectAdditions {
         FillerTextComp = null;
         RecordText = null;
         RecordTextComp = null;
+        _inGameMode = false;
+    }
+
+    public void BattleSceneLoaded() {
+        _inGameMode = true;
+        _hasAdjustedSkills = false;
+        _skillIconGroup = null;
+        _frameCount = 0;
+    }
+
+    public void BattleUpdate() {
+
+        if (_hasAdjustedSkills)
+            return;
+
+        if (!(ArchipelagoStatic.SessionHandler?.BattleHandler?.TryGetDisplaySkills(out var greatToPerfect, out var missToGreat) ?? false)) {
+            _hasAdjustedSkills = true;
+            return;
+        }
+
+        if (!_skillIconGroup) {
+            _skillIconGroup = GameObject.Find("SkillIconGrid");
+            if (!_skillIconGroup)
+                return;
+        }
+
+        //The following needs to activate multiple times for some weird reason...
+        if (greatToPerfect > 0)
+            EventManager.instance.Invoke("Battle/OnGreat2Perfect", new Il2CppReferenceArray<Object>(new Object[] { greatToPerfect }));
+
+        if (missToGreat > 0)
+            EventManager.instance.Invoke("Battle/OnMiss2Great", new Il2CppReferenceArray<Object>(new Object[] { missToGreat }));
+
+        _frameCount++;
+        if (_frameCount > 2)
+            _hasAdjustedSkills = true;
     }
 
     public void AddHintBox(StageLikeToggle likeButton) {

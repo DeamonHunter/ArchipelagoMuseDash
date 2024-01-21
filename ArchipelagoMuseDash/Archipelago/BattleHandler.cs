@@ -244,6 +244,16 @@ public class BattleHandler {
         return sb.ToString().Trim();
     }
 
+    public bool TryGetDisplaySkills(out int greatToPerfect, out int missToGreat) {
+        greatToPerfect = _greatToPerfectCount.CurrentCount;
+        missToGreat = _missToGreatCount.CurrentCount;
+        return greatToPerfect > 0 || missToGreat > 0;
+    }
+
+    public int GetExtraLives() {
+        return _extraLifeCount.CurrentCount - _extraLifesUsed;
+    }
+
     private struct BattleItem {
         public int TotalCount;
         public int CurrentCount;

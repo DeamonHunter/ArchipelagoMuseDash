@@ -123,10 +123,11 @@ public class SessionHandler {
     ///     Runs on Unity's Scene has changed.
     /// </summary>
     public void SceneChanged(string sceneName) {
-        if (sceneName != "UISystem_PC")
-            return;
+        if (sceneName == "UISystem_PC")
+            SongSelectAdditions?.MainSceneLoaded();
+        else if (sceneName == "GameMain")
+            SongSelectAdditions?.BattleSceneLoaded();
 
-        SongSelectAdditions?.MainSceneLoaded();
     }
 
     public void CollectItems() {

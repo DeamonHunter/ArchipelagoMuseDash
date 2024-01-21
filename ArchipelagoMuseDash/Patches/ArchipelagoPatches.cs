@@ -1,4 +1,5 @@
-﻿using Archipelago.MultiClient.Net.Enums;
+﻿using System.Collections;
+using Archipelago.MultiClient.Net.Enums;
 using ArchipelagoMuseDash.Archipelago;
 using ArchipelagoMuseDash.Archipelago.Items;
 using ArchipelagoMuseDash.Helpers;
@@ -6,6 +7,7 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppAssets.Scripts.Database;
 using Il2CppAssets.Scripts.GameCore.HostComponent;
+using Il2CppAssets.Scripts.PeroTools.Commons;
 using Il2CppAssets.Scripts.PeroTools.Managers;
 using Il2CppAssets.Scripts.PeroTools.Nice.Interface;
 using Il2CppAssets.Scripts.UI.Controls;
@@ -413,5 +415,43 @@ sealed class BattleRoleAttributeComponentHurtPatch {
 
         __instance.AddHp(__instance.GetHpMax() - __instance.hp);
         return false;
+    }
+}
+[HarmonyPatch(typeof(ChangeHealthValue), "OnHpAdd")]
+[HarmonyPatch(typeof(ChangeHealthValue), "OnHpDeduct")]
+[HarmonyPatch(typeof(ChangeHealthValue), "OnHpRateChange")]
+sealed class ChangeHealthValueExtraLifePatch {
+    private static void Postfix(ChangeHealthValue __instance) {
+        ArchipelagoStatic.ArchLogger.LogDebug("ChangeHealthValue", "Active");
+        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+            return;
+
+        var extraLifeCount = ArchipelagoStatic.SessionHandler.BattleHandler.GetExtraLives();
+        ArchipelagoStatic.ArchLogger.LogDebug("ChangeHealthValue", $"Logged in: {extraLifeCount <= 0}, {__instance.text.text.EndsWith(')')}");
+        if (extraLifeCount <= 0 || __instance.text.text.EndsWith(')'))
+            return;
+
+
+        __instance.text.horizontalOverflow = HorizontalWrapMode.Overflow;
+        var newText = $"{BattleRoleAttributeComponent.instance.hp}/{BattleRoleAttributeComponent.instance.GetHpMax()}  (+{extraLifeCount})";
+        __instance.text.text = newText;
+
+        //MelonCoroutines.Start(ChangeHPText(__instance));
+    }
+
+    private static IEnumerator ChangeHPText(ChangeHealthValue value) {
+        yield return new WaitForEndOfFrame();
+        if (!value)
+            yield break;
+
+        value.text.horizontalOverflow = HorizontalWrapMode.Overflow;
+        var extraLifeCount = ArchipelagoStatic.SessionHandler.BattleHandler.GetExtraLives();
+        var newText = $"{BattleRoleAttributeComponent.instance.hp}/{BattleRoleAttributeComponent.instance.GetHpMax()}  (+{extraLifeCount})";
+
+
+        value.m_PeroString.Clear();
+        value.m_PeroString.Append(newText);
+        PeroStringUtils.SetPeroText(value.text, value.m_PeroString, true);
+        ArchipelagoStatic.ArchLogger.LogDebug("Text", value.text.text);
     }
 }
