@@ -48,7 +48,7 @@ public class BattleHandler {
 
         switch (item.Item) {
             case 2900030: {
-                _greatToPerfectCount.IncreaseCount(5);
+                _greatToPerfectCount.IncreaseCount(10);
                 break;
             }
             case 2900031: {
