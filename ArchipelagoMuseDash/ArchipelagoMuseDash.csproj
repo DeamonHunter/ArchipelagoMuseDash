@@ -41,6 +41,9 @@
         <Reference Include="Il2CppPeroTools2">
             <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\Il2CppPeroTools2.dll</HintPath>
         </Reference>
+        <Reference Include="Il2CppPeroTools2.Account">
+            <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\Il2CppPeroTools2.Account.dll</HintPath>
+        </Reference>
         <Reference Include="Il2CppPeroTools2.Resources">
             <HintPath>D:\Program Files\Steam\steamapps\common\Muse Dash\MelonLoader\Il2CppAssemblies\Il2CppPeroTools2.Resources.dll</HintPath>
         </Reference>

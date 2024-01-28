@@ -2,6 +2,7 @@
 using System.Text;
 using ArchipelagoMuseDash.Helpers;
 using Il2Cpp;
+using Il2CppAccount;
 using Il2CppAssets.Scripts.Database;
 using Il2CppAssets.Scripts.UI.Controls;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
@@ -306,8 +307,16 @@ public class ArchipelagoLogin {
                 File.WriteAllText(_lastLoginPath, sb.ToString());
             }
 
-            DataHelper.isUnlockAllMaster = true;
+            //Save first before doing anything
+            try { 
+                GameAccountSystem.instance.Synchronize();
+            }
+            catch (Exception e) {
+                ArchipelagoStatic.ArchLogger.Error("Login Save", e);
+            }
+
             ArchipelagoStatic.SessionHandler.StartSession();
+            DataHelper.isUnlockAllMaster = true;
 
             HideLoginOverlay();
             RefreshSongs();
