@@ -4,6 +4,7 @@ using ArchipelagoMuseDash.Logging;
 using Il2Cpp;
 using Il2CppAssets.Scripts.UI.Panels;
 using Il2CppFormulaBase;
+using MelonLoader;
 using UnityEngine;
 
 namespace ArchipelagoMuseDash;
@@ -39,4 +40,8 @@ public static class ArchipelagoStatic {
 
     public static int ExtraLifesUsed;
     public static GameObject PlaceholderElfin;
+
+    //Custom Albums 4 Workaround
+    public static MelonPreferences_Entry<bool> CustomAlbumsSaveEntry;
+    public static bool? CustomAlbumsSaveEntryOriginal;
 }

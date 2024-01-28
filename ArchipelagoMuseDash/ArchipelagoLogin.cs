@@ -8,10 +8,13 @@ using Il2CppAssets.Scripts.UI.Controls;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MelonLoader;
 using UnityEngine;
+using Task = System.Threading.Tasks.Task;
 
 namespace ArchipelagoMuseDash;
 
 public class ArchipelagoLogin {
+
+    private const float archipelago_login_display_delay = 0.25f;
     private bool _showLoginButton;
     private bool _showLoginScreen;
 
@@ -25,13 +28,11 @@ public class ArchipelagoLogin {
 
     private float _deltaTime;
 
-    private const float archipelago_login_display_delay = 0.25f;
-
-    private Texture2D _yesTexture;
-    private Texture2D _yesTextureHighlighted;
-    private Texture2D _noTexture;
-    private Texture2D _noTextureHighlighted;
-    private Texture2D _backgroundTexture;
+    private readonly Texture2D _yesTexture;
+    private readonly Texture2D _yesTextureHighlighted;
+    private readonly Texture2D _noTexture;
+    private readonly Texture2D _noTextureHighlighted;
+    private readonly Texture2D _backgroundTexture;
 
     private GUIStyle _windowStyle;
     private GUIStyle _buttonYesStyle;
@@ -39,13 +40,13 @@ public class ArchipelagoLogin {
     private GUIStyle _labelStyle;
     private GUIStyle _textFieldStyle;
     private GUIStyle _toggleStyle;
-    private string _versionNumber;
-    private string _trueVersion;
+    private readonly string _versionNumber;
+    private readonly string _trueVersion;
 
     private VersionCheckState _checkVersionState;
     private string _newVersionValue;
 
-    private readonly Il2CppReferenceArray<GUILayoutOption> _defaultInputHeight = new Il2CppReferenceArray<GUILayoutOption>(new[] {
+    private readonly Il2CppReferenceArray<GUILayoutOption> _defaultInputHeight = new(new[] {
         GUILayout.Height(25f)
     });
 
@@ -234,7 +235,7 @@ public class ArchipelagoLogin {
     }
 
     private void SetupStyles() {
-        var mainState = new GUIStyleState() {
+        var mainState = new GUIStyleState {
             background = _backgroundTexture,
             textColor = new Color(1, 1, 1, 1)
         };
@@ -246,11 +247,11 @@ public class ArchipelagoLogin {
             active = mainState
         };
 
-        var yesState = new GUIStyleState() {
+        var yesState = new GUIStyleState {
             background = _yesTexture,
             textColor = Color.white
         };
-        var yesStateHighlighted = new GUIStyleState() {
+        var yesStateHighlighted = new GUIStyleState {
             background = _yesTextureHighlighted,
             textColor = Color.white
         };
@@ -262,11 +263,11 @@ public class ArchipelagoLogin {
             active = yesStateHighlighted
         };
 
-        var noState = new GUIStyleState() {
+        var noState = new GUIStyleState {
             background = _noTexture,
             textColor = Color.white
         };
-        var noStateHighlighted = new GUIStyleState() {
+        var noStateHighlighted = new GUIStyleState {
             background = _noTextureHighlighted,
             textColor = Color.white
         };
@@ -320,6 +321,7 @@ public class ArchipelagoLogin {
 
             HideLoginOverlay();
             RefreshSongs();
+            DisableCustomAlbumsSaving();
 #if DEBUG
             //Attach this to playing normally so that it can be easily triggered, once everything *should* be loaded
             ArchipelagoStatic.SongNameChanger.DumpSongsToTextFile(Path.Combine(Application.absoluteURL, "Output/SongDump.txt"));
@@ -337,6 +339,13 @@ public class ArchipelagoLogin {
 
         if (ArchipelagoStatic.SongSelectPanel)
             ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
+    }
+
+    private void DisableCustomAlbumsSaving() {
+        if (ArchipelagoStatic.CustomAlbumsSaveEntry == null)
+            return;
+        ArchipelagoStatic.CustomAlbumsSaveEntryOriginal = ArchipelagoStatic.CustomAlbumsSaveEntry.Value;
+        ArchipelagoStatic.CustomAlbumsSaveEntry.Value = false;
     }
 
     private void BackupSaveData() {
@@ -372,7 +381,7 @@ public class ArchipelagoLogin {
         _showLoginScreen = false;
     }
 
-    private async System.Threading.Tasks.Task CheckForNewVersion() {
+    private async Task CheckForNewVersion() {
         //This is a very dumb, and likely to not work forever method to check updates.
         var request = WebRequest.CreateHttp("https://github.com/DeamonHunter/ArchipelagoMuseDash/releases/latest");
         try {
