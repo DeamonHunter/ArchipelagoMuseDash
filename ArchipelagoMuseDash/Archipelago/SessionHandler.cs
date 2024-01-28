@@ -16,6 +16,7 @@ public class SessionHandler {
 
     public SongSelectAdditions SongSelectAdditions;
 
+    private bool _sessionStarted;
     private ArchipelagoSession _currentSession;
     private int _slot;
     private int _team;
@@ -24,7 +25,7 @@ public class SessionHandler {
     public bool CanReleaseOnVictory { get; private set; }
     public bool CanCollectOnVictory { get; private set; }
 
-    public bool IsLoggedIn => _currentSession != null;
+    public bool IsLoggedIn => _currentSession != null && _sessionStarted;
 
 
     /// <summary>
@@ -71,6 +72,7 @@ public class SessionHandler {
     ///     Starts up all Archipelago related services. Should be started after loading save file to ensure nothing is broken.
     /// </summary>
     public void StartSession() {
+        _sessionStarted = true;
         try {
             DataStorageHandler = new DataStorageHandler(_slot, _team, _currentSession.DataStorage);
             ItemHandler = new ItemHandler(_currentSession, _slot);
