@@ -292,7 +292,11 @@ public class ArchipelagoLogin {
 
     private void AttemptLogin() {
         try {
-            if (!ArchipelagoStatic.SessionHandler.TryFreshLogin(_ipAddress, _username, _password, out var reason)) {
+            var ipAddress = _ipAddress.Trim();
+            if (ipAddress.StartsWith("/connect"))
+                ipAddress = ipAddress.Remove(0, 8).Trim();
+
+            if (!ArchipelagoStatic.SessionHandler.TryFreshLogin(ipAddress, _username.Trim(), _password.Trim(), out var reason)) {
                 _error = reason;
                 return;
             }
