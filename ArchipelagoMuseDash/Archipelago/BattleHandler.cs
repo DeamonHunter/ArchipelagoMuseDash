@@ -103,7 +103,7 @@ public class BattleHandler {
         }
 
         _activatedTrap = _knownTrapItems[_lastHandledTrap];
-        if (_activatedTrap.NetworkItem is { Player: 0, Location: < 0 })
+        if (_activatedTrap.NetworkItem is { Player: 0, Location: -1 })
             _knownTrapItems.RemoveAt(_lastHandledTrap);
         else
             _lastHandledTrap++;
