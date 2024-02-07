@@ -173,6 +173,10 @@
   "43-36": "Mermaid Radio",
   //人鱼电台
 
+  //Google Translate. Couldn't find youtube reference
+  "43-44": "Twilight Poems",
+  //暮色小诗
+
   //Phonetically translated as google just translates this to "war"
   "44-1": "Ying Ying da Zuozhan",
   //嘤嘤大作战
@@ -292,6 +296,34 @@
   //Touhou song. Generally accepted name.
   "69-5": "Tsurupettan",
   //つるぺったん
+
+  //AKA. Bring It On. Going with the Romaji ver as its more known.
+  "70-0": "Rettou Joutou",
+  //劣等上等
+
+  //Generally accepted translation. Also Trans Rights!
+  "70-1": "Telecaster B-Boy",
+  //テレキャスタービーボーイ
+
+  //AKA. Whatever Whatever Whatever. Going with the Romaji ver as its more known.
+  "70-2": "Iya Iya Iya",
+  //い～やい～やい～や
+
+  //Official Translation
+  "70-3": "Nee Nee Nee",
+  //ねぇねぇねぇ。
+
+  //Official Translation
+  "70-5": "Dance of the Corpses",
+  //しかばねの踊り
+
+  //Official Translation
+  "70-6": "Bitter Choco Decoration",
+  //ビターチョコデコレーション
+
+  //Official Translation
+  "70-7": "Dance Robot Dance",
+  //ダンスロボットダンス
 
   ///
   /// Song Cleanup Section

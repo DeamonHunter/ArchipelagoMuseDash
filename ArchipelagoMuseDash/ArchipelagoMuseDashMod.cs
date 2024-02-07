@@ -4,7 +4,7 @@ using ArchipelagoMuseDash.Helpers;
 using ArchipelagoMuseDash.Logging;
 using MelonLoader;
 using UnityEngine;
-[assembly: MelonInfo(typeof(ArchipelagoMuseDashMod), "Archipelago Muse Dash", "1.4.3", "DeamonHunter")]
+[assembly: MelonInfo(typeof(ArchipelagoMuseDashMod), "Archipelago Muse Dash", "1.4.4", "DeamonHunter")]
 [assembly: MelonGame("PeroPeroGames", "MuseDash")]
 [assembly: MelonPriority(100)]
 
@@ -83,6 +83,10 @@ public class ArchipelagoMuseDashMod : MelonMod {
 
     public override void OnUpdate() {
         base.OnUpdate();
+
+        if (Input.GetKeyDown(KeyCode.F5))
+            AssetHelpers.PrintoutAllGameObjects();
+
         ArchipelagoStatic.Login.OnUpdate();
 
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
