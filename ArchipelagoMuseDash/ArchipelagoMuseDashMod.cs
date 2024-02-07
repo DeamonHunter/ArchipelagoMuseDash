@@ -35,6 +35,7 @@ public class ArchipelagoMuseDashMod : MelonMod {
         using (var stream = MelonAssembly.Assembly.GetManifestResourceStream("ArchipelagoMuseDash.Assets.MuseDashData.txt"))
             ArchipelagoStatic.AlbumDatabase.LoadMusicList(stream);
 
+        LoadPreferences();
         ArchipelagoStatic.Records.Load();
     }
 
@@ -46,10 +47,8 @@ public class ArchipelagoMuseDashMod : MelonMod {
 
             if (sceneName == "Welcome" && !_attemptedPreferencesLoad) {
                 _attemptedPreferencesLoad = true;
-                ArchipelagoStatic.CustomAlbumsSaveEntry = MelonPreferences.GetEntry<bool>("CustomAlbums", "SavingEnabled");
-                ArchipelagoStatic.ArchLogger.LogDebug("Preferences", $"{ArchipelagoStatic.CustomAlbumsSaveEntry}");
+                LoadPreferences();
             }
-
 
             ArchipelagoStatic.CurrentScene = sceneName;
             ArchipelagoStatic.Login.SceneSwitch();
@@ -60,12 +59,25 @@ public class ArchipelagoMuseDashMod : MelonMod {
         }
     }
 
+    private void LoadPreferences() {
+        ArchipelagoStatic.ArchipelagoOverridenCustomAlbums ??= MelonPreferences.CreateEntry("ArchipelagoMuseDash", "OverridenCustomAlbums", false);
+        ArchipelagoStatic.CustomAlbumsSaveEntry ??= MelonPreferences.GetEntry<bool>("CustomAlbums", "SavingEnabled");
+
+        //Make sure that it got reset properly
+        if (ArchipelagoStatic.CustomAlbumsSaveEntry == null || !ArchipelagoStatic.ArchipelagoOverridenCustomAlbums.Value)
+            return;
+
+        ArchipelagoStatic.CustomAlbumsSaveEntry.Value = true;
+        ArchipelagoStatic.ArchipelagoOverridenCustomAlbums.Value = false;
+    }
+
     public override void OnApplicationQuit() {
         base.OnApplicationQuit();
 
-        if (!ArchipelagoStatic.CustomAlbumsSaveEntryOriginal.HasValue)
+        if (!ArchipelagoStatic.ArchipelagoOverridenCustomAlbums.Value)
             return;
-        ArchipelagoStatic.CustomAlbumsSaveEntry.Value = ArchipelagoStatic.CustomAlbumsSaveEntryOriginal.Value;
+        ArchipelagoStatic.CustomAlbumsSaveEntry.Value = true;
+        ArchipelagoStatic.ArchipelagoOverridenCustomAlbums.Value = false;
         MelonPreferences.Save();
     }
 

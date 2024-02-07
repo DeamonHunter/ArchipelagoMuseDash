@@ -313,7 +313,7 @@ public class ArchipelagoLogin {
             }
 
             //Save first before doing anything
-            try { 
+            try {
                 GameAccountSystem.instance.Synchronize();
             }
             catch (Exception e) {
@@ -346,10 +346,10 @@ public class ArchipelagoLogin {
     }
 
     private void DisableCustomAlbumsSaving() {
-        if (ArchipelagoStatic.CustomAlbumsSaveEntry == null)
+        if (ArchipelagoStatic.CustomAlbumsSaveEntry == null || !ArchipelagoStatic.CustomAlbumsSaveEntry.Value)
             return;
-        ArchipelagoStatic.CustomAlbumsSaveEntryOriginal = ArchipelagoStatic.CustomAlbumsSaveEntry.Value;
         ArchipelagoStatic.CustomAlbumsSaveEntry.Value = false;
+        ArchipelagoStatic.ArchipelagoOverridenCustomAlbums.Value = true;
     }
 
     private void BackupSaveData() {

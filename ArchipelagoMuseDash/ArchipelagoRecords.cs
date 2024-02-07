@@ -43,6 +43,7 @@ public class ArchipelagoRecords {
         var musicInfo = GlobalDataBase.dbBattleStage.selectedMusicInfo;
         var diff = GlobalDataBase.dbBattleStage.selectedDifficulty;
         var taskStage = TaskStageTarget.instance;
+        //Todo: Handle item usage
 
         var score = taskStage.GetScore();
         if (_records.TryGetValue(diff, out var difficulty) && difficulty.Records.TryGetValue(musicInfo.uid, out var prevRecord) && prevRecord.Score >= score)

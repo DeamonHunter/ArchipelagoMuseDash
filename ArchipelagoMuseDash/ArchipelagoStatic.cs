@@ -43,5 +43,5 @@ public static class ArchipelagoStatic {
 
     //Custom Albums 4 Workaround
     public static MelonPreferences_Entry<bool> CustomAlbumsSaveEntry;
-    public static bool? CustomAlbumsSaveEntryOriginal;
+    public static MelonPreferences_Entry<bool> ArchipelagoOverridenCustomAlbums;
 }
