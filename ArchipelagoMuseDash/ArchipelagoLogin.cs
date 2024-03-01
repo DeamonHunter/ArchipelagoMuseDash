@@ -359,7 +359,7 @@ public class ArchipelagoLogin {
             return;
         }
 
-        var backupPath = Path.Combine(Application.absoluteURL, "UserData", "Backups");
+        var backupPath = Path.Combine(Application.absoluteURL, "UserData", "ArchSaves");
         if (!Directory.Exists(backupPath))
             Directory.CreateDirectory(backupPath);
 
