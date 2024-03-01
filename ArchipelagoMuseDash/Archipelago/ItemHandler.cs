@@ -52,7 +52,7 @@ public class ItemHandler {
     public bool VictoryAchieved { get; set; }
     public bool ShowFillerItems { get; set; }
 
-    public void Setup(Dictionary<string, object> slotData) {
+    public void Setup(Dictionary<string, object> slotData, bool hasItems) {
         ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Setup Called.");
 
         SongsInLogic.Clear();
@@ -89,7 +89,9 @@ public class ItemHandler {
         else
             GradeNeeded = GradeOption.Any;
 
-        if (slotData.TryGetValue("hasFiller", out var hasFiller))
+        if (hasItems)
+            ShowFillerItems = true;
+        else if ( slotData.TryGetValue("hasFiller", out var hasFiller))
             ShowFillerItems = (bool)hasFiller;
         else
             ShowFillerItems = false;
