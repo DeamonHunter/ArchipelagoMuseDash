@@ -325,6 +325,10 @@
   "70-7": "Dance Robot Dance",
   //ダンスロボットダンス
 
+  //Google Translate
+  "71-4": "Rose Love",
+  //蔷薇の恋心 feat.AKA
+  
   ///
   /// Song Cleanup Section
   ///
@@ -409,6 +413,18 @@
 
   "69-0": "Samayoi no mei Amatsu",
   //Samayoi no mei ～Amatsu～
-  "69-2": "Shuki*RaiRai"
+  "69-2": "Shuki*RaiRai",
   //Shuki*RaiRai
+
+  "0-53": "Yume Ou Mono Yo Secret",
+  //Yume Ou Mono Yo feat. Wotoha - Neko Hacker
+  
+  "0-54": "Yume Ou Mono Yo",
+  //Yume Ou Mono Yo feat. Wotoha - Neko Hacker
+  
+  "71-0": "Sweet Dream VIVINOS",
+  //Sweet Dream VIVINOS - 'Alien Stage OST Part.2'
+  
+  "71-1": "Ruler Of My Heart VIVINOS"
+  //Ruler Of My Heart VIVINOS - 'Alien Stage Pt5'  
 }
