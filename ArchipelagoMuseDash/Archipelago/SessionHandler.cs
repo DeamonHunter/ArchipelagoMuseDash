@@ -87,7 +87,7 @@ public class SessionHandler {
             CanCollectOnVictory = (_currentSession.RoomState.CollectPermissions & (Permissions.Enabled | Permissions.Goal)) != 0;
 
             var hasItems = _currentSession.RoomState.Version.Major > 0 || _currentSession.RoomState.Version.Minor > 4
-                || (_currentSession.RoomState.Version.Minor == 4 && _currentSession.RoomState.Version.Build > 4);
+                || (_currentSession.RoomState.Version.Minor == 4 && _currentSession.RoomState.Version.Build > 5);
             ArchipelagoStatic.ArchLogger.Log("SessionHandler", $"Joined a server with version: {_currentSession.RoomState.Version.Major}:{_currentSession.RoomState.Version.Minor}:{_currentSession.RoomState.Version.Build}");
             ArchipelagoStatic.ArchLogger.Log("SessionHandler", $"Has Items: {hasItems}");
             
