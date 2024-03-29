@@ -50,6 +50,7 @@ public class SongNameChanger {
         { 'ë', 'e' },
         { 'Я', 'R' },
         { 'í', 'i' },
+        { '·', ' ' }
     };
 
     /// <summary>

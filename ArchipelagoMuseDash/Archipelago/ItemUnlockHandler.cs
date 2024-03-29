@@ -87,6 +87,11 @@ public class ItemUnlockHandler {
         if (_unlockingItem != null)
             throw new Exception("Tried to unlock an item while one was already unlocking.");
 
+        if (item == null) {
+            ArchipelagoStatic.ArchLogger.Log("ItemHandler", "GOT A NULL ITEM. PLEASE REPORT THIS.");
+            return;
+        }
+        
         if (item is MusicSheetItem) {
             var handler = ArchipelagoStatic.SessionHandler.ItemHandler;
 
