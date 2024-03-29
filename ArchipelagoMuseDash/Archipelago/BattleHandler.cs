@@ -67,7 +67,7 @@ public class BattleHandler {
     }
 
     public bool EnqueueIfTrap(NetworkItem item) {
-        if (item.Item is < 2900001 or > 2900009)
+        if (item.Item is < 2900001 or > 2900010)
             return false;
 
         if (_knownTrapItems.Any(t => ArchipelagoHelpers.IsItemDuplicate(t.NetworkItem, item)))
@@ -83,6 +83,7 @@ public class BattleHandler {
             2900007 => new GrayScaleTrap(),
             2900008 => new NyaaTrap(),
             2900009 => new ErrorSFXTrap(),
+            2900010 => new FocusLineTrap(),
             //2900010 => new MutownTrap(),
             _ => null
         };
