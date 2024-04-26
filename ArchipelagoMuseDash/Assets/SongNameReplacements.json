@@ -341,6 +341,10 @@
   "72-6": "Teshikani TESHiKANi",
   //てしかに TESHiKANi
 
+  //Google Translate
+  "73-2": "Dance Dance Good Night Dance",
+  //Dance Dance 晚安舞会
+
   ///
   /// Song Cleanup Section
   ///
@@ -443,6 +447,9 @@
   "72-1": "PA PPA PANIC",
   //PA*PPA*PANIC
 
-  "72-3": "Re Re"
+  "72-3": "Re Re",
+  //Ré:Ré
+
+  "73-3": "Ops Limone"
   //Ré:Ré
 }
