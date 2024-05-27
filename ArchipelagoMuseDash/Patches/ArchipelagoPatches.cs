@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Reflection;
 using Archipelago.MultiClient.Net.Enums;
 using ArchipelagoMuseDash.Archipelago;
 using ArchipelagoMuseDash.Archipelago.Items;
@@ -7,6 +8,7 @@ using HarmonyLib;
 using Il2Cpp;
 using Il2CppAssets.Scripts.Database;
 using Il2CppAssets.Scripts.GameCore.HostComponent;
+using Il2CppAssets.Scripts.GameCore.Managers;
 using Il2CppAssets.Scripts.PeroTools.Commons;
 using Il2CppAssets.Scripts.PeroTools.Managers;
 using Il2CppAssets.Scripts.PeroTools.Nice.Interface;
@@ -453,5 +455,27 @@ sealed class ChangeHealthValueExtraLifePatch {
         value.m_PeroString.Append(newText);
         PeroStringUtils.SetPeroText(value.text, value.m_PeroString, true);
         ArchipelagoStatic.ArchLogger.LogDebug("Text", value.text.text);
+    }
+}
+[HarmonyPatch(typeof(MessageManager))]
+sealed class MessageManagerReceivePatch {
+    private static MethodInfo[] TargetMethods() {
+        return typeof(MessageManager).GetMethods(BindingFlags.Instance | BindingFlags.Public).Where(m => m.Name.StartsWith("Receive")).ToArray();
+    }
+
+    private static bool Prefix(string type) {
+        ArchipelagoStatic.ArchLogger.LogDebug("Message Manager", $"Blocking Receive: {type}");
+        return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
+    }
+}
+[HarmonyPatch(typeof(MessageManager))]
+sealed class MessageManagerOnRewardPatch {
+    private static MethodInfo[] TargetMethods() {
+        return typeof(MessageManager).GetMethods(BindingFlags.Instance | BindingFlags.Public).Where(m => m.Name.StartsWith("OnReward")).ToArray();
+    }
+
+    private static bool Prefix(object sender, object rev) {
+        ArchipelagoStatic.ArchLogger.LogDebug("Message Manager", $"Blocking OnReward: {sender}, {rev}");
+        return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
     }
 }
