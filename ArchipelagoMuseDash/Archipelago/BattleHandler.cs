@@ -171,7 +171,7 @@ public class BattleHandler {
             var diff = _greatToPerfectCount.CurrentCount - property.greatToPerfect;
             ArchipelagoStatic.ArchLogger.LogDebug("Battle Handler", $"Greats Used {diff}");
             _greatToPerfectCount.CurrentCount -= diff;
-            ArchipelagoStatic.SessionHandler.DataStorageHandler.SetUsedGreatToPerfect(_missToGreatCount.TotalCount - _missToGreatCount.CurrentCount);
+            ArchipelagoStatic.SessionHandler.DataStorageHandler.SetUsedGreatToPerfect(_greatToPerfectCount.TotalCount - _greatToPerfectCount.CurrentCount);
         }
 
         if (property.missToGreat < _missToGreatCount.CurrentCount) {
