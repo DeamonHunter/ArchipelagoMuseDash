@@ -6,7 +6,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps;
 public interface ITrap {
     string TrapName { get; }
     string TrapMessage { get; }
-    NetworkItem NetworkItem { get; set; }
+    ItemInfo NetworkItem { get; set; }
 
     void PreGameSceneLoad();
     void LoadMusicDataByFilenameHook();

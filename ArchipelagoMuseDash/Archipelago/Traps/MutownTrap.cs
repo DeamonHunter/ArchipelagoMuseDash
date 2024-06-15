@@ -6,13 +6,13 @@ using Il2CppPeroPeroGames.GlobalDefines;
 namespace ArchipelagoMuseDash.Archipelago.Traps;
 
 /// <summary>
-/// This trap is not active due to the SFX not being officially released. Might be for an upcoming update.
+///     This trap is not active due to the SFX not being officially released. Might be for an upcoming update.
 /// </summary>
 public class MutownTrap : ITrap {
     private int? _originalSFX;
     public string TrapName => "Mutown SFX";
     public string TrapMessage => "★★ Trap Activated ★★\nMutown!";
-    public NetworkItem NetworkItem { get; set; }
+    public ItemInfo NetworkItem { get; set; }
 
     public void PreGameSceneLoad() {
         ArchipelagoStatic.ArchLogger.LogDebug("MutownTrap", "PreGameSceneLoad");

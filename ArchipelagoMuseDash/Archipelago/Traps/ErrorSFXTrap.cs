@@ -10,7 +10,7 @@ public class ErrorSFXTrap : ITrap {
     private int? _originalSFX;
     public string TrapName => "Error SFX";
     public string TrapMessage => "★★ Trap Activated ★★\nAn error has occured.";
-    public NetworkItem NetworkItem { get; set; }
+    public ItemInfo NetworkItem { get; set; }
 
     public void PreGameSceneLoad() {
         ArchipelagoStatic.ArchLogger.LogDebug("ErrorSFXTrap", "PreGameSceneLoad");

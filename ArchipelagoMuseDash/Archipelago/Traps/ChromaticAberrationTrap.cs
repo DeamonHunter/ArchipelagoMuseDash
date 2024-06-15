@@ -7,7 +7,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps;
 public class ChromaticAberrationTrap : ITrap {
     public string TrapName => "Chromatic Aberration";
     public string TrapMessage => "★★ Trap Activated ★★\nChromatic Aberration!";
-    public NetworkItem NetworkItem { get; set; }
+    public ItemInfo NetworkItem { get; set; }
 
     public void PreGameSceneLoad() { }
 
@@ -32,32 +32,34 @@ public class ChromaticAberrationTrap : ITrap {
 
     public void OnEnd() { }
 
-    private NoteConfigData CreateChromaticAberrationNoteData() => new NoteConfigData() {
-        id = "79",
-        ibms_id = "2C",
-        uid = "000805",
-        mirror_uid = "000805",
-        scene = "0",
-        des = "RGB分离",
-        prefab_name = "000805",
-        type = 23,
-        effect = "0",
-        key_audio = "0",
-        boss_action = "0",
-        left_perfect_range = 0,
-        left_great_range = 0,
-        right_perfect_range = 0,
-        right_great_range = 0,
-        damage = 0,
-        pathway = 0,
-        speed = 1,
-        score = 0,
-        fever = 0,
-        missCombo = false,
-        addCombo = false,
-        jumpNote = false,
-        isShowPlayEffect = false,
-        m_BmsUid = BmsNodeUid.RgbSplit,
-        sceneChangeNames = null
-    };
+    private NoteConfigData CreateChromaticAberrationNoteData() {
+        return new NoteConfigData() {
+            id = "79",
+            ibms_id = "2C",
+            uid = "000805",
+            mirror_uid = "000805",
+            scene = "0",
+            des = "RGB分离",
+            prefab_name = "000805",
+            type = 23,
+            effect = "0",
+            key_audio = "0",
+            boss_action = "0",
+            left_perfect_range = 0,
+            left_great_range = 0,
+            right_perfect_range = 0,
+            right_great_range = 0,
+            damage = 0,
+            pathway = 0,
+            speed = 1,
+            score = 0,
+            fever = 0,
+            missCombo = false,
+            addCombo = false,
+            jumpNote = false,
+            isShowPlayEffect = false,
+            m_BmsUid = BmsNodeUid.RgbSplit,
+            sceneChangeNames = null
+        };
+    }
 }

@@ -6,7 +6,6 @@ using ArchipelagoMuseDash.Archipelago.Items;
 using ArchipelagoMuseDash.Helpers;
 using Il2Cpp;
 using Il2CppAssets.Scripts.Database;
-using Il2CppAssets.Scripts.GameCore.Managers;
 using Il2CppAssets.Scripts.UI.Controls;
 using UnityEngine.EventSystems;
 using Task = System.Threading.Tasks.Task;
@@ -29,8 +28,6 @@ public class ItemHandler {
 
     private readonly ArchipelagoSession _currentSession;
     private readonly int _currentPlayerSlot;
-    private int _triggeredFeverFillerCount;
-    private bool _triggerFeverFiller;
 
     private readonly Random _random = new();
 
@@ -91,7 +88,7 @@ public class ItemHandler {
 
         if (hasItems)
             ShowFillerItems = true;
-        else if ( slotData.TryGetValue("hasFiller", out var hasFiller))
+        else if (slotData.TryGetValue("hasFiller", out var hasFiller))
             ShowFillerItems = (bool)hasFiller;
         else
             ShowFillerItems = false;
@@ -111,11 +108,6 @@ public class ItemHandler {
         CheckForNewItems();
         Unlocker.UnlockAllItems();
         ArchipelagoStatic.SessionHandler.BattleHandler.ResetNewItemCount();
-
-        var prevFillerCount = ArchipelagoStatic.SessionHandler.DataStorageHandler.GetHandledFeverCount();
-        if (prevFillerCount < _triggeredFeverFillerCount)
-            _triggerFeverFiller = true;
-
         foreach (var location in _currentSession.Locations.AllLocationsChecked) {
             var name = _currentSession.Locations.GetLocationNameFromId(location);
             CheckRemoteLocation(name[..^2], false);
@@ -128,15 +120,6 @@ public class ItemHandler {
     public void OnUpdate() {
         if (ArchipelagoStatic.CurrentScene == "UISystem_PC")
             CheckForNewItems();
-
-        if (_triggerFeverFiller) {
-            var battleStage = ArchipelagoStatic.BattleComponent;
-            if (battleStage != null && !battleStage.isDead && !battleStage.isPause && !battleStage.isSucceed) {
-                GlobalManagers.feverManager.AddFever(9999);
-                _triggerFeverFiller = false;
-                ArchipelagoStatic.SessionHandler.DataStorageHandler.SetHandledFeverCount(_triggeredFeverFillerCount);
-            }
-        }
 
         if (ArchipelagoStatic.SessionHandler.SongSelectAdditions.ToggleSongsButton == null)
             return;
@@ -170,57 +153,49 @@ public class ItemHandler {
         }
     }
 
-    private IMuseDashItem GetItemFromNetworkItem(NetworkItem item, bool otherPlayersItem, bool locallyObtained) {
-        var name = _currentSession.Items.GetItemName(item.Item);
+    private IMuseDashItem GetItemFromNetworkItem(ItemInfo item, bool otherPlayersItem, bool locallyObtained) {
+        ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", $"Got Item: {item.ItemName}({item.ItemId}:{item.ItemGame}). Player {item.Player}, "
+            + $"Location {item.LocationName}({item.LocationId}:{item.LocationGame}), Flags {item.Flags}.");
 
-        ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", $"Got Item: {name}({item.Item}). Player {item.Player}, Location {item.Location}, Flags {item.Flags}.");
-
+        var itemName = item.ItemName ?? $"Unknown Item: {item.ItemId}";
         if (otherPlayersItem) {
-            var playerName = _currentSession.Players.GetPlayerAlias(item.Player);
-            if (string.IsNullOrEmpty(playerName))
-                playerName = "Unknown Player"; //Catch all for certain cases, like cheated items
+            string playerName;
+            if (item.Player.Slot <= 0)
+                playerName = "Server";
+            else
+                playerName = item.Player.Alias ?? item.Player.Name ?? $"Unknown Player: {item.Player.Slot}";
 
-            name = name ?? $"Unknown Item: {item.Item}";
-            ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", $"External Item: {playerName}, {name}");
-            return new ExternalItem(item.Item, name, playerName) { Item = item };
+            ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", $"External Item: {playerName}, {itemName}");
+            return new ExternalItem(item.ItemId, itemName, playerName) { Item = item };
         }
 
         if (ArchipelagoStatic.SessionHandler.BattleHandler.EnqueueIfBattleItem(item, out var createFiller)) {
             if (!createFiller || !locallyObtained)
                 return null;
-            return new FillerItem() { Item = item };
+            return new FillerItem { Item = item };
         }
 
-        if (name == fever_filler_item) {
-            if (locallyObtained)
-                return new FillerItem();
-
-            _triggeredFeverFillerCount++;
-            _triggerFeverFiller = true;
-            return null;
-        }
-
-        if (name == music_sheet_item_name)
+        if (itemName == music_sheet_item_name)
             return new MusicSheetItem { Item = item };
 
         //Try to match by item id first
-        if (ArchipelagoStatic.AlbumDatabase.TryGetSongFromItemId(item.Item, out var itemInfo)) {
+        if (ArchipelagoStatic.AlbumDatabase.TryGetSongFromItemId(item.ItemId, out var itemInfo)) {
             ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", "Matched item id");
-            if (item.Location == -2)
+            if (item.LocationId == -2)
                 StarterSongUIDs.Add(itemInfo.uid);
 
             return new SongItem(itemInfo) { Item = item };
         }
 
         //Then match by name
-        if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(name, out var singularInfo))
+        if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(itemName, out var singularInfo))
             return new SongItem(singularInfo) { Item = item };
 
-        if (ArchipelagoStatic.AlbumDatabase.TryGetAlbum(name, out var album))
-            return new AlbumItem(name, album) { Item = item };
+        if (ArchipelagoStatic.AlbumDatabase.TryGetAlbum(itemName, out var album))
+            return new AlbumItem(itemName, album) { Item = item };
 
-        if (name != "Nothing" && name != "Victory")
-            ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Unknown Item was given: {name}");
+        if (itemName != "Nothing" && itemName != "Victory")
+            ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Unknown Item was given: {itemName}");
 
         return null;
     }
@@ -413,7 +388,7 @@ public class ItemHandler {
 
                 //Todo: This maybe should be priority?
                 Unlocker.AddItem(new VictoryItem(_currentSession.Players.GetPlayerAlias(_currentPlayerSlot), uid));
-                Unlocker.PrioritiseItems(new[] { new NetworkItem() });
+                Unlocker.PrioritiseItems(null);
 
                 var statusUpdatePacket = new StatusUpdatePacket {
                     Status = ArchipelagoClientState.ClientGoal
@@ -456,13 +431,14 @@ public class ItemHandler {
 
             ArchipelagoStatic.ArchLogger.LogDebug("CheckLocations", "Received Items Packet.");
             CheckRemoteLocation(locationName, true);
-            foreach (var networkItem in items.Locations) {
-                var item = GetItemFromNetworkItem(networkItem, networkItem.Player != _currentPlayerSlot, true);
+            foreach (var networkItem in items) {
+
+                var item = GetItemFromNetworkItem(networkItem.Value, networkItem.Value.Player.Slot != _currentPlayerSlot, true);
                 if (item != null)
                     Unlocker.AddItem(item);
             }
 
-            Unlocker.PrioritiseItems(items.Locations);
+            Unlocker.PrioritiseItems(items);
         }
         catch (Exception e) {
             ArchipelagoStatic.ArchLogger.Error("Check Location", e);

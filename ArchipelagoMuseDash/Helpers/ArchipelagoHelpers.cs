@@ -7,8 +7,8 @@ namespace ArchipelagoMuseDash.Helpers;
 
 public static class ArchipelagoHelpers {
     /// <summary>
-    /// Chooses the next available song in the shown music list.
-    /// - This should be run before any songs are hidden.
+    ///     Chooses the next available song in the shown music list.
+    ///     - This should be run before any songs are hidden.
     /// </summary>
     public static void SelectNextAvailableSong() {
         var selectedInfo = GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo;
@@ -28,7 +28,7 @@ public static class ArchipelagoHelpers {
         var array = GlobalDataBase.dbMusicTag.m_StageShowMusicUids.ToArray();
 
         MusicInfo nextSong = null;
-        for (int i = index + 1; i < array.Count; i++) {
+        for (var i = index + 1; i < array.Count; i++) {
             var songUid = array[i];
             if (!IsSongStillShown(songUid))
                 continue;
@@ -37,7 +37,7 @@ public static class ArchipelagoHelpers {
         }
 
         if (nextSong == null) {
-            for (int i = 0; i < index; i++) {
+            for (var i = 0; i < index; i++) {
                 var songUid = array[i];
                 if (!IsSongStillShown(songUid))
                     continue;
@@ -64,14 +64,15 @@ public static class ArchipelagoHelpers {
         };
     }
 
-    public static bool IsItemDuplicate(NetworkItem itemA, NetworkItem itemB) {
+    public static bool IsItemDuplicate(ItemInfo itemA, ItemInfo itemB) {
         //If either item is given by the server (cheat or starting item) then never say its a duplicate
-        if (itemA is { Player: 0, Location: < 0 })
+        if (itemA is { Player.Slot: 0, LocationId: < 0 })
             return false;
-        if (itemB is { Player: 0, Location: < 0 })
+        if (itemB is { Player.Slot: 0, LocationId: < 0 })
             return false;
 
-        return itemA.Item == itemB.Item && itemA.Location == itemB.Location;
+        return itemA.ItemGame == itemB.ItemGame && itemA.LocationGame == itemB.LocationGame
+            && itemA.ItemId == itemB.ItemId && itemA.LocationId == itemB.LocationId;
     }
 
     public static void SetBackToDefaultFilter() {

@@ -1,19 +1,19 @@
 ﻿using Archipelago.MultiClient.Net.Models;
 
-namespace ArchipelagoMuseDash.Archipelago.Items {
-    public interface IMuseDashItem {
-        NetworkItem Item { get; set; }
+namespace ArchipelagoMuseDash.Archipelago.Items;
 
-        string UnlockSongUid { get; }
-        bool UseArchipelagoLogo { get; }
+public interface IMuseDashItem {
+    ItemInfo Item { get; set; }
 
-        string TitleText { get; }
-        string SongText { get; }
-        string AuthorText { get; }
+    string UnlockSongUid { get; }
+    bool UseArchipelagoLogo { get; }
 
-        string PreUnlockBannerText { get; }
-        string PostUnlockBannerText { get; }
+    string TitleText { get; }
+    string SongText { get; }
+    string AuthorText { get; }
 
-        void UnlockItem(ItemHandler handler, bool immediate);
-    }
+    string PreUnlockBannerText { get; }
+    string PostUnlockBannerText { get; }
+
+    void UnlockItem(ItemHandler handler, bool immediate);
 }

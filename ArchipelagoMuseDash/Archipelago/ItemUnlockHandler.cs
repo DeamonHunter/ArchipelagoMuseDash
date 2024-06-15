@@ -10,9 +10,10 @@ using UnityEngine;
 namespace ArchipelagoMuseDash.Archipelago;
 
 /// <summary>
-/// Handles Item Unlocks
+///     Handles Item Unlocks
 /// </summary>
 public class ItemUnlockHandler {
+    private const float on_show_stage_select_delay = 0.75f;
     private readonly ItemHandler _handler;
     private readonly Queue<IMuseDashItem> _enqueuedItems = new();
     //private readonly HashSet<NetworkItem> _knownItems = new HashSet<NetworkItem>();
@@ -21,7 +22,6 @@ public class ItemUnlockHandler {
 
     private IMuseDashItem _unlockingItem;
     private bool _hasUnlockedItem;
-    private const float on_show_stage_select_delay = 0.75f;
     private float _itemGiveDelay;
     private int _currentItemCount;
 
@@ -31,28 +31,33 @@ public class ItemUnlockHandler {
 
     public void AddItem(IMuseDashItem item) {
         lock (_enqueuedItems) {
-            if (_knownStartingSongs.Contains(item.Item.Item) || LocationIsKnown(item.Item))
-            {
-                ArchipelagoStatic.ArchLogger.LogDebug("Item Unlock", $"Known Duplicate: {item.Item.Item}/{item.Item.Location}");
+            //Enqueued items don't have a network item.
+            if (item is VictoryItem) {
+                _enqueuedItems.Enqueue(item);
+                return;
+            }
+            
+            if (_knownStartingSongs.Contains(item.Item.ItemId) || LocationIsKnown(item.Item)) {
+                ArchipelagoStatic.ArchLogger.LogDebug("Item Unlock", $"Known Duplicate: {item.Item.ItemId}/{item.Item.LocationId}");
                 return;
             }
 
-            if (item.Item.Location == -2)
-                _knownStartingSongs.Add(item.Item.Item);
-            if (item.Item.Item >= 0)
-                _knownReceivedLocations.Add((item.Item.Player, item.Item.Location));
+            if (item.Item.LocationId == -2)
+                _knownStartingSongs.Add(item.Item.ItemId);
+            if (item.Item.ItemId >= 0)
+                _knownReceivedLocations.Add((item.Item.Player, item.Item.LocationId));
             _enqueuedItems.Enqueue(item);
         }
     }
 
-    public void PrioritiseItems(NetworkItem[] items) {
+    public void PrioritiseItems(Dictionary<long, ScoutedItemInfo> items) {
         lock (_enqueuedItems) {
             var itemsWithoutDuplicates = new List<IMuseDashItem>();
             var itemsWithDuplicates = new List<IMuseDashItem>();
 
             while (_enqueuedItems.Count > 0) {
                 var enqueuedItem = _enqueuedItems.Dequeue();
-                var hasDuplicate = items.Any(item => ArchipelagoHelpers.IsItemDuplicate(item, enqueuedItem.Item));
+                var hasDuplicate = items?.Any(item => ArchipelagoHelpers.IsItemDuplicate(item.Value, enqueuedItem.Item)) ?? false;
                 if (hasDuplicate)
                     itemsWithDuplicates.Add(enqueuedItem);
                 else
@@ -91,7 +96,7 @@ public class ItemUnlockHandler {
             ArchipelagoStatic.ArchLogger.Log("ItemHandler", "GOT A NULL ITEM. PLEASE REPORT THIS.");
             return;
         }
-        
+
         if (item is MusicSheetItem) {
             var handler = ArchipelagoStatic.SessionHandler.ItemHandler;
 
@@ -191,7 +196,7 @@ public class ItemUnlockHandler {
         return _unlockingItem;
     }
 
-    private bool LocationIsKnown(NetworkItem item) {
-        return item.Location >= 0 && _knownReceivedLocations.Contains((item.Player, item.Location));
+    private bool LocationIsKnown(ItemInfo item) {
+        return item.LocationId >= 0 && _knownReceivedLocations.Contains((item.Player, item.LocationId));
     }
 }

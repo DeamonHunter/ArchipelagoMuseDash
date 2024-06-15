@@ -11,15 +11,33 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/478b1b30356042599ab0ae5061a75463a19600/34/e01b2fd6/StageBattleComponent.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/478b1b30356042599ab0ae5061a75463a19600/3f/f6c0c464/MusicData.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/478b1b30356042599ab0ae5061a75463a19600/90/e8c137b2/PnlVictory.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/478b1b30356042599ab0ae5061a75463a19600/de/172c384b/DBOther.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/478b1b30356042599ab0ae5061a75463a19600/ef/62974f5c/DBMusicTag.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/01e587bf92b74b1087664404516a335fb44600/54/7000255e/BmsNodeUid.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/12f139a61f794917ba53fc17975a9a9fad0800/2f/a80e1cac/GameAccountSystem.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/12f139a61f794917ba53fc17975a9a9fad0800/84/375e27f6/PeroStringUtils.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/12f139a61f794917ba53fc17975a9a9fad0800/85/65a2513a/SteamSync.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/12f139a61f794917ba53fc17975a9a9fad0800/ae/c8394b4d/PnlStage.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6425afb6ac6a429aaf770255d2f7de579ca00/02/3d6328c7/MelonBase.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6c701f5335f14d16ac1bbcc781f8c1d3a24ea0/42/a7089d31/Version.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/94cee28932f74b2483190e24ea7a1fc71da00/2c/eca32a34/ItemInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/94cee28932f74b2483190e24ea7a1fc71da00/6a/47b04a40/PlayerInfo.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/94cee28932f74b2483190e24ea7a1fc71da00/df/ad6b9cc9/IItemInfoResolver.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a8f6c33fa12646d38264c39c3694d5f3c0e00/25/95336492/MelonPreferences.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a8f6c33fa12646d38264c39c3694d5f3c0e00/37/a5312bb1/MelonPriorityAttribute.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a8f6c33fa12646d38264c39c3694d5f3c0e00/8e/a96a138a/MelonPreferences_Category.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a8f6c33fa12646d38264c39c3694d5f3c0e00/b1/804b10ed/MelonPreferences_ReflectiveCategory.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ddff5295dcbb40b4a013c72bf34811131b800/97/f06cad41/RoomStateHelper.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ddff5295dcbb40b4a013c72bf34811131b800/a9/97addcc0/LocationCheckHelper.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ddff5295dcbb40b4a013c72bf34811131b800/c6/b5eb3740/ReceivedItemsHelper.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ddff5295dcbb40b4a013c72bf34811131b800/cf/3e1e8690/NetworkItem.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ddff5295dcbb40b4a013c72bf34811131b800/f8/b5638c47/ArchipelagoSession.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="SWEA" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="2O63OqO6D2WcsE4SB1YvILEZJAO" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -30,10 +48,12 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;rider.code.cleanup.on.save&quot;: &quot;true&quot;,
     &quot;rider.code.cleanup.on.save.profile&quot;: &quot;Copy of Built-in: Reformat Code&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
@@ -41,8 +61,8 @@
   },
   &quot;keyToStringList&quot;: {
     &quot;rider.external.source.directories&quot;: [
-      &quot;C:\\Users\\deamo\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\DecompilerCache&quot;,
-      &quot;C:\\Users\\deamo\\AppData\\Roaming\\JetBrains\\Rider2023.1\\resharper-host\\SourcesCache&quot;,
+      &quot;C:\\Users\\deamo\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\DecompilerCache&quot;,
+      &quot;C:\\Users\\deamo\\AppData\\Roaming\\JetBrains\\Rider2023.3\\resharper-host\\SourcesCache&quot;,
       &quot;C:\\Users\\deamo\\AppData\\Local\\Symbols\\src&quot;
     ]
   }
@@ -73,11 +93,57 @@
       <workItem from="1680942025278" duration="843000" />
       <workItem from="1681008771846" duration="449000" />
       <workItem from="1681098697876" duration="1586000" />
+      <workItem from="1705728802863" duration="12356000" />
+      <workItem from="1705811418343" duration="2638000" />
+      <workItem from="1706399523280" duration="1321000" />
+      <workItem from="1706407260470" duration="1852000" />
+      <workItem from="1706410971614" duration="314000" />
+      <workItem from="1706412355619" duration="5757000" />
+      <workItem from="1706447349254" duration="681000" />
+      <workItem from="1706572468957" duration="599000" />
+      <workItem from="1706573420052" duration="2087000" />
+      <workItem from="1707296347598" duration="3538000" />
+      <workItem from="1707308555498" duration="720000" />
+      <workItem from="1707390547948" duration="4000" />
+      <workItem from="1707537040860" duration="603000" />
+      <workItem from="1707814951552" duration="1654000" />
+      <workItem from="1707827789933" duration="611000" />
+      <workItem from="1707985416711" duration="601000" />
+      <workItem from="1708145497709" duration="605000" />
+      <workItem from="1709108517580" duration="655000" />
+      <workItem from="1709197352357" duration="178000" />
+      <workItem from="1709284901087" duration="3642000" />
+      <workItem from="1709444253102" duration="775000" />
+      <workItem from="1709518292075" duration="622000" />
+      <workItem from="1711700591770" duration="6103000" />
+      <workItem from="1712617401683" duration="176000" />
+      <workItem from="1712662673022" duration="186000" />
+      <workItem from="1713067769828" duration="633000" />
+      <workItem from="1713082006837" duration="642000" />
+      <workItem from="1714123365419" duration="1814000" />
+      <workItem from="1714463400432" duration="104000" />
+      <workItem from="1714725892980" duration="223000" />
+      <workItem from="1715590108895" duration="680000" />
+      <workItem from="1716443636559" duration="200000" />
+      <workItem from="1716546602626" duration="1454000" />
+      <workItem from="1716593815817" duration="95000" />
+      <workItem from="1716641886154" duration="4466000" />
+      <workItem from="1716808430026" duration="768000" />
+      <workItem from="1717228290183" duration="49000" />
+      <workItem from="1717290017300" duration="3160000" />
+      <workItem from="1717308377056" duration="18000" />
+      <workItem from="1717633053215" duration="228000" />
+      <workItem from="1717894328287" duration="1581000" />
+      <workItem from="1718422722575" duration="300000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="UnityProjectDiscoverer">
+    <option name="hasUnityReference" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />

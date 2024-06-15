@@ -8,7 +8,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps;
 public class FocusLineTrap : ITrap {
     public string TrapName => "Focus";
     public string TrapMessage => "★★ Trap Activated ★★\nLet's focus!";
-    public NetworkItem NetworkItem { get; set; }
+    public ItemInfo NetworkItem { get; set; }
 
     public void PreGameSceneLoad() { }
 
@@ -33,7 +33,7 @@ public class FocusLineTrap : ITrap {
     public void OnEnd() { }
 
     private NoteConfigData CreateFocusBlack() {
-        return new NoteConfigData() {
+        return new NoteConfigData {
             id = "126",
             ibms_id = "2T",
             uid = "001005",
@@ -64,7 +64,7 @@ public class FocusLineTrap : ITrap {
     }
 
     private NoteConfigData CreateFocusWhite() {
-        return new NoteConfigData() {
+        return new NoteConfigData {
             id = "127",
             ibms_id = "2U",
             uid = "001006",

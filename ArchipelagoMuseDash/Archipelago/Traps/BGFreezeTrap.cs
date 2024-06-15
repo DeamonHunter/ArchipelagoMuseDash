@@ -7,7 +7,7 @@ namespace ArchipelagoMuseDash.Archipelago.Traps;
 public class BGFreezeTrap : ITrap {
     public string TrapName => "Background Freeze";
     public string TrapMessage => "★★ Trap Activated ★★\nBackground Frozen!";
-    public NetworkItem NetworkItem { get; set; }
+    public ItemInfo NetworkItem { get; set; }
 
     public void PreGameSceneLoad() { }
 
@@ -32,32 +32,34 @@ public class BGFreezeTrap : ITrap {
 
     public void OnEnd() { }
 
-    private NoteConfigData CreateBackgroundFreezeNoteData() => new NoteConfigData() {
-        id = "112",
-        ibms_id = "2N",
-        uid = "000903",
-        mirror_uid = "000903",
-        scene = "0",
-        des = "黑白滤镜开始",
-        prefab_name = "000903",
-        type = 32,
-        effect = "0",
-        key_audio = "0",
-        boss_action = "0",
-        left_perfect_range = 0,
-        left_great_range = 0,
-        right_perfect_range = 0,
-        right_great_range = 0,
-        damage = 0,
-        pathway = 0,
-        speed = 1,
-        score = 0,
-        fever = 0,
-        missCombo = false,
-        addCombo = false,
-        jumpNote = false,
-        isShowPlayEffect = false,
-        m_BmsUid = BmsNodeUid.BgFreeze,
-        sceneChangeNames = null
-    };
+    private NoteConfigData CreateBackgroundFreezeNoteData() {
+        return new NoteConfigData() {
+            id = "112",
+            ibms_id = "2N",
+            uid = "000903",
+            mirror_uid = "000903",
+            scene = "0",
+            des = "黑白滤镜开始",
+            prefab_name = "000903",
+            type = 32,
+            effect = "0",
+            key_audio = "0",
+            boss_action = "0",
+            left_perfect_range = 0,
+            left_great_range = 0,
+            right_perfect_range = 0,
+            right_great_range = 0,
+            damage = 0,
+            pathway = 0,
+            speed = 1,
+            score = 0,
+            fever = 0,
+            missCombo = false,
+            addCombo = false,
+            jumpNote = false,
+            isShowPlayEffect = false,
+            m_BmsUid = BmsNodeUid.BgFreeze,
+            sceneChangeNames = null
+        };
+    }
 }

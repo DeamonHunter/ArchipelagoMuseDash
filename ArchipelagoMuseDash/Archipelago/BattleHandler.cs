@@ -13,14 +13,13 @@ public class BattleHandler {
     private ITrap _activatedTrap;
 
     private readonly List<ITrap> _knownTrapItems = new();
-    private readonly List<NetworkItem> _knownBattleItems = new();
+    private readonly List<ItemInfo> _knownBattleItems = new();
 
     private BattleItem _greatToPerfectCount;
     private BattleItem _missToGreatCount;
     private BattleItem _extraLifeCount;
 
     private int _extraLifesUsed;
-    private bool _forceUpdate;
 
     public BattleHandler() {
         _knownTrapItems.Clear();
@@ -29,16 +28,17 @@ public class BattleHandler {
         _lastHandledTrap = ArchipelagoStatic.SessionHandler.DataStorageHandler.GetHandledTrapCount();
 
         _greatToPerfectCount.CurrentCount -= ArchipelagoStatic.SessionHandler.DataStorageHandler.GetUsedGreatToPerfect();
+        ArchipelagoStatic.ArchLogger.LogDebug("Battle Handler", $"Greats Count {_greatToPerfectCount.CurrentCount}");
         _missToGreatCount.CurrentCount -= ArchipelagoStatic.SessionHandler.DataStorageHandler.GetUsedMissToGreat();
         _extraLifeCount.CurrentCount -= ArchipelagoStatic.SessionHandler.DataStorageHandler.GetUsedExtraLifes();
     }
 
-    public bool EnqueueIfBattleItem(NetworkItem item, out bool createFiller) {
+    public bool EnqueueIfBattleItem(ItemInfo item, out bool createFiller) {
         createFiller = false;
         if (EnqueueIfTrap(item))
             return true;
 
-        if (item.Item is < 2900030 or > 2900032)
+        if (item.ItemId is < 2900030 or > 2900032)
             return false;
 
         if (_knownBattleItems.Any(n => ArchipelagoHelpers.IsItemDuplicate(n, item)))
@@ -46,9 +46,10 @@ public class BattleHandler {
 
         createFiller = true;
 
-        switch (item.Item) {
+        switch (item.ItemId) {
             case 2900030: {
                 _greatToPerfectCount.IncreaseCount(10);
+                ArchipelagoStatic.ArchLogger.LogDebug("Battle Handler", $"Greats Count {_greatToPerfectCount.CurrentCount}");
                 break;
             }
             case 2900031: {
@@ -62,18 +63,17 @@ public class BattleHandler {
         }
 
         _knownBattleItems.Add(item);
-        _forceUpdate = true;
         return true;
     }
 
-    public bool EnqueueIfTrap(NetworkItem item) {
-        if (item.Item is < 2900001 or > 2900010)
+    public bool EnqueueIfTrap(ItemInfo item) {
+        if (item.ItemId is < 2900001 or > 2900010)
             return false;
 
         if (_knownTrapItems.Any(t => ArchipelagoHelpers.IsItemDuplicate(t.NetworkItem, item)))
             return true;
 
-        ITrap trap = item.Item switch {
+        ITrap trap = item.ItemId switch {
             2900001 => new BadAppleTrap(),
             2900002 => new PixelateTrap(),
             2900003 => new RandomWaveTrap(),
@@ -104,7 +104,7 @@ public class BattleHandler {
         }
 
         _activatedTrap = _knownTrapItems[_lastHandledTrap];
-        if (_activatedTrap.NetworkItem is { Player: 0, Location: -1 })
+        if (_activatedTrap.NetworkItem is { Player.Slot: 0, LocationId: -1 })
             _knownTrapItems.RemoveAt(_lastHandledTrap);
         else
             _lastHandledTrap++;
@@ -192,17 +192,14 @@ public class BattleHandler {
     }
 
     public void ResetNewItemCount() {
-        _forceUpdate = true;
         _greatToPerfectCount.NewCount = 0;
         _missToGreatCount.NewCount = 0;
         _extraLifeCount.NewCount = 0;
     }
 
     public void OnUpdate() {
-        if (ArchipelagoStatic.SessionHandler.SongSelectAdditions.FillerTextComp == null) {
-            _forceUpdate = true;
+        if (ArchipelagoStatic.SessionHandler.SongSelectAdditions.FillerTextComp == null)
             return;
-        }
 
         if (ArchipelagoStatic.SessionHandler.ItemHandler.ShowFillerItems) {
             if (!ArchipelagoStatic.SessionHandler.SongSelectAdditions.FillerItemText.activeSelf)

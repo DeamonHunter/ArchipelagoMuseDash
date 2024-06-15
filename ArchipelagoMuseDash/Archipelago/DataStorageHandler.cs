@@ -3,7 +3,7 @@
 namespace ArchipelagoMuseDash.Archipelago;
 
 public class DataStorageHandler {
-    private readonly DataStorageHelper _dataStorageHelper;
+    private readonly IDataStorageHelper _dataStorageHelper;
     private readonly string _trapStorageIndex;
     private readonly string _feverStorageIndex;
 
@@ -11,7 +11,7 @@ public class DataStorageHandler {
     private readonly string _missToGreatIndex;
     private readonly string _extraLifeIndex;
 
-    public DataStorageHandler(int slotNumber, int teamNumber, DataStorageHelper dataStorageHelper) {
+    public DataStorageHandler(int slotNumber, int teamNumber, IDataStorageHelper dataStorageHelper) {
         _dataStorageHelper = dataStorageHelper;
         _trapStorageIndex = $"last_trap_{slotNumber}_{teamNumber}";
         _feverStorageIndex = $"fill_fever_{slotNumber}_{teamNumber}";
@@ -24,14 +24,9 @@ public class DataStorageHandler {
     public int GetHandledTrapCount() {
         return _dataStorageHelper[_trapStorageIndex];
     }
-    public int GetHandledFeverCount() {
-        return _dataStorageHelper[_feverStorageIndex];
-    }
+
     public void SetHandledTrapCount(int count) {
         _dataStorageHelper[_trapStorageIndex] = count;
-    }
-    public void SetHandledFeverCount(int count) {
-        _dataStorageHelper[_feverStorageIndex] = count;
     }
 
     public int GetUsedGreatToPerfect() {
