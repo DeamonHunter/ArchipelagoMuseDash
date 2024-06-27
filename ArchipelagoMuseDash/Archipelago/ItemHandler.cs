@@ -276,7 +276,7 @@ public class ItemHandler {
 
             switch (mode) {
                 case ShownSongMode.AllInLogic:
-                    if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                    if (GlobalDataBase.dbMusicTag.IsMusicHide(song))
                         GlobalDataBase.dbMusicTag.RemoveHide(song);
 
                     if (UnlockedSongUids.Contains(song.uid) && !CompletedSongUids.Contains(song.uid) && !GlobalDataBase.dbMusicTag.ContainsCollection(song))
@@ -291,7 +291,7 @@ public class ItemHandler {
                             GlobalDataBase.dbMusicTag.RemoveCollection(song);
                     }
                     else {
-                        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                        if (GlobalDataBase.dbMusicTag.IsMusicHide(song))
                             GlobalDataBase.dbMusicTag.RemoveHide(song);
 
                         if (!CompletedSongUids.Contains(song.uid) && !GlobalDataBase.dbMusicTag.ContainsCollection(song))
@@ -307,7 +307,7 @@ public class ItemHandler {
                             GlobalDataBase.dbMusicTag.RemoveCollection(song);
                     }
                     else {
-                        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                        if (GlobalDataBase.dbMusicTag.IsMusicHide(song))
                             GlobalDataBase.dbMusicTag.RemoveHide(song);
 
                         if (!GlobalDataBase.dbMusicTag.ContainsCollection(song))
@@ -324,7 +324,7 @@ public class ItemHandler {
                             GlobalDataBase.dbMusicTag.RemoveCollection(song);
                     }
                     else {
-                        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+                        if (GlobalDataBase.dbMusicTag.IsMusicHide(song))
                             GlobalDataBase.dbMusicTag.RemoveHide(song);
 
                         if (!GlobalDataBase.dbMusicTag.ContainsCollection(song))
@@ -340,7 +340,7 @@ public class ItemHandler {
     }
 
     private void AddHide(MusicInfo song, bool outsideSongSelect) {
-        if (GlobalDataBase.dbMusicTag.ContainsHide(song))
+        if (GlobalDataBase.dbMusicTag.IsMusicHide(song))
             return;
 
         if (outsideSongSelect)

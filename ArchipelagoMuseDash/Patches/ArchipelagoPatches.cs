@@ -135,6 +135,7 @@ sealed class PnlUnlockStagePatch {
 sealed class PnlVictoryPatch {
     public const int NEKO_CHARACTER_ID = 16;
     public const int SILENCER_ELFIN_ID = 9;
+    public const int BETA_DOG_ELFIN_ID = 11;
 
     [HarmonyPriority(Priority.Last)]
     private static void Postfix() {
@@ -157,6 +158,15 @@ sealed class PnlVictoryPatch {
         if (GlobalDataBase.dbBattleStage.IsSelectRole(NEKO_CHARACTER_ID) && !GlobalDataBase.dbBattleStage.IsSelectElfin(SILENCER_ELFIN_ID)) {
             if (GlobalDataBase.dbSkill.nekoSkillInvoke) {
                 var reason = "No Items Given:\nDied as NEKO.";
+                ShowText.ShowInfo(reason);
+                ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
+                return;
+            }
+        }
+        
+        if (GlobalDataBase.dbBattleStage.IsSelectElfin(BETA_DOG_ELFIN_ID)) {
+            if (GlobalDataBase.dbSkill.betaDogSkillInvoke) {
+                var reason = "No Items Given:\nDied with BetaGo.";
                 ShowText.ShowInfo(reason);
                 ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
                 return;
@@ -343,6 +353,22 @@ sealed class PnlRoleApplyPatch {
     }
 }
 /// <summary>
+///     Only allow the favourite/hide button to be clicked during normal gameplay
+/// </summary>
+[HarmonyPatch(typeof(PnlElfin), "OnApplyClicked")]
+sealed class PnlElfinApplyPatch {
+    private const int beta_dog_elfin_index = 11;
+
+    private static void Postfix() {
+        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+            return;
+
+        ArchipelagoStatic.ArchLogger.LogDebug("Elfin", DataHelper.selectedElfinIndex.ToString());
+        if (DataHelper.selectedElfinIndex == beta_dog_elfin_index)
+            ShowText.ShowInfo("BetaGo will not unlock items if you die before completing the stage.");
+    }
+}
+/// <summary>
 ///     Show the reason briefly for deathlink
 /// </summary>
 [HarmonyPatch(typeof(PnlFail), "OnEnable")]
@@ -409,13 +435,13 @@ sealed class BattleRoleAttributeComponentHurtPatch {
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return true;
 
-        if (__instance.hp + hurtValue > 0)
+        if (__instance.m_Hp + hurtValue > 0)
             return true;
 
         if (!ArchipelagoStatic.SessionHandler.BattleHandler.TryUseExtraLife())
             return true;
 
-        __instance.AddHp(__instance.GetHpMax() - __instance.hp);
+        __instance.AddHp(__instance.GetHpMax() - __instance.m_Hp);
         return false;
     }
 }
@@ -435,7 +461,7 @@ sealed class ChangeHealthValueExtraLifePatch {
 
 
         __instance.text.horizontalOverflow = HorizontalWrapMode.Overflow;
-        var newText = $"{BattleRoleAttributeComponent.instance.hp}/{BattleRoleAttributeComponent.instance.GetHpMax()}  (+{extraLifeCount})";
+        var newText = $"{BattleRoleAttributeComponent.instance.m_Hp}/{BattleRoleAttributeComponent.instance.GetHpMax()}  (+{extraLifeCount})";
         __instance.text.text = newText;
 
         //MelonCoroutines.Start(ChangeHPText(__instance));
@@ -448,7 +474,7 @@ sealed class ChangeHealthValueExtraLifePatch {
 
         value.text.horizontalOverflow = HorizontalWrapMode.Overflow;
         var extraLifeCount = ArchipelagoStatic.SessionHandler.BattleHandler.GetExtraLives();
-        var newText = $"{BattleRoleAttributeComponent.instance.hp}/{BattleRoleAttributeComponent.instance.GetHpMax()}  (+{extraLifeCount})";
+        var newText = $"{BattleRoleAttributeComponent.instance.m_Hp}/{BattleRoleAttributeComponent.instance.GetHpMax()}  (+{extraLifeCount})";
 
 
         value.m_PeroString.Clear();
