@@ -20,7 +20,8 @@ public class AlbumDatabase {
     private const int starting_music_item_id = 2900000 + 50; //Start ID + Music ID Offset
 
     private static readonly Dictionary<string, string> _currentNamesToOldNames = new() {
-        { "Crimson Nightingale", "Crimson Nightingle" }
+        { "Crimson Nightingale", "Crimson Nightingle" },
+        { "Tsukuyomi Ni Naru", "Territory Battles" }
     };
 
     public void Setup() {
