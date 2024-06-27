@@ -146,7 +146,7 @@ public class HintHandler {
             }
 
             if (hint.FindingPlayer == _currentPlayerSlot) {
-                var locationName = _currentSession.Locations.GetLocationNameFromId(hint.LocationId);
+                var locationName = _currentSession.Locations.GetLocationNameFromId(hint.LocationId, _currentSession.Players.GetPlayerInfo(hint.FindingPlayer).Game);
 
                 ArchipelagoStatic.ArchLogger.LogDebug("Hinting", $"Got Hint for location: {locationName}, Finding Player, {hint.Found}");
                 if (hint.Found)
@@ -195,7 +195,7 @@ public class HintHandler {
                 if (musicSheetHint.Found)
                     continue;
 
-                var locationName = _currentSession.Locations.GetLocationNameFromId(musicSheetHint.LocationId);
+                var locationName = _currentSession.Locations.GetLocationNameFromId(musicSheetHint.LocationId, _currentSession.Players.GetPlayerInfo(musicSheetHint.FindingPlayer).Game);
                 GetHintFromLocationName(musicSheetHint, sb, locationName);
                 if (locationName.Length > 2 && ArchipelagoStatic.AlbumDatabase.TryGetOldName(locationName[..^2], out var oldName))
                     GetHintFromLocationName(musicSheetHint, sb, oldName);
@@ -233,7 +233,7 @@ public class HintHandler {
     private void GetHintFromItemName(string itemName, StringBuilder sb) {
 
         if (_itemsHints.TryGetValue(itemName, out var locatedHint)) {
-            var locationName = _currentSession.Locations.GetLocationNameFromId(locatedHint.LocationId);
+            var locationName = _currentSession.Locations.GetLocationNameFromId(locatedHint.LocationId, _currentSession.Players.GetPlayerInfo(locatedHint.FindingPlayer).Game);
             if (locatedHint.FindingPlayer == _currentPlayerSlot) //Local Item
                 sb.Append($"To be found at {locationName[..^2]}");
             else //Remote Item
