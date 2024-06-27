@@ -46,6 +46,9 @@ public class SessionHandler {
             throw new NotImplementedException("Changing sessions is not implemented atm.");
 
         var session = ArchipelagoSessionFactory.CreateSession(ipAddress);
+        session.Socket.ErrorReceived += (exception, message) => {
+            ArchipelagoStatic.ArchLogger.Log("[ArchError]", $"{message} : {exception}");
+        };
 
         var loginResult = session.TryConnectAndLogin("Muse Dash", username, ItemsHandlingFlags.AllItems, password: password);
 
