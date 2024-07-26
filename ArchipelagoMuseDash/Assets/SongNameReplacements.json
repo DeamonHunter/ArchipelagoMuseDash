@@ -349,6 +349,14 @@
   "43-59": "HEARTBEAT! KyunKyun!",
   //HEARTBEAT!キュンキュン!iKz feat.Warma
 
+  //Official Press release. (Interesting that the game doesn't translate it.)
+  "74-6": "Tsukuyomi Ni Naru",
+  //月詠に鳴る
+
+  //Google Translate
+  "76-3": "Christmas Season-LLABB",
+  //圣诞季-LLABB
+
   ///
   /// Song Cleanup Section
   ///
@@ -457,6 +465,12 @@
   "73-3": "Ops Limone",
   //Ops:Limone
 
-  "74-2": "Tsukuyomi Ni Naru"
+  "74-2": "Tsukuyomi Ni Naru",
   //Territory Battles
+
+  "0-55": "Echo over you... Secret",
+  //Echo over you...
+
+  "0-56": "Echo over you..."
+  //Echo over you...
 }

@@ -163,7 +163,7 @@ sealed class PnlVictoryPatch {
                 return;
             }
         }
-        
+
         if (GlobalDataBase.dbBattleStage.IsSelectElfin(BETA_DOG_ELFIN_ID)) {
             if (GlobalDataBase.dbSkill.betaDogSkillInvoke) {
                 var reason = "No Items Given:\nDied with BetaGo.";

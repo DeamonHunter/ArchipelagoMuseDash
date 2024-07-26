@@ -4,15 +4,9 @@ using Il2CppAssets.Scripts.PeroTools.Managers;
 namespace ArchipelagoMuseDash;
 
 /// <summary>
-/// Contains information about the game's songs, in a way that is easier to access for us.
+///     Contains information about the game's songs, in a way that is easier to access for us.
 /// </summary>
 public class AlbumDatabase {
-    private Dictionary<string, MusicInfo> _songsByItemName = new();
-    private Dictionary<string, List<MusicInfo>> _songsByAlbum = new();
-
-    private Dictionary<string, MusicInfo> _songsByUid = new();
-    private readonly Dictionary<long, string> _songIDToUid = new();
-    private readonly Dictionary<long, string> _albumIDToAlbumString = new(); //Not Used yet
 
     public const int CHINESE_LOC_INDEX = 0;
     public const int ENGLISH_LOC_INDEX = 1;
@@ -23,6 +17,17 @@ public class AlbumDatabase {
         { "Crimson Nightingale", "Crimson Nightingle" },
         { "Tsukuyomi Ni Naru", "Territory Battles" }
     };
+
+    public static readonly Dictionary<string, string> UidOverrides = new() {
+        { "74-2", "74-6" }
+    };
+    
+    private Dictionary<string, MusicInfo> _songsByItemName = new();
+    private Dictionary<string, List<MusicInfo>> _songsByAlbum = new();
+
+    private Dictionary<string, MusicInfo> _songsByUid = new();
+    private readonly Dictionary<long, string> _songIDToUid = new();
+    private readonly Dictionary<long, string> _albumIDToAlbumString = new(); //Not Used yet
 
     public void Setup() {
         _songsByAlbum.Clear();
@@ -49,7 +54,11 @@ public class AlbumDatabase {
             var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
 
             var songName = GetItemNameFromMusicInfo(musicInfo);
-            _songsByItemName.Add(songName, musicInfo);
+            if (!_songsByItemName.TryAdd(songName, musicInfo)) {
+                ArchipelagoStatic.ArchLogger.Warning("[Album Database]", $"Duplicate Song Name found. Id: {musicInfo.uid}");
+                continue;
+            }
+
             _songsByUid.Add(musicInfo.uid, musicInfo);
 
             if (_currentNamesToOldNames.TryGetValue(songName, out var oldName))
@@ -92,13 +101,23 @@ public class AlbumDatabase {
         }
     }
 
-    public bool TryGetOldName(string newName, out string oldName) => _currentNamesToOldNames.TryGetValue(newName, out oldName);
-    public bool TryGetMusicInfo(string itemName, out MusicInfo info) => _songsByItemName.TryGetValue(itemName, out info);
-    public MusicInfo GetMusicInfo(string itemName) => _songsByItemName[itemName];
+    public bool TryGetOldName(string newName, out string oldName) {
+        return _currentNamesToOldNames.TryGetValue(newName, out oldName);
+    }
+    public bool TryGetMusicInfo(string itemName, out MusicInfo info) {
+        return _songsByItemName.TryGetValue(itemName, out info);
+    }
+    public MusicInfo GetMusicInfo(string itemName) {
+        return _songsByItemName[itemName];
+    }
 
-    public bool TryGetAlbum(string itemName, out List<MusicInfo> infos) => _songsByAlbum.TryGetValue(itemName, out infos);
+    public bool TryGetAlbum(string itemName, out List<MusicInfo> infos) {
+        return _songsByAlbum.TryGetValue(itemName, out infos);
+    }
 
-    public List<MusicInfo> GetAlbum(string itemName) => _songsByAlbum[itemName];
+    public List<MusicInfo> GetAlbum(string itemName) {
+        return _songsByAlbum[itemName];
+    }
 
     public string GetItemNameFromMusicInfo(MusicInfo musicInfo) {
         var localisedSongName = ArchipelagoStatic.SongNameChanger.GetSongName(musicInfo);
@@ -116,6 +135,9 @@ public class AlbumDatabase {
         info = null;
         if (!_songIDToUid.TryGetValue(itemId, out var uid))
             return false;
+
+        if (UidOverrides.TryGetValue(uid, out var replacementUid))
+            uid = replacementUid;
 
         return _songsByUid.TryGetValue(uid, out info);
     }

@@ -127,7 +127,7 @@ public class HintHandler {
 
         //There is no specific packet or function to send for costed hints. So we need to send a chat message for the player
         if (song.uid == ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong.uid)
-            _currentSession.Socket.SendPacketAsync(new SayPacket { Text = $"!hint Music Sheet" });
+            _currentSession.Socket.SendPacketAsync(new SayPacket { Text = "!hint Music Sheet" });
         else
             _currentSession.Socket.SendPacketAsync(new SayPacket { Text = $"!hint {ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(song)}" });
     }
@@ -240,7 +240,7 @@ public class HintHandler {
                 sb.Append($"To be found by {_currentSession.Players.GetPlayerAlias(locatedHint.FindingPlayer)} at {locationName}");
         }
 
-        bool addedItemHint = false;
+        var addedItemHint = false;
 
         if (_locationHints.TryGetValue(itemName + "-0", out var itemHint1)) {
             var item = _currentSession.Items.GetItemName(itemHint1.ItemId);
