@@ -243,7 +243,7 @@ public class HintHandler {
         var addedItemHint = false;
 
         if (_locationHints.TryGetValue(itemName + "-0", out var itemHint1)) {
-            var item = _currentSession.Items.GetItemName(itemHint1.ItemId);
+            var item = _currentSession.Items.GetItemName(itemHint1.ItemId, _currentSession.Players.GetPlayerInfo(itemHint1.ReceivingPlayer).Game);
             if (itemHint1.ReceivingPlayer != _currentPlayerSlot)
                 item += $"[{_currentSession.Players.GetPlayerAlias(itemHint1.ReceivingPlayer)}]";
 
@@ -254,7 +254,7 @@ public class HintHandler {
         }
 
         if (_locationHints.TryGetValue(itemName + "-1", out var itemHint2)) {
-            var item = _currentSession.Items.GetItemName(itemHint2.ItemId);
+            var item = _currentSession.Items.GetItemName(itemHint2.ItemId, _currentSession.Players.GetPlayerInfo(itemHint2.ReceivingPlayer).Game);
             if (itemHint2.ReceivingPlayer != _currentPlayerSlot)
                 item += $"[{_currentSession.Players.GetPlayerAlias(itemHint2.ReceivingPlayer)}]";
 
