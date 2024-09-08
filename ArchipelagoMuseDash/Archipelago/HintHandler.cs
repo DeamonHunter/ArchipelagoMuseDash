@@ -137,7 +137,7 @@ public class HintHandler {
         _forceUpdate = true;
 
         foreach (var hint in hints) {
-            var itemName = _currentSession.Items.GetItemName(hint.ItemId);
+            var itemName = _currentSession.Items.GetItemName(hint.ItemId, _currentSession.Players.GetPlayerInfo(hint.ReceivingPlayer).Game);
             if (itemName == "Music Sheet" && hint.ReceivingPlayer == _currentPlayerSlot) {
                 if (hint.Found)
                     _musicSheetHints.Remove(hint.LocationId);
