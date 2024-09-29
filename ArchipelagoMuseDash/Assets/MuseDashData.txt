@@ -579,4 +579,14 @@ The Whole Rest|77-1|Let's Rhythm Jam!|False|5|8|10|11
 Hydra|77-2|Let's Rhythm Jam!|False|4|7|11|
 Pastel Lines|77-3|Let's Rhythm Jam!|False|3|6|9|
 LINK x LIN#S|77-4|Let's Rhythm Jam!|False|3|6|9|
-Arcade ViruZ|77-5|Let's Rhythm Jam!|False|6|8|10|
+Arcade ViruZ|77-5|Let's Rhythm Jam!|False|6|8|11|
+Eve Avenir|78-0|Endless Pirouette|False|6|8|10|
+Silverstring|78-1|Endless Pirouette|False|5|7|10|
+Melusia|78-2|Endless Pirouette|False|5|7|10|11
+Devil's Castle|78-3|Endless Pirouette|False|4|7|10|
+Abatement|78-4|Endless Pirouette|False|6|8|10|11
+Azalea|78-5|Endless Pirouette|False|4|8|10|
+Brightly World|78-6|Endless Pirouette|False|6|8|10|
+We'll meet in every world ***|78-7|Endless Pirouette|False|7|9|11|
+Collapsar|78-8|Endless Pirouette|False|7|9|10|11
+Parousia|78-9|Endless Pirouette|False|6|8|10|
