@@ -93,7 +93,7 @@ public class ItemHandler {
         else
             ShowFillerItems = false;
 
-        HashSet<string> packetsSent = new HashSet<string>();
+        var packetsSent = new HashSet<string>();
 
         foreach (var location in _currentSession.Locations.AllLocations) {
             var name = _currentSession.Locations.GetLocationNameFromId(location);
@@ -108,13 +108,13 @@ public class ItemHandler {
                 ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Saw Invalid location: {name}");
                 if (_currentSession.Locations.AllLocationsChecked.Contains(location))
                     continue;
-                
+
                 Task.Run(async () => await CheckLocationsInner("74-2", name));
-                ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Marking Checked");
+                ArchipelagoStatic.ArchLogger.Warning("ItemHandler", "Marking Checked");
 
             }
             else {
-                
+
                 ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Unknown location: {name}");
             }
         }

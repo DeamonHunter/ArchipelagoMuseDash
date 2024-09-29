@@ -21,7 +21,7 @@ public class AlbumDatabase {
     public static readonly Dictionary<string, string> UidOverrides = new() {
         { "74-2", "74-6" }
     };
-    
+
     private Dictionary<string, MusicInfo> _songsByItemName = new();
     private Dictionary<string, List<MusicInfo>> _songsByAlbum = new();
 
