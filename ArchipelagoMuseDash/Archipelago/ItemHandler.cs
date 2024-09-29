@@ -93,14 +93,30 @@ public class ItemHandler {
         else
             ShowFillerItems = false;
 
+        HashSet<string> packetsSent = new HashSet<string>();
+
         foreach (var location in _currentSession.Locations.AllLocations) {
             var name = _currentSession.Locations.GetLocationNameFromId(location);
             name = name[..^2];
 
             if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(name, out var info))
                 SongsInLogic.Add(info.uid);
-            else
+            else if (name == "Tsukuyomi Ni Naru Replaced") {
+                if (!packetsSent.Add(name))
+                    continue;
+
+                ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Saw Invalid location: {name}");
+                if (_currentSession.Locations.AllLocationsChecked.Contains(location))
+                    continue;
+                
+                Task.Run(async () => await CheckLocationsInner("74-2", name));
+                ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Marking Checked");
+
+            }
+            else {
+                
                 ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Unknown location: {name}");
+            }
         }
 
         CurrentNumberOfMusicSheets = 0;
