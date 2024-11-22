@@ -2,7 +2,6 @@
 using Il2Cpp;
 using Il2CppAssets.Scripts.Database;
 using Il2CppAssets.Scripts.PeroTools.Managers;
-using Il2CppFormulaBase;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using UnityEngine;
@@ -184,7 +183,7 @@ public class SongSelectAdditions {
         //The HideSongDialogue has the button we want, and it should be available at this time.
         var noButton = ArchipelagoStatic.HideSongDialogue.m_NoButton;
         var noButtonImage = noButton.GetComponent<Image>();
-        var noText = noButton.transform.GetChild(0);
+        var noText = noButton.transform.GetChild(1);
         var noTextComp = noText.GetComponent<Text>();
 
         HintText = new GameObject("ArchipelagoHintText");
@@ -225,7 +224,7 @@ public class SongSelectAdditions {
         //The HideSongDialogue has the button we want, and it should be available at this time.
         var noButton = ArchipelagoStatic.HideSongDialogue.m_NoButton;
         var noButtonImage = noButton.GetComponent<Image>();
-        var noText = noButton.transform.GetChild(0);
+        var noText = noButton.transform.GetChild(1);
         var noTextComp = noText.GetComponent<Text>();
 
         SongText = new GameObject("ArchipelagoSongTitle");
@@ -266,7 +265,7 @@ public class SongSelectAdditions {
         //The HideSongDialogue has the button we want, and it should be available at this time.
         var yesButton = ArchipelagoStatic.HideSongDialogue.m_YesButton;
         var yesButtonImage = yesButton.GetComponent<Image>();
-        var yesText = yesButton.transform.GetChild(0);
+        var yesText = yesButton.transform.GetChild(1);
         var yesTextComp = yesText.GetComponent<Text>();
 
         FillerItemText = new GameObject("ArchipelagoFillerText");
@@ -307,7 +306,7 @@ public class SongSelectAdditions {
         //The HideSongDialogue has the button we want, and it should be available at this time.
         var yesButton = ArchipelagoStatic.HideSongDialogue.m_YesButton;
         var yesButtonImage = yesButton.GetComponent<Image>();
-        var yesText = yesButton.transform.GetChild(0);
+        var yesText = yesButton.transform.GetChild(1);
         var yesTextComp = yesText.GetComponent<Text>();
 
         RecordText = new GameObject("ArchipelagoFillerText");
@@ -346,12 +345,11 @@ public class SongSelectAdditions {
         //The HideSongDialogue has the button we want, and it should be available at this time.
         var yesButton = ArchipelagoStatic.HideSongDialogue.m_YesButton;
         var yesButtonImage = yesButton.GetComponent<Image>();
-        var yesText = yesButton.transform.GetChild(0);
+        var yesText = yesButton.transform.GetChild(1);
         var yesTextComp = yesText.GetComponent<Text>();
 
         var buttonParent = new GameObject(buttonName);
         buttonParent.transform.SetParent(likeButton.transform.parent, false);
-
 
         var button = buttonParent.AddComponent<Button>();
         button.onClick.AddListener(DelegateSupport.ConvertDelegate<UnityAction>(onClick));
@@ -388,9 +386,8 @@ public class SongSelectAdditions {
         var rectTransfrom = hintButtonText.GetComponent<RectTransform>();
         var yesRectTransform = yesText.GetComponent<RectTransform>();
 
-        rectTransfrom.anchorMin = yesRectTransform.anchorMin;
-        rectTransfrom.anchorMax = yesRectTransform.anchorMax;
-        rectTransfrom.pivot = yesRectTransform.pivot;
+        rectTransfrom.anchorMin = new Vector2(0, 0);
+        rectTransfrom.anchorMax = new Vector2(1, 1);
         rectTransfrom.sizeDelta = yesRectTransform.sizeDelta;
 
         return buttonParent;
