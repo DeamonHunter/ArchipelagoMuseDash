@@ -596,9 +596,9 @@ SHOWTIME!!|79-2|Ensemble Arcanum|False|6|8|10|
 Achromic Riddle|79-3|Ensemble Arcanum|False|6|8|10|11
 karanosu|79-4|Ensemble Arcanum|False|3|6|8|
 Necromantic|43-60|MD Plus Project|False|6|8|10|
-Saishuu kichiku imouto Flandre-S|80-0|Touhou Mugakudan -IV-|False|6|8|10|11
-Kachoufuugetsu|80-1|Touhou Mugakudan -IV-|False|2|6|8|
-Maid heart is a puppet|80-2|Touhou Mugakudan -IV-|False|5|7|9|
-Trance dance anarchy|80-3|Touhou Mugakudan -IV-|False|4|7|10|
-fairy stage|80-4|Touhou Mugakudan -IV-|False|4|6|9|
-Scarlet Police on Ghetto Patrol|80-5|Touhou Mugakudan -IV-|False|5|7|10|
+Saishuu kichiku imouto Flandre-S|80-0|Touhou Mugakudan -4-|False|6|8|10|11
+Kachoufuugetsu|80-1|Touhou Mugakudan -4-|False|2|6|8|
+Maid heart is a puppet|80-2|Touhou Mugakudan -4-|False|5|7|9|
+Trance dance anarchy|80-3|Touhou Mugakudan -4-|False|4|7|10|
+fairy stage|80-4|Touhou Mugakudan -4-|False|4|6|9|
+Scarlet Police on Ghetto Patrol|80-5|Touhou Mugakudan -4-|False|5|7|10|
