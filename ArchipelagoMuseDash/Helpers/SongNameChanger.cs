@@ -106,17 +106,31 @@ public class SongNameChanger {
         var sortedList = new List<MusicInfo>(databaseList.Count);
         foreach (var item in databaseList)
             sortedList.Add(item);
+        
+        sortedList.Add(new MusicInfo() {
+            name = "Tsukuyomi Ni Naru Replaced",
+            uid = "74-2",
+            difficulty1 = "5",
+            difficulty2 = "7",
+            difficulty3 = "9"
+        });
 
         sortedList.Sort(CompareItemIds);
+        var index = sortedList.FindIndex(x => x.uid == "74-2");
+        sortedList[index].m_MusicExInfo = sortedList[index + 1].m_MusicExInfo;
 
         var sb = new StringBuilder();
         var failedSongsSB = new StringBuilder();
+        var pythonSb = new StringBuilder();
+        pythonSb.AppendLine("from .Items import SongData\nfrom typing import Dict\n\n\n# Auto Generated\nSONG_DATA: Dict[str, SongData] = {");
 
         var originalStreamerMode = AnchorModule.instance.isAnchorMode;
         AnchorModule.instance.isAnchorMode = true;
 
         var configManager = ConfigManager.instance;
         var albumConfig = configManager.GetConfigObject<DBConfigAlbums>();
+
+        long lastId = -1;
 
         foreach (var musicInfo in sortedList) {
             if (musicInfo.uid == AlbumDatabase.RANDOM_PANEL_UID || musicInfo.uid.Contains("999"))
@@ -131,6 +145,9 @@ public class SongNameChanger {
                 failedSongsSB.AppendLine($"{musicInfo.uid}|{chineseLoc.name}|{englishLoc.name}");
             }
 
+            if (musicInfo.uid == "uid")
+                englishName = "Tsukuyomi Ni Naru Replaced";
+
             var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>().GetLocal(AlbumDatabase.ENGLISH_LOC_INDEX);
             var albumLocal = albumLocalisation.GetLocalTitleByIndex(albumConfig.GetAlbumInfoByAlbumJsonIndex(musicInfo.albumJsonIndex).listIndex);
             if (albumLocal.Any(c => !_allowedCharacters.Contains(c))) {
@@ -143,14 +160,57 @@ public class SongNameChanger {
 
             var availableInStreamerMode = !AnchorModule.instance.CheckLockByMusicUid(musicInfo.uid);
             sb.AppendLine($"{englishName}|{musicInfo.uid}|{albumLocal}|{availableInStreamerMode}|{musicInfo.difficulty1}|{musicInfo.difficulty2}|{musicInfo.difficulty3}|{musicInfo.difficulty4}");
+
+            lastId = WritePythonLine(pythonSb, lastId, englishName, musicInfo.uid, albumLocal, availableInStreamerMode, musicInfo.difficulty1, musicInfo.difficulty2, musicInfo.difficulty3);
         }
+        pythonSb.AppendLine("}");
 
         AnchorModule.instance.isAnchorMode = originalStreamerMode;
 
         if (!Directory.Exists(Path.GetDirectoryName(filePath)))
             Directory.CreateDirectory(Path.GetDirectoryName(filePath)!);
-        File.WriteAllText(filePath, sb.ToString());
+        File.WriteAllText(filePath + ".txt", sb.ToString());
+        File.WriteAllText(filePath + ".py", pythonSb.ToString());
         File.WriteAllText(Path.Combine(Path.GetDirectoryName(filePath)!, "FailedOutput.txt"), failedSongsSB.ToString());
+    }
+    
+    private long WritePythonLine(StringBuilder sb, long lastId,
+        string englishName, string uid, string album, bool streamerMode, string diff1, string diff2, string diff3) {
+        if (!ArchipelagoStatic.AlbumDatabase.SongUidToId.TryGetValue(uid, out var id))
+            id = lastId + 1;
+
+        if (_difficultyOverrides.Contains(englishName)) {
+            ArchipelagoStatic.ArchLogger.Log("info", $"{englishName} : {diff1} : {diff2} : {diff3}");
+            if (!string.IsNullOrEmpty(diff1) && diff1 != "0")
+                diff1 = "4";
+            else
+                diff1 = "None";
+            if (!string.IsNullOrEmpty(diff2) && diff2 != "0")
+                diff2 = "7";
+            else
+                diff2 = "None";
+            if (!string.IsNullOrEmpty(diff3) && diff3 != "0")
+                diff3 = "10";
+            else
+                diff3 = "None";
+        }
+        else {
+            diff1 = ParseDiffToNumberOrNull(diff1);
+            diff2 = ParseDiffToNumberOrNull(diff2);
+            diff3 = ParseDiffToNumberOrNull(diff3);
+        }
+        
+        sb.AppendLine($"    \"{englishName}\": SongData({id}, \"{uid}\", \"{album}\", {streamerMode}, {diff1}, {diff2}, {diff3}),");
+        return id;
+    }
+
+    private string ParseDiffToNumberOrNull(string diff) {
+        if (string.IsNullOrEmpty(diff) || diff == "?" || diff == "¿" || diff == "0")
+            return "None";
+
+        if (diff == "〇")
+            return "10";
+        return diff;
     }
 
     private int CompareItemIds(MusicInfo a, MusicInfo b) {

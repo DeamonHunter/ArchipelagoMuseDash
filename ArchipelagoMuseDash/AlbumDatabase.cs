@@ -28,6 +28,11 @@ public class AlbumDatabase {
     private Dictionary<string, MusicInfo> _songsByUid = new();
     private readonly Dictionary<long, string> _songIDToUid = new();
     private readonly Dictionary<long, string> _albumIDToAlbumString = new(); //Not Used yet
+    
+#if DEBUG
+    //For file writing purposes though may be helpful elsewhere
+    public readonly Dictionary<string, long> SongUidToId = new();
+#endif
 
     public void Setup() {
         _songsByAlbum.Clear();
@@ -97,6 +102,7 @@ public class AlbumDatabase {
 
             var uid = sections[1];
             _songIDToUid[itemID] = uid;
+            SongUidToId[uid] = itemID;
             itemID++;
         }
     }
@@ -107,6 +113,10 @@ public class AlbumDatabase {
     public bool TryGetMusicInfo(string itemName, out MusicInfo info) {
         return _songsByItemName.TryGetValue(itemName, out info);
     }
+    public bool TryGetMusicInfoFromUid(string uid, out MusicInfo info) {
+        return _songsByUid.TryGetValue(uid, out info);
+    }
+    
     public MusicInfo GetMusicInfo(string itemName) {
         return _songsByItemName[itemName];
     }

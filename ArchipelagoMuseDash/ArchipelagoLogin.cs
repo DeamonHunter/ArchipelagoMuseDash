@@ -328,7 +328,7 @@ public class ArchipelagoLogin {
             DisableCustomAlbumsSaving();
 #if DEBUG
             //Attach this to playing normally so that it can be easily triggered, once everything *should* be loaded
-            ArchipelagoStatic.SongNameChanger.DumpSongsToTextFile(Path.Combine(Application.absoluteURL, "Output/SongDump.txt"));
+            ArchipelagoStatic.SongNameChanger.DumpSongsToTextFile(Path.Combine(Application.absoluteURL, "Output/MuseDashData"));
 #endif
         }
         catch (Exception e) {
