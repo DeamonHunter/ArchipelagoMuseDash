@@ -53,6 +53,15 @@ public class SongNameChanger {
         { '·', ' ' }
     };
 
+    private HashSet<string> _difficultyOverrides = new() {
+        "MuseDash ka nanika hi",
+        "Rush-Hour",
+        "Find this Month's Featured Playlist",
+        "PeroPero in the Universe",
+        "umpopoff",
+        "P E R O P E R O Brother Dance",
+    };
+
     /// <summary>
     /// Creates a <see cref="SongNameChanger"/> from a <see cref="Stream"/> containing JSON.
     /// </summary>
@@ -145,7 +154,7 @@ public class SongNameChanger {
                 failedSongsSB.AppendLine($"{musicInfo.uid}|{chineseLoc.name}|{englishLoc.name}");
             }
 
-            if (musicInfo.uid == "uid")
+            if (musicInfo.uid == "74-2")
                 englishName = "Tsukuyomi Ni Naru Replaced";
 
             var albumLocalisation = configManager.GetConfigObject<DBConfigAlbums>().GetLocal(AlbumDatabase.ENGLISH_LOC_INDEX);

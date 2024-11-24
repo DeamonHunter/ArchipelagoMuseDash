@@ -102,7 +102,9 @@ public class AlbumDatabase {
 
             var uid = sections[1];
             _songIDToUid[itemID] = uid;
+#if DEBUG
             SongUidToId[uid] = itemID;
+#endif
             itemID++;
         }
     }
