@@ -102,6 +102,7 @@ public class SongNameChanger {
         return englishName;
     }
 
+#if DEBUG
     /// <summary>
     /// Outputs a file which is can be used by the Archipelago Randomiser to create items/locations.
     /// Also outputs another file for any songs containing non-ASCII characters that may need to be translated to become items/locations.
@@ -227,6 +228,8 @@ public class SongNameChanger {
         var itemIdB = ArchipelagoStatic.AlbumDatabase.GetItemIdForSong(b);
         return itemIdA != itemIdB ? itemIdA.CompareTo(itemIdB) : string.Compare(a.uid, b.uid, StringComparison.Ordinal);
     }
+
+#endif
 
     /// <summary>
     /// Goes through a string and replaces all characters that we have defined to be replaced.
