@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Reflection;
+﻿using System.Reflection;
 using Archipelago.MultiClient.Net.Enums;
 using ArchipelagoMuseDash.Archipelago;
 using ArchipelagoMuseDash.Archipelago.Items;
@@ -9,7 +8,6 @@ using Il2Cpp;
 using Il2CppAssets.Scripts.Database;
 using Il2CppAssets.Scripts.GameCore.HostComponent;
 using Il2CppAssets.Scripts.GameCore.Managers;
-using Il2CppAssets.Scripts.PeroTools.Commons;
 using Il2CppAssets.Scripts.PeroTools.Managers;
 using Il2CppAssets.Scripts.PeroTools.Nice.Interface;
 using Il2CppAssets.Scripts.UI.Controls;
