@@ -602,3 +602,7 @@ Maid heart is a puppet|80-2|Touhou Mugakudan -4-|False|5|7|9|
 Trance dance anarchy|80-3|Touhou Mugakudan -4-|False|4|7|10|
 fairy stage|80-4|Touhou Mugakudan -4-|False|4|6|9|
 Scarlet Police on Ghetto Patrol|80-5|Touhou Mugakudan -4-|False|5|7|10|
+Unwelcome School|81-0|MD-level Tactical Training Blu-ray|False|6|8|10|
+Usagi Flap|81-1|MD-level Tactical Training Blu-ray|False|3|6|8|
+RE Aoharu|81-2|MD-level Tactical Training Blu-ray|False|3|5|8|10
+Operation*DOTABATA!|81-3|MD-level Tactical Training Blu-ray|False|5|7|10|
