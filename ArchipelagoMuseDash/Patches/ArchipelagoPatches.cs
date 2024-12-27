@@ -451,7 +451,7 @@ sealed class BattleRoleAttributeComponentHurtPatch {
 sealed class ChangeHealthValueExtraLifePatch {
     private static void Postfix(ChangeHealthValue __instance) {
         ArchipelagoStatic.ArchLogger.LogDebug("ChangeHealthValue", "Active");
-        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || !__instance || !__instance.text)
             return;
 
         var extraLifeCount = ArchipelagoStatic.SessionHandler.BattleHandler.GetExtraLives();
@@ -465,22 +465,6 @@ sealed class ChangeHealthValueExtraLifePatch {
         __instance.text.text = newText;
 
         //MelonCoroutines.Start(ChangeHPText(__instance));
-    }
-
-    private static IEnumerator ChangeHPText(ChangeHealthValue value) {
-        yield return new WaitForEndOfFrame();
-        if (!value)
-            yield break;
-
-        value.text.horizontalOverflow = HorizontalWrapMode.Overflow;
-        var extraLifeCount = ArchipelagoStatic.SessionHandler.BattleHandler.GetExtraLives();
-        var newText = $"{BattleRoleAttributeComponent.instance.m_Hp}/{BattleRoleAttributeComponent.instance.GetHpMax()}  (+{extraLifeCount})";
-
-
-        value.m_PeroString.Clear();
-        value.m_PeroString.Append(newText);
-        PeroStringUtils.SetPeroText(value.text, value.m_PeroString, true);
-        ArchipelagoStatic.ArchLogger.LogDebug("Text", value.text.text);
     }
 }
 [HarmonyPatch(typeof(MessageManager))]
