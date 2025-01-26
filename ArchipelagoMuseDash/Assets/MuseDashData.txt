@@ -606,3 +606,12 @@ Unwelcome School|81-0|MD-level Tactical Training Blu-ray|False|6|8|10|
 Usagi Flap|81-1|MD-level Tactical Training Blu-ray|False|3|6|8|
 RE Aoharu|81-2|MD-level Tactical Training Blu-ray|False|3|5|8|10
 Operation*DOTABATA!|81-3|MD-level Tactical Training Blu-ray|False|5|7|10|
+Break Through the Dome|82-0|MSR Anthology_Vol.02|False|5|7|9|11
+Here in Vernal Terrene|82-1|MSR Anthology_Vol.02|False|3|5|7|
+Everything's Alright|82-2|MSR Anthology_Vol.02|False|3|5|8|
+Operation Ashring|82-3|MSR Anthology_Vol.02|False|3|5|7|
+Misty Memory Day Version|82-4|MSR Anthology_Vol.02|False|3|5|7|
+Misty Memory Night Version|82-5|MSR Anthology_Vol.02|False|2|6|9|
+Arsonist|82-6|MSR Anthology_Vol.02|False|3|6|8|
+Operation Deepness|82-7|MSR Anthology_Vol.02|False|2|4|6|
+ALL!!!|82-8|MSR Anthology_Vol.02|False|6|8|10|
