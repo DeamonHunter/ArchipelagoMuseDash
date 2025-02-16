@@ -80,32 +80,19 @@ public class AlbumDatabase {
 
     public void LoadMusicList(Stream dataTextStream) {
         //This section is to help improve compatibility between versions
-        var itemID = starting_music_item_id;
         using var sr = new StreamReader(dataTextStream);
-
-        var knownItems = new HashSet<string>();
-
         while (!sr.EndOfStream) {
             var line = sr.ReadLine();
             if (string.IsNullOrEmpty(line))
                 continue;
 
-            var sections = line.Split('|');
-            if (sections.Length < 2)
-                continue;
-
-            if (sections.Length >= 3 && !knownItems.Contains(sections[2])) {
-                knownItems.Add(sections[2]);
-                _albumIDToAlbumString.Add(itemID, sections[2]);
-                itemID++;
-            }
-
-            var uid = sections[1];
-            _songIDToUid[itemID] = uid;
+            var index = line.LastIndexOf('|');
+            var trackUid = line[..index];
+            var itemId = long.Parse(line[(index + 1)..]);
+            _songIDToUid[itemId] = trackUid;
 #if DEBUG
-            SongUidToId[uid] = itemID;
+            SongUidToId[trackUid] = itemId;
 #endif
-            itemID++;
         }
     }
 

@@ -140,7 +140,7 @@ public class SongNameChanger {
         var configManager = ConfigManager.instance;
         var albumConfig = configManager.GetConfigObject<DBConfigAlbums>();
 
-        long lastId = -1;
+        var nextValidId = ArchipelagoStatic.AlbumDatabase.SongUidToId.Values.Max() + 1;
 
         foreach (var musicInfo in sortedList) {
             if (musicInfo.uid == AlbumDatabase.RANDOM_PANEL_UID || musicInfo.uid.Contains("999"))
@@ -168,11 +168,16 @@ public class SongNameChanger {
                 }
             }
 
-            var availableInStreamerMode = !AnchorModule.instance.CheckLockByMusicUid(musicInfo.uid);
-            sb.AppendLine($"{englishName}|{musicInfo.uid}|{albumLocal}|{availableInStreamerMode}|{musicInfo.difficulty1}|{musicInfo.difficulty2}|{musicInfo.difficulty3}|{musicInfo.difficulty4}");
+            if (!ArchipelagoStatic.AlbumDatabase.SongUidToId.TryGetValue(musicInfo.uid, out var id)) {
+                id = nextValidId;
+                nextValidId++;
+            }
 
-            lastId = WritePythonLine(pythonSb, lastId, englishName, musicInfo.uid, albumLocal, availableInStreamerMode, musicInfo.difficulty1, musicInfo.difficulty2, musicInfo.difficulty3);
+            var availableInStreamerMode = !AnchorModule.instance.CheckLockByMusicUid(musicInfo.uid);
+            sb.AppendLine($"{musicInfo.uid}|{id}");
+            WritePythonLine(pythonSb, id, englishName, musicInfo.uid, albumLocal, availableInStreamerMode, musicInfo.difficulty1, musicInfo.difficulty2, musicInfo.difficulty3);
         }
+
         pythonSb.AppendLine("}");
 
         AnchorModule.instance.isAnchorMode = originalStreamerMode;
@@ -183,12 +188,9 @@ public class SongNameChanger {
         File.WriteAllText(filePath + ".py", pythonSb.ToString());
         File.WriteAllText(Path.Combine(Path.GetDirectoryName(filePath)!, "FailedOutput.txt"), failedSongsSB.ToString());
     }
-    
-    private long WritePythonLine(StringBuilder sb, long lastId,
-        string englishName, string uid, string album, bool streamerMode, string diff1, string diff2, string diff3) {
-        if (!ArchipelagoStatic.AlbumDatabase.SongUidToId.TryGetValue(uid, out var id))
-            id = lastId + 1;
 
+    private void WritePythonLine(StringBuilder sb, long id,
+        string englishName, string uid, string album, bool streamerMode, string diff1, string diff2, string diff3) {
         if (_difficultyOverrides.Contains(englishName)) {
             ArchipelagoStatic.ArchLogger.Log("info", $"{englishName} : {diff1} : {diff2} : {diff3}");
             if (!string.IsNullOrEmpty(diff1) && diff1 != "0")
@@ -209,9 +211,8 @@ public class SongNameChanger {
             diff2 = ParseDiffToNumberOrNull(diff2);
             diff3 = ParseDiffToNumberOrNull(diff3);
         }
-        
+
         sb.AppendLine($"    \"{englishName}\": SongData({id}, \"{uid}\", \"{album}\", {streamerMode}, {diff1}, {diff2}, {diff3}),");
-        return id;
     }
 
     private string ParseDiffToNumberOrNull(string diff) {

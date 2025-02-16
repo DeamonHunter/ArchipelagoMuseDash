@@ -1,617 +1,617 @@
-Magical Wonderland|0-48|Default Music|True|1|3|0|
-Iyaiya|0-0|Default Music|True|1|4|0|
-Wonderful Pain|0-2|Default Music|False|1|3|0|
-Breaking Dawn|0-3|Default Music|True|2|4|0|
-One-Way Subway|0-4|Default Music|True|1|4|0|
-Frost Land|0-1|Default Music|False|1|3|6|
-Heart-Pounding Flight|0-5|Default Music|True|2|5|0|
-Pancake is Love|0-29|Default Music|True|2|4|7|
-Shiguang Tuya|0-6|Default Music|True|2|5|0|
-Evolution|0-37|Default Music|False|2|4|7|
-Dolphin and Broadcast|0-7|Default Music|True|2|5|0|
-Yuki no Shizuku Ame no Oto|0-8|Default Music|True|2|4|6|
-Best One feat.tooko|0-43|Default Music|False|3|5|0|
-Candy-coloured Love Theory|0-31|Default Music|False|2|4|6|
-Night Wander|0-38|Default Music|False|3|5|7|
-Dohna Dohna no Uta|0-46|Default Music|False|2|4|6|
-Spring Carnival|0-9|Default Music|False|2|4|7|
-DISCO NIGHT|0-30|Default Music|True|2|4|7|
-Koi no Moonlight|0-49|Default Music|False|2|5|8|
-Lian Ai Audio Navigation|0-10|Default Music|False|3|5|7|
-Lights of Muse|0-11|Default Music|True|4|6|8|10
-midstream jam|0-12|Default Music|False|2|5|8|
-Nihao|0-40|Default Music|False|3|5|7|
-Confession|0-13|Default Music|False|3|5|8|
-Galaxy Striker|0-32|Default Music|False|4|7|9|
-Departure Road|0-14|Default Music|True|2|5|8|
-Bass Telekinesis|0-15|Default Music|False|2|5|8|
-Cage of Almeria|0-16|Default Music|True|3|5|7|
-Ira|0-17|Default Music|True|4|6|8|
-Blackest Luxury Car|0-18|Default Music|True|3|6|8|
-Medicine of Sing|0-19|Default Music|False|3|6|8|
-irregulyze|0-20|Default Music|True|3|6|8|
-I don't care about Christmas though|0-47|Default Music|False|4|6|8|
-Imaginary World|0-21|Default Music|True|4|6|8|10
-Dysthymia|0-22|Default Music|True|4|7|9|
-From the New World|0-42|Default Music|False|2|5|7|
-NISEGAO|0-33|Default Music|True|4|7|9|
-Say! Fanfare!|0-44|Default Music|False|4|6|9|
-Star Driver|0-34|Default Music|True|5|7|9|
-Formation|0-23|Default Music|True|4|6|9|
-Shinsou Masui|0-24|Default Music|True|4|6|10|
-Mezame Eurythmics|0-50|Default Music|False|4|6|9|
-Shenri Kuaira -repeat-|0-51|Default Music|False|5|7|9|
-Latitude|0-25|Default Music|True|3|6|9|
-Aqua Stars|0-39|Default Music|False|5|7|10|
-Funkotsu Saishin Casino|0-26|Default Music|False|5|7|10|
-Clock Room & Spiritual World|0-27|Default Music|True|4|6|9|
-INTERNET OVERDOSE|0-52|Default Music|False|3|6|9|
-Tu Hua|0-35|Default Music|True|4|7|9|
-Mujinku-Vacuum|0-28|Default Music|False|5|7|11|
-MilK|0-36|Default Music|False|5|7|9|
-umpopoff|0-41|Default Music|False|0|?|0|
-Mopemope|0-45|Default Music|False|4|7|9|11
-The Happycore Idol|43-0|MD Plus Project|True|2|5|7|
-Amatsumikaboshi|43-1|MD Plus Project|True|4|6|8|10
-ARIGA THESIS|43-2|MD Plus Project|True|3|6|10|
-Night of Nights|43-3|MD Plus Project|False|4|7|10|
-#Psychedelic_Meguro_River|43-4|MD Plus Project|False|3|6|8|
-can you feel it|43-5|MD Plus Project|False|4|6|8|9
-Midnight O'clock|43-6|MD Plus Project|True|3|6|8|
-Rin|43-7|MD Plus Project|True|5|7|10|
-Smile-mileS|43-8|MD Plus Project|False|6|8|10|
-Believing and Being|43-9|MD Plus Project|True|4|6|9|
-Catalyst|43-10|MD Plus Project|False|5|7|9|
-don't!stop!eroero!|43-11|MD Plus Project|True|5|7|9|
-pa pi pu pi pu pi pa|43-12|MD Plus Project|False|6|8|10|
-Sand Maze|43-13|MD Plus Project|True|6|8|10|11
-Diffraction|43-14|MD Plus Project|True|5|8|10|
-AKUMU|43-15|MD Plus Project|False|4|6|8|
-Queen Aluett|43-16|MD Plus Project|True|7|9|11|
-DROPS|43-17|MD Plus Project|False|2|5|8|
-Frightfully-insane Flan-chan's frightful song|43-18|MD Plus Project|False|5|7|10|
-snooze|43-19|MD Plus Project|False|5|7|10|
-Kuishinbo Hacker feat.Kuishinbo Akachan|43-20|MD Plus Project|True|5|7|9|
-Inu no outa|43-21|MD Plus Project|True|3|5|7|
-Prism Fountain|43-22|MD Plus Project|True|7|9|11|
-Gospel|43-23|MD Plus Project|False|4|6|9|
-East Ai Li Lovely|62-0|Happy Otaku Pack Vol.17|False|2|4|7|
-Mori Umi no Fune|62-1|Happy Otaku Pack Vol.17|True|5|7|9|
-Ooi|62-2|Happy Otaku Pack Vol.17|True|5|7|10|
-Numatta!!|62-3|Happy Otaku Pack Vol.17|True|5|7|9|
-SATELLITE|62-4|Happy Otaku Pack Vol.17|False|5|7|9|10
-Fantasia Sonata Colorful feat. V!C|62-5|Happy Otaku Pack Vol.17|True|6|8|11|
-MuseDash ka nanika hi|61-0|Ola Dash|True|?|?|¿|
-Aleph-0|61-1|Ola Dash|True|7|9|11|
-Buttoba Supernova|61-2|Ola Dash|False|5|7|10|11
-Rush-Hour|61-3|Ola Dash|False|IG|Jh|a2|Eh
-3rd Avenue|61-4|Ola Dash|False|3|5|〇|
-WORLDINVADER|61-5|Ola Dash|True|5|8|10|11
-N3V3R G3T OV3R|60-0|maimai DX Limited-time Suite|True|4|7|10|
-Oshama Scramble!|60-1|maimai DX Limited-time Suite|True|5|7|10|
-Valsqotch|60-2|maimai DX Limited-time Suite|True|5|9|11|
-Paranormal My Mind|60-3|maimai DX Limited-time Suite|True|5|7|9|
-Flower, snow and Drum'n'bass.|60-4|maimai DX Limited-time Suite|True|5|8|10|?
-Amenohoakari|60-5|maimai DX Limited-time Suite|True|6|8|10|
-Boiling Blood|59-0|MSR Anthology|True|5|8|10|
-ManiFesto|59-1|MSR Anthology|True|4|6|9|
-Operation Blade|59-2|MSR Anthology|True|3|5|7|
-Radiant|59-3|MSR Anthology|True|3|5|8|
-Renegade|59-4|MSR Anthology|True|3|5|8|
-Speed of Light|59-5|MSR Anthology|False|1|4|7|
-Dossoles Holiday|59-6|MSR Anthology|True|5|7|9|
-Autumn Moods|59-7|MSR Anthology|True|3|5|7|
-People People|58-0|Nanahira Paradise|True|5|7|9|11
-Endless Error Loop|58-1|Nanahira Paradise|True|4|7|9|
-Forbidden Pizza!|58-2|Nanahira Paradise|True|5|7|9|
-Don't Make the Vocalist do Anything Insane|58-3|Nanahira Paradise|True|5|8|9|
-Tokimeki*Meteostrike|57-0|Happy Otaku Pack Vol.16|True|3|6|8|
-Down Low|57-1|Happy Otaku Pack Vol.16|True|4|6|8|
-LOUDER MACHINE|57-2|Happy Otaku Pack Vol.16|True|5|7|9|
-Sorewa mo Lovechu|57-3|Happy Otaku Pack Vol.16|True|5|7|10|
-Rave_Tech|57-4|Happy Otaku Pack Vol.16|True|5|8|10|
-Brilliant & Shining!|57-5|Happy Otaku Pack Vol.16|False|5|8|10|
-Psyched Fevereiro|56-0|Give Up TREATMENT Vol.11|False|5|8|10|
-Inferno City|56-1|Give Up TREATMENT Vol.11|False|6|8|10|
-Paradigm Shift|56-2|Give Up TREATMENT Vol.11|False|4|7|10|
-Snapdragon|56-3|Give Up TREATMENT Vol.11|False|5|7|10|
-Prestige and Vestige|56-4|Give Up TREATMENT Vol.11|True|6|8|11|
-Tiny Fate|56-5|Give Up TREATMENT Vol.11|False|7|9|11|
-Tsuki ni Murakumo Hana ni Kaze|55-0|Touhou Mugakudan -2-|False|3|5|7|
-Patchouli's - Best Hit GSK|55-1|Touhou Mugakudan -2-|False|3|5|8|
-Monosugoi Space Shuttle de Koishi ga Monosugoi uta|55-2|Touhou Mugakudan -2-|False|3|5|7|11
-Kakoinaki Yo wa Ichigo no Tsukikage|55-3|Touhou Mugakudan -2-|False|3|6|8|
-Psychedelic Kizakura Doumei|55-4|Touhou Mugakudan -2-|False|4|7|10|
-Mischievous Sensation|55-5|Touhou Mugakudan -2-|False|5|7|9|
-White Canvas|54-0|MEGAREX THE FUTURE|False|3|6|8|
-Gloomy Flash|54-1|MEGAREX THE FUTURE|False|5|8|10|
-Find this Month's Featured Playlist|54-2|MEGAREX THE FUTURE|False|?|?|¿|
-Sunday Night|54-3|MEGAREX THE FUTURE|False|3|6|9|
-Goodbye Goodnight|54-4|MEGAREX THE FUTURE|False|4|6|9|
-ENDLESS CIDER|54-5|MEGAREX THE FUTURE|False|4|6|8|
-On And On!!|53-0|Happy Otaku Pack Vol.15|True|4|7|9|11
-Trip!|53-1|Happy Otaku Pack Vol.15|True|3|5|7|
-Hoshi no otoshimono|53-2|Happy Otaku Pack Vol.15|False|5|7|9|
-Plucky Race|53-3|Happy Otaku Pack Vol.15|True|5|8|10|11
-Fantasia Sonata Destiny|53-4|Happy Otaku Pack Vol.15|True|3|7|10|
-Run through|53-5|Happy Otaku Pack Vol.15|False|5|8|10|
-marooned night|52-0|MUSE RADIO FM103|False|2|4|6|
-daydream girl|52-1|MUSE RADIO FM103|False|3|6|8|
-Not Ornament|52-2|MUSE RADIO FM103|True|3|5|8|
-Baby Pink|52-3|MUSE RADIO FM103|False|3|5|8|
-I'm Here|52-4|MUSE RADIO FM103|False|4|6|8|
-Masquerade Diary|51-0|Virtual Idol Production|True|2|5|8|
-Reminiscence|51-1|Virtual Idol Production|True|5|7|9|
-DarakuDatenshi|51-2|Virtual Idol Production|True|3|6|9|
-D.I.Y.|51-3|Virtual Idol Production|False|4|6|9|
-Boys in Virtual Land|51-4|Virtual Idol Production|False|4|7|9|
-kui|51-5|Virtual Idol Production|True|5|7|9|11
-Nyan Cat|50-0|Nyanya Universe!|False|4|7|9|
-PeroPero in the Universe|50-1|Nyanya Universe!|True|?|?|¿|
-In-kya Yo-kya Onmyoji|50-2|Nyanya Universe!|False|6|8|10|
-KABOOOOOM!!!!|50-3|Nyanya Universe!|True|4|6|8|
-Doppelganger|50-4|Nyanya Universe!|True|5|7|9|12
-Pray a LOVE|49-0|DokiDoki! Valentine!|False|2|5|8|
-Love-Avoidance Addiction|49-1|DokiDoki! Valentine!|False|3|5|7|
-Daisuki Dayo feat.Wotoha|49-2|DokiDoki! Valentine!|False|5|7|10|
-glory day|48-0|DJMAX Reflect|False|2|5|7|
-Bright Dream|48-1|DJMAX Reflect|False|2|4|7|
-Groovin Up|48-2|DJMAX Reflect|False|4|6|8|
-I Want You|48-3|DJMAX Reflect|False|3|6|8|
-OBLIVION|48-4|DJMAX Reflect|False|3|6|9|
-Elastic STAR|48-5|DJMAX Reflect|False|4|6|8|
-U.A.D|48-6|DJMAX Reflect|False|4|6|8|10
-Jealousy|48-7|DJMAX Reflect|False|3|5|7|
-Memory of Beach|48-8|DJMAX Reflect|False|3|6|8|
-Don't Die|48-9|DJMAX Reflect|False|6|8|10|
-Y CE Ver.|48-10|DJMAX Reflect|False|4|6|9|
-Fancy Night|48-11|DJMAX Reflect|False|4|6|8|
-Can We Talk|48-12|DJMAX Reflect|False|4|6|8|
-Give Me 5|48-13|DJMAX Reflect|False|2|6|8|
-Nightmare|48-14|DJMAX Reflect|False|7|9|11|
-Haze of Autumn|47-0|Arcaea|True|3|6|9|
-GIMME DA BLOOD|47-1|Arcaea|False|3|6|9|
-Libertas|47-2|Arcaea|False|4|7|10|
-Cyaegha|47-3|Arcaea|False|5|7|9|11
-Bang!!|46-0|Happy Otaku Pack Vol.14|False|4|6|8|
-Paradise 2|46-1|Happy Otaku Pack Vol.14|False|4|6|8|
-Symbol|46-2|Happy Otaku Pack Vol.14|False|5|7|9|
-Nekojarashi|46-3|Happy Otaku Pack Vol.14|False|5|8|10|11
-A Philosophical Wanderer|46-4|Happy Otaku Pack Vol.14|False|4|6|10|
-Isouten|46-5|Happy Otaku Pack Vol.14|True|6|8|10|11
-ONOMATO Pairing!!!|45-0|WACCA Horizon|False|4|6|9|
-with U|45-1|WACCA Horizon|False|6|8|10|11
-Chariot|45-2|WACCA Horizon|False|3|6|9|
-GASHATT|45-3|WACCA Horizon|False|5|7|10|
-LIN NE KRO NE feat. lasah|45-4|WACCA Horizon|False|6|8|10|
-ANGEL HALO|45-5|WACCA Horizon|False|5|8|11|
-Party in the HOLLOWood|44-0|Happy Otaku Pack Vol.13|False|3|6|8|
-Ying Ying da Zuozhan|44-1|Happy Otaku Pack Vol.13|True|5|7|9|
-Howlin' Pumpkin|44-2|Happy Otaku Pack Vol.13|True|4|6|8|
-Bad Apple!! feat. Nomico|42-0|Touhou Mugakudan -1-|False|1|3|6|8
-Iro wa Nioedo, Chirinuru wo|42-1|Touhou Mugakudan -1-|False|2|4|7|
-Cirno's Perfect Math Class|42-2|Touhou Mugakudan -1-|False|4|7|9|
-Hiiro Gekka Kyousai no Zetsu|42-3|Touhou Mugakudan -1-|False|4|6|8|
-Flowery Moonlit Night|42-4|Touhou Mugakudan -1-|False|3|6|8|
-Unconscious Requiem|42-5|Touhou Mugakudan -1-|False|3|6|8|
-Super Battleworn Insomniac|41-0|7th Beat Games|True|4|7|9|?
-Bomb-Sniffing Pomeranian|41-1|7th Beat Games|True|4|6|8|
-Rollerdisco Rumble|41-2|7th Beat Games|True|4|6|9|
-Rose Garden|41-3|7th Beat Games|False|5|8|9|
-EMOMOMO|41-4|7th Beat Games|True|4|7|10|
-Heracles|41-5|7th Beat Games|False|6|8|10|?
-Rush-More|40-0|Happy Otaku Pack Vol.12|False|4|7|9|
-Kill My Fortune|40-1|Happy Otaku Pack Vol.12|False|5|7|10|
-Yosari Tsukibotaru Suminoborite|40-2|Happy Otaku Pack Vol.12|False|5|7|9|
-JUMP! HardCandy|40-3|Happy Otaku Pack Vol.12|False|3|6|8|
-Hibari|40-4|Happy Otaku Pack Vol.12|False|3|5|8|
-OCCHOCO-REST-LESS|40-5|Happy Otaku Pack Vol.12|True|4|7|9|
-See-Saw Day|39-0|MUSE RADIO FM102|True|1|3|6|
-happy hour|39-1|MUSE RADIO FM102|True|2|4|7|
-Seikimatsu no Natsu|39-2|MUSE RADIO FM102|True|4|6|8|
-twinkle night|39-3|MUSE RADIO FM102|False|3|6|8|
-ARUYA HARERUYA|39-4|MUSE RADIO FM102|False|2|5|7|
-Blush|39-5|MUSE RADIO FM102|False|2|4|7|
-Naked Summer|39-6|MUSE RADIO FM102|True|4|6|8|
-BLESS ME|39-7|MUSE RADIO FM102|True|2|5|7|
-FM 17314 SUGAR RADIO|39-8|MUSE RADIO FM102|True|?|?|?|
-NO ONE YES MAN|38-0|Phigros|False|5|7|9|
-Snowfall, Merry Christmas|38-1|Phigros|False|5|8|10|
-Igallta|38-2|Phigros|False|6|8|10|11
-Colored Glass|37-0|Cute Is Everything Vol.7|False|1|4|7|
-Neonlights|37-1|Cute Is Everything Vol.7|False|4|7|9|
-Hope for the flowers|37-2|Cute Is Everything Vol.7|False|4|7|9|
-Seaside Cycling on May 30|37-3|Cute Is Everything Vol.7|False|3|6|8|
-SKY HIGH|37-4|Cute Is Everything Vol.7|False|2|4|6|
-Mousou Chu!!|37-5|Cute Is Everything Vol.7|False|4|7|8|
-NightTheater|36-0|Give Up TREATMENT Vol.10|True|6|8|11|
-Cutter|36-1|Give Up TREATMENT Vol.10|False|4|7|10|
-bamboo|36-2|Give Up TREATMENT Vol.10|False|6|8|10|11
-enchanted love|36-3|Give Up TREATMENT Vol.10|False|2|6|9|
-c.s.q.n.|36-4|Give Up TREATMENT Vol.10|False|5|8|11|
-Booouncing!!|36-5|Give Up TREATMENT Vol.10|False|5|7|10|
-PeroPeroGames goes Bankrupt|35-0|Happy Otaku Pack SP|True|6|8|10|
-MARENOL|35-1|Happy Otaku Pack SP|False|4|7|10|
-I am really good at Japanese style|35-2|Happy Otaku Pack SP|True|6|8|10|
-Rush B|35-3|Happy Otaku Pack SP|True|4|7|9|
-DataErr0r|35-4|Happy Otaku Pack SP|False|5|7|9|?
-Burn|35-5|Happy Otaku Pack SP|True|4|7|9|
-ALiVE|34-0|HARDCORE TANO*C|False|5|7|10|
-BATTLE NO.1|34-1|HARDCORE TANO*C|False|5|8|10|11
-Cthugha|34-2|HARDCORE TANO*C|False|6|8|10|11
-TWINKLE*MAGIC|34-3|HARDCORE TANO*C|False|4|7|10|11
-Comet Coaster|34-4|HARDCORE TANO*C|False|6|8|10|11
-XODUS|34-5|HARDCORE TANO*C|False|7|9|11|12
-Fireflies|33-0|cyTus|True|1|4|7|
-Light up my love!!|33-1|cyTus|True|3|5|7|
-Happiness Breeze|33-2|cyTus|True|4|6|8|9
-Chrome VOX|33-3|cyTus|True|6|8|10|11
-CHAOS|33-4|cyTus|True|3|6|9|
-Saika|33-5|cyTus|True|3|5|8|
-Standby for Action|33-6|cyTus|True|4|6|8|
-Hydrangea|33-7|cyTus|True|5|7|9|
-Amenemhat|33-8|cyTus|True|6|8|10|
-Santouka|33-9|cyTus|True|2|5|8|
-HEXENNACHTROCK-katashihaya-|33-10|cyTus|True|4|8|10|
-Blah!!|33-11|cyTus|True|5|8|11|
-CHAOS Glitch|33-12|cyTus|True|0|?|0|
-Preparara|32-0|Let's Do Bad Things Together|False|1|4|6|
-Whatcha;Whatcha Doin'|32-1|Let's Do Bad Things Together|False|3|6|9|
-Madara|32-2|Let's Do Bad Things Together|False|4|6|9|
-pICARESq|32-3|Let's Do Bad Things Together|False|4|6|8|
-Desastre|32-4|Let's Do Bad Things Together|False|4|6|8|
-Shoot for the Moon|32-5|Let's Do Bad Things Together|False|2|5|8|
-The 90's Decision|31-0|Happy Otaku Pack Vol.11|True|5|7|9|
-Medusa|31-1|Happy Otaku Pack Vol.11|False|4|6|8|10
-Final Step!|31-2|Happy Otaku Pack Vol.11|False|5|7|10|
-MAGENTA POTION|31-3|Happy Otaku Pack Vol.11|False|4|7|9|
-Cross Ray|31-4|Happy Otaku Pack Vol.11|False|3|6|9|
-Square Lake|31-5|Happy Otaku Pack Vol.11|False|6|8|9|11
-Girly Cupid|30-0|Cute Is Everything Vol.6|False|3|6|8|
-sheep in the light|30-1|Cute Is Everything Vol.6|False|2|5|8|
-Breaker city|30-2|Cute Is Everything Vol.6|False|4|6|9|
-heterodoxy|30-3|Cute Is Everything Vol.6|False|4|6|8|
-Computer Music Girl|30-4|Cute Is Everything Vol.6|False|3|5|7|
-Focus Point|30-5|Cute Is Everything Vol.6|True|2|5|7|
-Groove Prayer|29-0|Let' s GROOVE!|True|3|5|7|
-FUJIN Rumble|29-1|Let' s GROOVE!|True|5|7|10|11
-Marry me, Nightmare|29-2|Let' s GROOVE!|False|6|8|11|
-HG Makaizou Polyvinyl Shounen|29-3|Let' s GROOVE!|True|4|7|9|10
-Seizya no Ibuki|29-4|Let' s GROOVE!|True|6|8|10|
-ouroboros -twin stroke of the end-|29-5|Let' s GROOVE!|True|4|6|9|12
-Heisha Onsha|28-0|Happy Otaku Pack Vol.10|False|4|6|8|
-Ginevra|28-1|Happy Otaku Pack Vol.10|True|5|7|10|10
-Paracelestia|28-2|Happy Otaku Pack Vol.10|False|5|8|10|
-un secret|28-3|Happy Otaku Pack Vol.10|False|2|4|6|
-Good Life|28-4|Happy Otaku Pack Vol.10|False|4|6|8|
-nini-nini-|28-5|Happy Otaku Pack Vol.10|False|4|7|9|
-Can I friend you on Bassbook? lol|27-0|Nanahira Festival|False|3|6|8|
-Gaming*Everything|27-1|Nanahira Festival|False|5|8|11|
-Renji de haochi|27-2|Nanahira Festival|False|5|7|9|
-You Make My Life 1UP|27-3|Nanahira Festival|False|4|6|8|
-Newbies, Geeks, Internets|27-4|Nanahira Festival|False|6|8|10|
-Onegai!Kon kon Oinarisama|27-5|Nanahira Festival|False|3|6|9|
-Legend of Eastern Rabbit -SKY DEFENDER-|26-0|Give Up TREATMENT Vol.9|False|4|6|9|
-ENERGY SYNERGY MATRIX|26-1|Give Up TREATMENT Vol.9|False|6|8|10|
-Punai Punai Genso|26-2|Give Up TREATMENT Vol.9|False|2|7|11|
-Better Graphic Animation|26-3|Give Up TREATMENT Vol.9|False|5|8|11|
-Variant Cross|26-4|Give Up TREATMENT Vol.9|False|4|7|10|
-Ultra Happy Miracle Bazoooooka!!|26-5|Give Up TREATMENT Vol.9|False|7|9|11|
-tape/stop/night|25-0|MUSE RADIO FM101|True|3|5|7|
-Pixel Galaxy|25-1|MUSE RADIO FM101|False|2|5|8|
-Notice|25-2|MUSE RADIO FM101|False|4|7|10|
-Strawberry Godzilla|25-3|MUSE RADIO FM101|True|2|5|7|
-OKIMOCHI EXPRESSION|25-4|MUSE RADIO FM101|False|4|6|10|
-Kimi to pool disco|25-5|MUSE RADIO FM101|False|4|6|8|
-The Last Page|24-0|Happy Otaku Pack Vol.9|False|3|5|7|
-IKAROS|24-1|Happy Otaku Pack Vol.9|False|4|7|10|
-Tsukuyomi|24-2|Happy Otaku Pack Vol.9|False|3|6|9|
-Future Stream|24-3|Happy Otaku Pack Vol.9|False|4|6|8|
-FULi AUTO SHOOTER|24-4|Happy Otaku Pack Vol.9|True|4|7|9|
-GOODFORTUNE|24-5|Happy Otaku Pack Vol.9|False|5|7|9|
-The Dessert After Rain|23-0|Cute Is Everything Vol.5|True|2|4|6|
-Confession Support Formula|23-1|Cute Is Everything Vol.5|False|3|5|7|
-Omatsuri|23-2|Cute Is Everything Vol.5|False|1|3|6|
-FUTUREPOP|23-3|Cute Is Everything Vol.5|True|2|5|7|
-The Breeze|23-4|Cute Is Everything Vol.5|False|1|4|6|
-I LOVE LETTUCE FRIED RICE!!|23-5|Cute Is Everything Vol.5|False|3|7|9|
-The NightScape|22-0|Give Up TREATMENT Vol.8|False|4|7|9|
-FREEDOM DiVE|22-1|Give Up TREATMENT Vol.8|False|6|8|10|12
-Phi|22-2|Give Up TREATMENT Vol.8|False|5|8|10|
-Lueur de la nuit|22-3|Give Up TREATMENT Vol.8|False|6|8|11|
-Creamy Sugary OVERDRIVE!!!|22-4|Give Up TREATMENT Vol.8|True|4|7|10|
-Disorder|22-5|Give Up TREATMENT Vol.8|False|5|7|11|
-Glimmer|21-0|Budget Is Burning: Nano Core|False|2|5|8|
-EXIST|21-1|Budget Is Burning: Nano Core|False|3|5|8|
-Irreplaceable|21-2|Budget Is Burning: Nano Core|False|4|6|8|
-Moonlight Banquet|20-0|Happy Otaku Pack Vol.8|True|2|5|8|
-Flashdance|20-1|Happy Otaku Pack Vol.8|False|3|6|9|
-INFiNiTE ENERZY -Overdoze-|20-2|Happy Otaku Pack Vol.8|False|4|7|9|10
-One Way Street|20-3|Happy Otaku Pack Vol.8|False|3|6|10|
-This Club is Not 4 U|20-4|Happy Otaku Pack Vol.8|False|4|7|9|
-ULTRA MEGA HAPPY PARTY!!!|20-5|Happy Otaku Pack Vol.8|False|5|7|10|
-INFINITY|19-0|Give Up TREATMENT Vol.7|True|5|8|10|
-Punai Punai Senso|19-1|Give Up TREATMENT Vol.7|False|2|7|11|
-Maxi|19-2|Give Up TREATMENT Vol.7|False|5|8|10|
-YInMn Blue|19-3|Give Up TREATMENT Vol.7|False|6|8|10|
-Plumage|19-4|Give Up TREATMENT Vol.7|False|4|7|10|
-Dr.Techro|19-5|Give Up TREATMENT Vol.7|False|7|9|11|
-SWEETSWEETSWEET|18-0|Cute Is Everything Vol.4|True|2|5|7|
-Deep Blue and the Breaths of the Night|18-1|Cute Is Everything Vol.4|True|2|4|6|
-Joy Connection|18-2|Cute Is Everything Vol.4|False|3|6|8|
-Self Willed Girl Ver.B|18-3|Cute Is Everything Vol.4|True|4|6|8|
-Just Disobedient|18-4|Cute Is Everything Vol.4|False|3|6|8|
-Holy Sh*t Grass Snake|18-5|Cute Is Everything Vol.4|False|2|6|9|
-Cotton Candy Wonderland|17-0|Happy Otaku Pack Vol.7|False|2|5|8|
-Punai Punai Taiso|17-1|Happy Otaku Pack Vol.7|False|2|7|10|
-Fly High|17-2|Happy Otaku Pack Vol.7|False|3|5|7|
-prejudice|17-3|Happy Otaku Pack Vol.7|True|4|6|9|
-The 89's Momentum|17-4|Happy Otaku Pack Vol.7|True|5|7|9|
-energy night|17-5|Happy Otaku Pack Vol.7|True|5|7|10|
-Future Dive|16-0|Give Up TREATMENT Vol.6|True|4|6|9|
-Re End of a Dream|16-1|Give Up TREATMENT Vol.6|False|5|8|11|
-Etude -Storm-|16-2|Give Up TREATMENT Vol.6|True|6|8|10|
-Unlimited Katharsis|16-3|Give Up TREATMENT Vol.6|False|4|6|10|
-Magic Knight Girl|16-4|Give Up TREATMENT Vol.6|False|4|7|9|
-Eeliaas|16-5|Give Up TREATMENT Vol.6|False|6|9|11|
-Magic Spell|15-0|Cute Is Everything Vol.3|True|2|5|7|
-Colorful Star, Colored Drawing, Travel Poem|15-1|Cute Is Everything Vol.3|False|3|4|6|
-Satell Knight|15-2|Cute Is Everything Vol.3|False|3|6|8|
-Black River Feat.Mes|15-3|Cute Is Everything Vol.3|True|1|4|6|
-I am sorry|15-4|Cute Is Everything Vol.3|False|2|5|8|
-Ueta Tori Tachi|15-5|Cute Is Everything Vol.3|False|3|6|8|
-Elysion's Old Mans|14-0|Happy Otaku Pack Vol.6|False|3|5|8|
-AXION|14-1|Happy Otaku Pack Vol.6|False|4|5|8|
-Amnesia|14-2|Happy Otaku Pack Vol.6|True|3|6|9|
-Onsen Dai Sakusen|14-3|Happy Otaku Pack Vol.6|True|4|6|8|
-Gleam stone|14-4|Happy Otaku Pack Vol.6|False|4|7|9|
-GOODWORLD|14-5|Happy Otaku Pack Vol.6|False|4|7|10|
-Instant Soluble Neon|13-0|Cute Is Everything Vol.2|True|2|4|7|
-Retrospective Poem on the Planet|13-1|Cute Is Everything Vol.2|False|3|5|7|
-I'm Gonna Buy! Buy! Buy!|13-2|Cute Is Everything Vol.2|True|4|6|8|
-Dating Manifesto|13-3|Cute Is Everything Vol.2|True|2|4|6|
-First Snow|13-4|Cute Is Everything Vol.2|True|2|3|6|
-Xin Shang Huahai|13-5|Cute Is Everything Vol.2|False|3|6|8|
-Gaikan Chrysalis|12-0|Give Up TREATMENT Vol.5|False|4|6|8|
-Sterelogue|12-1|Give Up TREATMENT Vol.5|True|5|7|10|
-Cheshire's Dance|12-2|Give Up TREATMENT Vol.5|True|4|7|10|
-Skrik|12-3|Give Up TREATMENT Vol.5|True|5|7|11|
-Soda Pop Canva5!|12-4|Give Up TREATMENT Vol.5|False|5|8|10|
-RUBY LINTe|12-5|Give Up TREATMENT Vol.5|False|5|8|11|
-Brave My Heart|11-0|Happy Otaku Pack Vol.5|True|3|5|7|
-Sakura Fubuki|11-1|Happy Otaku Pack Vol.5|False|4|7|10|
-8bit Adventurer|11-2|Happy Otaku Pack Vol.5|False|6|8|10|
-Suffering of screw|11-3|Happy Otaku Pack Vol.5|False|3|5|8|
-tiny lady|11-4|Happy Otaku Pack Vol.5|True|4|6|9|
-Power Attack|11-5|Happy Otaku Pack Vol.5|False|5|7|10|
-Destr0yer|10-0|Give Up TREATMENT Vol.4|False|4|7|9|
-Noel|10-1|Give Up TREATMENT Vol.4|False|5|8|10|
-Kyoukiranbu|10-2|Give Up TREATMENT Vol.4|False|7|9|11|
-Two Phace|10-3|Give Up TREATMENT Vol.4|True|4|7|10|
-Fly Again|10-4|Give Up TREATMENT Vol.4|False|5|7|10|
-ouroVoros|10-5|Give Up TREATMENT Vol.4|False|7|9|11|
-Leave It Alone|9-0|Happy Otaku Pack Vol.4|True|2|5|8|
-Tsubasa no Oreta Tenshitachi no Requiem|9-1|Happy Otaku Pack Vol.4|False|4|7|9|
-Chronomia|9-2|Happy Otaku Pack Vol.4|False|5|7|10|
-Dandelion's Daydream|9-3|Happy Otaku Pack Vol.4|True|5|7|8|
-Lorikeet Flat design|9-4|Happy Otaku Pack Vol.4|True|5|7|10|
-GOODRAGE|9-5|Happy Otaku Pack Vol.4|False|6|9|11|
-Altale|8-0|Give Up TREATMENT Vol.3|False|3|5|7|10
-Brain Power|8-1|Give Up TREATMENT Vol.3|False|4|7|10|
-Berry Go!!|8-2|Give Up TREATMENT Vol.3|False|3|6|9|
-Sweet* Witch* Girl*|8-3|Give Up TREATMENT Vol.3|False|6|8|10|?
-trippers feeling!|8-4|Give Up TREATMENT Vol.3|True|5|7|9|11
-Lilith ambivalence lovers|8-5|Give Up TREATMENT Vol.3|False|5|8|10|
-Brave My Soul|7-0|Give Up TREATMENT Vol.2|False|4|6|8|
-Halcyon|7-1|Give Up TREATMENT Vol.2|False|4|7|10|
-Crimson Nightingale|7-2|Give Up TREATMENT Vol.2|True|4|7|10|
-Invader|7-3|Give Up TREATMENT Vol.2|True|3|7|11|
-Lyrith|7-4|Give Up TREATMENT Vol.2|False|5|7|10|
-GOODBOUNCE|7-5|Give Up TREATMENT Vol.2|False|4|6|9|
-Out of Sense|6-0|Budget Is Burning Vol.1|False|3|5|8|
-My Life Is For You|6-1|Budget Is Burning Vol.1|False|2|4|7|
-Etude -Sunset-|6-2|Budget Is Burning Vol.1|True|5|7|9|
-Goodbye Boss|6-3|Budget Is Burning Vol.1|False|4|6|8|
-Stargazer|6-4|Budget Is Burning Vol.1|True|2|5|8|9
-Lys Tourbillon|6-5|Budget Is Burning Vol.1|True|4|6|8|
-Thirty Million Persona|5-0|Happy Otaku Pack Vol.3|False|2|4|6|
-conflict|5-1|Happy Otaku Pack Vol.3|False|2|6|9|10
-Enka Dance Music|5-2|Happy Otaku Pack Vol.3|False|3|5|7|
-XING|5-3|Happy Otaku Pack Vol.3|True|4|6|8|9
-Amakakeru Soukyuu no Serenade|5-4|Happy Otaku Pack Vol.3|False|3|6|9|
-Gift box|5-5|Happy Otaku Pack Vol.3|False|5|7|10|
-MUSEDASH!!!!|4-0|Happy Otaku Pack Vol.2|False|2|6|9|0
-Imprinting|4-1|Happy Otaku Pack Vol.2|False|3|6|9|0
-Skyward|4-2|Happy Otaku Pack Vol.2|True|4|7|10|0
-La nuit de vif|4-3|Happy Otaku Pack Vol.2|True|2|5|8|0
-Bit-alize|4-4|Happy Otaku Pack Vol.2|False|3|6|8|0
-GOODTEK|4-5|Happy Otaku Pack Vol.2|False|4|6|9|?
-Maharajah|3-0|Happy Otaku Pack Vol.1|False|1|3|6|
-keep on running|3-1|Happy Otaku Pack Vol.1|False|5|7|9|
-Kafig|3-2|Happy Otaku Pack Vol.1|True|4|6|8|
--+|3-3|Happy Otaku Pack Vol.1|True|4|6|8|
-Tenri Kaku Jou|3-4|Happy Otaku Pack Vol.1|True|3|6|9|
-Adjudicatorz-DanZai-|3-5|Happy Otaku Pack Vol.1|False|3|7|10|
-Oriens|2-0|Give Up TREATMENT Vol.1|True|3|7|9|
-PUPA|2-1|Give Up TREATMENT Vol.1|False|6|8|11|
-Luna Express 2032|2-2|Give Up TREATMENT Vol.1|False|4|6|8|
-Ukiyoe Yokochou|2-3|Give Up TREATMENT Vol.1|False|6|7|9|
-Alice in Misanthrope|2-4|Give Up TREATMENT Vol.1|False|5|7|10|
-GOODMEN|2-5|Give Up TREATMENT Vol.1|False|5|7|10|
-Sunshine and Rainbow after August Rain|1-0|Cute Is Everything Vol.1|False|2|5|8|
-Magical Number|1-1|Cute Is Everything Vol.1|False|2|5|8|
-Dreaming Girl|1-2|Cute Is Everything Vol.1|False|2|5|6|
-Daruma-san Fell Over|1-3|Cute Is Everything Vol.1|False|3|4|6|
-Different|1-4|Cute Is Everything Vol.1|False|1|3|6|
-The Future of the Phantom|1-5|Cute Is Everything Vol.1|False|1|3|5|
-Doki Doki Jump!|63-0|MUSE RADIO FM104|True|3|5|7|
-Centennial Streamers High|63-1|MUSE RADIO FM104|False|4|7|9|
-Love Patrol|63-2|MUSE RADIO FM104|True|3|5|7|
-Mahorova|63-3|MUSE RADIO FM104|True|3|5|8|
-Yoru no machi|63-4|MUSE RADIO FM104|True|1|4|7|
-INTERNET YAMERO|63-5|MUSE RADIO FM104|True|6|8|10|
-Abracadabra|43-24|MD Plus Project|False|6|8|10|
-Squalldecimator feat. EZ-Ven|43-25|MD Plus Project|True|5|7|9|
-Amateras Rhythm|43-26|MD Plus Project|True|6|8|11|
-Record one's Dream|43-27|MD Plus Project|False|4|7|10|
-Lunatic|43-28|MD Plus Project|True|5|8|10|
-Jiumeng|43-29|MD Plus Project|True|3|6|8|
-The Day We Become Family|43-30|MD Plus Project|True|3|5|8|
-Sutori ma FIRE!?!?|64-0|COSMIC RADIO PEROLIST|True|3|5|8|
-Tanuki Step|64-1|COSMIC RADIO PEROLIST|True|5|7|10|11
-Space Stationery|64-2|COSMIC RADIO PEROLIST|True|5|7|10|
-Songs Are Judged 90% by Chorus feat. Mameko|64-3|COSMIC RADIO PEROLIST|True|6|8|10|
-Kawai Splendid Space Thief|64-4|COSMIC RADIO PEROLIST|False|6|8|10|11
-Night City Runway|64-5|COSMIC RADIO PEROLIST|True|4|6|8|
-Chaos Shotgun feat. ChumuNote|64-6|COSMIC RADIO PEROLIST|True|6|8|10|
-mew mew magical summer|64-7|COSMIC RADIO PEROLIST|False|5|8|10|11
-BrainDance|65-0|NeonAbyss|True|3|6|9|
-My Focus!|65-1|NeonAbyss|True|5|7|10|
-ABABABA BURST|65-2|NeonAbyss|True|5|7|9|
-ULTRA HIGHER|65-3|NeonAbyss|True|4|7|10|
-Silver Bullet|43-31|MD Plus Project|True|5|7|10|
-Random|43-32|MD Plus Project|True|4|7|9|
-OTOGE-BOSS-KYOKU-CHAN|43-33|MD Plus Project|False|6|8|10|11
-Crow Rabbit|43-34|MD Plus Project|True|7|9|11|
-SyZyGy|43-35|MD Plus Project|True|6|8|10|11
-Mermaid Radio|43-36|MD Plus Project|True|3|5|7|
-Helixir|43-37|MD Plus Project|False|6|8|10|
-Highway Cruisin'|43-38|MD Plus Project|False|3|5|8|
-JACK PT BOSS|43-39|MD Plus Project|False|6|8|10|
-Time Capsule|43-40|MD Plus Project|False|7|9|11|
-39 Music!|66-0|Miku in Museland|False|3|5|8|
-Hand in Hand|66-1|Miku in Museland|False|1|3|6|
-Cynical Night Plan|66-2|Miku in Museland|False|4|6|8|
-God-ish|66-3|Miku in Museland|False|4|7|10|
-Darling Dance|66-4|Miku in Museland|False|4|7|9|
-Hatsune Creation Myth|66-5|Miku in Museland|False|6|8|10|11
-The Vampire|66-6|Miku in Museland|False|4|6|9|
-Future Eve|66-7|Miku in Museland|False|4|8|11|
-Unknown Mother Goose|66-8|Miku in Museland|False|4|8|10|
-Shun-ran|66-9|Miku in Museland|False|4|7|9|
-NICE TYPE feat. monii|43-41|MD Plus Project|True|3|6|8|
-Rainy Angel|67-0|Happy Otaku Pack Vol.18|True|4|6|9|11
-Gullinkambi|67-1|Happy Otaku Pack Vol.18|True|4|7|10|
-RakiRaki Rebuilders!!!|67-2|Happy Otaku Pack Vol.18|True|5|7|10|
-Laniakea|67-3|Happy Otaku Pack Vol.18|False|5|8|10|
-OTTAMA GAZER|67-4|Happy Otaku Pack Vol.18|True|5|8|10|
-Sleep Tight feat.Macoto|67-5|Happy Otaku Pack Vol.18|True|3|5|8|
-New York Back Raise|68-0|Gambler's Tricks|True|6|8|10|
-slic.hertz|68-1|Gambler's Tricks|True|5|7|9|
-Fuzzy-Navel|68-2|Gambler's Tricks|True|6|8|10|11
-Swing Edge|68-3|Gambler's Tricks|True|4|8|10|
-Twisted Escape|68-4|Gambler's Tricks|True|5|8|10|11
-Swing Sweet Twee Dance|68-5|Gambler's Tricks|False|4|7|10|
-Sanyousei SAY YA!!!|43-42|MD Plus Project|False|4|6|8|
-YUKEMURI TAMAONSEN II|43-43|MD Plus Project|False|3|6|9|
-Samayoi no mei Amatsu|69-0|Touhou Mugakudan -3-|False|4|6|9|
-INTERNET SURVIVOR|69-1|Touhou Mugakudan -3-|False|5|8|10|
-Shuki*RaiRai|69-2|Touhou Mugakudan -3-|False|5|7|9|
-HELLOHELL|69-3|Touhou Mugakudan -3-|False|4|7|10|
-Calamity Fortune|69-4|Touhou Mugakudan -3-|True|6|8|10|11
-Tsurupettan|69-5|Touhou Mugakudan -3-|True|2|5|8|
-Twilight Poems|43-44|MD Plus Project|True|3|6|8|
-All My Friends feat. RANASOL|43-45|MD Plus Project|True|4|7|9|
-Heartache|43-46|MD Plus Project|True|5|7|10|
-Blue Lemonade|43-47|MD Plus Project|True|3|6|8|
-Haunted Dance|43-48|MD Plus Project|False|6|9|11|
-Hey Vincent.|43-49|MD Plus Project|True|6|8|10|
-Meteor feat. TEA|43-50|MD Plus Project|True|3|6|9|
-Narcissism Angel|43-51|MD Plus Project|True|1|3|6|
-AlterLuna|43-52|MD Plus Project|True|6|8|11|12
-Niki Tousen|43-53|MD Plus Project|True|6|8|10|12
-Rettou Joutou|70-0|Rin Len's Mirrorland|False|4|7|9|
-Telecaster B-Boy|70-1|Rin Len's Mirrorland|False|5|7|10|
-Iya Iya Iya|70-2|Rin Len's Mirrorland|False|2|4|7|
-Nee Nee Nee|70-3|Rin Len's Mirrorland|False|4|6|8|
-Chaotic Love Revolution|70-4|Rin Len's Mirrorland|False|4|6|8|
-Dance of the Corpses|70-5|Rin Len's Mirrorland|False|2|5|8|
-Bitter Choco Decoration|70-6|Rin Len's Mirrorland|False|3|6|9|
-Dance Robot Dance|70-7|Rin Len's Mirrorland|False|4|7|10|
-Sweet Devil|70-8|Rin Len's Mirrorland|False|5|7|9|
-Someday'z Coming|70-9|Rin Len's Mirrorland|False|5|7|9|
-Yume Ou Mono Yo Secret|0-53|Default Music|True|6|8|10|
-Yume Ou Mono Yo|0-54|Default Music|True|1|4|0|
-Sweet Dream VIVINOS|71-0|Valentine Stage|False|1|4|7|
-Ruler Of My Heart VIVINOS|71-1|Valentine Stage|False|2|4|6|
-Reality Show|71-2|Valentine Stage|False|5|7|10|
-SIG feat.Tobokegao|71-3|Valentine Stage|True|3|6|8|
-Rose Love|71-4|Valentine Stage|True|2|4|7|
-Euphoria|71-5|Valentine Stage|True|1|3|6|
-P E R O P E R O Brother Dance|72-0|Legends of Muse Warriors|True|0|?|0|
-PA PPA PANIC|72-1|Legends of Muse Warriors|False|4|8|10|
-How To Make Music Game Song!|72-2|Legends of Muse Warriors|True|6|8|10|11
-Re Re|72-3|Legends of Muse Warriors|True|7|9|11|12
-Marmalade Twins|72-4|Legends of Muse Warriors|True|5|8|10|
-DOMINATOR|72-5|Legends of Muse Warriors|True|7|9|11|
-Teshikani TESHiKANi|72-6|Legends of Muse Warriors|True|5|7|9|
-Urban Magic|73-0|Happy Otaku Pack Vol.19|True|3|5|7|
-Maid's Prank|73-1|Happy Otaku Pack Vol.19|True|5|7|10|
-Dance Dance Good Night Dance|73-2|Happy Otaku Pack Vol.19|True|2|4|7|
-Ops Limone|73-3|Happy Otaku Pack Vol.19|True|5|8|11|
-NOVA|73-4|Happy Otaku Pack Vol.19|True|6|8|10|
-Heaven's Gradius|73-5|Happy Otaku Pack Vol.19|True|6|8|10|
-Ray Tuning|74-0|CHUNITHM COURSE MUSE|True|6|8|10|
-World Vanquisher|74-1|CHUNITHM COURSE MUSE|True|6|8|10|11
-Tsukuyomi Ni Naru Replaced|74-2|CHUNITHM COURSE MUSE|True|5|7|9|
-The wheel to the right|74-3|CHUNITHM COURSE MUSE|True|5|7|9|11
-Climax|74-4|CHUNITHM COURSE MUSE|True|4|8|11|11
-Spider's Thread|74-5|CHUNITHM COURSE MUSE|True|5|8|10|12
-HIT ME UP|43-54|MD Plus Project|True|4|6|8|
-Test Me feat. Uyeon|43-55|MD Plus Project|True|3|5|9|
-Assault TAXI|43-56|MD Plus Project|True|4|7|10|
-No|43-57|MD Plus Project|False|4|6|9|
-Pop it|43-58|MD Plus Project|True|1|3|6|
-HEARTBEAT! KyunKyun!|43-59|MD Plus Project|True|4|6|9|
-SUPERHERO|75-0|Novice Rider Pack|False|2|4|7|
-Highway_Summer|75-1|Novice Rider Pack|True|2|4|6|
-Mx. Black Box|75-2|Novice Rider Pack|True|5|7|9|
-Sweet Encounter|75-3|Novice Rider Pack|True|2|4|7|
-Echo over you... Secret|0-55|Default Music|False|6|8|10|
-Echo over you...|0-56|Default Music|False|1|4|0|
-Tsukuyomi Ni Naru|74-6|CHUNITHM COURSE MUSE|True|5|8|10|
-disco light|76-0|MUSE RADIO FM105|True|5|7|9|
-room light feat.chancylemon|76-1|MUSE RADIO FM105|True|3|5|7|
-Invisible|76-2|MUSE RADIO FM105|True|3|5|8|
-Christmas Season-LLABB|76-3|MUSE RADIO FM105|True|1|4|7|
-Hyouryu|77-0|Let's Rhythm Jam!|False|6|8|10|
-The Whole Rest|77-1|Let's Rhythm Jam!|False|5|8|10|11
-Hydra|77-2|Let's Rhythm Jam!|False|4|7|11|
-Pastel Lines|77-3|Let's Rhythm Jam!|False|3|6|9|
-LINK x LIN#S|77-4|Let's Rhythm Jam!|False|3|6|9|
-Arcade ViruZ|77-5|Let's Rhythm Jam!|False|6|8|11|
-Eve Avenir|78-0|Endless Pirouette|True|6|8|10|
-Silverstring|78-1|Endless Pirouette|True|5|7|10|
-Melusia|78-2|Endless Pirouette|False|5|7|10|11
-Devil's Castle|78-3|Endless Pirouette|True|4|7|10|
-Abatement|78-4|Endless Pirouette|True|6|8|10|11
-Azalea|78-5|Endless Pirouette|False|4|8|10|
-Brightly World|78-6|Endless Pirouette|True|6|8|10|
-We'll meet in every world ***|78-7|Endless Pirouette|True|7|9|11|
-Collapsar|78-8|Endless Pirouette|True|7|9|10|11
-Parousia|78-9|Endless Pirouette|False|6|8|10|
-Gunners in the Rain|79-0|Ensemble Arcanum|False|5|8|10|
-Halzion|79-1|Ensemble Arcanum|False|2|5|8|
-SHOWTIME!!|79-2|Ensemble Arcanum|False|6|8|10|
-Achromic Riddle|79-3|Ensemble Arcanum|False|6|8|10|11
-karanosu|79-4|Ensemble Arcanum|False|3|6|8|
-Necromantic|43-60|MD Plus Project|False|6|8|10|
-Saishuu kichiku imouto Flandre-S|80-0|Touhou Mugakudan -4-|False|6|8|10|11
-Kachoufuugetsu|80-1|Touhou Mugakudan -4-|False|2|6|8|
-Maid heart is a puppet|80-2|Touhou Mugakudan -4-|False|5|7|9|
-Trance dance anarchy|80-3|Touhou Mugakudan -4-|False|4|7|10|
-fairy stage|80-4|Touhou Mugakudan -4-|False|4|6|9|
-Scarlet Police on Ghetto Patrol|80-5|Touhou Mugakudan -4-|False|5|7|10|
-Unwelcome School|81-0|MD-level Tactical Training Blu-ray|False|6|8|10|
-Usagi Flap|81-1|MD-level Tactical Training Blu-ray|False|3|6|8|
-RE Aoharu|81-2|MD-level Tactical Training Blu-ray|False|3|5|8|10
-Operation*DOTABATA!|81-3|MD-level Tactical Training Blu-ray|False|5|7|10|
-Break Through the Dome|82-0|MSR Anthology_Vol.02|False|5|7|9|11
-Here in Vernal Terrene|82-1|MSR Anthology_Vol.02|False|3|5|7|
-Everything's Alright|82-2|MSR Anthology_Vol.02|False|3|5|8|
-Operation Ashring|82-3|MSR Anthology_Vol.02|False|3|5|7|
-Misty Memory Day Version|82-4|MSR Anthology_Vol.02|False|3|5|7|
-Misty Memory Night Version|82-5|MSR Anthology_Vol.02|False|2|6|9|
-Arsonist|82-6|MSR Anthology_Vol.02|False|3|6|8|
-Operation Deepness|82-7|MSR Anthology_Vol.02|False|2|4|6|
-ALL!!!|82-8|MSR Anthology_Vol.02|False|6|8|10|
+0-48|2900051
+0-0|2900052
+0-2|2900053
+0-3|2900054
+0-4|2900055
+0-1|2900056
+0-5|2900057
+0-29|2900058
+0-6|2900059
+0-37|2900060
+0-7|2900061
+0-8|2900062
+0-43|2900063
+0-31|2900064
+0-38|2900065
+0-46|2900066
+0-9|2900067
+0-30|2900068
+0-49|2900069
+0-10|2900070
+0-11|2900071
+0-12|2900072
+0-40|2900073
+0-13|2900074
+0-32|2900075
+0-14|2900076
+0-15|2900077
+0-16|2900078
+0-17|2900079
+0-18|2900080
+0-19|2900081
+0-20|2900082
+0-47|2900083
+0-21|2900084
+0-22|2900085
+0-42|2900086
+0-33|2900087
+0-44|2900088
+0-34|2900089
+0-23|2900090
+0-24|2900091
+0-50|2900092
+0-51|2900093
+0-25|2900094
+0-39|2900095
+0-26|2900096
+0-27|2900097
+0-52|2900098
+0-35|2900099
+0-28|2900100
+0-36|2900101
+0-41|2900102
+0-45|2900103
+43-0|2900105
+43-1|2900106
+43-2|2900107
+43-3|2900108
+43-4|2900109
+43-5|2900110
+43-6|2900111
+43-7|2900112
+43-8|2900113
+43-9|2900114
+43-10|2900115
+43-11|2900116
+43-12|2900117
+43-13|2900118
+43-14|2900119
+43-15|2900120
+43-16|2900121
+43-17|2900122
+43-18|2900123
+43-19|2900124
+43-20|2900125
+43-21|2900126
+43-22|2900127
+43-23|2900128
+62-0|2900130
+62-1|2900131
+62-2|2900132
+62-3|2900133
+62-4|2900134
+62-5|2900135
+61-0|2900137
+61-1|2900138
+61-2|2900139
+61-3|2900140
+61-4|2900141
+61-5|2900142
+60-0|2900144
+60-1|2900145
+60-2|2900146
+60-3|2900147
+60-4|2900148
+60-5|2900149
+59-0|2900151
+59-1|2900152
+59-2|2900153
+59-3|2900154
+59-4|2900155
+59-5|2900156
+59-6|2900157
+59-7|2900158
+58-0|2900160
+58-1|2900161
+58-2|2900162
+58-3|2900163
+57-0|2900165
+57-1|2900166
+57-2|2900167
+57-3|2900168
+57-4|2900169
+57-5|2900170
+56-0|2900172
+56-1|2900173
+56-2|2900174
+56-3|2900175
+56-4|2900176
+56-5|2900177
+55-0|2900179
+55-1|2900180
+55-2|2900181
+55-3|2900182
+55-4|2900183
+55-5|2900184
+54-0|2900186
+54-1|2900187
+54-2|2900188
+54-3|2900189
+54-4|2900190
+54-5|2900191
+53-0|2900193
+53-1|2900194
+53-2|2900195
+53-3|2900196
+53-4|2900197
+53-5|2900198
+52-0|2900200
+52-1|2900201
+52-2|2900202
+52-3|2900203
+52-4|2900204
+51-0|2900206
+51-1|2900207
+51-2|2900208
+51-3|2900209
+51-4|2900210
+51-5|2900211
+50-0|2900213
+50-1|2900214
+50-2|2900215
+50-3|2900216
+50-4|2900217
+49-0|2900219
+49-1|2900220
+49-2|2900221
+48-0|2900223
+48-1|2900224
+48-2|2900225
+48-3|2900226
+48-4|2900227
+48-5|2900228
+48-6|2900229
+48-7|2900230
+48-8|2900231
+48-9|2900232
+48-10|2900233
+48-11|2900234
+48-12|2900235
+48-13|2900236
+48-14|2900237
+47-0|2900239
+47-1|2900240
+47-2|2900241
+47-3|2900242
+46-0|2900244
+46-1|2900245
+46-2|2900246
+46-3|2900247
+46-4|2900248
+46-5|2900249
+45-0|2900251
+45-1|2900252
+45-2|2900253
+45-3|2900254
+45-4|2900255
+45-5|2900256
+44-0|2900258
+44-1|2900259
+44-2|2900260
+42-0|2900262
+42-1|2900263
+42-2|2900264
+42-3|2900265
+42-4|2900266
+42-5|2900267
+41-0|2900269
+41-1|2900270
+41-2|2900271
+41-3|2900272
+41-4|2900273
+41-5|2900274
+40-0|2900276
+40-1|2900277
+40-2|2900278
+40-3|2900279
+40-4|2900280
+40-5|2900281
+39-0|2900283
+39-1|2900284
+39-2|2900285
+39-3|2900286
+39-4|2900287
+39-5|2900288
+39-6|2900289
+39-7|2900290
+39-8|2900291
+38-0|2900293
+38-1|2900294
+38-2|2900295
+37-0|2900297
+37-1|2900298
+37-2|2900299
+37-3|2900300
+37-4|2900301
+37-5|2900302
+36-0|2900304
+36-1|2900305
+36-2|2900306
+36-3|2900307
+36-4|2900308
+36-5|2900309
+35-0|2900311
+35-1|2900312
+35-2|2900313
+35-3|2900314
+35-4|2900315
+35-5|2900316
+34-0|2900318
+34-1|2900319
+34-2|2900320
+34-3|2900321
+34-4|2900322
+34-5|2900323
+33-0|2900325
+33-1|2900326
+33-2|2900327
+33-3|2900328
+33-4|2900329
+33-5|2900330
+33-6|2900331
+33-7|2900332
+33-8|2900333
+33-9|2900334
+33-10|2900335
+33-11|2900336
+33-12|2900337
+32-0|2900339
+32-1|2900340
+32-2|2900341
+32-3|2900342
+32-4|2900343
+32-5|2900344
+31-0|2900346
+31-1|2900347
+31-2|2900348
+31-3|2900349
+31-4|2900350
+31-5|2900351
+30-0|2900353
+30-1|2900354
+30-2|2900355
+30-3|2900356
+30-4|2900357
+30-5|2900358
+29-0|2900360
+29-1|2900361
+29-2|2900362
+29-3|2900363
+29-4|2900364
+29-5|2900365
+28-0|2900367
+28-1|2900368
+28-2|2900369
+28-3|2900370
+28-4|2900371
+28-5|2900372
+27-0|2900374
+27-1|2900375
+27-2|2900376
+27-3|2900377
+27-4|2900378
+27-5|2900379
+26-0|2900381
+26-1|2900382
+26-2|2900383
+26-3|2900384
+26-4|2900385
+26-5|2900386
+25-0|2900388
+25-1|2900389
+25-2|2900390
+25-3|2900391
+25-4|2900392
+25-5|2900393
+24-0|2900395
+24-1|2900396
+24-2|2900397
+24-3|2900398
+24-4|2900399
+24-5|2900400
+23-0|2900402
+23-1|2900403
+23-2|2900404
+23-3|2900405
+23-4|2900406
+23-5|2900407
+22-0|2900409
+22-1|2900410
+22-2|2900411
+22-3|2900412
+22-4|2900413
+22-5|2900414
+21-0|2900416
+21-1|2900417
+21-2|2900418
+20-0|2900420
+20-1|2900421
+20-2|2900422
+20-3|2900423
+20-4|2900424
+20-5|2900425
+19-0|2900427
+19-1|2900428
+19-2|2900429
+19-3|2900430
+19-4|2900431
+19-5|2900432
+18-0|2900434
+18-1|2900435
+18-2|2900436
+18-3|2900437
+18-4|2900438
+18-5|2900439
+17-0|2900441
+17-1|2900442
+17-2|2900443
+17-3|2900444
+17-4|2900445
+17-5|2900446
+16-0|2900448
+16-1|2900449
+16-2|2900450
+16-3|2900451
+16-4|2900452
+16-5|2900453
+15-0|2900455
+15-1|2900456
+15-2|2900457
+15-3|2900458
+15-4|2900459
+15-5|2900460
+14-0|2900462
+14-1|2900463
+14-2|2900464
+14-3|2900465
+14-4|2900466
+14-5|2900467
+13-0|2900469
+13-1|2900470
+13-2|2900471
+13-3|2900472
+13-4|2900473
+13-5|2900474
+12-0|2900476
+12-1|2900477
+12-2|2900478
+12-3|2900479
+12-4|2900480
+12-5|2900481
+11-0|2900483
+11-1|2900484
+11-2|2900485
+11-3|2900486
+11-4|2900487
+11-5|2900488
+10-0|2900490
+10-1|2900491
+10-2|2900492
+10-3|2900493
+10-4|2900494
+10-5|2900495
+9-0|2900497
+9-1|2900498
+9-2|2900499
+9-3|2900500
+9-4|2900501
+9-5|2900502
+8-0|2900504
+8-1|2900505
+8-2|2900506
+8-3|2900507
+8-4|2900508
+8-5|2900509
+7-0|2900511
+7-1|2900512
+7-2|2900513
+7-3|2900514
+7-4|2900515
+7-5|2900516
+6-0|2900518
+6-1|2900519
+6-2|2900520
+6-3|2900521
+6-4|2900522
+6-5|2900523
+5-0|2900525
+5-1|2900526
+5-2|2900527
+5-3|2900528
+5-4|2900529
+5-5|2900530
+4-0|2900532
+4-1|2900533
+4-2|2900534
+4-3|2900535
+4-4|2900536
+4-5|2900537
+3-0|2900539
+3-1|2900540
+3-2|2900541
+3-3|2900542
+3-4|2900543
+3-5|2900544
+2-0|2900546
+2-1|2900547
+2-2|2900548
+2-3|2900549
+2-4|2900550
+2-5|2900551
+1-0|2900553
+1-1|2900554
+1-2|2900555
+1-3|2900556
+1-4|2900557
+1-5|2900558
+63-0|2900560
+63-1|2900561
+63-2|2900562
+63-3|2900563
+63-4|2900564
+63-5|2900565
+43-24|2900566
+43-25|2900567
+43-26|2900568
+43-27|2900569
+43-28|2900570
+43-29|2900571
+43-30|2900572
+64-0|2900574
+64-1|2900575
+64-2|2900576
+64-3|2900577
+64-4|2900578
+64-5|2900579
+64-6|2900580
+64-7|2900581
+65-0|2900583
+65-1|2900584
+65-2|2900585
+65-3|2900586
+43-31|2900587
+43-32|2900588
+43-33|2900589
+43-34|2900590
+43-35|2900591
+43-36|2900592
+43-37|2900593
+43-38|2900594
+43-39|2900595
+43-40|2900596
+66-0|2900598
+66-1|2900599
+66-2|2900600
+66-3|2900601
+66-4|2900602
+66-5|2900603
+66-6|2900604
+66-7|2900605
+66-8|2900606
+66-9|2900607
+43-41|2900608
+67-0|2900610
+67-1|2900611
+67-2|2900612
+67-3|2900613
+67-4|2900614
+67-5|2900615
+68-0|2900617
+68-1|2900618
+68-2|2900619
+68-3|2900620
+68-4|2900621
+68-5|2900622
+43-42|2900623
+43-43|2900624
+69-0|2900626
+69-1|2900627
+69-2|2900628
+69-3|2900629
+69-4|2900630
+69-5|2900631
+43-44|2900632
+43-45|2900633
+43-46|2900634
+43-47|2900635
+43-48|2900636
+43-49|2900637
+43-50|2900638
+43-51|2900639
+43-52|2900640
+43-53|2900641
+70-0|2900643
+70-1|2900644
+70-2|2900645
+70-3|2900646
+70-4|2900647
+70-5|2900648
+70-6|2900649
+70-7|2900650
+70-8|2900651
+70-9|2900652
+0-53|2900653
+0-54|2900654
+71-0|2900656
+71-1|2900657
+71-2|2900658
+71-3|2900659
+71-4|2900660
+71-5|2900661
+72-0|2900663
+72-1|2900664
+72-2|2900665
+72-3|2900666
+72-4|2900667
+72-5|2900668
+72-6|2900669
+73-0|2900671
+73-1|2900672
+73-2|2900673
+73-3|2900674
+73-4|2900675
+73-5|2900676
+74-0|2900678
+74-1|2900679
+74-2|2900680
+74-3|2900681
+74-4|2900682
+74-5|2900683
+43-54|2900684
+43-55|2900685
+43-56|2900686
+43-57|2900687
+43-58|2900688
+43-59|2900689
+75-0|2900691
+75-1|2900692
+75-2|2900693
+75-3|2900694
+0-55|2900695
+0-56|2900696
+74-6|2900697
+76-0|2900699
+76-1|2900700
+76-2|2900701
+76-3|2900702
+77-0|2900704
+77-1|2900705
+77-2|2900706
+77-3|2900707
+77-4|2900708
+77-5|2900709
+78-0|2900711
+78-1|2900712
+78-2|2900713
+78-3|2900714
+78-4|2900715
+78-5|2900716
+78-6|2900717
+78-7|2900718
+78-8|2900719
+78-9|2900720
+79-0|2900722
+79-1|2900723
+79-2|2900724
+79-3|2900725
+79-4|2900726
+43-60|2900727
+80-0|2900729
+80-1|2900730
+80-2|2900731
+80-3|2900732
+80-4|2900733
+80-5|2900734
+81-0|2900735
+81-1|2900736
+81-2|2900737
+81-3|2900738
+82-0|2900739
+82-1|2900740
+82-2|2900741
+82-3|2900742
+82-4|2900743
+82-5|2900744
+82-6|2900745
+82-7|2900746
+82-8|2900747
