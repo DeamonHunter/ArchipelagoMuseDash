@@ -42,7 +42,7 @@ public class ItemUnlockHandler {
                 return;
             }
 
-            if (item.Item.LocationId == -2)
+            if (item.Item.LocationId == -2 && item is not MusicSheetItem)
                 _knownStartingSongs.Add(item.Item.ItemId);
             if (item.Item.ItemId >= 0)
                 _knownReceivedLocations.Add((item.Item.Player, item.Item.LocationId));
