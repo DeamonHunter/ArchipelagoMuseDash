@@ -51,7 +51,7 @@ public static class ArchipelagoHelpers {
     }
 
     private static bool IsSongStillShown(string uid) {
-        if (uid == AlbumDatabase.RANDOM_PANEL_UID)
+        if (uid == AlbumDatabase.RANDOM_PANEL_UID || uid == ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong.uid)
             return true;
 
         var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
