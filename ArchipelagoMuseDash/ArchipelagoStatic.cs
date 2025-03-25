@@ -41,6 +41,11 @@ public static class ArchipelagoStatic {
     public static int ExtraLifesUsed;
     public static GameObject PlaceholderElfin;
 
+    //this state is kept track of to make sure the application of AP song order
+    //doesn't run uselessly over and over for each added song
+    //without being visible
+    public static bool IsLoadingAP = false;
+
     //Custom Albums 4 Workaround
     public static MelonPreferences_Entry<bool> CustomAlbumsSaveEntry;
     public static MelonPreferences_Entry<bool> ArchipelagoOverridenCustomAlbums;
