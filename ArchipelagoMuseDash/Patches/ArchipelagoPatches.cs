@@ -488,67 +488,59 @@ sealed class MessageManagerOnRewardPatch {
     }
 }
 /// <summary>
-///     Apply AP song order onto refreshed music uids
+///     Apply AP song order onto refreshed music uid list
+///     the input buffer has all changes from filters and such, while
+///     stageShowMusicList contains old "live" list of uids, and this
+///     function replaces it in the process
 /// </summary>
 [HarmonyPatch(typeof(DBMusicTag), "RefreshShowMusicUids")]
 sealed class DBMusicTagRefreshShowMusicUidsPatch {
-    private static void Postfix(Il2CppSystem.Collections.Generic.List<string> buffer) {
+    private static bool Prefix(Il2CppSystem.Collections.Generic.List<string> buffer) {
         ArchipelagoStatic.ArchLogger.LogDebug("DBMusicTag", "RefreshShowMusicUids");
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || ArchipelagoStatic.IsLoadingAP) {
-            return;
+            return true;
         }
         var apSongUidList = ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids;
-        var gameUidList = GlobalDataBase.dbMusicTag.stageShowMusicList;
-        if (apSongUidList.Count == 0 || gameUidList.Count == 0) {
-            return;
+        if (buffer.Count == 0 || apSongUidList.Count == 0) {
+            return true;
         }
         string goalSongUid = ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong.uid;
-        if (gameUidList[^1] != AlbumDatabase.RANDOM_PANEL_UID && goalSongUid != gameUidList[^1]) {
-            int goalIndex = gameUidList.IndexOf(goalSongUid);
+        // random panel might be last element or might not exist
+        // we want to account for that and put the goal song
+        // before the panel if it does exist
+        int offset;
+        if (buffer[^1] == AlbumDatabase.RANDOM_PANEL_UID) {
+            offset = 2;
+        }
+        else {
+            offset = 1;
+        }
+        if (buffer.Count >= offset && goalSongUid != buffer[^offset]) {
+            // `Count - offset` makes the loops ignore both slot for goal song and the random panel (if it exists)
+            int goalIndex = buffer.SublistIndexOf(0, buffer.Count - offset, goalSongUid);
             if (goalIndex != -1) {
-                gameUidList[goalIndex] = gameUidList[^1];
-                gameUidList[^1] = goalSongUid;
-                buffer[^1] = goalSongUid;
+                buffer[goalIndex] = buffer[^offset];
+                buffer[^offset] = goalSongUid;
             }
         }
-        else if (gameUidList.Count > 1 && goalSongUid != gameUidList[^2]) {
-            int goalIndex = gameUidList.IndexOf(goalSongUid);
-            if (goalIndex != -1) {
-                gameUidList[goalIndex] = gameUidList[^2];
-                gameUidList[^2] = goalSongUid;
-                buffer[^2] = goalSongUid;
-            }
-        }
+        // `Count - offset` makes the loops ignore both goal song and the random panel (if it exists)
         int j = 0;
-        for (int i = 0; i < apSongUidList.Count && j < gameUidList.Count; i++) {
-            if (apSongUidList[i] == gameUidList[j]) {
-                buffer[j] = gameUidList[j];
+        for (int i = 0; i < apSongUidList.Count && j < buffer.Count - offset; i++) {
+            if (apSongUidList[i] == goalSongUid) {
+                continue;
+            }
+            if (apSongUidList[i] == buffer[j]) {
                 j++;
                 continue;
             }
-            int uidIndex = gameUidList.IndexOf(apSongUidList[i]);
+            int uidIndex = buffer.SublistIndexOf(j + 1, buffer.Count - offset, apSongUidList[i]);
             if (uidIndex != -1) {
-                gameUidList[uidIndex] = gameUidList[j];
-                gameUidList[j] = apSongUidList[i];
-                buffer[j] = gameUidList[j];
+                buffer[uidIndex] = buffer[j];
+                buffer[j] = apSongUidList[i];
                 j++;
             }
         }
-        for (; j < gameUidList.Count - 1; j++) {
-            buffer[j] = gameUidList[j];
-        }
-        if (GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo != null) {
-            string currentSongUid = GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo.uid;
-            int currentSongIndex = GlobalDataBase.dbMusicTag.m_CurSelectedMusicIdx;
-            ArchipelagoStatic.ArchLogger.LogDebug("m_CurSelectedMusicInfo.uid", currentSongUid);
-            ArchipelagoStatic.ArchLogger.LogDebug("m_CurSelectedMusicIdx", currentSongIndex.ToString());
-            if (currentSongIndex < 0 || currentSongIndex >= gameUidList.Count || currentSongUid != gameUidList[currentSongIndex]) {
-                currentSongIndex = gameUidList.IndexOf(currentSongUid);
-                if (currentSongIndex != -1)
-                {
-                    GlobalDataBase.dbMusicTag.m_CurSelectedMusicIdx = currentSongIndex;
-                }
-            }
-        }
+        return true;
     }
 }
+

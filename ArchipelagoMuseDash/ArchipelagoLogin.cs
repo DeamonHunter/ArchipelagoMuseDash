@@ -325,6 +325,7 @@ public class ArchipelagoLogin {
             DataHelper.isUnlockAllMaster = true;
 
             HideLoginOverlay();
+            ArchipelagoStatic.IsLoadingAP = false;
             RefreshSongs();
             DisableCustomAlbumsSaving();
 #if DEBUG

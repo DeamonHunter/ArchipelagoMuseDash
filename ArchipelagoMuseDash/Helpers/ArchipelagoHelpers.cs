@@ -84,4 +84,13 @@ public static class ArchipelagoHelpers {
         }
         MusicTagManager.instance.RefreshStageDisplayMusics();
     }
+
+    public static int SublistIndexOf<T>(this Il2CppSystem.Collections.Generic.List<T> list, int start, int end_excluded, T item) {
+        for (int i = start; i < end_excluded; i++) {
+            if (EqualityComparer<T>.Default.Equals(list[i], item)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
