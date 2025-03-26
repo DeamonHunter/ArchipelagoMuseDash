@@ -567,3 +567,17 @@ sealed class DBMusicTagRefreshShowMusicUidsPatch
         }
     }
 }
+
+[HarmonyPatch(typeof(DBMusicTag), "get_isRandom")]
+sealed class DBMusicTagget_isRandomPatch
+{
+    private static void Postfix(ref bool __result) {
+        ArchipelagoStatic.ArchLogger.LogDebug("DBMusicTag", "get_isRandom");
+        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || ArchipelagoStatic.IsLoadingAP) {
+            return;
+        }
+        var currentlySelectedSong = GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo;
+        var isSongRandomSelect = currentlySelectedSong == null || currentlySelectedSong.uid == AlbumDatabase.RANDOM_PANEL_UID;
+        __result = isSongRandomSelect;
+    }
+}
