@@ -491,73 +491,58 @@ sealed class MessageManagerOnRewardPatch {
 ///     Apply AP song order onto refreshed music uids
 /// </summary>
 [HarmonyPatch(typeof(DBMusicTag), "RefreshShowMusicUids")]
-sealed class DBMusicTagRefreshShowMusicUidsPatch
-{
-    private static void Postfix(Il2CppSystem.Collections.Generic.List<string> buffer)
-    {
+sealed class DBMusicTagRefreshShowMusicUidsPatch {
+    private static void Postfix(Il2CppSystem.Collections.Generic.List<string> buffer) {
         ArchipelagoStatic.ArchLogger.LogDebug("DBMusicTag", "RefreshShowMusicUids");
-        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || ArchipelagoStatic.IsLoadingAP)
-        {
+        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || ArchipelagoStatic.IsLoadingAP) {
             return;
         }
-        List<string> apSongUidList = ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids;
-        Il2CppSystem.Collections.Generic.List<string> gameUidList = GlobalDataBase.dbMusicTag.stageShowMusicList;
-        if (apSongUidList.Count == 0 || gameUidList.Count == 0)
-        {
+        var apSongUidList = ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids;
+        var gameUidList = GlobalDataBase.dbMusicTag.stageShowMusicList;
+        if (apSongUidList.Count == 0 || gameUidList.Count == 0) {
             return;
         }
         string goalSongUid = ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong.uid;
-        if (gameUidList[^1] != AlbumDatabase.RANDOM_PANEL_UID && goalSongUid != gameUidList[^1])
-        {
+        if (gameUidList[^1] != AlbumDatabase.RANDOM_PANEL_UID && goalSongUid != gameUidList[^1]) {
             int goalIndex = gameUidList.IndexOf(goalSongUid);
-            if (goalIndex != -1)
-            {
+            if (goalIndex != -1) {
                 gameUidList[goalIndex] = gameUidList[^1];
                 gameUidList[^1] = goalSongUid;
                 buffer[^1] = goalSongUid;
             }
         }
-        else if (gameUidList.Count > 1 && goalSongUid != gameUidList[^2])
-        {
+        else if (gameUidList.Count > 1 && goalSongUid != gameUidList[^2]) {
             int goalIndex = gameUidList.IndexOf(goalSongUid);
-            if (goalIndex != -1)
-            {
+            if (goalIndex != -1) {
                 gameUidList[goalIndex] = gameUidList[^2];
                 gameUidList[^2] = goalSongUid;
                 buffer[^2] = goalSongUid;
             }
         }
         int j = 0;
-        for (int i = 0; i < apSongUidList.Count && j < gameUidList.Count; i++)
-        {
-            if (apSongUidList[i] == gameUidList[j])
-            {
+        for (int i = 0; i < apSongUidList.Count && j < gameUidList.Count; i++) {
+            if (apSongUidList[i] == gameUidList[j]) {
                 buffer[j] = gameUidList[j];
                 j++;
                 continue;
             }
             int uidIndex = gameUidList.IndexOf(apSongUidList[i]);
-            if (uidIndex != -1)
-            {
+            if (uidIndex != -1) {
                 gameUidList[uidIndex] = gameUidList[j];
                 gameUidList[j] = apSongUidList[i];
                 buffer[j] = gameUidList[j];
                 j++;
             }
         }
-        for (; j < gameUidList.Count - 1; j++)
-        {
+        for (; j < gameUidList.Count - 1; j++) {
             buffer[j] = gameUidList[j];
         }
-        if (GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo != null)
-        {
+        if (GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo != null) {
             string currentSongUid = GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo.uid;
             int currentSongIndex = GlobalDataBase.dbMusicTag.m_CurSelectedMusicIdx;
             ArchipelagoStatic.ArchLogger.LogDebug("m_CurSelectedMusicInfo.uid", currentSongUid);
             ArchipelagoStatic.ArchLogger.LogDebug("m_CurSelectedMusicIdx", currentSongIndex.ToString());
-
-            if (currentSongIndex < 0 || currentSongIndex >= gameUidList.Count || currentSongUid != gameUidList[currentSongIndex])
-            {
+            if (currentSongIndex < 0 || currentSongIndex >= gameUidList.Count || currentSongUid != gameUidList[currentSongIndex]) {
                 currentSongIndex = gameUidList.IndexOf(currentSongUid);
                 if (currentSongIndex != -1)
                 {
@@ -569,8 +554,7 @@ sealed class DBMusicTagRefreshShowMusicUidsPatch
 }
 
 [HarmonyPatch(typeof(DBMusicTag), "get_isRandom")]
-sealed class DBMusicTagget_isRandomPatch
-{
+sealed class DBMusicTagget_isRandomPatch {
     private static void Postfix(ref bool __result) {
         ArchipelagoStatic.ArchLogger.LogDebug("DBMusicTag", "get_isRandom");
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || ArchipelagoStatic.IsLoadingAP) {
