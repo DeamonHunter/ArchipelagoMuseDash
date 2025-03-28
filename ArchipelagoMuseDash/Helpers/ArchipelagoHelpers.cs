@@ -51,7 +51,7 @@ public static class ArchipelagoHelpers {
     }
 
     private static bool IsSongStillShown(string uid) {
-        if (uid == AlbumDatabase.RANDOM_PANEL_UID)
+        if (uid == AlbumDatabase.RANDOM_PANEL_UID || uid == ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong.uid)
             return true;
 
         var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
@@ -83,5 +83,14 @@ public static class ArchipelagoHelpers {
             ArchipelagoStatic.SongSelectPanel.m_PnlMusicTag.RefreshAllShownItem();
         }
         MusicTagManager.instance.RefreshStageDisplayMusics();
+    }
+
+    public static int SublistIndexOf<T>(this Il2CppSystem.Collections.Generic.List<T> list, int start, int end_excluded, T item) {
+        for (int i = start; i < end_excluded; i++) {
+            if (EqualityComparer<T>.Default.Equals(list[i], item)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

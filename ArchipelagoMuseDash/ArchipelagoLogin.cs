@@ -292,6 +292,7 @@ public class ArchipelagoLogin {
 
     private void AttemptLogin() {
         try {
+            ArchipelagoStatic.IsLoadingAP = true;
             var ipAddress = _ipAddress.Trim();
             if (ipAddress.StartsWith("/connect"))
                 ipAddress = ipAddress.Remove(0, 8).Trim();
@@ -324,6 +325,7 @@ public class ArchipelagoLogin {
             DataHelper.isUnlockAllMaster = true;
 
             HideLoginOverlay();
+            ArchipelagoStatic.IsLoadingAP = false;
             RefreshSongs();
             DisableCustomAlbumsSaving();
 #if DEBUG
@@ -334,6 +336,9 @@ public class ArchipelagoLogin {
         catch (Exception e) {
             ArchipelagoStatic.ArchLogger.Error("Login", e);
             _error = e.Message;
+        }
+        finally {
+            ArchipelagoStatic.IsLoadingAP = false;
         }
     }
 

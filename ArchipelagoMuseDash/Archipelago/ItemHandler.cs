@@ -22,7 +22,7 @@ public class ItemHandler {
     private const string fever_filler_item = "Fever Refill";
 
     public readonly HashSet<string> SongsInLogic = new();
-    public readonly HashSet<string> UnlockedSongUids = new();
+    public readonly List<string> UnlockedSongUids = new();
     public readonly HashSet<string> CompletedSongUids = new();
     public readonly HashSet<string> StarterSongUIDs = new();
 
@@ -367,7 +367,8 @@ public class ItemHandler {
     }
 
     public void UnlockSong(MusicInfo song) {
-        UnlockedSongUids.Add(song.uid);
+        if (!UnlockedSongUids.Contains(song.uid))
+            UnlockedSongUids.Add(song.uid);
         if (HiddenSongMode == ShownSongMode.AllInLogic || !SongsInLogic.Contains(song.uid))
             return;
 
