@@ -66,6 +66,7 @@ public class SongNameChanger {
     /// Creates a <see cref="SongNameChanger"/> from a <see cref="Stream"/> containing JSON.
     /// </summary>
     /// <param name="stream"></param>
+    [Obsolete("Obsolete")]
     public SongNameChanger(Stream stream) {
         using (var sr = new StreamReader(stream)) {
             var text = sr.ReadToEnd();
