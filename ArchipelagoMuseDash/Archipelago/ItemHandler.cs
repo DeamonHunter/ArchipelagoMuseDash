@@ -49,6 +49,8 @@ public class ItemHandler {
     public bool VictoryAchieved { get; set; }
     public bool ShowFillerItems { get; set; }
 
+    private Dictionary<long, long> _songIdDictionary = new Dictionary<long, long>();
+
     public void Setup(Dictionary<string, object> slotData, bool hasItems) {
         ArchipelagoStatic.ArchLogger.Log("ItemHandler", "Setup Called.");
 
@@ -117,6 +119,26 @@ public class ItemHandler {
 
                 ArchipelagoStatic.ArchLogger.Warning("ItemHandler", $"Unknown location: {name}");
             }
+        }
+
+        try {
+            var nameCheck = _currentSession.Items.GetItemName(2900105);
+            if (nameCheck != ArchipelagoStatic.AlbumDatabase.GetItemNameFromUid("43-0")) {
+                ArchipelagoStatic.ArchLogger.Warning("ItemHandler", "Detected an old version using album items. Adjusting songs.");
+
+                for (var i = 0; i < 800; i++) {
+                    var id = 2900000 + i;
+                    var name = _currentSession.Items.GetItemName(id);
+                    if (name == null)
+                        continue;
+                    
+                    if (ArchipelagoStatic.AlbumDatabase.TryGetMusicInfo(name, out var info))
+                        _songIdDictionary[id] = ArchipelagoStatic.AlbumDatabase.GetItemIdForSong(info);
+                }
+            }
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("ItemHandler", e);
         }
 
         CurrentNumberOfMusicSheets = 0;
@@ -193,9 +215,12 @@ public class ItemHandler {
 
         if (itemName == music_sheet_item_name)
             return new MusicSheetItem { Item = item };
+        
+        if (!_songIdDictionary.TryGetValue(item.ItemId, out var songId))
+            songId = item.ItemId;
 
         //Try to match by item id first
-        if (ArchipelagoStatic.AlbumDatabase.TryGetSongFromItemId(item.ItemId, out var itemInfo)) {
+        if (ArchipelagoStatic.AlbumDatabase.TryGetSongFromItemId(songId, out var itemInfo)) {
             ArchipelagoStatic.ArchLogger.LogDebug("ItemHandler", "Matched item id");
             if (item.LocationId == -2)
                 StarterSongUIDs.Add(itemInfo.uid);
