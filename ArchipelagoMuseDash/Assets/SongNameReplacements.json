@@ -361,6 +361,22 @@
   "80-5": "Scarlet Police on Ghetto Patrol",
   //スカーレット警察のゲットーパトロール24時
 
+  //Google Translate
+  "84-0": "Meow Rock feat. Chun Ge, Yuan Shen",
+  //喵斯摇 feat. 春哥，渊神
+  
+  //Google Translate
+  "84-1": "Even if you make an old radio song with AI",
+  //AIに古の電波ソングを作っても
+  
+  //Google Translate
+  "84-2": "Unusual Sketchbook",
+  //非日常スケッチブック
+  
+  //Official Translation: https://www.youtube.com/watch?v=n3gHAqxWAj0
+  "84-5": "But the Blue Bird is Already Dead",
+  //青い鳥はもう死んだのに
+
   ///
   /// Song Cleanup Section
   ///
@@ -477,4 +493,7 @@
 
   "0-56": "Echo over you..."
   //Echo over you...
+
+  "84-4": "SHOOTING*STAR",
+  //SHOOTING*STAR feat.るなっち*ほし
 }
