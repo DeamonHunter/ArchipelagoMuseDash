@@ -52,8 +52,14 @@ sealed class PnlUnlockStagePatch {
         if (currentItem.SongText != null)
             __instance.musicTitle.text = currentItem.SongText;
 
-        if (currentItem.AuthorText != null)
+        if (currentItem.AuthorText != null) {
+            if (__instance.authorTitle.font.name == "Normal") {
+                ArchipelagoStatic.ArchLogger.LogDebug("PnlUnlockStage", $"Invalid Font Found. PPG Issue: {__instance.authorTitle.font.name}");
+                __instance.authorTitle.font = __instance.musicTitle.font;
+            }
+
             __instance.authorTitle.text = currentItem.AuthorText;
+        }
 
         __instance.unlockText.text = currentItem.PreUnlockBannerText;
 
