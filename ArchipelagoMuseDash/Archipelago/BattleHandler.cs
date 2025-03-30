@@ -84,6 +84,7 @@ public class BattleHandler {
             2900008 => new NyaaTrap(),
             2900009 => new ErrorSFXTrap(),
             2900010 => new FocusLineTrap(),
+            2900011 => new BeefcakeSFXTrap(),
             //2900010 => new MutownTrap(),
             _ => null
         };
