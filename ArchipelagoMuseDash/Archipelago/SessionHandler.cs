@@ -41,23 +41,23 @@ public class SessionHandler {
     /// <param name="password">The password for this slot.</param>
     /// <param name="reason">The first error code that was generated if the attempt was unsuccessful.</param>
     /// <returns>Whether the session was successfully created.</returns>
-    public bool TryFreshLogin(string ipAddress, string username, string password, out string reason) {
+    public async Task<string?>  TryFreshLogin(string ipAddress, string username, string password) {
         if (_currentSession != null)
-            throw new NotImplementedException("Changing sessions is not implemented atm.");
+            throw new Exception("Already Connected!");
 
         var session = ArchipelagoSessionFactory.CreateSession(ipAddress);
         session.Socket.ErrorReceived += (exception, message) => {
             ArchipelagoStatic.ArchLogger.Log("[ArchError]", $"{message} : {exception}");
         };
 
-        var loginResult = session.TryConnectAndLogin("Muse Dash", username, ItemsHandlingFlags.AllItems, password: password);
+        await session.ConnectAsync();
+        var loginResult = await session.LoginAsync("Muse Dash", username, ItemsHandlingFlags.AllItems, password: password);
 
         if (!loginResult.Successful) {
             var failed = (LoginFailure)loginResult;
 
             //Todo: When does multiple errors show up? And should we handle that case here.
-            reason = failed.Errors[0];
-            return false;
+            return failed.Errors[0];
         }
 
         var successful = (LoginSuccessful)loginResult;
@@ -67,10 +67,9 @@ public class SessionHandler {
         _slotData = successful.SlotData;
         _currentSession = session;
 
-        reason = null;
-        return true;
+        return null;
     }
-
+    
     /// <summary>
     ///     Starts up all Archipelago related services. Should be started after loading save file to ensure nothing is broken.
     /// </summary>
@@ -102,12 +101,37 @@ public class SessionHandler {
             ArchipelagoStatic.ArchLogger.Error("SessionHandler", e);
         }
     }
+    
+    public async Task Disconnect()
+    {
+        try
+        {
+            if (_currentSession == null)
+                throw new Exception("Trying to disconnect from a non-existent connection?");
+
+            await _currentSession.Socket.DisconnectAsync();
+            
+            DataStorageHandler = null;
+            ItemHandler = null;
+            HintHandler = null;
+            DeathLinkHandler = null;
+            BattleHandler = null;
+            SongSelectAdditions = null;
+            _currentSession = null;
+            
+            ArchipelagoStatic.Login.StopWaiting(null);
+        }
+        catch (Exception e)
+        {
+            ArchipelagoStatic.Login.StopWaiting(e);
+        }
+    }
 
     /// <summary>
     ///     Runs on Every Unity's OnUpdate(). Passes the update along to child handlers, if the session was started.
     /// </summary>
     public void OnUpdate() {
-        if (!IsLoggedIn)
+        if (!IsLoggedIn || ArchipelagoStatic.IsLoadingAP)
             return;
 
         SongSelectAdditions.OnUpdate();
@@ -123,7 +147,7 @@ public class SessionHandler {
     ///     Runs on Every Unity's OnLateUpdate(). Passes the update along to child handlers, if the session was started.
     /// </summary>
     public void OnLateUpdate() {
-        if (!IsLoggedIn)
+        if (!IsLoggedIn || ArchipelagoStatic.IsLoadingAP)
             return;
 
         ItemHandler.Unlocker.OnLateUpdate();
