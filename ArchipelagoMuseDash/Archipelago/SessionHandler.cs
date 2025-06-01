@@ -50,8 +50,17 @@ public class SessionHandler {
             ArchipelagoStatic.ArchLogger.Log("[ArchError]", $"{message} : {exception}");
         };
 
-        await session.ConnectAsync();
-        var loginResult = await session.LoginAsync("Muse Dash", username, ItemsHandlingFlags.AllItems, password: password);
+        LoginResult loginResult;
+        try
+        {
+            await session.ConnectAsync();
+            loginResult = await session.LoginAsync("Muse Dash", username, ItemsHandlingFlags.AllItems, password: password);
+        }
+        catch (TaskCanceledException e)
+        {
+            loginResult = new LoginFailure("Timed out. Please check connection info.");
+            ArchipelagoStatic.ArchLogger.Error("Login", e);
+        }
 
         if (!loginResult.Successful) {
             var failed = (LoginFailure)loginResult;
