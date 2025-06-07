@@ -341,7 +341,7 @@ public class ArchipelagoLogin {
     private async Task AttemptLoginAsync() {
         try {
             ArchipelagoStatic.IsLoadingAP = true;
-            var ipAddress = _ipAddress.Trim();
+            var ipAddress = _ipAddress?.Trim();
             if (string.IsNullOrEmpty(ipAddress)) {
                 _error = "IP Address is empty! Ensure you put the correct ip address in.";
                 _waiting = false;
