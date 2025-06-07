@@ -4,6 +4,7 @@ using ArchipelagoMuseDash.Helpers;
 using Il2Cpp;
 using Il2CppAccount;
 using Il2CppAssets.Scripts.Database;
+using Il2CppAssets.Scripts.PeroTools.Commons;
 using Il2CppAssets.Scripts.UI.Controls;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using MelonLoader;
@@ -156,7 +157,7 @@ public class ArchipelagoLogin {
         GUILayout.Label("IP Address And Port:", _labelStyle);
         _ipAddress = GUILayout.TextField(_ipAddress, _textFieldStyle, _defaultInputHeight);
 
-        GUILayout.Label("Username:", _labelStyle);
+        GUILayout.Label("Slot Name:", _labelStyle);
         _username = GUILayout.TextField(_username, _textFieldStyle, _defaultInputHeight);
 
         GUILayout.Label("Password:", _labelStyle);
@@ -341,8 +342,27 @@ public class ArchipelagoLogin {
         try {
             ArchipelagoStatic.IsLoadingAP = true;
             var ipAddress = _ipAddress.Trim();
+            if (string.IsNullOrEmpty(ipAddress)) {
+                _error = "IP Address is empty! Ensure you put the correct ip address in.";
+                _waiting = false;
+                return;
+            }
+                
             if (ipAddress.StartsWith("/connect"))
                 ipAddress = ipAddress.Remove(0, 8).Trim();
+            
+            //Just double check in case of "/connect"
+            if (string.IsNullOrEmpty(ipAddress)) {
+                _error = "IP Address is empty! Ensure you put the correct ip address in.";
+                _waiting = false;
+                return;
+            }
+
+            if (string.IsNullOrEmpty(_username)) {
+                _error = "Slot Name is empty! Ensure you put the correct slot name in.";
+                _waiting = false;
+                return;
+            }
 
             var reason = await ArchipelagoStatic.SessionHandler.TryFreshLogin(ipAddress, _username.Trim(), _password.Trim());
             if (reason != null) {
