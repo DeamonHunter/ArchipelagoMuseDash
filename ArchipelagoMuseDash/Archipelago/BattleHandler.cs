@@ -154,7 +154,7 @@ public class BattleHandler {
 
         result.Clear();
         foreach (var value in list)
-            result.Add(value);
+            result.System_Collections_IList_Add(value); //Todo: This is a temporary thing to deal with v0.7.1
     }
 
     public bool TryUseExtraLife() {
