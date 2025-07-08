@@ -15,7 +15,8 @@ public class AlbumDatabase {
 
     private static readonly Dictionary<string, string> _currentNamesToOldNames = new() {
         { "Crimson Nightingale", "Crimson Nightingle" },
-        { "Tsukuyomi Ni Naru", "Territory Battles" }
+        { "Tsukuyomi Ni Naru", "Territory Battles" },
+        { "Suito", "Cuidu" },
     };
 
     public static readonly Dictionary<string, string> UidOverrides = new() {
