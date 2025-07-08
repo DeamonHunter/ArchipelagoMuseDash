@@ -76,8 +76,9 @@ public static class ArchipelagoHelpers {
     }
 
     public static void SetBackToDefaultFilter() {
-        ArchipelagoStatic.ArchLogger.Log("Helpers", $"Tag Index: {GlobalDataBase.dbMusicTag.selectedTagIndex}");
+        ArchipelagoStatic.ArchLogger.Log("Helpers", $"Tag Index: {GlobalDataBase.dbMusicTag.selectedTagIndex} Search: {GlobalDataBase.dbMusicTag.musicFindKeyWord}");
         GlobalDataBase.dbMusicTag.selectedTagIndex = 1; // 0 is favourite songs, 1 is all songs
+        GlobalDataBase.dbMusicTag.musicFindKeyWord = "";
         if (ArchipelagoStatic.SongSelectPanel) {
             ArchipelagoStatic.SongSelectPanel.m_PnlMusicTag.SetTabIndex(0);
             ArchipelagoStatic.SongSelectPanel.m_PnlMusicTag.RefreshAllShownItem();
