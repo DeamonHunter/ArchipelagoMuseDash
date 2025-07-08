@@ -143,13 +143,19 @@ public class SessionHandler {
         if (!IsLoggedIn || ArchipelagoStatic.IsLoadingAP)
             return;
 
-        SongSelectAdditions.OnUpdate();
+        try { 
+            SongSelectAdditions.OnUpdate();
 
-        ItemHandler.OnUpdate();
-        ItemHandler.Unlocker.OnUpdate();
-        HintHandler.OnUpdate();
-        BattleHandler.OnUpdate();
-        DeathLinkHandler.Update();
+            ItemHandler.OnUpdate();
+            ItemHandler.Unlocker.OnUpdate();
+            HintHandler.OnUpdate();
+            BattleHandler.OnUpdate();
+            DeathLinkHandler.Update();
+            
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("OnUpdate", e);
+        }
     }
 
     /// <summary>
@@ -159,18 +165,27 @@ public class SessionHandler {
         if (!IsLoggedIn || ArchipelagoStatic.IsLoadingAP)
             return;
 
-        ItemHandler.Unlocker.OnLateUpdate();
+        try { 
+            ItemHandler.Unlocker.OnLateUpdate();
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("OnLateUpdate", e);
+        }
     }
 
     /// <summary>
     ///     Runs on Unity's Scene has changed.
     /// </summary>
     public void SceneChanged(string sceneName) {
-        if (sceneName == "UISystem_PC")
-            SongSelectAdditions?.MainSceneLoaded();
-        else if (sceneName == "GameMain")
-            SongSelectAdditions?.BattleSceneLoaded();
-
+        try { 
+            if (sceneName == "UISystem_PC")
+                SongSelectAdditions?.MainSceneLoaded();
+            else if (sceneName == "GameMain")
+                SongSelectAdditions?.BattleSceneLoaded();
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("SceneChanged", e);
+        }
     }
 
     public void CollectItems() {

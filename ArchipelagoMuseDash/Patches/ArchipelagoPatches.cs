@@ -36,57 +36,62 @@ sealed class PnlUnlockStagePatch {
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return;
 
-        ArchipelagoStatic.ArchLogger.LogDebug("PnlUnlockStage", "Handling new Item.");
+        try{
+            ArchipelagoStatic.ArchLogger.LogDebug("PnlUnlockStage", "Handling new Item.");
 
-        var currentItem = ArchipelagoStatic.SessionHandler.ItemHandler.Unlocker.GetCurrentItem();
+            var currentItem = ArchipelagoStatic.SessionHandler.ItemHandler.Unlocker.GetCurrentItem();
 
-        //Something else triggered this unlock. Avoid doing anything
-        if (currentItem == null)
-            return;
+            //Something else triggered this unlock. Avoid doing anything
+            if (currentItem == null)
+                return;
 
-        ArchipelagoStatic.ArchLogger.LogDebug("PnlUnlockStage", $"Demo: {GlobalDataBase.dbMusicTag.m_AllMusicInfo[currentItem.UnlockSongUid].demo}");
+            ArchipelagoStatic.ArchLogger.LogDebug("PnlUnlockStage", $"Demo: {GlobalDataBase.dbMusicTag.m_AllMusicInfo[currentItem.UnlockSongUid].demo}");
 
-        if (currentItem.TitleText != null)
-            GetTitleText(__instance.gameObject).text = currentItem.TitleText;
+            if (currentItem.TitleText != null)
+                GetTitleText(__instance.gameObject).text = currentItem.TitleText;
 
-        if (currentItem.SongText != null)
-            __instance.musicTitle.text = currentItem.SongText;
+            if (currentItem.SongText != null)
+                __instance.musicTitle.text = currentItem.SongText;
 
-        if (currentItem.AuthorText != null) {
-            if (__instance.authorTitle.font.name == "Normal") {
-                ArchipelagoStatic.ArchLogger.LogDebug("PnlUnlockStage", $"Invalid Font Found. PPG Issue: {__instance.authorTitle.font.name}");
-                __instance.authorTitle.font = __instance.musicTitle.font;
+            if (currentItem.AuthorText != null) {
+                if (__instance.authorTitle.font.name == "Normal") {
+                    ArchipelagoStatic.ArchLogger.LogDebug("PnlUnlockStage", $"Invalid Font Found. PPG Issue: {__instance.authorTitle.font.name}");
+                    __instance.authorTitle.font = __instance.musicTitle.font;
+                }
+
+                __instance.authorTitle.text = currentItem.AuthorText;
             }
 
-            __instance.authorTitle.text = currentItem.AuthorText;
-        }
+            __instance.unlockText.text = currentItem.PreUnlockBannerText;
 
-        __instance.unlockText.text = currentItem.PreUnlockBannerText;
-
-        if (currentItem.UseArchipelagoLogo) {
-            var iconIndex = 0;
-            if (currentItem is ExternalItem) {
-                if ((currentItem.Item.Flags & ItemFlags.Advancement) != 0)
-                    iconIndex = 0;
-                else if ((currentItem.Item.Flags & ItemFlags.NeverExclude) != 0)
-                    iconIndex = 1;
-                else if ((currentItem.Item.Flags & ItemFlags.Trap) != 0)
-                    iconIndex = 3;
-                else
+            if (currentItem.UseArchipelagoLogo) {
+                var iconIndex = 0;
+                if (currentItem is ExternalItem) {
+                    if ((currentItem.Item.Flags & ItemFlags.Advancement) != 0)
+                        iconIndex = 0;
+                    else if ((currentItem.Item.Flags & ItemFlags.NeverExclude) != 0)
+                        iconIndex = 1;
+                    else if ((currentItem.Item.Flags & ItemFlags.Trap) != 0)
+                        iconIndex = 3;
+                    else
+                        iconIndex = 2;
+                }
+                else if (currentItem is FillerItem)
                     iconIndex = 2;
+
+                var icon = ArchipelagoStatic.ArchipelagoIcons[iconIndex];
+
+                //Recreate the sprite here as for some reason it gets garbage collected
+                var newSprite = Sprite.Create(icon, new Rect(0, 0, icon.width, icon.height), new Vector2(0.5f, 0.5f));
+                newSprite.name = "ArchipelagoItem_cover";
+                __instance.unlockCover.sprite = newSprite;
             }
-            else if (currentItem is FillerItem)
-                iconIndex = 2;
-
-            var icon = ArchipelagoStatic.ArchipelagoIcons[iconIndex];
-
-            //Recreate the sprite here as for some reason it gets garbage collected
-            var newSprite = Sprite.Create(icon, new Rect(0, 0, icon.width, icon.height), new Vector2(0.5f, 0.5f));
-            newSprite.name = "ArchipelagoItem_cover";
-            __instance.unlockCover.sprite = newSprite;
+            else if (__instance.unlockCover.sprite == null) //Todo: Is this needed anymore
+                AttemptToFixBrokenAlbumImage(__instance);
         }
-        else if (__instance.unlockCover.sprite == null) //Todo: Is this needed anymore
-            AttemptToFixBrokenAlbumImage(__instance);
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("PnlUnlockStage", e);
+        }
     }
 
     private static void AttemptToFixBrokenAlbumImage(PnlUnlockStage instance) {
@@ -147,50 +152,54 @@ sealed class PnlVictoryPatch {
         ArchipelagoStatic.ArchLogger.LogDebug("PnlVictory", $"Selected Role: {GlobalDataBase.dbBattleStage.selectedRole}");
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return;
-
-        // Block Sleepwalker Rin (Auto Mode) from getting completions
-        if (BattleHelper.isAutoSleepy) {
-            var reason = "No Items Given:\nSleepwalker Rin was used without Silencer.";
-            ShowText.ShowInfo(reason);
-            ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
-            return;
-        }
-
-        var activeTrap = ArchipelagoStatic.SessionHandler.BattleHandler.SetTrapFinished();
-
-        // Cover Neko's death
-        if (GlobalDataBase.dbBattleStage.IsSelectRole(NEKO_CHARACTER_ID) && !GlobalDataBase.dbBattleStage.IsSelectElfin(SILENCER_ELFIN_ID)) {
-            if (GlobalDataBase.dbSkill.nekoSkillInvoke) {
-                var reason = "No Items Given:\nDied as NEKO.";
+        try{
+            // Block Sleepwalker Rin (Auto Mode) from getting completions
+            if (BattleHelper.isAutoSleepy) {
+                var reason = "No Items Given:\nSleepwalker Rin was used without Silencer.";
                 ShowText.ShowInfo(reason);
                 ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
                 return;
             }
-        }
 
-        if (GlobalDataBase.dbBattleStage.IsSelectElfin(BETA_DOG_ELFIN_ID)) {
-            if (GlobalDataBase.dbSkill.betaDogSkillInvoke) {
-                var reason = "No Items Given:\nDied with BetaGo.";
+            var activeTrap = ArchipelagoStatic.SessionHandler.BattleHandler.SetTrapFinished();
+
+            // Cover Neko's death
+            if (GlobalDataBase.dbBattleStage.IsSelectRole(NEKO_CHARACTER_ID) && !GlobalDataBase.dbBattleStage.IsSelectElfin(SILENCER_ELFIN_ID)) {
+                if (GlobalDataBase.dbSkill.nekoSkillInvoke) {
+                    var reason = "No Items Given:\nDied as NEKO.";
+                    ShowText.ShowInfo(reason);
+                    ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
+                    return;
+                }
+            }
+
+            if (GlobalDataBase.dbBattleStage.IsSelectElfin(BETA_DOG_ELFIN_ID)) {
+                if (GlobalDataBase.dbSkill.betaDogSkillInvoke) {
+                    var reason = "No Items Given:\nDied with BetaGo.";
+                    ShowText.ShowInfo(reason);
+                    ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
+                    return;
+                }
+            }
+
+            var kvp = TaskStageTarget.instance.GetStageEvaluate();
+            if (kvp.Value < (int)ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded) {
+                var reason = $"No Items Given:\nGrade result was worse than {ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded}";
                 ShowText.ShowInfo(reason);
                 ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
+                ArchipelagoStatic.SessionHandler.DeathLinkHandler.PlayerDied();
                 return;
             }
-        }
 
-        var kvp = TaskStageTarget.instance.GetStageEvaluate();
-        if (kvp.Value < (int)ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded) {
-            var reason = $"No Items Given:\nGrade result was worse than {ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded}";
-            ShowText.ShowInfo(reason);
-            ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
-            ArchipelagoStatic.SessionHandler.DeathLinkHandler.PlayerDied();
-            return;
+            //Music info must be grabbed now. The next frame it will be nulled and be unusable.
+            var musicInfo = GlobalDataBase.dbBattleStage.selectedMusicInfo;
+            var locationName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(musicInfo);
+            ArchipelagoStatic.SessionHandler.ItemHandler.CheckLocation(musicInfo.uid, locationName);
+            ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd(false, activeTrap);
         }
-
-        //Music info must be grabbed now. The next frame it will be nulled and be unusable.
-        var musicInfo = GlobalDataBase.dbBattleStage.selectedMusicInfo;
-        var locationName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(musicInfo);
-        ArchipelagoStatic.SessionHandler.ItemHandler.CheckLocation(musicInfo.uid, locationName);
-        ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd(false, activeTrap);
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("PnlVictory", e);
+        }
     }
 }
 /// <summary>
@@ -206,76 +215,81 @@ sealed class MusicStageCellOnChangeCellPatch {
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return;
 
-        //Todo: Possibly fragile. PurchaseLock -> ImgDarken, ImgLock
-        var darkenImage = __instance.m_LockObj.transform.GetChild(0).gameObject;
-        var lockImage = __instance.m_LockObj.transform.GetChild(1).gameObject;
-        var banner = __instance.m_LockObj.transform.GetChild(2).gameObject;
-        var bannerImage = banner.GetComponent<Image>();
-        bannerImage.color = new Color(bannerImage.color.r, bannerImage.color.g, bannerImage.color.b, 1f);
+        try {
+            //Todo: Possibly fragile. PurchaseLock -> ImgDarken, ImgLock
+            var darkenImage = __instance.m_LockObj.transform.GetChild(0).gameObject;
+            var lockImage = __instance.m_LockObj.transform.GetChild(1).gameObject;
+            var banner = __instance.m_LockObj.transform.GetChild(2).gameObject;
+            var bannerImage = banner.GetComponent<Image>();
+            bannerImage.color = new Color(bannerImage.color.r, bannerImage.color.g, bannerImage.color.b, 1f);
 
-        if (!_originalTextColor.HasValue)
-            _originalTextColor = __instance.m_LockTxt.color;
-        __instance.m_LockTxt.color = _originalTextColor.Value;
+            if (!_originalTextColor.HasValue)
+                _originalTextColor = __instance.m_LockTxt.color;
+            __instance.m_LockTxt.color = _originalTextColor.Value;
 
-        if (targetCellIndex == -1)
-            targetCellIndex = VariableUtils.GetResult<int>(__instance.m_VariableBehaviour.Cast<IVariable>());
+            if (targetCellIndex == -1)
+                targetCellIndex = VariableUtils.GetResult<int>(__instance.m_VariableBehaviour.Cast<IVariable>());
 
-        var cellInfo = __instance.GetMusicStageCellInfo(targetCellIndex);
-        if (cellInfo.uidIsRandom || cellInfo.musicUid == AlbumDatabase.RANDOM_PANEL_UID) {
-            lockImage.SetActive(false);
-            darkenImage.SetActive(false);
-            __instance.m_LockObj.SetActive(false);
-            return;
-        }
-
-        var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
-        var uid = cellInfo.musicUid;
-
-        if (itemHandler.GoalSong.uid == uid) {
-            __instance.m_LockObj.SetActive(true);
-
-            if (itemHandler.VictoryAchieved)
-                __instance.m_LockTxt.text = "Goal [Completed]";
-            else if (itemHandler.NumberOfMusicSheetsToWin > 1 && itemHandler.NumberOfMusicSheetsToWin - itemHandler.CurrentNumberOfMusicSheets > 0)
-                __instance.m_LockTxt.text = $"Goal [{itemHandler.NumberOfMusicSheetsToWin - itemHandler.CurrentNumberOfMusicSheets} Left]";
-            else
-                __instance.m_LockTxt.text = "Goal";
-
-            var unlocked = itemHandler.UnlockedSongUids.Contains(uid);
-            darkenImage.SetActive(!unlocked);
-            lockImage.SetActive(!unlocked);
-            banner.SetActive(true);
-            __instance.m_LockTxt.gameObject.SetActive(true);
-        }
-        else if (itemHandler.StarterSongUIDs.Contains(uid)) {
-            __instance.m_LockObj.SetActive(true);
-            __instance.m_LockTxt.text = "Starter";
-            __instance.m_LockTxt.color = Color.white;
-            darkenImage.SetActive(false);
-            lockImage.SetActive(false);
-            banner.SetActive(true);
-            bannerImage.color = new Color(bannerImage.color.r, bannerImage.color.g, bannerImage.color.b, 0.5f);
-            __instance.m_LockTxt.gameObject.SetActive(true);
-        }
-        else {
-            var locked = !itemHandler.UnlockedSongUids.Contains(uid);
-            lockImage.SetActive(locked);
-            darkenImage.SetActive(locked);
-            __instance.m_LockObj.SetActive(locked);
-
-            if (locked) {
-                var songInLogic = ArchipelagoStatic.SessionHandler.ItemHandler.SongsInLogic.Contains(uid);
-
-                if (songInLogic) {
-                    __instance.m_LockTxt.text = "Not yet unlocked.";
-                    banner.SetActive(true);
-                    __instance.m_LockTxt.gameObject.SetActive(true);
-                }
-                else {
-                    banner.SetActive(false);
-                    __instance.m_LockTxt.gameObject.SetActive(false);
-                }
+            var cellInfo = __instance.GetMusicStageCellInfo(targetCellIndex);
+            if (cellInfo.uidIsRandom || cellInfo.musicUid == AlbumDatabase.RANDOM_PANEL_UID) {
+                lockImage.SetActive(false);
+                darkenImage.SetActive(false);
+                __instance.m_LockObj.SetActive(false);
+                return;
             }
+
+            var itemHandler = ArchipelagoStatic.SessionHandler.ItemHandler;
+            var uid = cellInfo.musicUid;
+
+            if (itemHandler.GoalSong.uid == uid) {
+                __instance.m_LockObj.SetActive(true);
+
+                if (itemHandler.VictoryAchieved)
+                    __instance.m_LockTxt.text = "Goal [Completed]";
+                else if (itemHandler.NumberOfMusicSheetsToWin > 1 && itemHandler.NumberOfMusicSheetsToWin - itemHandler.CurrentNumberOfMusicSheets > 0)
+                    __instance.m_LockTxt.text = $"Goal [{itemHandler.NumberOfMusicSheetsToWin - itemHandler.CurrentNumberOfMusicSheets} Left]";
+                else
+                    __instance.m_LockTxt.text = "Goal";
+
+                var unlocked = itemHandler.UnlockedSongUids.Contains(uid);
+                darkenImage.SetActive(!unlocked);
+                lockImage.SetActive(!unlocked);
+                banner.SetActive(true);
+                __instance.m_LockTxt.gameObject.SetActive(true);
+            }
+            else if (itemHandler.StarterSongUIDs.Contains(uid)) {
+                __instance.m_LockObj.SetActive(true);
+                __instance.m_LockTxt.text = "Starter";
+                __instance.m_LockTxt.color = Color.white;
+                darkenImage.SetActive(false);
+                lockImage.SetActive(false);
+                banner.SetActive(true);
+                bannerImage.color = new Color(bannerImage.color.r, bannerImage.color.g, bannerImage.color.b, 0.5f);
+                __instance.m_LockTxt.gameObject.SetActive(true);
+            }
+            else {
+                var locked = !itemHandler.UnlockedSongUids.Contains(uid);
+                lockImage.SetActive(locked);
+                darkenImage.SetActive(locked);
+                __instance.m_LockObj.SetActive(locked);
+
+                if (locked) {
+                    var songInLogic = ArchipelagoStatic.SessionHandler.ItemHandler.SongsInLogic.Contains(uid);
+
+                    if (songInLogic) {
+                        __instance.m_LockTxt.text = "Not yet unlocked.";
+                        banner.SetActive(true);
+                        __instance.m_LockTxt.gameObject.SetActive(true);
+                    }
+                    else {
+                        banner.SetActive(false);
+                        __instance.m_LockTxt.gameObject.SetActive(false);
+                    }
+                }
+            } 
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("MusicStageCell", e);
         }
     }
 }
@@ -290,17 +304,23 @@ sealed class PnlStageOnBtnPlayClickedPatch {
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return true;
 
-        ArchipelagoStatic.ArchLogger.LogDebug("PnlStage", "OnBtnPlayClicked");
-        var musicInfo = GlobalDataBase.s_DbMusicTag.CurMusicInfo();
-        if (musicInfo.uid == AlbumDatabase.RANDOM_PANEL_UID || ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(musicInfo.uid)) {
-            //This bypasses level checks in order to allow players to play everything
-            DataHelper.Level = 999;
-            return true;
-        }
+        try {
+            ArchipelagoStatic.ArchLogger.LogDebug("PnlStage", "OnBtnPlayClicked");
+            var musicInfo = GlobalDataBase.s_DbMusicTag.CurMusicInfo();
+            if (musicInfo.uid == AlbumDatabase.RANDOM_PANEL_UID || ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids.Contains(musicInfo.uid)) {
+                //This bypasses level checks in order to allow players to play everything
+                DataHelper.Level = 999;
+                return true;
+            }
 
-        AudioManager.instance.PlayOneShot(__instance.clickSfx, DataHelper.sfxVolume);
-        ShowText.ShowInfo("The song isn't unlocked yet. Try another one.");
-        return false;
+            AudioManager.instance.PlayOneShot(__instance.clickSfx, DataHelper.sfxVolume);
+            ShowText.ShowInfo("The song isn't unlocked yet. Try another one.");
+            return false;
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("PnlStageOnBtnPlayClickedPatch", e);
+            return false;
+        }
     }
 
     private static void Postfix(int __state) {
@@ -315,17 +335,23 @@ sealed class PnlStageOnBtnPlayClickedPatch {
 [HarmonyPatch(typeof(DBMusicTag), "SelectRandomMusic")]
 sealed class DBMusicTagSelectRandomMusicPatch {
     private static bool Prefix(DBMusicTag __instance, out MusicInfo __result) {
-        __result = null;
-        //Don't override normal gameplay
-        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
-            return true;
+        try { 
+            __result = null;
+            //Don't override normal gameplay
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+                return true;
 
-        __result = ArchipelagoStatic.SessionHandler.ItemHandler.GetRandomUnfinishedSong();
+            __result = ArchipelagoStatic.SessionHandler.ItemHandler.GetRandomUnfinishedSong();
 
-        if (__result != null)
-            __instance.SetSelectedMusic(__result, true);
+            if (__result != null)
+                __instance.SetSelectedMusic(__result, true);
 
-        return false;
+            return false;
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("SelectRandomMusic", e);
+            throw;
+        }
     }
 }
 /// <summary>
@@ -347,13 +373,18 @@ sealed class PnlRoleApplyPatch {
     private const int neko_character_id = 16;
 
     private static void Postfix() {
-        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
-            return;
+        try { 
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+                return;
 
-        if (DataHelper.selectedRoleIndex == sleepwalker_rin_character_id)
-            ShowText.ShowInfo("Sleepwalker Rin will not unlock items without the Silencer Elfin.");
-        else if (DataHelper.selectedRoleIndex == neko_character_id)
-            ShowText.ShowInfo("NEKO will not unlock items if she dies before completing the stage.");
+            if (DataHelper.selectedRoleIndex == sleepwalker_rin_character_id)
+                ShowText.ShowInfo("Sleepwalker Rin will not unlock items without the Silencer Elfin.");
+            else if (DataHelper.selectedRoleIndex == neko_character_id)
+                ShowText.ShowInfo("NEKO will not unlock items if she dies before completing the stage.");
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("PnlRole", e);
+        }
     }
 }
 /// <summary>
@@ -366,10 +397,14 @@ sealed class PnlElfinApplyPatch {
     private static void Postfix() {
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return;
-
-        ArchipelagoStatic.ArchLogger.LogDebug("Elfin", DataHelper.selectedElfinIndex.ToString());
-        if (DataHelper.selectedElfinIndex == beta_dog_elfin_index)
-            ShowText.ShowInfo("BetaGo will not unlock items if you die before completing the stage.");
+        try { 
+            ArchipelagoStatic.ArchLogger.LogDebug("Elfin", DataHelper.selectedElfinIndex.ToString());
+            if (DataHelper.selectedElfinIndex == beta_dog_elfin_index)
+                ShowText.ShowInfo("BetaGo will not unlock items if you die before completing the stage.");
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("PnlElfin", e);
+        }
     }
 }
 /// <summary>
@@ -381,9 +416,14 @@ sealed class PnlFailOnEnablePatch {
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || ArchipelagoStatic.SessionHandler?.DeathLinkHandler == null)
             return;
 
-        var reason = ArchipelagoStatic.SessionHandler.DeathLinkHandler.GetDeathLinkReason();
-        if (reason != null)
-            ShowText.ShowInfo(reason);
+        try { 
+            var reason = ArchipelagoStatic.SessionHandler.DeathLinkHandler.GetDeathLinkReason();
+            if (reason != null)
+                ShowText.ShowInfo(reason);
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("PnlFail", e);
+        }
     }
 }
 /// <summary>
@@ -395,10 +435,15 @@ sealed class PnlVictoryOnContinueClickedPatch {
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return;
 
-        if (ArchipelagoStatic.SessionHandler.ItemHandler.HiddenSongMode != ShownSongMode.Unplayed)
-            return;
+        try {
+            if (ArchipelagoStatic.SessionHandler.ItemHandler.HiddenSongMode != ShownSongMode.Unplayed)
+                return;
 
-        ArchipelagoHelpers.SelectNextAvailableSong();
+            ArchipelagoHelpers.SelectNextAvailableSong();
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("PnlVictory", e);
+        }
     }
 }
 /// <summary>
@@ -407,12 +452,17 @@ sealed class PnlVictoryOnContinueClickedPatch {
 [HarmonyPatch(typeof(ShowText), "DoTweenInit")]
 sealed class ShowTextDoTweenInitPatch {
     private static void Postfix(ShowText __instance) {
-        var tween = DOTweenModuleUI.DOFade(__instance.m_CanvasGroup, 1f, 5f);
-        TweenSettingsExtensions.SetEase(tween, __instance.m_Curve);
-        tween.onComplete = __instance.m_Tween.onComplete;
-        TweenSettingsExtensions.SetAutoKill(tween, false);
-        tween.onKill = __instance.m_Tween.onKill;
-        __instance.m_Tween = tween;
+        try { 
+            var tween = DOTweenModuleUI.DOFade(__instance.m_CanvasGroup, 1f, 5f);
+            TweenSettingsExtensions.SetEase(tween, __instance.m_Curve);
+            tween.onComplete = __instance.m_Tween.onComplete;
+            TweenSettingsExtensions.SetAutoKill(tween, false);
+            tween.onKill = __instance.m_Tween.onKill;
+            __instance.m_Tween = tween;
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("ShowText", e);
+        }
     }
 }
 /// <summary>
@@ -439,14 +489,20 @@ sealed class BattleRoleAttributeComponentHurtPatch {
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return true;
 
-        if (__instance.m_Hp + hurtValue > 0)
-            return true;
+        try { 
+            if (__instance.m_Hp + hurtValue > 0)
+                return true;
 
-        if (!ArchipelagoStatic.SessionHandler.BattleHandler.TryUseExtraLife())
-            return true;
+            if (!ArchipelagoStatic.SessionHandler.BattleHandler.TryUseExtraLife())
+                return true;
 
-        __instance.AddHp(__instance.GetHpMax() - __instance.m_Hp);
-        return false;
+            __instance.AddHp(__instance.GetHpMax() - __instance.m_Hp);
+            return false;
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("ShowText", e);
+            return false;
+        }
     }
 }
 [HarmonyPatch(typeof(ChangeHealthValue), "OnHpAdd")]
@@ -458,15 +514,20 @@ sealed class ChangeHealthValueExtraLifePatch {
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || !__instance || !__instance.text)
             return;
 
-        var extraLifeCount = ArchipelagoStatic.SessionHandler.BattleHandler.GetExtraLives();
-        ArchipelagoStatic.ArchLogger.LogDebug("ChangeHealthValue", $"Logged in: {extraLifeCount <= 0}, {__instance.text.text.EndsWith(')')}");
-        if (extraLifeCount <= 0 || __instance.text.text.EndsWith(')'))
-            return;
+        try {
+            var extraLifeCount = ArchipelagoStatic.SessionHandler.BattleHandler.GetExtraLives();
+            ArchipelagoStatic.ArchLogger.LogDebug("ChangeHealthValue", $"Logged in: {extraLifeCount <= 0}, {__instance.text.text.EndsWith(')')}");
+            if (extraLifeCount <= 0 || __instance.text.text.EndsWith(')'))
+                return;
 
 
-        __instance.text.horizontalOverflow = HorizontalWrapMode.Overflow;
-        var newText = $"{BattleRoleAttributeComponent.instance.m_Hp}/{BattleRoleAttributeComponent.instance.GetHpMax()}  (+{extraLifeCount})";
-        __instance.text.text = newText;
+            __instance.text.horizontalOverflow = HorizontalWrapMode.Overflow;
+            var newText = $"{BattleRoleAttributeComponent.instance.m_Hp}/{BattleRoleAttributeComponent.instance.GetHpMax()}  (+{extraLifeCount})";
+            __instance.text.text = newText;
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("ChangeHealthValueExtraLifePatch", e);
+        }
 
         //MelonCoroutines.Start(ChangeHPText(__instance));
     }
@@ -493,6 +554,7 @@ sealed class MessageManagerOnRewardPatch {
         return !ArchipelagoStatic.SessionHandler.IsLoggedIn;
     }
 }
+
 /// <summary>
 ///     Apply AP song order onto refreshed music uid list
 ///     the input buffer has all changes from filters and such, while
@@ -501,54 +563,58 @@ sealed class MessageManagerOnRewardPatch {
 /// </summary>
 [HarmonyPatch(typeof(DBMusicTag), "RefreshShowMusicUids")]
 sealed class DBMusicTagRefreshShowMusicUidsPatch {
-    private static bool Prefix(Il2CppSystem.Collections.Generic.List<string> buffer) {
-        ArchipelagoStatic.ArchLogger.LogDebug("DBMusicTag", "RefreshShowMusicUids");
-        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || ArchipelagoStatic.IsLoadingAP)
-            return true;
-        
-        var apSongUidList = ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids;
-        if (buffer.Count == 0 || apSongUidList.Count == 0)
-            return true;
+    private static void Prefix(Il2CppSystem.Collections.Generic.List<string> buffer) {
+        try { 
+            ArchipelagoStatic.ArchLogger.LogDebug("DBMusicTag", "RefreshShowMusicUids");
+            if (!ArchipelagoStatic.SessionHandler.IsLoggedIn || ArchipelagoStatic.IsLoadingAP)
+                return;
             
-        var goalSongUid = ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong.uid;
-        // random panel might be last element or might not exist
-        // we want to account for that and put the goal song
-        // before the panel if it does exist
-        
-        int offset;
-        if (buffer[^1] == AlbumDatabase.RANDOM_PANEL_UID)
-            offset = 2;
-        else 
-            offset = 1;
-        
-        if (buffer.Count >= offset && goalSongUid != buffer[^offset]) {
-            // `Count - offset` makes the loops ignore both slot for goal song and the random panel (if it exists)
-            var goalIndex = buffer.SublistIndexOf(0, buffer.Count - offset, goalSongUid);
-            if (goalIndex != -1) {
-                buffer[goalIndex] = buffer[^offset];
-                buffer[^offset] = goalSongUid;
+            var apSongUidList = ArchipelagoStatic.SessionHandler.ItemHandler.UnlockedSongUids;
+            if (buffer.Count == 0 || apSongUidList.Count == 0)
+                return;
+                
+            var goalSongUid = ArchipelagoStatic.SessionHandler.ItemHandler.GoalSong.uid;
+            // random panel might be last element or might not exist
+            // we want to account for that and put the goal song
+            // before the panel if it does exist
+            
+            int offset;
+            if (buffer[^1] == AlbumDatabase.RANDOM_PANEL_UID)
+                offset = 2;
+            else 
+                offset = 1;
+            
+            if (buffer.Count >= offset && goalSongUid != buffer[^offset]) {
+                // `Count - offset` makes the loops ignore both slot for goal song and the random panel (if it exists)
+                var goalIndex = buffer.SublistIndexOf(0, buffer.Count - offset, goalSongUid);
+                if (goalIndex != -1) {
+                    buffer[goalIndex] = buffer[^offset];
+                    buffer[^offset] = goalSongUid;
+                }
+            }
+            
+            // `Count - offset` makes the loops ignore both goal song and the random panel (if it exists)
+            var j = 0;
+            for (var i = 0; i < apSongUidList.Count && j < buffer.Count - offset; i++) {
+                if (apSongUidList[i] == goalSongUid)
+                    continue;
+                
+                if (apSongUidList[i] == buffer[j]) {
+                    j++;
+                    continue;
+                }
+                
+                var uidIndex = buffer.SublistIndexOf(j + 1, buffer.Count - offset, apSongUidList[i]);
+                if (uidIndex != -1) {
+                    buffer[uidIndex] = buffer[j];
+                    buffer[j] = apSongUidList[i];
+                    j++;
+                }
             }
         }
-        
-        // `Count - offset` makes the loops ignore both goal song and the random panel (if it exists)
-        var j = 0;
-        for (var i = 0; i < apSongUidList.Count && j < buffer.Count - offset; i++) {
-            if (apSongUidList[i] == goalSongUid)
-                continue;
-            
-            if (apSongUidList[i] == buffer[j]) {
-                j++;
-                continue;
-            }
-            
-            var uidIndex = buffer.SublistIndexOf(j + 1, buffer.Count - offset, apSongUidList[i]);
-            if (uidIndex != -1) {
-                buffer[uidIndex] = buffer[j];
-                buffer[j] = apSongUidList[i];
-                j++;
-            }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("RefreshPatch", e);
         }
-        return true;
     }
 }
 

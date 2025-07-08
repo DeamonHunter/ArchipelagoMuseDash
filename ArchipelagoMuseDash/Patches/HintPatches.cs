@@ -20,16 +20,22 @@ sealed class AbstractMessageBoxOnYesClickedPatch {
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return true;
 
-        ArchipelagoStatic.ArchLogger.LogDebug("AbstractMessageBox", "OnYesClicked");
-        if (!__instance.m_Title || __instance.m_Title.text != HintHandler.ARCHIPELAGO_DIALOGUE_TITLE)
-            return true;
+        try {
+            ArchipelagoStatic.ArchLogger.LogDebug("AbstractMessageBox", "OnYesClicked");
+            if (!__instance.m_Title || __instance.m_Title.text != HintHandler.ARCHIPELAGO_DIALOGUE_TITLE)
+                return true;
 
-        if (__instance.m_PlayClickAudio)
-            AudioManager.instance.PlayOneShot(PnlTipsManager.s_YesClip, DataHelper.sfxVolume);
+            if (__instance.m_PlayClickAudio)
+                AudioManager.instance.PlayOneShot(PnlTipsManager.s_YesClip, DataHelper.sfxVolume);
 
-        ArchipelagoStatic.SessionHandler.HintHandler.HintSong(GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo);
+            ArchipelagoStatic.SessionHandler.HintHandler.HintSong(GlobalDataBase.dbMusicTag.m_CurSelectedMusicInfo);
 
-        __instance.Close();
-        return false;
+            __instance.Close();
+            return false; 
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("AbstractMessageBox", e);
+            return false;
+        }
     }
 }

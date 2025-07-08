@@ -88,11 +88,16 @@ sealed class StageBattleComponentDeadPatch {
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return;
 
-        ArchipelagoStatic.ArchLogger.LogDebug("StageBattleComponent", "Dead");
-        ArchipelagoStatic.SessionHandler.DeathLinkHandler.PlayerDied();
-        if (!ArchipelagoStatic.SessionHandler.DeathLinkHandler.HasDeathLinkReason()) {
-            ArchipelagoStatic.SessionHandler.BattleHandler.SetTrapFinished();
-            ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd(true, "");
+        try { 
+            ArchipelagoStatic.ArchLogger.LogDebug("StageBattleComponent", "Dead");
+            ArchipelagoStatic.SessionHandler.DeathLinkHandler.PlayerDied();
+            if (!ArchipelagoStatic.SessionHandler.DeathLinkHandler.HasDeathLinkReason()) {
+                ArchipelagoStatic.SessionHandler.BattleHandler.SetTrapFinished();
+                ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd(true, "");
+            }
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("StageBattleComponent", e);
         }
     }
 }
@@ -105,13 +110,18 @@ sealed class AttackEffectManagerInvokeElfinEffectPatch {
         __result = null;
         if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
             return true;
+        try { 
+            if (__instance.m_ElfinEffect?.pool != null && __instance.m_ElfinEffect.pool.sourcePrefab)
+                return true;
 
-        if (__instance.m_ElfinEffect?.pool != null && __instance.m_ElfinEffect.pool.sourcePrefab)
-            return true;
-
-        if (!ArchipelagoStatic.PlaceholderElfin)
-            ArchipelagoStatic.PlaceholderElfin = new GameObject();
-        __result = ArchipelagoStatic.PlaceholderElfin;
-        return false;
+            if (!ArchipelagoStatic.PlaceholderElfin)
+                ArchipelagoStatic.PlaceholderElfin = new GameObject();
+            __result = ArchipelagoStatic.PlaceholderElfin;
+            return false;
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("AttackEffectManager", e);
+            return false;
+        }
     }
 }
