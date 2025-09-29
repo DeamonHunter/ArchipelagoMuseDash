@@ -31,7 +31,7 @@ static class SteamSyncLoadLocal {
 static class DataManagerSavePatch {
     //Todo: Patch this instead of completely removing it
     private static bool Prefix() {
-        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+        if (!ArchipelagoStatic.SessionHandler.HasOpenedOnce)
             return true;
 
         ArchipelagoStatic.ArchLogger.LogDebug("DataManager", "Interrupting save...");
@@ -45,7 +45,7 @@ static class DataManagerSavePatch {
 static class GameAccountSystemSynchronizePatch {
     //Todo: Patch this instead of completely removing it
     private static bool Prefix() {
-        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+        if (!ArchipelagoStatic.SessionHandler.HasOpenedOnce)
             return true;
 
         ArchipelagoStatic.ArchLogger.LogDebug("GameAccountSystem", "Interrupting save...");

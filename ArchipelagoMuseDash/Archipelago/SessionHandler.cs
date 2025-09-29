@@ -26,7 +26,7 @@ public class SessionHandler {
     public bool CanCollectOnVictory { get; private set; }
 
     public bool IsLoggedIn => _currentSession != null && _sessionStarted;
-
+    public bool HasOpenedOnce { get; private set; }
 
     /// <summary>
     ///     Attempts to create a new <see cref="ArchipelagoSession" /> using the data provided.<br />
@@ -75,10 +75,10 @@ public class SessionHandler {
         _team = successful.Team;
         _slotData = successful.SlotData;
         _currentSession = session;
-
+        HasOpenedOnce = true;
         return null;
     }
-    
+
     /// <summary>
     ///     Starts up all Archipelago related services. Should be started after loading save file to ensure nothing is broken.
     /// </summary>
