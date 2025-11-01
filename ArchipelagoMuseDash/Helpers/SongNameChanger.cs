@@ -50,7 +50,8 @@ public class SongNameChanger {
         { 'ë', 'e' },
         { 'Я', 'R' },
         { 'í', 'i' },
-        { '·', ' ' }
+        { '·', ' ' },
+        { '⁵', '5' }
     };
 
     private HashSet<string> _difficultyOverrides = new() {
