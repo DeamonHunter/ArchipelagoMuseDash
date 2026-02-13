@@ -111,6 +111,10 @@ public class AlbumDatabase {
         return _songsByItemName[itemName];
     }
 
+    public IEnumerable<MusicInfo> GetAllMusic() {
+        return _songsByUid.Values;
+    }
+
     public bool TryGetAlbum(string itemName, out List<MusicInfo> infos) {
         return _songsByAlbum.TryGetValue(itemName, out infos);
     }

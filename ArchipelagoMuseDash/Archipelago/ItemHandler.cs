@@ -289,6 +289,12 @@ public class ItemHandler {
     }
 
     private void SetVisibilityOfAllSongs(ShownSongMode mode) {
+        //Reset all songs we know.
+        foreach (var info in ArchipelagoStatic.AlbumDatabase.GetAllMusic()) {
+            GlobalDataBase.dbMusicTag.RemoveHide(info);
+            GlobalDataBase.dbMusicTag.AddCollection(info);
+        }
+
         var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
         GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
 
