@@ -40,6 +40,7 @@ public class SongNameChanger {
         { '\u00A0', ' ' }, //No Break Space
         { '☆', '*' },
         { '★', '*' },
+        { '♡', ' ' },
         { '↑', ' ' },
         { '↓', ' ' },
         { '†', ' ' },
@@ -61,6 +62,7 @@ public class SongNameChanger {
         "PeroPero in the Universe",
         "umpopoff",
         "P E R O P E R O Brother Dance",
+        "Master Bancho's Sushi Class",
     };
 
     /// <summary>
