@@ -13,6 +13,8 @@ using Il2CppAssets.Scripts.PeroTools.Nice.Interface;
 using Il2CppAssets.Scripts.UI.Controls;
 using Il2CppAssets.Scripts.UI.Panels;
 using Il2CppAssets.Scripts.UI.Panels.PnlRole;
+using Il2CppDaveGameFramework.GameComponents.GameHUD;
+using Il2CppDaveGameFramework.GameInstanceData;
 using Il2CppDG.Tweening;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Il2CppPeroTools2.Resources;
@@ -202,6 +204,43 @@ sealed class PnlVictoryPatch {
         }
     }
 }
+/// <summary>
+///     Gets called when the player completes the Dave Game Song.
+/// </summary>
+[HarmonyPatch(typeof(PnlDaveGameVictoryChild), "SetGameData")]
+[HarmonyPriority(Priority.Last)]
+sealed class PnlDaveGameVictoryPatch {
+
+    [HarmonyPriority(Priority.Last)]
+    private static void Postfix(DaveGameResultData resData) {
+        //Don't override normal gameplay
+        if (!ArchipelagoStatic.SessionHandler.IsLoggedIn)
+            return;
+        try
+        {
+            ArchipelagoStatic.ArchLogger.LogDebug("PnlVictoryDaveGame", $"Dave Game: {resData.evaluate}");
+            var activeTrap = ArchipelagoStatic.SessionHandler.BattleHandler.SetTrapFinished();
+            var kvp = resData.evaluate;
+            if (kvp < (int)ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded) {
+                var reason = $"No Items Given:\nGrade result was worse than {ArchipelagoStatic.SessionHandler.ItemHandler.GradeNeeded}";
+                ShowText.ShowInfo(reason);
+                ArchipelagoStatic.ArchLogger.Log("PnlVictory", reason);
+                ArchipelagoStatic.SessionHandler.DeathLinkHandler.PlayerDied();
+                return;
+            }
+
+            //Music info must be grabbed now. The next frame it will be nulled and be unusable.
+            var musicInfo = GlobalDataBase.dbBattleStage.selectedMusicInfo;
+            var locationName = ArchipelagoStatic.AlbumDatabase.GetItemNameFromMusicInfo(musicInfo);
+            ArchipelagoStatic.SessionHandler.ItemHandler.CheckLocation(musicInfo.uid, locationName);
+            ArchipelagoStatic.SessionHandler.BattleHandler.OnBattleEnd(false, activeTrap);
+        }
+        catch (Exception e) {
+            ArchipelagoStatic.ArchLogger.Error("PnlVictory", e);
+        }
+    }
+}
+
 /// <summary>
 ///     Called every time the Cell moves. Used to update the cell to show the right status.
 ///     Note that this is call per frame during movement.
