@@ -1,4 +1,4 @@
-﻿using Archipelago.MultiClient.Net;
+using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using Archipelago.MultiClient.Net.Packets;
@@ -9,6 +9,7 @@ using Il2CppAssets.Scripts.Database;
 using Il2CppAssets.Scripts.UI.Controls;
 using UnityEngine.EventSystems;
 using Task = System.Threading.Tasks.Task;
+using System.Linq;
 
 namespace ArchipelagoMuseDash.Archipelago;
 
@@ -30,6 +31,10 @@ public class ItemHandler {
     private readonly int _currentPlayerSlot;
 
     private readonly Random _random = new();
+
+    // Queue to defer location check processing off the network thread.
+    // Prevents music desyncs when receiving items during gameplay.
+    private readonly Queue<IReadOnlyCollection<long>> _pendingLocationChecks = new();
 
     public ItemHandler(ArchipelagoSession session, int playerSlot) {
         _currentSession = session;
@@ -156,8 +161,22 @@ public class ItemHandler {
     }
 
     public void OnUpdate() {
-        if (ArchipelagoStatic.CurrentScene == "UISystem_PC")
+        if (ArchipelagoStatic.CurrentScene == "UISystem_PC") {
             CheckForNewItems();
+
+            // Process location checks queued from the network thread.
+            // Only runs in the menu scene, never during gameplay.
+            lock (_pendingLocationChecks) {
+                while (_pendingLocationChecks.Count > 0) {
+                    var locations = _pendingLocationChecks.Dequeue();
+                    foreach (var location in locations) {
+                        ArchipelagoStatic.ArchLogger.LogDebug("NewLocationCheck", $"New Location: {location}");
+                        var name = _currentSession.Locations.GetLocationNameFromId(location);
+                        CheckRemoteLocation(name[..^2], false);
+                    }
+                }
+            }
+        }
 
         if (ArchipelagoStatic.SessionHandler.SongSelectAdditions.ToggleSongsButton == null)
             return;
@@ -183,11 +202,13 @@ public class ItemHandler {
         }
     }
 
+    /// <summary>
+    ///     Called from the Archipelago network thread — do not call Unity API here.
+    ///     Queues locations for processing in OnUpdate() on the main thread.
+    /// </summary>
     private void NewLocationChecked(IReadOnlyCollection<long> locations) {
-        foreach (var location in locations) {
-            ArchipelagoStatic.ArchLogger.LogDebug("NewLocationCheck", $"New Location: {location}");
-            var name = _currentSession.Locations.GetLocationNameFromId(location);
-            CheckRemoteLocation(name[..^2], false);
+        lock (_pendingLocationChecks) {
+            _pendingLocationChecks.Enqueue(locations);
         }
     }
 
@@ -295,20 +316,20 @@ public class ItemHandler {
             GlobalDataBase.dbMusicTag.AddCollection(info);
         }
 
-        var list = new Il2CppSystem.Collections.Generic.List<MusicInfo>();
-        GlobalDataBase.dbMusicTag.GetAllMusicInfo(list);
+        var list = ArchipelagoStatic.AlbumDatabase.GetAllMusic().ToList();
 
         ArchipelagoStatic.ArchLogger.Log("ItemHandler", $"Visibility being set to {mode}");
         HiddenSongMode = mode;
-        ArchipelagoHelpers.SelectNextAvailableSong();
 
         var hintedSongs = mode == ShownSongMode.Hinted ? ArchipelagoStatic.SessionHandler.HintHandler.GetHintedSongs() : new HashSet<string>();
 
-        foreach (var song in list) {
+        foreach (var song in list)
+        {
             if (song.uid == AlbumDatabase.RANDOM_PANEL_UID)
                 continue;
 
-            if (!SongsInLogic.Contains(song.uid)) {
+            if (!SongsInLogic.Contains(song.uid))
+            {
                 AddHide(song, false);
                 GlobalDataBase.dbMusicTag.RemoveCollection(song);
                 continue;
@@ -382,8 +403,12 @@ public class ItemHandler {
         }
 
         MusicTagManager.instance.RefreshDBDisplayMusics();
+
         if (ArchipelagoStatic.SongSelectPanel)
             ArchipelagoStatic.SongSelectPanel.RefreshMusicFSV();
+
+        // Select next available song after everything is ready
+        ArchipelagoHelpers.SelectNextAvailableSong();
     }
 
     private void AddHide(MusicInfo song, bool outsideSongSelect) {
