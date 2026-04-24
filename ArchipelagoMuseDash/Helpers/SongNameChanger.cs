@@ -177,6 +177,8 @@ public class SongNameChanger {
                 nextValidId++;
             }
 
+            albumLocal = albumLocal.Trim();
+
             var availableInStreamerMode = !AnchorModule.instance.CheckLockByMusicUid(musicInfo.uid);
             sb.AppendLine($"{musicInfo.uid}|{id}");
             WritePythonLine(pythonSb, id, englishName, musicInfo.uid, albumLocal, availableInStreamerMode, musicInfo.difficulty1, musicInfo.difficulty2, musicInfo.difficulty3);
