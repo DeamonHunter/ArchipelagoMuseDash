@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Archipelago.MultiClient.Net;
 using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
@@ -34,7 +35,7 @@ public class ItemHandler {
 
     // Queue to defer location check processing off the network thread.
     // Prevents music desyncs when receiving items during gameplay.
-    private readonly Queue<IReadOnlyCollection<long>> _pendingLocationChecks = new();
+    private readonly ConcurrentQueue<long> _pendingLocationChecks = new();
 
     public ItemHandler(ArchipelagoSession session, int playerSlot) {
         _currentSession = session;
@@ -163,19 +164,7 @@ public class ItemHandler {
     public void OnUpdate() {
         if (ArchipelagoStatic.CurrentScene == "UISystem_PC") {
             CheckForNewItems();
-
-            // Process location checks queued from the network thread.
-            // Only runs in the menu scene, never during gameplay.
-            lock (_pendingLocationChecks) {
-                while (_pendingLocationChecks.Count > 0) {
-                    var locations = _pendingLocationChecks.Dequeue();
-                    foreach (var location in locations) {
-                        ArchipelagoStatic.ArchLogger.LogDebug("NewLocationCheck", $"New Location: {location}");
-                        var name = _currentSession.Locations.GetLocationNameFromId(location);
-                        CheckRemoteLocation(name[..^2], false);
-                    }
-                }
-            }
+            ProcessLocations();
         }
 
         if (ArchipelagoStatic.SessionHandler.SongSelectAdditions.ToggleSongsButton == null)
@@ -202,14 +191,23 @@ public class ItemHandler {
         }
     }
 
+    private void ProcessLocations() {
+        // Process location checks queued from the network thread.
+        // Only runs in the menu scene, never during gameplay.
+        while (_pendingLocationChecks.TryDequeue(out var location)) {
+            ArchipelagoStatic.ArchLogger.LogDebug("NewLocationCheck", $"New Location: {location}");
+            var name = _currentSession.Locations.GetLocationNameFromId(location);
+            CheckRemoteLocation(name[..^2], false);
+        }
+    }
+
     /// <summary>
     ///     Called from the Archipelago network thread — do not call Unity API here.
     ///     Queues locations for processing in OnUpdate() on the main thread.
     /// </summary>
     private void NewLocationChecked(IReadOnlyCollection<long> locations) {
-        lock (_pendingLocationChecks) {
-            _pendingLocationChecks.Enqueue(locations);
-        }
+        foreach (var location in locations)
+            _pendingLocationChecks.Enqueue(location);
     }
 
     private IMuseDashItem GetItemFromNetworkItem(ItemInfo item, bool otherPlayersItem, bool locallyObtained) {
