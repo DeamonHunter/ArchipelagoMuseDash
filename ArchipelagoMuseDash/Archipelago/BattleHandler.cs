@@ -25,12 +25,16 @@ public class BattleHandler {
         _knownTrapItems.Clear();
         _knownBattleItems.Clear();
 
-        _lastHandledTrap = ArchipelagoStatic.SessionHandler.DataStorageHandler.GetHandledTrapCount();
-
-        _greatToPerfectCount.CurrentCount -= ArchipelagoStatic.SessionHandler.DataStorageHandler.GetUsedGreatToPerfect();
-        ArchipelagoStatic.ArchLogger.LogDebug("Battle Handler", $"Greats Count {_greatToPerfectCount.CurrentCount}");
-        _missToGreatCount.CurrentCount -= ArchipelagoStatic.SessionHandler.DataStorageHandler.GetUsedMissToGreat();
-        _extraLifeCount.CurrentCount -= ArchipelagoStatic.SessionHandler.DataStorageHandler.GetUsedExtraLifes();
+        try {
+            _lastHandledTrap = ArchipelagoStatic.SessionHandler.DataStorageHandler.GetHandledTrapCount();
+            _greatToPerfectCount.CurrentCount -= ArchipelagoStatic.SessionHandler.DataStorageHandler.GetUsedGreatToPerfect();
+            _missToGreatCount.CurrentCount -= ArchipelagoStatic.SessionHandler.DataStorageHandler.GetUsedMissToGreat();
+            _extraLifeCount.CurrentCount -= ArchipelagoStatic.SessionHandler.DataStorageHandler.GetUsedExtraLifes();
+        }
+        catch (TimeoutException e) {
+            ArchipelagoStatic.ArchLogger.Error("Battle Handler", e);
+            ArchipelagoStatic.ArchLogger.Log("Battle Handler", "Will continue as this error doesn't exactly matter. Enjoy your free items!");
+        }
     }
 
     public bool EnqueueIfBattleItem(ItemInfo item, out bool createFiller) {
